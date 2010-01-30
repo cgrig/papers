@@ -1,0 +1,64 @@
+1. roles in existing AOPLs; description and comparison.
+2. traits in mainstream programing languages. comparison with roles.
+3. roles in sociology -- organisational theory and role theory. Comparison with roles in AOPL.
+4.roles in frameworks.
+
+AOPLs:
+
+  AGENT0
+  PLACA
+  SPLAW
+  SLABSp
+  Jason
+  3APL, 2APL
+  GOAL
+
+  MetateM
+  J-Moise+
+  Normative multi-agent programming language
+
+Frameworks:
+  Jade
+  Brain
+  S-Moise+
+  MadKit
+
+Methodologies:
+  GAIA
+  Tropos
+  OMNI
+
+Articles to read:
+
+  --
+  MAS
+  Desiderata for agent oriented programming languages -- Huguet
+  An overview of agent oriented programming -- Shoham
+  A survey of agent oriented methodologies -- Iglesias
+  Agent oriented software engineering: The state of the art -- Woolridge
+  A survey of Programming languages and platforms for multi-agent systems -- Bordini
+  An overview of MAS engineering methodology -- Wood
+  --
+  ROLES in MAS
+o Modeling organizations in MAS: a comparison of models -- Continho (13)
+  BRAIN: A framework for flexible role-based interactions in MAS -- Cabri
+  Enacting and Deacting roles in agent programming -- Dastani
+  Role assignment in open agent societies -- Dastani
+  Role-modelling for agent system analysis, design and implementation -- Kendal
+  Organisation models and behavioural requirements specificcation for MAS -- Ferber
+v Organisational abstractions for the analysis and design of multi-agent systems-- Zambonelli
+v From agents to organizations -- Ferber
+  A methodology for agent oriented analysis and design -- Wooldridge
+  SODA: societies and infrastructure.. -- Omicini 
+  Learning organizational roles in heterogeneous multi-agent systems -- Prasad (42)
+v How to program organizations and roles in the JADE framework -- Baldoni
+  --
+  ROLES in online communities
+  A conceptual and operational definition of social role in online community -- Gleave
+  Visualizing the signatures of social roles in online discussion groups 
+
+Books:
+
+  Agent oriented programming -- Huntbach
+  An introduction to MultiAgent Systems -- Wooldridge
+  Advance in social network analysis: research in the social and behavioural sciences
