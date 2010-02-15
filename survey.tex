@@ -51,7 +51,7 @@ frameworks.
 \subsubsection{J-Moise+}
 \subsubsection{Normative multi-agent programming language}
 
-\subsection{Roles in AOP frameworks}
+\subsection{Roles in AOP meta-models}
 
 \subsubsection{AALAADIN} The AALAADIN meta-model, AGR, is described
 as being a model for organisation centered multiagent systems.
@@ -70,11 +70,58 @@ represent either sets of similar agents or function based systems.
 A role describes an abstract behaviour of agents and represents the
 abstraction of a functional position of an agent in a group.
 
+\subsubsection{BRAIN} The BRAIN Framework is intended to support
+the development of interactions in agent-based appllications, using
+the concept of role. It is constituted of three components: the
+interaction model, XRole -- an XML-based notation to express roles,
+and Rolesystem -- an interaction infrastructure implementing the
+proposed model.
+
+A role is modeled as a set of capabilities -- activities that can be
+performed, and an expected behaviour -- reactions to incoming events.
+Roles are temporary, generic and related to contexts.
+
+It is considered to be an interaction between two agents when an
+agent performs an action, from the set of actions associated to its
+role, and that action is translated into an event that is notified to
+another agent which is expected to react conforming to its role.
+
+The underlying interaction infrastructure provides the translation
+from actions to events. In this particular case, the Rolesystem
+implementation is written in Java, and it is built on top of the Jade
+Platform.
 
 \subsubsection{Jade} 
-\subsubsection{Brain} 
-\subsubsection{S-Moise+}
+
+\subsubsection{Moise+} The Moise+ organisational model is the first
+one to join roles with plans. It consists of three main dimensions:
+structural, functional and deontic. Roles represent the structural,
+plans are the functional, and the relations between roles and plans
+represent the deontic dimension.
+
+The structural dimension has three levels. The individual level is
+represented by the roles, that are viewed as sets of constraints
+that agents ought to follow. The social level is represented by the
+links, which are relations between the roles, and constrain the
+agents behaviour in relation to other agents. And the colective level
+is represented by the groups, which introduce the compatibility
+constraints between roles, that specifies what roles an agent is
+allowed to assume depending on the roles that it is currently playing.
+
+The functional dimension is based on the concepts of missions (sets of
+coherent goals that an agent can commit to), global plans (goals in a
+structure) and Social Scheme (the goal decomposition tree).
+
+The deontic dimension defines at the individual level the set of
+obligations and permissions of a role on a mission.
+
+Saci-Moise+, Jason-Moise+ and Moise+JavaAPI frameworks are all
+implementations of the Moise+ meta-model.
+
 \subsubsection{MadKit}
+\subsubsection{GAIA}
+\subsubsection{Tropos}
+\subsubsection{OMNI}
 
 \section{Conclusion}
 
