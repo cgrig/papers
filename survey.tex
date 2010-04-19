@@ -51,11 +51,11 @@ frameworks.
 \subsubsection{J-Moise+}
 \subsubsection{Normative multi-agent programming language}
 
-\subsection{Roles in AOP meta-models}
+\subsection{Roles and Organisations in the AOSE Meta-Models}
 
-\subsubsection{AALAADIN} The AALAADIN meta-model, AGR, is described
-as being a model for organisation centered multiagent systems.
-AGR is based on three main concepts: agents, groups and roles.
+\subsubsection{AALAADIN} The AALAADIN's meta-model, AGR, is described
+as being a model for organisation centered multiagent systems. AGR is
+based on three main concepts: agents, groups and roles.
 
 An organisation is constituted of agents that manifest a behaviour.
 The overall organisation can be partitioned into groups that may
@@ -91,7 +91,33 @@ from actions to events. In this particular case, the Rolesystem
 implementation is written in Java, and it is built on top of the Jade
 Platform.
 
-\subsubsection{Jade} 
+\subsubsection{JADE} The Java Agent DEvelopment framework is
+fully implemented in Java language, and complies with the FIPA
+specifications. It has been extended to include roles and
+organisations as follows:
+
+Baldoni et al. extended the Jade framework to offer primitives
+for constructing organisations. The underlying conceptual model
+is based on the concept of role. Roles are used to structure the
+organisation, to distribute responsibilities among agents and as
+a means of coordination. A role exists only in the context of an
+organisation, working as an interface between the organisation and
+agents. Roles offer powers to the agents to operate inside the
+organisation, and in the same time request a set of requirements
+from them. The expected behaviour is described in terms of goals and
+beliefs attributed to a role. An agent can play multiple roles in an
+organisation but not simultaneously, only one role at a time can be
+active. TODO: addDROPS
+
+JadeOrgs is an extension to JADE that introduces agent organisations
+and roles. The JadeOrgs metamodel is centered around three concepts:
+JadeOrgs Agent, Organisations, and Role. JadeOrgs Agent is a
+specialisation of Agent that manages organisation membership
+information and roles. The Organisation is also a specialisation
+of Agent with added functionality related to associated roles,
+registration and deregistration of members. Roles integrate required
+behaviours and ontologies, along with message templates for the
+messages sent and received.
 
 \subsubsection{Moise+} The Moise+ organisational model is the first
 one to join roles with plans. It consists of three main dimensions:
@@ -118,10 +144,21 @@ obligations and permissions of a role on a mission.
 Saci-Moise+, Jason-Moise+ and Moise+JavaAPI frameworks are all
 implementations of the Moise+ meta-model.
 
-\subsubsection{MadKit}
+\subsubsection{MadKit} MadKit is a multiagent platform written in
+Java. It is build upon the AGR organisational model, which was
+described earlier.
+
+MadKit supports heterogenity in agent architectures and communication
+languages. Agents can be programmed in Java, Scheme, Jess and
+BeanShell.
+
+
 \subsubsection{GAIA}
-\subsubsection{Tropos}
+\subsubsection{MaSE}
 \subsubsection{OMNI}
+\subsubsection{SODA}
+\subsubsection{Styx}
+\subsubsection{Tropos}
 
 \section{Conclusion}
 
