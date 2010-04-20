@@ -1,10 +1,15 @@
 \documentclass{article}
+\usepackage{xcolor}
+
+\newcommand{\todo}[1]{[\textcolor{red}{TODO}: #1]}
+
 \title{Roles in Agent Oriented Programming\\\normalsize{a survey}}
 \author{Claudia Grigore, Rem Collier, Radu Grigore}
 
 \begin{document}
 \maketitle
 
+%{{{ introduction
 \section{Introduction}
 
 Compared to OOP (object oriented programming), AOP (agent oriented
@@ -15,14 +20,31 @@ In AOP style it is easy to simulate societies and to code distributed
 algorithms.
 
 Clearly, AOP is inspired by sociology. Recently there has been
-much interest in importing other concepts from sociology, roles
-and organisations, in order to make it easier to write large scale
-programs. In this paper we briefly review the concept of roles as it
-is used in sociology and then survey attempts by computer scientists
-to integrate those concepts in AOP languages and frameworks. We assume
-that the reader is familiar with the basic concepts of AOP (see, for
-example, \cite{todo}).
+much interest in importing other concepts from sociology, such
+as roles and organisations, in order to make it easier to write
+large scale programs. In this paper we briefly review the concept
+of roles as it is used in sociology and then survey attempts by
+computer scientists to integrate those concepts in AOP languages
+and frameworks. We assume that the reader is familiar with the
+basic concepts of AOP (see, for example, \cite{todo}).
+%}}} introduction
+%{{{ background
+\section{Background}
 
+\todo{Briefly explain concepts related to agents that are used later,
+  \emph{except} roles and organisations. Use examples.}
+\todo{Talk about FIPA specs.}
+\todo{Talk about JADE.}
+\todo{Talk about other AOP languages and frameworks that do \emph{not}
+  have roles, but are referred to later, perhaps because they were
+  extended with roles.}
+
+The Java Agent DEvelopment framework complies with the FIPA
+specifications and is implemented in Java. Several systems
+including roles are built on top of it. \todo{Say exactly which
+are those systems.}
+%}}} background
+%{{{ roles in sociology
 \section{Roles in Sociology}
 
 Roles are sets of connected behaviours, rights, and obligations
@@ -30,72 +52,86 @@ that correspond to the social position of a person (agent) in a
 group (organisation). This definition is used both by functionalists
 (for example, Auguste Comte) and by modern and contemporary
 interactionists.
-
-
+%}}} roles in sociology
+%{{{ roles in software engineering
 \section{Roles in Software Engineering}
 
+\todo{Explain the typical relation between agents, roles, and
+  organisations.}
+\todo{Explain the difference between a (conceptual) model and an
+  implementation. Make it clear what is the difference between a
+  model and a meta-model.}
 AOP (agent oriented programming) is supported by languages and by
-frameworks.
+frameworks.  \todo{Explain the difference between languages and
+frameworks.}
 
-\subsection{Roles in AOP languages}
 
-\subsubsection{AGENT0}
-\subsubsection{AFAPL2}
-\subsubsection{PLACA}
-\subsubsection{SPLAW}
-\subsubsection{SLABSp}
-\subsubsection{Jason}
-\subsubsection{3APL, 2APL}
-\subsubsection{GOAL}
-\subsubsection{MetateM}
-\subsubsection{J-Moise+}
-\subsubsection{Normative multi-agent programming language}
+\todo{More intro.}
 
-\subsection{Roles and Organisations in the AOSE Meta-Models}
+\todo{For the following, make it clear which are conceptual models and
+  which are implementations.}
+\todo{Decide when you say `multi-agent system' and when `agent system'.
+  It's probably OK to stick to just one.}
 
-\subsubsection{AALAADIN} The AALAADIN's meta-model, AGR, is described
-as being a model for organisation centered multiagent systems. AGR is
-based on three main concepts: agents, groups and roles.
+\subsection{AGENT0}
+\subsection{AFAPL2}
+\subsection{PLACA}
+\subsection{SPLAW}
+\subsection{SLABSp}
+\subsection{Jason}
+\subsection{3APL, 2APL}
+\subsection{GOAL}
+\subsection{MetateM}
+\subsection{J-Moise+}
+\subsection{Normative multi-agent programming language}
+
+\subsection{AALAADIN} 
+\label{sec:aalaadin}
+
+AGR, AALAADIN's meta-model, is a model for organisation-centered
+multi-agent systems. AGR is based on three main concepts: agents,
+groups and roles.
 
 An organisation is constituted of agents that manifest a behaviour.
 The overall organisation can be partitioned into groups that may
 overlap. 
 
-Agents play roles within groups. A group can be viewed as a context
-for activities. Two agents can interact only if they are member of
-the same group, but usually an agent is member of several groups.
-Groups are sets of agents that are sharing common characteristics, and
-represent either sets of similar agents or function based systems.
+Agents play roles within groups. A group can be viewed as a
+context for activities. Two agents can interact only if they are
+members of the same group, but usually an agent is member of
+several groups. Groups are sets of agents that either have some
+similar characteristics or work together toward a common goal.
 
 A role describes an abstract behaviour of agents and represents the
 abstraction of a functional position of an agent in a group.
 
-\subsubsection{BRAIN} The BRAIN Framework is intended to support
-the development of interactions in agent-based appllications, using
-the concept of role. It is constituted of three components: the
-interaction model, XRole -- an XML-based notation to express roles,
-and Rolesystem -- an interaction infrastructure implementing the
-proposed model.
+\subsection{BRAIN} 
 
-A role is modeled as a set of capabilities -- activities that can be
-performed, and an expected behaviour -- reactions to incoming events.
-Roles are temporary, generic and related to contexts.
+The BRAIN Framework supports the development of interactions
+in agent-based applications, using the concept of role. It
+consists of (1)~an interaction model, (2)~an XML-based notation
+to express roles (XRole), and (3)~an interaction infrastructure
+implementation (Rolesystem).
 
-It is considered to be an interaction between two agents when an
-agent performs an action, from the set of actions associated to its
-role, and that action is translated into an event that is notified to
-another agent which is expected to react conforming to its role.
+A role is a set of capabilities and has an expected behaviour.
+Capabilities are activities that an agent can perform. Behaviours
+are reactions to incoming events. \todo{What is a `reaction'?
+Does a role have one or multiple behaviours? Does a behaviour
+prescribe one action for one event or multiple actions for a
+combination of events?}
 
-The underlying interaction infrastructure provides the translation
-from actions to events. In this particular case, the Rolesystem
-implementation is written in Java, and it is built on top of the Jade
-Platform.
+Rolesystem is built on top of Jade. It translates actions of
+agents into event notifications to other agents. An event may,
+in turn, trigger actions, according to the roles assumed by
+the notified agent. In this way, Rolesystem, facilitates the
+interaction between agents.
 
-\subsubsection{JADE} The Java Agent DEvelopment framework is
-fully implemented in Java language, and complies with the FIPA
-specifications. It has been extended to include roles and
-organisations as follows:
+\subsection{Jade extension}
 
+\todo{Does this have a better name than `Jade extension'?}
+
+\todo{This paragraph seems to serve as a good general description
+of the relation between agents, roles, and organizations.}
 Baldoni et al. extended the Jade framework to offer primitives
 for constructing organisations. The underlying conceptual model
 is based on the concept of role. Roles are used to structure the
@@ -107,60 +143,72 @@ organisation, and in the same time request a set of requirements
 from them. The expected behaviour is described in terms of goals and
 beliefs attributed to a role. An agent can play multiple roles in an
 organisation but not simultaneously, only one role at a time can be
-active. TODO: addDROPS
+active. \todo{addDROPS} \todo{Explain the previous TODO.}
 
-JadeOrgs is an extension to JADE that introduces agent organisations
-and roles. The JadeOrgs metamodel is centered around three concepts:
-JadeOrgs Agent, Organisations, and Role. JadeOrgs Agent is a
-specialisation of Agent that manages organisation membership
-information and roles. The Organisation is also a specialisation
-of Agent with added functionality related to associated roles,
-registration and deregistration of members. Roles integrate required
-behaviours and ontologies, along with message templates for the
-messages sent and received.
+\subsection{JadeOrgs}
 
-\subsubsection{Moise+} The Moise+ organisational model is the first
-one to join roles with plans. It consists of three main dimensions:
-structural, functional and deontic. Roles represent the structural,
-plans are the functional, and the relations between roles and plans
-represent the deontic dimension.
+JadeOrgs extends Jade. Unlike a Jade agent, a JadeOrgs
+agent manages roles and organisation membership. A JadeOrgs
+organisation is a Jade agent that manages a group of JadeOrg
+agents. \todo{`Manages' sounds a bit like `leads', when what I
+mean is that it bookkeeps membership. Rephrase.} Roles consist
+of (1)~required behaviours, (2)~required ontologies, and
+(3)~templates for messages. \todo{Huh? Why would a role have
+templates for messages? Explain.}
 
-The structural dimension has three levels. The individual level is
-represented by the roles, that are viewed as sets of constraints
-that agents ought to follow. The social level is represented by the
-links, which are relations between the roles, and constrain the
-agents behaviour in relation to other agents. And the colective level
-is represented by the groups, which introduce the compatibility
-constraints between roles, that specifies what roles an agent is
-allowed to assume depending on the roles that it is currently playing.
+\subsection{Moise+} 
 
-The functional dimension is based on the concepts of missions (sets of
-coherent goals that an agent can commit to), global plans (goals in a
-structure) and Social Scheme (the goal decomposition tree).
+The Moise+ organisational model is the first one to join roles
+with plans. It consists of three main dimensions: structural,
+functional and deontic. Roles represent the structural, plans
+are the functional, and the relations between roles and
+plans represent the deontic dimension. \todo{Define the word
+`deontic'.}
+
+\todo{Decide on some shape for the following three paragraphs
+and use the same shape for all three.}
+
+The structural dimension has three levels. The individual level
+is represented by roles, which are viewed as sets of constraints
+that agents ought to follow. The social level is represented
+by links, which are relations between roles, and constrain the
+agents' behaviour in relation to other agents. The collective
+level is represented by groups, which introduce compatibility
+constraints between roles, which specify what roles an agent is
+allowed to assume, depending on the roles that it is currently
+playing. \todo{Perhaps this paragraph could be made to flow
+better.}
+
+The functional dimension is based on the concepts of missions
+(sets of coherent goals that an agent can commit to), global
+plans (goals in a structure) and social scheme (the goal
+decomposition tree). 
 
 The deontic dimension defines at the individual level the set of
 obligations and permissions of a role on a mission.
 
 Saci-Moise+, Jason-Moise+ and Moise+JavaAPI frameworks are all
-implementations of the Moise+ meta-model.
+implementations of the Moise+ meta-model. \todo{More detail.}
 
-\subsubsection{MadKit} MadKit is a multiagent platform written in
-Java. It is build upon the AGR organisational model, which was
-described earlier.
+\subsection{MadKit} 
 
-MadKit supports heterogenity in agent architectures and communication
-languages. Agents can be programmed in Java, Scheme, Jess and
-BeanShell.
+MadKit is a multi-agent platform written in Java. It is build upon
+the AGR organisational model (Section~\ref{sec:aalaadin}).
 
+MadKit supports heterogeneity in agent architectures and
+communication languages. Agents can be programmed in Java,
+Scheme, Jess and BeanShell.
 
-\subsubsection{GAIA}
-\subsubsection{MaSE}
-\subsubsection{OMNI}
-\subsubsection{SODA}
-\subsubsection{Styx}
-\subsubsection{Tropos}
-
+\subsection{GAIA}
+\subsection{MaSE}
+\subsection{OMNI}
+\subsection{SODA}
+\subsection{Styx}
+\subsection{Tropos}
+%}}} roles in software engineering
+%{{{ conclusion
 \section{Conclusion}
+%}}} conclusion
 
 \bibliographystyle{plain}
 \bibliography{survey}
