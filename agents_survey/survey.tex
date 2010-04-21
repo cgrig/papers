@@ -1,6 +1,8 @@
 \documentclass{article}
 \usepackage{xcolor}
 
+\def\fb#1{\textbf{#1}}
+
 \newcommand{\todo}[1]{[\textcolor{red}{TODO}: #1]}
 
 \title{Roles in Agent Oriented Programming\\\normalsize{a survey}}
@@ -9,8 +11,39 @@
 \begin{document}
 \maketitle
 
+% {{{ abstract
+\begin{abstract}
+\end{abstract}
+% abstract }}}
 %{{{ introduction
 \section{Introduction}
+
+AOP (\fb agent \fb oriented \fb programming) is a research area
+whose goal is to find better ways to design, analyse, and develop
+programs by using concepts imported from sociology. The products
+of researchers working in this area range from methodologies that
+are useful in designing programs to programming languages. The
+type of applications that benefit the most from these results
+are those that are inherently distributed, an example being,
+unsurprisingly, simulators of societies.
+
+It is fairly clear now how certain social concepts,
+such as belief and behaviour, apply to programming
+(Section~\ref{sec:background}). Much recent work focuses on
+the assimilation from sociology of the concepts of role and
+organisation, which are closely related.
+
+\todo{Continue here.}
+Clearly, AOP is inspired by sociology. Recently there has been
+much interest in importing other concepts from sociology, such
+as roles and organisations, in order to make it easier to write
+large scale programs. In this paper we briefly review the concept
+of roles as it is used in sociology and then survey attempts by
+computer scientists to integrate those concepts in AOP languages
+and frameworks. 
+%}}} introduction
+%{{{ background
+\section{Background}
 
 Compared to OOP (object oriented programming), AOP (agent oriented
 programming) is done at a higher level of abstraction. The state of
@@ -18,18 +51,6 @@ an agent is a set of beliefs, which are described in a logic-like
 language. The actions of the agent are dictated by declarative rules.
 In AOP style it is easy to simulate societies and to code distributed
 algorithms.
-
-Clearly, AOP is inspired by sociology. Recently there has been
-much interest in importing other concepts from sociology, such
-as roles and organisations, in order to make it easier to write
-large scale programs. In this paper we briefly review the concept
-of roles as it is used in sociology and then survey attempts by
-computer scientists to integrate those concepts in AOP languages
-and frameworks. We assume that the reader is familiar with the
-basic concepts of AOP (see, for example, \cite{todo}).
-%}}} introduction
-%{{{ background
-\section{Background}
 
 \todo{Briefly explain concepts related to agents that are used later,
   \emph{except} roles and organisations. Use examples.}
