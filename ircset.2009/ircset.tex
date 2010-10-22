@@ -4,48 +4,74 @@
 
 \newcommand{\todo}[1]{[\textcolor{red}{TODO}: #1]}
 
-\title{Progress Report 2010: Claudia\_Grigore\_2008\_interim\_report} 
+\title{Progress Report 2010: grigore\_claudia\_2008\_interim\_report} 
 \author{Claudia Grigore}
 
 \begin{document} \maketitle
 
 \section{Objectives}
+Agent Oriented Programming (AOP) is a relatively new programming paradigm which
+adopts a social metaphor for the design and implementation of software systems.
+Specifically, software systems are viewed as communities of software entities,
+known as agents, that interact with one another in order to solve problems that
+are beyond their individual capabilities. It is widely accepted that this
+approach is well suited to problem domains in which there is no global system
+control, data is decentralised and computation is asynchronous.
 
-\begin{itemize}
-\item writing
-  \begin{itemize}
-  \item Survey of roles in AOP.
-  \item PhD proposal for UCD. (aka `transfer report')
-  \end{itemize}
-\item modify AFAPL to support the Moise methodology
-  \begin{itemize}
-  \item allow agents to change roles at run-time
-  \item allow agents to reason about their roles and about their interrelations
-  \end{itemize}
-\end{itemize}
+Organisations are increasingly seen as an important concept in agent oriented
+design. However, little work has been done on applying organisational concepts
+to AOP languages. For example, integrating the concept of roles offers
+significant advantages. They are a natural metaphor for describing the overall
+system behaviour, and they increase the adaptability and flexibility of agent
+systems by offering the appropriate level of granularity. Roles define a set of
+related behaviours, encapsulating them realises a separation of concerns and
+promotes information hiding.
 
+The primary hypothesis of my research is that the integration of roles, based
+on sociological Role Theory, will improve the readability and usability of AOP
+languages. 
+
+The objectives of this research for the last twelve months can be grouped in
+two main categories. The first one includes writing a survey of roles in agent
+oriented programming languages, and writing the PhD proposal required in UCD
+for the transfer to the second stage of the PhD. 
+
+The second category of objectives is modifying the AFAPL2 language to support
+the Moise+ methodology. This includes allowing agents to change their roles at
+run-time, and to reason abut their roles and about their interrelations.
 
 \section{Methodology}
+In order to achieve the categories of objectives I have set, I have adopted the
+following approach:
 
-\todo{}
+\begin{itemize}
+\item attending courses, seminaries, and summer schools on various agent topics
+to broad my view and understanding of the area.
+
+\item reading and summarising papers on agents, roles, and organisations, for a
+deeper understanding of the specific problem of integrating organisational
+concepts into AOP languages.
+
+\item solving concrete problems to attain a better understanding of MAS
+toolkits and AOP languages.
+
+\end{itemize}
 
 \section{Results}
 
 \begin{itemize}
 \item attended courses
   \begin{itemize}
-  \item Programming Languages
+  \item Principles of Programming Languages
   \item Object Oriented Design
-  \item Social Network Analysis and Multiagent Systems
+  \item Social Networks and Agent-based Simulation
+  \item Research Skills
+  \item Research Seminaries
   \end{itemize}
-\item understanding MAS toolkits by solving problems
-  \begin{itemize}
-  \item AgentFactory
-  \item S-Moise
-  \item Jade
-  \end{itemize}
+\item attended the EASSS 2009 summer school in Torino
+\item explored the use of Social Network Analysis techniques in agent systems
 \item 
-  research the current state of the art in the area of organisations in MAS,
+  researched the current state of the art in the area of organisations in MAS,
   summarised in the survey
   \begin{itemize}
   \item theoretical models of organisations
@@ -64,8 +90,13 @@
     \item Jade
     \end{itemize}
   \end{itemize}
-\item presentation on MAS in UCD's Research Seminar Series, highly appraised
-\item explored the use of SNA techniques in agent systems
+\item understanding MAS toolkits by solving problems
+  \begin{itemize}
+  \item AgentFactory
+  \item S-Moise
+  \item Jade
+  \end{itemize}
+\item presentation on MAS in UCD's Research Seminar Series
 \end{itemize}
 
 
@@ -73,7 +104,7 @@
 
 \todo{\emph{Research} difficulties.}
 
-Course work and demonstrating was more time consuming, expecting a delay of 2
+Course work and demonstrating was more time consuming, delay of 2
 months.
 
 Maternity leave of 3 months. 
@@ -93,7 +124,7 @@ Specify and implement a prototype of a role-based AOP language.
 
 \begin{itemize}
 \item Survey. \todo{target}
-\item Moise in AgentFactory. \todo{target}
+\item Moise+ in AgentFactory. \todo{target}
 \end{itemize}
 
 \end{document}
