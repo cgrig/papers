@@ -144,7 +144,7 @@ Jason, AgentSpeak, Moise.
 \subsection{AALAADIN} 
 \label{sec:aalaadin}
 
-AGR, AALAADIN's meta-model, is a model for organisation-centered
+AGR \cite{conf/aose/FerberGM03}, AALAADIN's meta-model, is a model for organisation-centered
 multi-agent systems. AGR is based on three main concepts: agents,
 groups and roles.
 
@@ -163,11 +163,11 @@ abstraction of a functional position of an agent in a group.
 
 \subsection{BRAIN} 
 
-The BRAIN Framework supports the development of interactions
-in agent-based applications, using the concept of role. It
-consists of (1)~an interaction model, (2)~an XML-based notation
-to express roles (XRole), and (3)~an interaction infrastructure
-implementation (Rolesystem).
+The BRAIN Framework \cite{conf/coopis/CabriLZ03} supports the development of
+interactions in agent-based applications, using the concept of role. It
+consists of (1)~an interaction model, (2)~an XML-based notation to express
+roles (XRole), and (3)~an interaction infrastructure implementation
+(Rolesystem).
 
 A role is a set of capabilities and has an expected behaviour.
 Capabilities are activities that an agent can perform. Behaviours
@@ -182,39 +182,37 @@ in turn, trigger actions, according to the roles assumed by
 the notified agent. In this way, Rolesystem, facilitates the
 interaction between agents.
 
-\subsection{Jade extension}
+\subsection{Power Jade}
 
 \todo{Does this have a better name than `Jade extension'?}
 
-\todo{This paragraph seems to serve as a good general description
-of the relation between agents, roles, and organizations.}
-Baldoni et al. extended the Jade framework to offer primitives
-for constructing organisations. The underlying conceptual model
-is based on the concept of role. Roles are used to structure the
-organisation, to distribute responsibilities among agents and as
-a means of coordination. A role exists only in the context of an
-organisation, working as an interface between the organisation and
-agents. Roles offer powers to the agents to operate inside the
-organisation, and in the same time request a set of requirements
-from them. The expected behaviour is described in terms of goals and
-beliefs attributed to a role. An agent can play multiple roles in an
-organisation but not simultaneously, only one role at a time can be
-active. \todo{addDROPS} \todo{Explain the previous TODO.}
+\todo{This paragraph seems to serve as a good general description of the
+relation between agents, roles, and organizations.} Baldoni et al.
+\cite{conf/mates/BaldoniBGGT08} extended the Jade framework to offer primitives
+for constructing organisations. The underlying conceptual model is based on the
+concept of role. Roles are used to structure the organisation, to distribute
+responsibilities among agents and as a means of coordination. A role exists
+only in the context of an organisation, working as an interface between the
+organisation and agents. Roles offer powers to the agents to operate inside the
+organisation, and in the same time request a set of requirements from them. The
+expected behaviour is described in terms of goals and beliefs attributed to a
+role. An agent can play multiple roles in an organisation but not
+simultaneously, only one role at a time can be active.  \todo{addDROPS}
+\todo{Explain the previous TODO.}
 
 \subsection{JadeOrgs}
 
-JadeOrgs extends Jade. Unlike a Jade agent, a JadeOrgs
-agent manages roles and organisation membership. A JadeOrgs
-organisation is a Jade agent that manages a group of JadeOrg
-agents. \todo{`Manages' sounds a bit like `leads', when what I
-mean is that it bookkeeps membership. Rephrase.} Roles consist
-of (1)~required behaviours, (2)~required ontologies, and
-(3)~templates for messages. \todo{Huh? Why would a role have
-templates for messages? Explain.}
+JadeOrgs \cite{madrigal2009adding} extends Jade. Unlike a Jade agent, a
+JadeOrgs agent manages roles and organisation membership. A JadeOrgs
+organisation is a Jade agent that manages a group of JadeOrg agents.
+\todo{`Manages' sounds a bit like `leads', when what I mean is that it
+bookkeeps membership. Rephrase.} Roles consist of (1)~required behaviours,
+(2)~required ontologies, and (3)~templates for messages. \todo{Huh? Why would a
+role have templates for messages? Explain.}
 
 \subsection{Moise+} 
 
-The Moise+ organisational model is the first one to join roles
+The Moise+ \cite{} organisational model is the first one to join roles
 with plans. It consists of three main dimensions: structural,
 functional and deontic. Roles represent the structural, plans
 are the functional, and the relations between roles and
@@ -274,8 +272,12 @@ phase covers the definition of the agent model based on the role model and the
 definition of the services model, where services correspond to blocks of
 activity required to realise agent's roles.
 
+\cite{BlakeG05}
+\cite{conf/aose/WooldridgeC00}
+
 \subsection{MaSE}
 \subsection{OMNI}
+\cite{journals/aamas/Vazquez-SalcedaDD05}
 \subsection{SODA}
 \subsection{Styx}
 \subsection{Tropos}
@@ -285,6 +287,6 @@ activity required to realise agent's roles.
 %}}} conclusion
 
 \bibliographystyle{plain}
-\bibliography{survey}
+\bibliography{survey,bib}
 
 \end{document}
