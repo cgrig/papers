@@ -182,7 +182,7 @@ conf {{{2
     A simple war game is simulated. The `good' side is played once by humans
     and once by agents programmed in Common Lisp. Both humans and agents
     try once without communicating and once communicating. The results are
-    as expected: Agents are slighlty better than humans, and communictaion
+    as expected: Agents are slightly better than humans, and communication
     improves performance. The agents are programmed around the concept of role.
   }
 }
@@ -213,14 +213,17 @@ conf {{{2
 @inproceedings{conf/coordination/JamisonL99,
   author    = {Wilfred C. Jamison and
                Doug Lea},
-  title     = {TRUCE: Agent Coordination Through Concurrent Interpretation
+  title     = {{TRUCE}: Agent Coordination Through Concurrent Interpretation
                of Role-Based Protocols},
   booktitle = {COORDINATION},
   year      = {1999},
   pages     = {384-398},
   ee        = {http://link.springer.de/link/service/series/0558/bibs/1594/15940384.htm},
   crossref  = {conf/coordination/1999},
-  bibsource = {DBLP, http://dblp.uni-trier.de}
+  bibsource = {DBLP, http://dblp.uni-trier.de},
+  annote = {
+    [NOTE: This doesn't seem significant enough to include.]
+  }
 }
 
 @inproceedings{conf/maamaw/Rao96,
@@ -231,7 +234,14 @@ conf {{{2
   year      = {1996},
   pages     = {42-55},
   crossref  = {conf/maamaw/1996},
-  bibsource = {DBLP, http://dblp.uni-trier.de}
+  bibsource = {DBLP, http://dblp.uni-trier.de},
+  annote = {
+    This seminal article introduces a declarative agent-oriented programming
+    language in the style of Prolog. AgentSpeak(L) has formal operational
+    semantics and a proof theory based on labeled transition systems.
+    Recent research~\cite{journals/logcom/BordiniFWV09}
+    focuses on model-checking agent systems written in AgentSpeak.
+  }
 }
 
 @inproceedings{conf/mates/BaldoniBGGT08,
@@ -240,13 +250,19 @@ conf {{{2
                Valerio Genovese and
                Roberto Grenna and
                Leendert van der Torre},
-  title     = {How to Program Organizations and Roles in the JADE Framework},
+  title     = {How to Program Organizations and Roles in the {JADE} Framework},
   booktitle = {MATES},
   year      = {2008},
   pages     = {25-36},
   ee        = {http://dx.doi.org/10.1007/978-3-540-87805-6_4},
   crossref  = {conf/mates/2008},
-  bibsource = {DBLP, http://dblp.uni-trier.de}
+  bibsource = {DBLP, http://dblp.uni-trier.de},
+  annote = {
+    This article documents an extension of JADE~\cite{todo}
+    that defines the concepts role, organization, requirement, and power:
+    An agent is allowed to play a role in an organization only if it
+    meets some requirements. Once an agent plays a role, it gains extra powers.
+  }
 }
 
 @inproceedings{conf/prima/DastaniMS08,
@@ -259,21 +275,34 @@ conf {{{2
   pages     = {139-152},
   ee        = {http://dx.doi.org/10.1007/978-3-540-89674-6_17},
   crossref  = {conf/prima/2008},
-  bibsource = {DBLP, http://dblp.uni-trier.de}
+  bibsource = {DBLP, http://dblp.uni-trier.de},
+  annote = {
+    [NOTE: Doesn't seem significant, but seems on-topic. To review more
+      carefully.]
+  }
 }
 
 @inproceedings{conf/promas/RossCO04,
   author    = {Robert J. Ross and
                Rem W. Collier and
                Gregory M. P. O'Hare},
-  title     = {AF-APL - Bridging Principles and Practice in Agent Oriented
+  title     = {{AF-APL} - Bridging Principles and Practice in Agent Oriented
                Languages},
   booktitle = {PROMAS},
   year      = {2004},
   pages     = {66-88},
   ee        = {http://springerlink.metapress.com/openurl.asp?genre=article{\&}issn=0302-9743{\&}volume=3346{\&}spage=66},
   crossref  = {conf/promas/2004},
-  bibsource = {DBLP, http://dblp.uni-trier.de}
+  bibsource = {DBLP, http://dblp.uni-trier.de},
+  annote = {
+    AFAPL is a pragmatic language for programming agents. Its designers aimed
+    more at producing an interpreter that is easy and practical to use,
+    rather than at formalizing the language, as is the case with other
+    languages like AgentSpeak(L)~\cite{conf/maamaw/Rao96}. Agents hold
+    beliefs and commit (promise) to carry certain actions in the future.
+    Notably, AFAPL was recently used to integrate components and 
+    agents~\cite{conf/sac/DragoneLCO09}.
+  }
 }
 
 @inproceedings{conf/promas/TinnemeierDM08,
@@ -286,7 +315,13 @@ conf {{{2
   pages     = {56-71},
   ee        = {http://dx.doi.org/10.1007/978-3-642-03278-3_4},
   crossref  = {conf/promas/2008},
-  bibsource = {DBLP, http://dblp.uni-trier.de}
+  bibsource = {DBLP, http://dblp.uni-trier.de},
+  annote = {
+    In this recent paper, the authors propose a programming language in which
+    \emph{organizations} play a central role: They actively monitor their
+    members and sanction them when they disobey established norms. The
+    language has a formal syntax and operational semantics. 
+  }
 }
 
 @inproceedings{conf/rex/BarringerFGGO89,
@@ -301,6 +336,20 @@ conf {{{2
   pages     = {94-129},
   ee        = {http://dx.doi.org/10.1007/3-540-52559-9_62},
   crossref  = {conf/rex/1989},
+  bibsource = {DBLP, http://dblp.uni-trier.de}
+}
+
+@inproceedings{conf/sac/DragoneLCO09,
+  author    = {Mauro Dragone and
+               David Lillis and
+               Rem W. Collier and
+               Gregory M. P. O'Hare},
+  title     = {SoSAA: a framework for integrating components {\&} agents},
+  booktitle = {SAC},
+  year      = {2009},
+  pages     = {722-728},
+  ee        = {http://doi.acm.org/10.1145/1529282.1529432},
+  crossref  = {conf/sac/2009},
   bibsource = {DBLP, http://dblp.uni-trier.de}
 }
 
@@ -488,6 +537,21 @@ journals {{{2
   year      = {2005},
   pages     = {401-408},
   ee        = {http://www.informatica.si/PDF/29-4/03_Susi-The\%20Tropos\%20Metamodel\%20and....pdf},
+  bibsource = {DBLP, http://dblp.uni-trier.de}
+}
+
+@article{journals/logcom/BordiniFWV09,
+  author    = {Rafael H. Bordini and
+               Michael Fisher and
+               Michael Wooldridge and
+               Willem Visser},
+  title     = {Property-based Slicing for Agent Verification},
+  journal   = {J. Log. Comput.},
+  volume    = {19},
+  number    = {6},
+  year      = {2009},
+  pages     = {1385-1425},
+  ee        = {http://dx.doi.org/10.1093/logcom/exp029},
   bibsource = {DBLP, http://dblp.uni-trier.de}
 }
 
@@ -743,6 +807,18 @@ groups {{{1
   volume    = {430},
   year      = {1990},
   isbn      = {3-540-52559-9},
+  bibsource = {DBLP, http://dblp.uni-trier.de}
+}
+
+@proceedings{conf/sac/2009,
+  editor    = {Sung Y. Shin and
+               Sascha Ossowski},
+  title     = {Proceedings of the 2009 ACM Symposium on Applied Computing
+               (SAC), Honolulu, Hawaii, USA, March 9-12, 2009},
+  booktitle = {SAC},
+  publisher = {ACM},
+  year      = {2009},
+  isbn      = {978-1-60558-166-8},
   bibsource = {DBLP, http://dblp.uni-trier.de}
 }
 
