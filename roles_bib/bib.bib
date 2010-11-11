@@ -1,3 +1,5 @@
+articles {{{1
+books {{{2
 @incollection{books/sp/map2005/BordiniHV05,
   author    = {Rafael H. Bordini and
                Jomi Fred H{\"u}bner and
@@ -41,6 +43,7 @@
   }
 }
 
+conf {{{2
 @inproceedings{conf/agents/GutknechtF00a,
   author    = {Olivier Gutknecht and
                Jacques Ferber},
@@ -75,19 +78,35 @@
   pages     = {214-230},
   ee        = {http://springerlink.metapress.com/openurl.asp?genre=article{\&}issn=0302-9743{\&}volume=2935{\&}spage=214},
   crossref  = {conf/aose/2003},
-  bibsource = {DBLP, http://dblp.uni-trier.de}
+  bibsource = {DBLP, http://dblp.uni-trier.de},
+  annote = {
+    This paper popularized concepts that are extrinsic to agents, but very
+    useful in designing and implementing agent systems. It is shown how
+    concepts like `organization', `group', and `role' may guide the design
+    of an agent system, without needing concepts intrinsic to agents such
+    as `mental state', `belief', and `goal'. This point of view is what
+    enables MadKit~\cite{conf/agents/GutknechtF00a} to act as a 
+    ``multi-(multi-agent system).''
+  }
 }
 
 @inproceedings{conf/aose/Omicini00,
   author    = {Andrea Omicini},
-  title     = {SODA: Societies and Infrastructures in the Analysis and
+  title     = {{SODA}: Societies and Infrastructures in the Analysis and
                Design of Agent-Based Systems},
   booktitle = {AOSE},
   year      = {2000},
   pages     = {185-193},
   ee        = {http://link.springer.de/link/service/series/0558/bibs/1957/19570185.htm},
   crossref  = {conf/aose/2000},
-  bibsource = {DBLP, http://dblp.uni-trier.de}
+  bibsource = {DBLP, http://dblp.uni-trier.de},
+  annote = {
+    SODA is a methodology for designing agent systems that focuses exclusively
+    on the social characteristics. The primitive concept is that of a 
+    \emph{task}. Prior to design, the problem is analyzed and then the
+    solution is phrased in terms of roles, groups, and resources. The
+    result of the design must specify agents, societies, and infrastructures.
+  }
 }
 
 @inproceedings{conf/aose/WooldridgeC00,
@@ -101,7 +120,10 @@
   crossref  = {conf/aose/2000},
   bibsource = {DBLP, http://dblp.uni-trier.de},
   annote = {
-    The most awesome survey $\cdots$ of its time.
+    This extremely influential article presents agent-oriented programming
+    by contrasting it with object-oriented programming. The focus is mostly
+    on the pre-coding stages of development, when the problem is analysed,
+    and the solution designed and double checked.
   }
 }
 
@@ -115,7 +137,14 @@
   pages     = {489-496},
   ee        = {http://doi.acm.org/10.1145/860575.860654},
   crossref  = {conf/atal/2003},
-  bibsource = {DBLP, http://dblp.uni-trier.de}
+  bibsource = {DBLP, http://dblp.uni-trier.de},
+  annote = {
+    The authors analyze the relation between agents and roles: What does it
+    mean that an agent starts to enact a role? When is an agent suitable to
+    enact a role? Are an agent's goals compatible with a role's requirements?
+    The problem is studied in the context of the
+    3APL~\cite{books/sp/map2005/DastaniRM05} language.
+  }
 }
 
 @inproceedings{conf/atal/WangSZ05,
@@ -129,7 +158,10 @@
   pages     = {1297-1298},
   ee        = {http://doi.acm.org/10.1145/1082473.1082741},
   crossref  = {conf/atal/2005},
-  bibsource = {DBLP, http://dblp.uni-trier.de}
+  bibsource = {DBLP, http://dblp.uni-trier.de},
+  annote = {
+    [NOTE: This should be dropped as it does not seem to be important enough.]
+  }
 }
 
 @inproceedings{conf/coopis/BechtGKM99,
@@ -137,28 +169,45 @@
                Thorsten Gurzki and
                J{\"u}rgen Klarmann and
                Matthias Muscholl},
-  title     = {ROPE: Role Oriented Programming Environment for Multiagent
+  title     = {{ROPE}: Role Oriented Programming Environment for Multiagent
                Systems},
   booktitle = {CoopIS},
   year      = {1999},
   pages     = {325-333},
   ee        = {db/conf/coopis/BechtGKM99.html, http://doi.ieeecomputersociety.org/10.1109/COOPIS.1999.792181},
   crossref  = {conf/coopis/1999},
-  bibsource = {DBLP, http://dblp.uni-trier.de}
+  bibsource = {DBLP, http://dblp.uni-trier.de},
+  annote = {
+    This is the case study on the importance of communication in agent systems.
+    A simple war game is simulated. The `good' side is played once by humans
+    and once by agents programmed in Common Lisp. Both humans and agents
+    try once without communicating and once communicating. The results are
+    as expected: Agents are slighlty better than humans, and communictaion
+    improves performance. The agents are programmed around the concept of role.
+  }
 }
 
 @inproceedings{conf/coopis/CabriLZ03,
   author    = {Giacomo Cabri and
                Letizia Leonardi and
                Franco Zambonelli},
-  title     = {BRAIN: A Framework for Flexible Role-Based Interactions
+  title     = {{BRAIN}: A Framework for Flexible Role-Based Interactions
                in Multiagent Systems},
   booktitle = {CoopIS/DOA/ODBASE},
   year      = {2003},
   pages     = {145-161},
   ee        = {http://springerlink.metapress.com/openurl.asp?genre=article{\&}issn=0302-9743{\&}volume=2888{\&}spage=145},
   crossref  = {conf/coopis/2003},
-  bibsource = {DBLP, http://dblp.uni-trier.de}
+  bibsource = {DBLP, http://dblp.uni-trier.de},
+  annote = {
+    Agents interact through messages, which may be written using a standardized
+    syntax like FIPA-ACL. There is however a significant probability that
+    things will run amok at runtime. The situation is somewhat akin to dynamic
+    typing. This article proposes an extra level of structure on messages.
+    The language used to express the extra structure is called XRole.
+    RoleX~\cite{journals/ibmsj/CabriFL05}
+    is a communication infrastructure that understands XRole.
+  }
 }
 
 @inproceedings{conf/coordination/JamisonL99,
@@ -303,6 +352,7 @@
   organization={Citeseer}
 }
 
+journals {{{2
 @article{journals/aamas/Dastani08,
   author    = {Mehdi Dastani},
   title     = {{2APL}: a practical agent programming language},
@@ -341,7 +391,7 @@
   pages     = {285--312},
   bibsource = {DBLP, http://dblp.uni-trier.de},
   annote = {
-    Introduce a complete and general methodology for the analysis and design of
+    Introduces a complete and general methodology for the analysis and design of
       MAS. It defines the structure of the MAS in terms of a role model. As it
       doesn't support the implementation it has to be used in conjunction with
       other tools. ABLE and JADE were two frameworks used lately to complement 
@@ -364,6 +414,21 @@
     mental states, (2)~a language for manipulating mental states and messages,
     and (3)~bla-bla.
   }
+}
+
+@article{journals/ibmsj/CabriFL05,
+  author    = {Giacomo Cabri and
+               Luca Ferrari and
+               Letizia Leonardi},
+  title     = {Injecting roles in Java agents through runtime bytecode
+               manipulation},
+  journal   = {IBM Systems Journal},
+  volume    = {44},
+  number    = {1},
+  year      = {2005},
+  pages     = {185-210},
+  ee        = {http://dx.doi.org/10.1147/sj.441.0185},
+  bibsource = {DBLP, http://dblp.uni-trier.de}
 }
 
 @article{journals/ijaose/HubnerSB07,
@@ -445,7 +510,8 @@
   organization={IEEE}
 }
 
-% Group
+groups {{{1
+
 @book{books/sp/map05,
   editor    = {Rafael H. Bordini and
                Mehdi Dastani and
