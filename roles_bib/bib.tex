@@ -1,28 +1,41 @@
+% header {{{1
 \documentclass{article}
-%\usepackage{apacite}
-\usepackage[english]{babel}
+% packages {{{2
 \usepackage[annote]{babelbib}
+\usepackage[english]{babel}
+\usepackage{microtype}
 
+% macros {{{2
 \renewcommand{\btxannotation}[1]{\par\noindent\textit{#1}}
+\newcommand{\fb}[1]{\textbf{#1}}
 
-\title{Roles in Agent-Oriented Programming\\[1ex]\small{annotated bibliography}}
-
+% title, author, ... {{{2
+\title{Roles in Agent-Oriented Programming}
 \begin{document}
 \maketitle
-
+% abstract {{{1
 \begin{abstract}
-TODO
+We survey the literature and the tools related to roles as used in agent-oriented programming.
 \end{abstract}
 
+% intro {{{1
 \section{Introduction}
+
+AOP (\fb agent-\fb oriented \fb programming) is an alternative to OOP (\fb object-\fb oriented \fb programming).
+Very roughly, agents replace objects, logic formulas replace primitive values, messages replace method calls, and roles replace classes and interfaces.
+Just as interfaces are very useful for developing large OO programs, so are roles very useful for developing large agent systems.
+
+
 
 Test text:
 AOP~\cite{journals/ai/Shoham93} is a fairly new programming paradigm.
 Also, Gaia~\cite{journals/aamas/WooldridgeJK00} is so cool.
 Software engineering is better ever since~\cite{conf/aose/WooldridgeC00}.
 
+% conceptual models {{{1
 \section{Conceptual Models}
 
+% implementations {{{1
 \section{Implementations}
 
 The following implementations are of high-quality and are actively developed.
@@ -36,6 +49,7 @@ The following implementations are of high-quality and are actively developed.
 \item AgentFactory
 \end{itemize}
 
+% footer {{{
 \bibliographystyle{babplain-fl}
 \bibliography{bib}
 \end{document}

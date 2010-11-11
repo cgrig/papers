@@ -32,19 +32,36 @@
   year      = {2005},
   pages     = {39-67},
   crossref  = {books/sp/map05},
-  bibsource = {DBLP, http://dblp.uni-trier.de}
+  bibsource = {DBLP, http://dblp.uni-trier.de},
+  annote = {
+    3APL~(pronounced triple-ey-pee-el) is an agent language and a development
+    platform. The basic building blocks of the language are beliefs, plans,
+    goals, and reasoning rules (to revise and generate plans).
+    3APL evolved into 2APL~\cite{todo}.
+  }
 }
 
 @inproceedings{conf/agents/GutknechtF00a,
   author    = {Olivier Gutknecht and
                Jacques Ferber},
-  title     = {The MADKIT Agent Platform Architecture},
+  title     = {The {MadKit} Agent Platform Architecture},
   booktitle = {Agents Workshop on Infrastructure for Multi-Agent Systems},
   year      = {2000},
   pages     = {48-55},
   ee        = {http://link.springer.de/link/service/series/0558/bibs/1887/18870048.htm},
   crossref  = {conf/agents/2000w},
-  bibsource = {DBLP, http://dblp.uni-trier.de}
+  bibsource = {DBLP, http://dblp.uni-trier.de},
+  annote = {
+    The basic concepts of MadKit---agent, group, and model---are taken
+    from AALAADIN~\cite{todo}. An agent is typically a Java subclass 
+    of~\textit{Agent}, but may also be an written in Python, Scheme, and
+    a couple of other languages. Groups and roles are represented by string
+    identifiers. An agent may create a group, and may assume a role in a group.
+    The platform keeps track of such memberships and uses that information
+    when an agent requests that a message be sent to all the agents in a
+    certain group. Agents are completely oblivious to whether the receivers
+    of their messages run on the same physical machine or not.
+  }
 }
 
 @inproceedings{conf/aose/FerberGM03,
@@ -183,6 +200,19 @@
   bibsource = {DBLP, http://dblp.uni-trier.de}
 }
 
+@inproceedings{conf/prima/DastaniMS08,
+  author    = {Mehdi Dastani and
+               Christian P. Mol and
+               Bas R. Steunebrink},
+  title     = {Modularity in Agent Programming Languages},
+  booktitle = {PRIMA},
+  year      = {2008},
+  pages     = {139-152},
+  ee        = {http://dx.doi.org/10.1007/978-3-540-89674-6_17},
+  crossref  = {conf/prima/2008},
+  bibsource = {DBLP, http://dblp.uni-trier.de}
+}
+
 @inproceedings{conf/promas/RossCO04,
   author    = {Robert J. Ross and
                Rem W. Collier and
@@ -271,6 +301,18 @@
   booktitle={5th International Conference on Autonomous Agents},
   year={2001},
   organization={Citeseer}
+}
+
+@article{journals/aamas/Dastani08,
+  author    = {Mehdi Dastani},
+  title     = {{2APL}: a practical agent programming language},
+  journal   = {Autonomous Agents and Multi-Agent Systems},
+  volume    = {16},
+  number    = {3},
+  year      = {2008},
+  pages     = {214-248},
+  ee        = {http://dx.doi.org/10.1007/s10458-008-9036-y},
+  bibsource = {DBLP, http://dblp.uni-trier.de}
 }
 
 @article{journals/aamas/Vazquez-SalcedaDD05,
@@ -554,6 +596,23 @@
   volume    = {5244},
   year      = {2008},
   isbn      = {978-3-540-87804-9},
+  bibsource = {DBLP, http://dblp.uni-trier.de}
+}
+
+@proceedings{conf/prima/2008,
+  editor    = {The Duy Bui and
+               Tuong Vinh Ho and
+               Quang-Thuy Ha},
+  title     = {Intelligent Agents and Multi-Agent Systems, 11th Pacific
+               Rim International Conference on Multi-Agents, PRIMA 2008,
+               Hanoi, Vietnam, December 15-16, 2008. Proceedings},
+  booktitle = {PRIMA},
+  publisher = {Springer},
+  series    = {Lecture Notes in Computer Science},
+  volume    = {5357},
+  year      = {2008},
+  isbn      = {978-3-540-89673-9},
+  ee        = {http://dx.doi.org/10.1007/978-3-540-89674-6},
   bibsource = {DBLP, http://dblp.uni-trier.de}
 }
 
