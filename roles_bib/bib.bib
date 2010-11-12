@@ -226,6 +226,17 @@ conf {{{2
   }
 }
 
+@inproceedings{conf/focs/Pnueli77,
+  author    = {Amir Pnueli},
+  title     = {The Temporal Logic of Programs},
+  booktitle = {FOCS},
+  year      = {1977},
+  pages     = {46-57},
+  crossref  = {conf/focs/FOCS18},
+  bibsource = {DBLP, http://dblp.uni-trier.de},
+  annote = { [NOTE: Delayed because it's a bit removed.] }
+}
+
 @inproceedings{conf/maamaw/Rao96,
   author    = {Anand S. Rao},
   title     = {{AgentSpeak(L)}: {BDI} Agents Speak Out in a Logical Computable
@@ -330,13 +341,21 @@ conf {{{2
                Dov M. Gabbay and
                Graham Gough and
                Richard Owens},
-  title     = {METATEM: A Framework for Programming in Temporal Logic},
+  title     = {{MetateM}: A Framework for Programming in Temporal Logic},
   booktitle = {REX Workshop},
   year      = {1989},
   pages     = {94-129},
   ee        = {http://dx.doi.org/10.1007/3-540-52559-9_62},
   crossref  = {conf/rex/1989},
-  bibsource = {DBLP, http://dblp.uni-trier.de}
+  bibsource = {DBLP, http://dblp.uni-trier.de},
+  annote = {
+    Temporal logic was imported from mathematics into computer science because
+    it seemed well-suited to specify liveness properties of concurrent
+    programs~\cite{conf/focs/Pnueli77}.  It subsequently found many other uses.
+    Barringer \emph{et al.}\ give here an execution mechanism for propositional
+    temporal logic, and for a restricted first order temporal logic. Thus, they
+    show how to use temporal logic as an imperative programming language.
+  }
 }
 
 @inproceedings{conf/sac/DragoneLCO09,
@@ -344,13 +363,17 @@ conf {{{2
                David Lillis and
                Rem W. Collier and
                Gregory M. P. O'Hare},
-  title     = {SoSAA: a framework for integrating components {\&} agents},
+  title     = {{SoSAA}: a framework for integrating components {\&} agents},
   booktitle = {SAC},
   year      = {2009},
   pages     = {722-728},
   ee        = {http://doi.acm.org/10.1145/1529282.1529432},
   crossref  = {conf/sac/2009},
-  bibsource = {DBLP, http://dblp.uni-trier.de}
+  bibsource = {DBLP, http://dblp.uni-trier.de},
+  annote = {
+    Explains how agents and components may co-operate in a single system.
+    The key is a so-called adapter layer.
+  }
 }
 
 @inproceedings{conf/sbia/HubnerSB02,
@@ -364,7 +387,12 @@ conf {{{2
   pages     = {118-128},
   ee        = {http://link.springer.de/link/service/series/0558/bibs/2507/25070118.htm},
   crossref  = {conf/sbia/2002},
-  bibsource = {DBLP, http://dblp.uni-trier.de}
+  bibsource = {DBLP, http://dblp.uni-trier.de},
+  annote = {
+    Introduces the Moise+ organizational model, in which the organization
+    is an active entity that may veto agents' actions if they disobey a certain
+    specification.
+  }
 }
 
 @article{bush2001styx,
@@ -372,25 +400,38 @@ conf {{{2
   author={Bush, G. and Cranefield, S. and Purvis, M.},
   journal={The Information Science Discussion Paper Series},
   volume={2},
-  year={2001}
+  year={2001},
+  annote = {[NOTE: not that notable.]}
 }
 
 @article{deloach2004mase,
-  title={{The mase methodology}},
+  title={The {MaSE} methodology},
   author={DeLoach, S.},
   journal={Methodologies and software engineering for agent systems},
   pages={107--125},
   year={2004},
-  publisher={Springer}
+  publisher={Springer},
+  annote = {
+    MaSE is a methodology that uses UML-like notations. Roles are a primitive
+    concept in MaSE, but there is no organization.
+  }
 }
 
 @article{hindriks2009programmingrationalagents,
-  title={{ProgrammingRationalAgents in GOAL}},
+  title={Programming Rational Agents in {Goal}},
   author={Hindriks, K.V.},
   journal={Multi-Agent Programming:},
-  pages={119--157},
+  pages={119-157},
   year={2009},
-  publisher={Springer}
+  publisher={Springer},
+  annote = {
+    Goal is a Prolog-like programming language for agent systems.
+    A program consists of a knowledge base, a belief base, a goal base,
+    a set of action rules, action specifications, and perception rules.
+    The action rules say which actions should be executed, based on the
+    current beliefs and goals. The language Goal has no durect support
+    for roles.
+  }
 }
 
 @conference{howden2001jack,
@@ -398,7 +439,12 @@ conf {{{2
   author={Howden, N. and R{\\"o}nnquist, R. and Hodgson, A. and Lucas, A.},
   booktitle={5th International Conference on Autonomous Agents},
   year={2001},
-  organization={Citeseer}
+  organization={Citeseer},
+  annote = {
+    JACK is a Java framework for developing agents. It supports \emph{team
+    programming}. The members of a team are partitioned into abstract
+    \emph{roles}.
+  }
 }
 
 journals {{{2
@@ -709,6 +755,15 @@ groups {{{1
   volume    = {1594},
   year      = {1999},
   isbn      = {3-540-65836-X},
+  bibsource = {DBLP, http://dblp.uni-trier.de}
+}
+
+@proceedings{conf/focs/FOCS18,
+  title     = {18th Annual Symposium on Foundations of Computer Science,
+               31 October-2 November, Providence, Rhode Island, USA},
+  booktitle = {FOCS},
+  publisher = {IEEE},
+  year      = {1977},
   bibsource = {DBLP, http://dblp.uni-trier.de}
 }
 
