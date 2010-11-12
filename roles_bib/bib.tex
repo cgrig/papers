@@ -5,9 +5,12 @@
 \usepackage[english]{babel}
 \usepackage{microtype}
 
+\usepackage{hyperref}
+
 % macros {{{2
-\renewcommand{\btxannotation}[1]{\par\noindent\textit{#1}}
 \newcommand{\fb}[1]{\textbf{#1}}
+\renewcommand{\btxannotation}[1]{\par\noindent\textit{#1}}
+\renewcommand{\sectionautorefname}{Section}
 
 % title, author, ... {{{2
 \title{An Annotated Bibliography of Roles in Agent-Oriented Programming}
@@ -19,27 +22,21 @@ We survey the literature and the tools related to roles as used in agent-oriente
 The focus is on practical advances, which may be of interest to software developers.
 \end{abstract}
 
-% intro {{{1
-\section{Introduction}
+\section{Introduction}\label{sec:introduction} %{{{1
 
 AOP (\fb agent-\fb oriented \fb programming) is an alternative to OOP (\fb object-\fb oriented \fb programming).
 Very roughly, agents replace objects, logic formulas replace primitive values, messages replace method calls, and roles replace classes and interfaces.
 Just as interfaces are very useful for developing large OO programs, so are roles very useful for developing large agent systems.
 
-TODO: Perl has roles! That \emph{must} be mentioned.
+We are not aware of any large ($>100{,}000$ lines of code) agent system.
+This may be because agent-oriented development tools, in general, and tools that support roles and organizations, in particular, are just beginning to mature.
+There exist however a few agent systems, some of them fun, some of them useful, and some of them even using roles.
+[TODO: Give some examples of agent systems, such as RoboCup soccer.]
 
-NOTE: There's a slew of abstract work that we ignore, because we focus on those research contributions that resulted in executable artefacts.
+We then list the main development environments (interpreters, libraries, etc.) that support roles and compare then with regards to various characteristics (\autoref{sec:implementations}).
+Finally, we present the main methodologies and conceptual models (\autoref{sec:general_nonsense}) that complement and motivate the existing implementations.
 
-Test text:
-AOP~\cite{journals/ai/Shoham93} is a fairly new programming paradigm.
-Also, Gaia~\cite{journals/aamas/WooldridgeJK00} is so cool.
-Software engineering is better ever since~\cite{conf/aose/WooldridgeC00}.
-
-% conceptual models {{{1
-\section{Conceptual Models}
-
-% implementations {{{1
-\section{Implementations}
+\section{Implementations}\label{sec:implementations} %{{{1
 
 The following implementations are of high-quality and are actively developed.
 \begin{itemize}
@@ -52,7 +49,11 @@ The following implementations are of high-quality and are actively developed.
 \item AgentFactory
 \end{itemize}
 
-% notes {{{1
+\section{Methodologies and Conceptual Models}\label{sec:general_nonsense} %{{{1
+
+\section{Conclusions}\label{sec:conclusions} %{{{1
+
+\section{Working Notes} %{{{1
 Methodologies that emphasize social aspects:
 \begin{itemize}
 \item GAIA~\cite{journals/aamas/WooldridgeJK00}
@@ -66,7 +67,16 @@ Metamodels that emphasize social aspects:
 \item RIO
 \end{itemize}
 
-% footer {{{
+TODO: Perl has roles! That \emph{must} be mentioned.
+
+NOTE: There's a slew of abstract work that we ignore, because we focus on those research contributions that resulted in executable artefacts.
+
+Test text:
+AOP~\cite{journals/ai/Shoham93} is a fairly new programming paradigm.
+Also, Gaia~\cite{journals/aamas/WooldridgeJK00} is so cool.
+Software engineering is better ever since~\cite{conf/aose/WooldridgeC00}.
+
+% footer {{{1
 \bibliographystyle{babplain-fl}
 \bibliography{bib}
 \end{document}
