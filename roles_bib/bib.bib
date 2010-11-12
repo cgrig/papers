@@ -457,7 +457,14 @@ journals {{{2
   year      = {2008},
   pages     = {214-248},
   ee        = {http://dx.doi.org/10.1007/s10458-008-9036-y},
-  bibsource = {DBLP, http://dblp.uni-trier.de}
+  bibsource = {DBLP, http://dblp.uni-trier.de},
+  annote = {
+    2APL (read ``a practical agent programming language'') is an evolution
+    of~\cite{books/sp/map2005/DastaniRM05} that emphasizes the interaction
+    between agents. The new concepts include sets of agents, environments,
+    access rights of agents to environments, events, goals. There is no
+    direct support for roles.
+  }
 }
 
 @article{journals/aamas/Vazquez-SalcedaDD05,
@@ -471,7 +478,13 @@ journals {{{2
   year      = {2005},
   pages     = {307-360},
   ee        = {http://dx.doi.org/10.1007/s10458-005-1673-9},
-  bibsource = {DBLP, http://dblp.uni-trier.de}
+  bibsource = {DBLP, http://dblp.uni-trier.de},
+  annote = {
+    Introduces the OMNI methodology, which is centered around the idea of
+    normative organization. Agents play roles within organizations. The
+    norms of an organization are meant to enable reasoning about whole
+    systems: Is a system stable? Will it converge?
+  }
 }
 
 @article{journals/aamas/WooldridgeJK00,
@@ -507,7 +520,7 @@ journals {{{2
     This is the article that introduced the AOP concept. It identifies the
     main components of an AOP framework: (1)~a language for representing
     mental states, (2)~a language for manipulating mental states and messages,
-    and (3)~bla-bla.
+    and (3)~a means to agentify traditional components.
   }
 }
 
@@ -523,7 +536,15 @@ journals {{{2
   year      = {2005},
   pages     = {185-210},
   ee        = {http://dx.doi.org/10.1147/sj.441.0185},
-  bibsource = {DBLP, http://dblp.uni-trier.de}
+  bibsource = {DBLP, http://dblp.uni-trier.de},
+  annote = {
+    RoleX is an interaction infrastructure that enables agents to enact and
+    diact roles at runtime. In this context, agents are Java objects and roles
+    are sets of Java methods, roughly. Enacting a role is implemented by
+    instrumenting at runtime the bytecode by adding methods. Roles are
+    described statically in the XML-based language 
+    XRole~\cite{conf/coopis/CabriLZ03}.
+  }
 }
 
 @article{journals/ijaose/HubnerSB07,
@@ -568,7 +589,12 @@ journals {{{2
   year      = {2006},
   pages     = {33-44},
   ee        = {http://www.informatica.si/PDF/30-1/02_Bordini-A\%20Survey\%20of\%20Programming\%20Languages\%20and\%20Platforms...pdf},
-  bibsource = {DBLP, http://dblp.uni-trier.de}
+  bibsource = {DBLP, http://dblp.uni-trier.de},
+  annote = {
+    Surveys European research results related to agents: languages (declarative
+    and imperative), integrated development environments, and frameworks.
+    It does not cover the concept of role.
+  }
 }
 
 @article{journals/informaticaSI/SusiPMG05,
@@ -576,14 +602,23 @@ journals {{{2
                Anna Perini and
                John Mylopoulos and
                Paolo Giorgini},
-  title     = {The Tropos Metamodel and its Use},
+  title     = {The {Tropos} Metamodel and its Use},
   journal   = {Informatica (Slovenia)},
   volume    = {29},
   number    = {4},
   year      = {2005},
   pages     = {401-408},
   ee        = {http://www.informatica.si/PDF/29-4/03_Susi-The\%20Tropos\%20Metamodel\%20and....pdf},
-  bibsource = {DBLP, http://dblp.uni-trier.de}
+  bibsource = {DBLP, http://dblp.uni-trier.de},
+  annote = {
+    Tropos is a modelling methodology useful before gathering specific
+    requirements. It comes with a graphical language similar to UML, but
+    geared towards agent systems. Such diagrams are useful to clarify the
+    problem and to ease the communication between software developers and
+    (future) software users. Tropos incorporate concepts related to society.
+    For example, the nodes in an \emph{actor diagram} are \emph{agents},
+    \emph{positions}, and \emph{roles}.
+  }
 }
 
 @article{journals/logcom/BordiniFWV09,
@@ -598,26 +633,38 @@ journals {{{2
   year      = {2009},
   pages     = {1385-1425},
   ee        = {http://dx.doi.org/10.1093/logcom/exp029},
-  bibsource = {DBLP, http://dblp.uni-trier.de}
+  bibsource = {DBLP, http://dblp.uni-trier.de},
+  annote = {
+    Discusses techniques for efficient model checking of 
+    AgentSpeak~\cite{conf/maamaw/Rao96} programs.
+  }
 }
 
 @article{madrigal2009adding,
-  title={{Adding organisations and roles to JADE with JadeOrgs}},
+  title={Adding organisations and roles to {JADE} with {JadeOrgs}},
   author={Madrigal-Mora, C. and Fischer, K.},
   journal={Agent-Based Technologies and Applications for Enterprise Interoperability},
-  pages={98--117},
+  pages={98-117},
   year={2009},
-  publisher={Springer}
+  publisher={Springer},
+  annote = {
+    [NOTE: Is this significant? There's almost nothing about it on the web.]
+  }
 }
 
 @conference{ubayashi2002roleep,
-  title={{RoleEP: role based evolutionary programming for cooperative mobile agent applications}},
+  title={{RoleEP}: role based evolutionary programming for cooperative mobile agent applications},
   author={Ubayashi, N. and Tamai, T.},
   booktitle={Principles of Software Evolution, 2000. Proceedings. International Symposium on},
-  pages={232--240},
+  pages={232-240},
   isbn={0769509061},
   year={2002},
-  organization={IEEE}
+  organization={IEEE},
+  annote = {
+    [NOTE: I'd rather not include this, because it talks about a framework,
+    Epsilon/J that is nowhere to be found online. It also doesn't have too
+    many citations, considering how old it is.]
+  }
 }
 
 groups {{{1
