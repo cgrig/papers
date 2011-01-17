@@ -6,9 +6,9 @@
 \usepackage{microtype}
 
 \usepackage{hyperref}
-
 % macros {{{2
 \newcommand{\fb}[1]{\textbf{#1}}
+\newenvironment{notes}{\medskip\hrule\smallskip\narrower}{\smallskip\hrule\medskip}
 \renewcommand{\btxannotation}[1]{\par\noindent\textit{#1}}
 \renewcommand{\sectionautorefname}{Section}
 
@@ -16,6 +16,7 @@
 \title{An Annotated Bibliography of Roles in Agent-Oriented Programming}
 \begin{document}
 \maketitle
+
 % abstract {{{1
 \begin{abstract}
 We survey the literature and the tools related to roles as used in agent-oriented programming.
@@ -31,10 +32,27 @@ Just as interfaces are very useful for developing large OO programs, so are role
 We are not aware of any large ($>100{,}000$ lines of code) agent system.
 This may be because agent-oriented development tools, in general, and tools that support roles and organizations, in particular, are just beginning to mature.
 There exist however a few agent systems, some of them fun, some of them useful, and some of them even using roles.
-[TODO: Give some examples of agent systems, such as RoboCup soccer.]
 
-We then list the main development environments (interpreters, libraries, etc.) that support roles and compare then with regards to various characteristics (\autoref{sec:implementations}).
-Finally, we present the main methodologies and conceptual models (\autoref{sec:general_nonsense}) that complement and motivate the existing implementations.
+\begin{notes}
+\emph{Examples of agent systems}
+
+\paragraph{RoboCup}
+According to \url{http://www.robocup.org/}, the first Soccer Server was developed by Itsuki Noda at the ElectroTechnical Laboratory, while doing research on multi-agent systems.
+Today's version is used for a yearly competition.
+The RoboCup competition has various tracks, some focused on soccer and some on other tasks, some using real robots and some focusing on simulation.
+We are here talking about simulation.
+The server itself is written in C++.
+The clients discuss with the server using UDP (messages).
+The simulation is real-time.
+The server keeps track of the environment and of client resources, such as stamina.
+The environment may be 2D or 3D\null.
+A team has 10 field players, 1 goalie, and 1 coach.
+A human referee may interrupt the game and award a free kick, for example when he judges players intention as being malicious.
+
+\end{notes}
+
+Next (\autoref{sec:implementations}), we list the main development environments (interpreters, libraries, etc.) that support roles and compare them with regards to various characteristics.
+Then (\autoref{sec:general_nonsense}), we present the main methodologies and conceptual models  that complement and motivate the existing implementations.
 
 \section{Implementations}\label{sec:implementations} %{{{1
 
