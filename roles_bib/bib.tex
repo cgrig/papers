@@ -4,10 +4,12 @@
 \usepackage[annote]{babelbib}
 \usepackage[english]{babel}
 \usepackage{microtype}
+\usepackage{xcolor}
 
 \usepackage{hyperref}
 % macros {{{2
 \newcommand{\fb}[1]{\textbf{#1}}
+\newcommand{\rg}[1]{{\small[\textcolor{red}{TODO}: #1]}}
 \newenvironment{notes}{\medskip\hrule\smallskip\narrower}{\smallskip\hrule\medskip}
 \renewcommand{\btxannotation}[1]{\par\noindent\textit{#1}}
 \renewcommand{\sectionautorefname}{Section}
@@ -52,16 +54,15 @@ The team members interact with the server through UDP, so there is no incentive 
 The initial RoboCup server was written by researchers working on multi-agent systems.
 Subsequently, it helped research in other fields, particularly in artificial intelligence.
 
+A new competition~\cite{site/mas_contest}, focusing on agents, started in~2005.
+The format is similar---a few clients written by competitors interact with a server written by organizers over a generic protocol.
+The tasks include herding cows, mining gold, gathering food.
+The organizers of the 2011 edition feel that previous competitions did not do enough to encourage a multi-agent programming style.
+The source code of the 2011 participants is available online.
+
+
 \begin{notes}
 \emph{Examples of agent systems}
-
-\paragraph{Multi-agent contest}
-See \url{http://www.multiagentcontest.org/}.
-Very popular in the MAS research community.
-Undergoing a change, since until 2010 many solutions are \emph{one} agent or are completely coordinated by one master agent, thus not really in the spirit of MAS.
-(In other words, competitors used a APL in a traditional way.
-One reason for this was that it takes much less time to develop a traditional solution.)
-
 
 \paragraph{Erlang}
 IIRC, this language is designed for writing distributed systems.
