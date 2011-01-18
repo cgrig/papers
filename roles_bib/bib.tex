@@ -33,21 +33,39 @@ We are not aware of any large ($>100{,}000$ lines of code) agent system.
 This may be because agent-oriented development tools, in general, and tools that support roles and organizations, in particular, are just beginning to mature.
 There exist however a few agent systems, some of them fun, some of them useful, and some of them even using roles.
 
+In practice, the line between agent systems and non-agent systems is not clear cut.
+At one extreme, one could use an agent programming language and write the program in a traditional style, without using in an essential way any of the high-level agent concepts; at the other extreme, one could write a program in C and organize it into agents that maintain state as logic formulas and communicate through messages.
+Similarly, one could write procedural code in Java, and object-oriented code in C\null.
+Since programming style is involved, it is hard to find hard and fast criteria for what constitutes an agent system.
+Still, some guidelines are useful.
+When a significant part of a system is a collection of interacting agents, we may call it an agent system.
+A part of a system qualifies as an agent only if it is fairly autonomous, much more so than a typical object.
+If that part of the system also maintains its state using logic formulas, then we should feel confident in calling it an `agent'.
+
+Let us look at some examples.
+
+RoboCup~\cite{journals/robotics/KitanoANM1998,site/robocup} is a fun yearly competition with multiple tracks.
+One of them, the simulation track, is a soccer contest with rules similar to the real World Cup.
+Each team consists of 12~agents: 10~field players, 1~goalie, and 1~coach.
+The environment and players' resources (like stamina) are managed by a server, which has $\approx48$ thousand lines of code.
+The team members interact with the server through UDP, so there is no incentive to code them in the same language as the server.
+The initial RoboCup server was written by researchers working on multi-agent systems.
+Subsequently, it helped research in other fields, particularly in artificial intelligence.
+
 \begin{notes}
 \emph{Examples of agent systems}
 
-\paragraph{RoboCup}
-According to \url{http://www.robocup.org/}, the first Soccer Server was developed by Itsuki Noda at the ElectroTechnical Laboratory, while doing research on multi-agent systems.
-Today's version is used for a yearly competition.
-The RoboCup competition has various tracks, some focused on soccer and some on other tasks, some using real robots and some focusing on simulation.
-We are here talking about simulation.
-The server itself is written in C++.
-The clients discuss with the server using UDP (messages).
-The simulation is real-time.
-The server keeps track of the environment and of client resources, such as stamina.
-The environment may be 2D or 3D\null.
-A team has 10 field players, 1 goalie, and 1 coach.
-A human referee may interrupt the game and award a free kick, for example when he judges players intention as being malicious.
+\paragraph{Multi-agent contest}
+See \url{http://www.multiagentcontest.org/}.
+Very popular in the MAS research community.
+Undergoing a change, since until 2010 many solutions are \emph{one} agent or are completely coordinated by one master agent, thus not really in the spirit of MAS.
+(In other words, competitors used a APL in a traditional way.
+One reason for this was that it takes much less time to develop a traditional solution.)
+
+
+\paragraph{Erlang}
+IIRC, this language is designed for writing distributed systems.
+See also \url{http://en.wikibooks.org/wiki/Erlang_Programming/Autonomous_Agents}.
 
 \end{notes}
 
