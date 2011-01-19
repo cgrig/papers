@@ -9,7 +9,7 @@
 \usepackage{hyperref}
 % macros {{{2
 \newcommand{\fb}[1]{\textbf{#1}}
-\newcommand{\rg}[1]{{\small[\textcolor{red}{TODO}: #1]}}
+\newcommand{\rg}[1]{{\small[\textcolor{red}{TODO}(rg): #1]}}
 \newenvironment{notes}{\medskip\hrule\smallskip\narrower}{\smallskip\hrule\medskip}
 \renewcommand{\btxannotation}[1]{\par\noindent\textit{#1}}
 \renewcommand{\sectionautorefname}{Section}
@@ -56,10 +56,14 @@ Subsequently, it helped research in other fields, particularly in artificial int
 
 A new competition~\cite{site/mas_contest}, focusing on agents, started in~2005.
 The format is similar---a few clients written by competitors interact with a server written by organizers over a generic protocol.
-The tasks include herding cows, mining gold, gathering food.
+Past tasks include herding cows, mining gold, and gathering food.
 The organizers of the 2011 edition feel that previous competitions did not do enough to encourage a multi-agent programming style.
-The source code of the 2011 participants is available online.
+The source code of the 2010 participants is available online.
 
+These agent systems are fun; other agent systems are useful.
+The Internet email infrastructure~\cite{rfc/5598} is probably the best known agent system.
+(Interestingly, email predates Shoham's article~\cite{journals/ai/Shoham93} that is generally accepted as the spark of the research in agent-oriented programming.)
+\rg{Read and summarize RFC5598.}
 
 \begin{notes}
 \emph{Examples of agent systems}
@@ -67,6 +71,22 @@ The source code of the 2011 participants is available online.
 \paragraph{Erlang}
 IIRC, this language is designed for writing distributed systems.
 See also \url{http://en.wikibooks.org/wiki/Erlang_Programming/Autonomous_Agents}.
+``Everything is a process.''
+Processes communicate thru messages.
+Functional.
+There is a framework called \fb erlang e\fb Xperimental \fb Agent \fb Tool.
+
+\paragraph{MTA}
+Mail servers are technically known as \fb message \fb transfer \fb agents.
+I believe their development had nothing to do with the MAS research community.
+The oldest RFC that mentions MTA is from 1993, the same year as Shoham's article.
+The overall architecture for email is described in \href{http://tools.ietf.org/html/rfc5598}{RFC5598}, from 2009.
+
+\paragraph{Browsers}
+Browsers are called ``HTTP user agents''.
+The other HTTP user agents are usually browser-like software libraries.
+
+\paragraph{Chat-bots}
 
 \end{notes}
 
