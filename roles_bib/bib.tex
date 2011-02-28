@@ -1,39 +1,48 @@
-% header {{{1
+% header {{{
 \documentclass{article}
-% packages {{{2
+
+% packages {{{
 \usepackage[annote]{babelbib}
 \usepackage[english]{babel}
 \usepackage{microtype}
 \usepackage{xcolor}
 
 \usepackage{hyperref}
-% macros {{{2
+
+% }}}
+% macros {{{
 \newcommand{\fb}[1]{\textbf{#1}}
 \newcommand{\rg}[1]{{\small[\textcolor{red}{TODO}(rg): #1]}}
 \newenvironment{notes}{\medskip\hrule\smallskip\narrower}{\smallskip\hrule\medskip}
 \renewcommand{\btxannotation}[1]{\par\noindent\textit{#1}}
 \renewcommand{\sectionautorefname}{Section}
 
-% title, author, ... {{{2
+% }}}
+% title, author, ... {{{
 \title{An Annotated Bibliography of Roles in Agent-Oriented Programming}
 \begin{document}
 \maketitle
 
-% abstract {{{1
+% }}}
+% }}}
+% abstract {{{
 \begin{abstract}
 We survey the literature and the tools related to roles as used in agent-oriented programming.
 The focus is on practical advances, which may be of interest to software developers.
 \end{abstract}
 
-\section{Introduction}\label{sec:introduction} %{{{1
+% }}}
+
+\section{Introduction}\label{sec:introduction} %{{{
 
 AOP (\fb agent-\fb oriented \fb programming) is an alternative to OOP (\fb object-\fb oriented \fb programming).
 Very roughly, agents replace objects, logic formulas replace primitive values, messages replace method calls, and roles replace classes and interfaces.
 Just as interfaces are very useful for developing large OO programs, so are roles very useful for developing large agent systems.
 
+\rg{It may very well be that all implementations for Internet Mail break this barrier. Internet browsers are definitely bigger. Rethink this paragraph.}
 We are not aware of any large ($>100{,}000$ lines of code) agent system.
 This may be because agent-oriented development tools, in general, and tools that support roles and organizations, in particular, are just beginning to mature.
-There exist however a few agent systems, some of them fun, some of them useful, and some of them even using roles.
+There exist, however, a few agent systems, some fun, some useful, and some even using roles.
 
 In practice, the line between agent systems and non-agent systems is not clear cut.
 At one extreme, one could use an agent programming language and write the program in a traditional style, without using in an essential way any of the high-level agent concepts; at the other extreme, one could write a program in C and organize it into agents that maintain state as logic formulas and communicate through messages.
@@ -60,10 +69,25 @@ Past tasks include herding cows, mining gold, and gathering food.
 The organizers of the 2011 edition feel that previous competitions did not do enough to encourage a multi-agent programming style.
 The source code of the 2010 participants is available online.
 
-These agent systems are fun; other agent systems are useful.
-The Internet email infrastructure~\cite{rfc/5598} is probably the best known agent system.
-(Interestingly, email predates Shoham's article~\cite{journals/ai/Shoham93} that is generally accepted as the spark of the research in agent-oriented programming.)
-\rg{Read and summarize RFC5598.}
+These agent systems are fun and push the boundaries; 
+other agent systems are useful and robust.
+
+Internet mail has an agent-oriented architecture~\cite{rfc/5598}.
+There are five types of agents, distinguished by the functions they perform: message user agent, message submission agent, message transfer agent, message delivery agent, and message store.
+Functions fulfill responsibilities, responsibilities are grouped into roles, and agents act in roles.
+Roles come in two flavors, based on whether fulfilling them requires looking inside the envelope.
+The user actors are: authors, recipients, return handlers, and mediators.
+The infrastructure actors are: originator, relay, receiver, and gateway.
+
+Internet mail agents are autonomous.
+For example, if a message transfer agent is shut down for not too long, then message delivery may be delayed but does not otherwise suffer.
+Other agents are autonomous and know how to deal with an unresponsive message transfer agent.
+Such resilience owes to the lack of state.
+The only agent whose state is important is the message store.
+
+The Internet mail architecture has many implementations.
+User agents come bundled in an email client (Microsoft Outlook, GMail) and infrastructure agents come bundled in an email server (sendmail, postfix).
+In postfix~\cite{site/postfix}, agents are implemented as operating system processes, so they are indeed loosely coupled.
 
 \begin{notes}
 \emph{Examples of agent systems}
@@ -75,12 +99,6 @@ See also \url{http://en.wikibooks.org/wiki/Erlang_Programming/Autonomous_Agents}
 Processes communicate thru messages.
 Functional.
 There is a framework called \fb erlang e\fb Xperimental \fb Agent \fb Tool.
-
-\paragraph{MTA}
-Mail servers are technically known as \fb message \fb transfer \fb agents.
-I believe their development had nothing to do with the MAS research community.
-The oldest RFC that mentions MTA is from 1993, the same year as Shoham's article.
-The overall architecture for email is described in \href{http://tools.ietf.org/html/rfc5598}{RFC5598}, from 2009.
 
 \paragraph{Browsers}
 Browsers are called ``HTTP user agents''.
