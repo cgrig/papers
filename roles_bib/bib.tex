@@ -89,30 +89,13 @@ The Internet mail architecture has many implementations.
 User agents come bundled in an email client (Microsoft Outlook, GMail) and infrastructure agents come bundled in an email server (sendmail, postfix).
 In postfix~\cite{site/postfix}, agents are implemented as operating system processes, so they are indeed loosely coupled.
 
-\begin{notes}
-\emph{Examples of agent systems}
-
-\paragraph{Erlang}
-IIRC, this language is designed for writing distributed systems.
-See also \url{http://en.wikibooks.org/wiki/Erlang_Programming/Autonomous_Agents}.
-``Everything is a process.''
-Processes communicate thru messages.
-Functional.
-There is a framework called \fb erlang e\fb Xperimental \fb Agent \fb Tool, which seems to be dead since 2004.
-
-\paragraph{Browsers}
-Browsers are called ``HTTP user agents''.
-The other HTTP user agents are usually browser-like software libraries.
-
-\paragraph{Chat-bots}
-
-\end{notes}
-
 Next (\autoref{sec:implementations}), we list the main development environments (interpreters, libraries, etc.) that support roles and compare them with regards to various characteristics.
 Then (\autoref{sec:general_nonsense}), we present the main methodologies and conceptual models  that complement and motivate the existing implementations.
 
+% }}}
 \section{Implementations}\label{sec:implementations} %{{{
 
+\begin{notes}
 The following implementations are of high-quality and are actively developed.
 \begin{itemize}
 \item Jason~\cite{books/sp/map2005/BordiniHV05}
@@ -123,21 +106,11 @@ The following implementations are of high-quality and are actively developed.
 \item The RoboCup soccer simulator
 \item AgentFactory
 \end{itemize}
-
-\begin{notes}
-Compare with:
-\begin{itemize}
-\item perl roles \url{http://perlcabal.org/syn/S14.html}
-\item traits \url{http://scg.unibe.ch/research/traits/}
-\item type classes \url{http://research.microsoft.com/en-us/um/people/simonpj/papers/haskell-retrospective/ECOOP-July09.pdf}
-\end{itemize}
 \end{notes}
 
-\section{Methodologies and Conceptual Models}\label{sec:general_nonsense} %{{{1
+\section{Methodologies and Conceptual Models}\label{sec:general_nonsense} %{{{
 
-\section{Conclusions}\label{sec:conclusions} %{{{1
-
-\section{Working Notes} %{{{1
+\begin{notes}
 Methodologies that emphasize social aspects:
 \begin{itemize}
 \item GAIA~\cite{journals/aamas/WooldridgeJK00}
@@ -150,20 +123,29 @@ Metamodels that emphasize social aspects:
 \item AGR~\cite{conf/aose/FerberGM03}
 \item RIO
 \end{itemize}
+\end{notes}
 
-TODO: Perl has roles! That \emph{must} be mentioned.
+%}}}
+\section{Roles without Agents}\label{sec:other_roles} %{{{
 
-NOTE: There's a slew of abstract work that we ignore, because we focus on those research contributions that resulted in executable artefacts.
+\begin{notes}
+\begin{itemize}
+\item roles in Perl \url{http://perlcabal.org/syn/S14.html}
+\item traits \url{http://scg.unibe.ch/research/traits/}
+\item type classes \url{http://research.microsoft.com/en-us/um/people/simonpj/papers/haskell-retrospective/ECOOP-July09.pdf}
+\end{itemize}
+\end{notes}
 
-Test text:
-AOP~\cite{journals/ai/Shoham93} is a fairly new programming paradigm.
-Also, Gaia~\cite{journals/aamas/WooldridgeJK00} is so cool.
-Software engineering is better ever since~\cite{conf/aose/WooldridgeC00}.
+%}}}
+\section{Conclusions}\label{sec:conclusions} %{{{
 
-% footer {{{1
+%}}}
+% footer {{{
 \bibliographystyle{babplain-fl}
 \bibliography{bib}
 \end{document}
+%}}}
 
-% see http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.33.8207&rep=rep1&type=pdf
+% example annotated bibliography:
+%   http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.33.8207&rep=rep1&type=pdf
 

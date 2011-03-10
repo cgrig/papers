@@ -1,0 +1,93 @@
+TODO: check which ones have >=12 commits in the last year.
+      (that's half what freeboogie has)
+
+open source:
+  git clone https://github.com/mcpat/microjiac-public.git microjiac
+  git clone git://jason.git.sourceforge.net/gitroot/jason/jason jason
+  svn co https://agentfactory.svn.sourceforge.net/svnroot/agentfactory agentfactory
+  svn co https://jadex.svn.sourceforge.net/svnroot/jadex jadex
+  wget http://www.fluxagent.org/download.php?file=Flux-3.1.tgz
+  svn co https://apapl.svn.sourceforge.net/svnroot/apapl/trunk 2apl
+  wget http://itee.uq.edu.au/~pjr/HomePages/QPFiles/qp8.12.tar.gz
+  svn co https://repast.svn.sourceforge.net/svnroot/repast repast
+  svn co https://avalon.cselt.it/svn/jade/trunk jade
+  svn co https://avalon.cselt.it/svn/jade_add-ons/trunk jade-addons
+  cvs -d:pserver:anonymous@madkit.cvs.sourceforge.net:/cvsroot/madkit login; cvs -z3 -d:pserver:anonymous@madkit.cvs.sourceforge.net:/cvsroot/madkit co -P madkit
+  wget http://www.cs.uu.nl/3apl/download/haskell/triple-apl.zip # haskell version
+  svn checkout http://semanticagent.googlecode.com/svn/trunk/ semanticagent
+  wget http://libslack.org/download/libslack-0.6.tar.gz
+  wget http://www.agentsolutions.com/brahms/agentenvironment/v2.0a/linux/setup.bin.gz # TODO check that source is in here
+  wget http://www.agentservice.it/download/agentservice-1.0.15.zip # TODO check
+
+closed source
+  wget http://ccl.northwestern.edu/netlogo/4.1.2/netlogo-4.1.2.tar.gz # TODO: is source in jars?
+  http://www.agent-software.com.au/products/jack/
+  wget http://www.cs.uu.nl/3apl/download/java/3apl.zip # java version
+
+used in multiagentcontest.org, summary:
+  4 http://www.jiac.de/  
+  3 http://jason.sourceforge.net/Jason/Jason.html
+  3 http://www.agentfactory.com/index.php/Main_Page
+  2 http://jadex-agents.informatik.uni-hamburg.de/xwiki/bin/view/About/Overview
+  1 http://ccl.northwestern.edu/netlogo/
+  1 http://www.fluxagent.org/
+  1 http://apapl.sourceforge.net/
+  1 http://www.agent-software.com.au/products/jack/
+  1 http://itee.uq.edu.au/~pjr/HomePages/QuPrologHome.html
+
+used in multiagentcontest.org
+  2010
+    JIAC V
+    JASON & DLV
+    MicroJIAC
+    Jason
+    AF-ABLE
+    Jason
+    Java
+    Java
+  2009
+    JIAC V
+    Jadex
+    ?
+    Jason
+    Smaper ?
+    MicroJIAC
+    AF-ABLE
+  2008
+    JIAC
+    Jadex
+    NetLogo
+    krzaczory ?
+    Jason
+    AF
+    KANGAL ?
+  2007
+    JIAC IV
+    MicroJIAC
+    Jason
+    FLUX
+    APL
+    JACK
+  2006
+    brazil ?
+    spain ?
+    germany ?
+  2005
+    Qu-Prolog
+    ?
+
+from dmoz
+  http://repast.sourceforge.net/
+  http://jade.tilab.com/
+  http://jason.sourceforge.net/
+  http://www.madkit.org/
+  http://www.cs.uu.nl/3apl/
+  http://code.google.com/p/semanticagent/
+ 
+tool homepages found by google search: agent oriented programming
+  http://libslack.org/
+  http://apapl.sourceforge.net/
+  http://www.agentsolutions.com/documentation/index.htm
+  http://www.agentservice.it/
+
+
