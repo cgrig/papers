@@ -326,11 +326,15 @@ Depending on the domain of application's type the design of multiagent systems w
 
 \subsection{SODA}
 
-\cite{conf/aose/Omicini00}
+SODA \cite{conf/aose/Omicini00} is an agent oriented methodology for the analysis and design of Internet-based systems. It focuses on the social aspects  exploiting coordination models and technologies. The key concepts are tasks, services, society (with a clear separation between individual an social) and environment. SODA doesn't address any intra-agent issues.
+
+During the Analysis phase three models are generated: Role Model,based on tasks (composed of responsibilities, required competences, and resources), roles (consisting of individual tasks, permissions to access resources, and interaction protocols) and groups (formed of social tasks, permissions to access resources, social roles, and interaction rules). Resource Model, based on services as abstract resources representing the functionality provided by the agent environment. Interaction Model, consisting of interaction protocols and interaction rules.
+
+The Design phase results in three other models: Agent Model -- individual and social roles are mapped upon agent classes. Society Model -- groups are mapped onto a society of agents. Environment model -- resources are mapped onto infrastructure classes.
 
 \subsection{Styx}
 
-The Styx methodology\cite{bush2001styx} is targeted to the development of collaborative agent systems with less than 30 roles. Roles are represented as agent classes. Styx methodology covers all of the life-cycle activities: 
+The Styx methodology \cite{bush2001styx} is targeted to the development of collaborative agent systems with less than 30 roles. Roles are represented as agent classes. Styx methodology covers all of the life-cycle activities: 
 
 Analysis -- focuses on the identification of agent roles and domain concepts and generating Use-Case Maps and Domain Concepts Models; 
 
