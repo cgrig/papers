@@ -1,5 +1,7 @@
+IN=.:../roles_bib:
+
 all:
-	rubber --pdf --force survey
+	TEXINPUTS=$(IN) BIBINPUTS=$(IN) rubber --pdf --force survey
 
 clean:
 	rubber --pdf --clean survey
