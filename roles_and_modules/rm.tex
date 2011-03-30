@@ -1,0 +1,63 @@
+\documentclass[conference,compsoc]{IEEEtran}
+\usepackage[cmex10]{amsmath}\interdisplaylinepenalty=2500
+\usepackage[nocompress]{cite}
+\usepackage{microtype}
+
+% TODO: After submitting abstract, switch peerreiewca to conference,
+%       and remove \IEEEpeerreviewmaketitle
+
+% Format notes for [conference,compsoc]
+%  - do NOT use \paragraph
+%  - for figures, use \centering and put captions after
+%  - refer to figures with "Figure", not "Fig" (you can use \figurename)
+%  - put algorithms in figures, not other floats
+%  - for tables, the caption comes *before*
+%  - \section*{Acknowledgment}
+
+
+\title{Roles and Modules}
+%\IEEEspecialpapernotice{(Position Paper)}
+\author{
+  \IEEEauthorblockN{Rem Collier and Claudia Grigore} 
+  \IEEEauthorblockA{
+    School of Computer Science and Informatics\\
+    University College Dublin\\
+    Belfield Campus, Dublin~4, Ireland\\
+    Email: \{rem.collier,claudia.grigore\}@ucd.ie}}
+
+\begin{document}
+\maketitle
+
+% problem
+% why important (?)
+% solution
+% consequences
+
+\begin{abstract}
+Roles are in danger of being supplanted by modules in agent-oriented
+programming languages.  We argue that a more general concept of role,
+inspired by Haskell's type classes, cannot be conveniently implemented with
+modules. Conversely, modules cannot be conveniently implemented with (even
+our more general) roles. The two concepts are both useful in organising
+large agent systems.
+\end{abstract}
+
+\section*{Notes}
+
+By ``module'', we mean whatever~\cite{DBLP:conf/prima/DastaniMS08} means.
+
+Ideally, we should have an example program that uses both modules and
+roles, and is cumbersome to write using only modules or only roles.
+
+Roles (like type classes) can have more than one implementation: Each
+agent plays a role in its own way.
+
+We should try to sneak in AgentFactory, if not too hard.
+
+
+\bibliographystyle{IEEEtran}
+\bibliography{IEEEabrv,rm}
+
+\end{document}
+
+% vim:tw=75:
