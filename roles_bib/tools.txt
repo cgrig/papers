@@ -1,18 +1,30 @@
-TODO: check which ones have >=12 commits in the last year.
+by commit in HEAD in last year:
+  836 svn co https://repast.svn.sourceforge.net/svnroot/repast repast
+  407 svn co https://agentfactory.svn.sourceforge.net/svnroot/agentfactory agentfactory
+  155 git clone git://jason.git.sourceforge.net/gitroot/jason/jason jason
+  98 svn co https://avalon.cselt.it/svn/jade/trunk jade
+  59 svn co https://avalon.cselt.it/svn/jade_add-ons/trunk jade-addons
+  34 svn co https://apapl.svn.sourceforge.net/svnroot/apapl/trunk 2apl
+  13 git clone https://github.com/mcpat/microjiac-public.git microjiac # NEW!
+
+inactive:
+  0 svn checkout http://semanticagent.googlecode.com/svn/trunk/ semanticagent
+
+TODO: check which ones have >=10 commits in the last year.
       (that's half what freeboogie has)
 
 open source:
   git clone https://github.com/mcpat/microjiac-public.git microjiac
   git clone git://jason.git.sourceforge.net/gitroot/jason/jason jason
   svn co https://agentfactory.svn.sourceforge.net/svnroot/agentfactory agentfactory
-  svn co https://jadex.svn.sourceforge.net/svnroot/jadex jadex
+???  svn co https://jadex.svn.sourceforge.net/svnroot/jadex jadex
   wget http://www.fluxagent.org/download.php?file=Flux-3.1.tgz
   svn co https://apapl.svn.sourceforge.net/svnroot/apapl/trunk 2apl
   wget http://itee.uq.edu.au/~pjr/HomePages/QPFiles/qp8.12.tar.gz
   svn co https://repast.svn.sourceforge.net/svnroot/repast repast
   svn co https://avalon.cselt.it/svn/jade/trunk jade
   svn co https://avalon.cselt.it/svn/jade_add-ons/trunk jade-addons
-  cvs -d:pserver:anonymous@madkit.cvs.sourceforge.net:/cvsroot/madkit login; cvs -z3 -d:pserver:anonymous@madkit.cvs.sourceforge.net:/cvsroot/madkit co -P madkit
+???  cvs -d:pserver:anonymous@madkit.cvs.sourceforge.net:/cvsroot/madkit login; cvs -z3 -d:pserver:anonymous@madkit.cvs.sourceforge.net:/cvsroot/madkit co -P madkit
   wget http://www.cs.uu.nl/3apl/download/haskell/triple-apl.zip # haskell version
   svn checkout http://semanticagent.googlecode.com/svn/trunk/ semanticagent
   wget http://libslack.org/download/libslack-0.6.tar.gz
