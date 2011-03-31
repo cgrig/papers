@@ -3,9 +3,6 @@
 \usepackage[nocompress]{cite}
 \usepackage{microtype}
 
-% TODO: After submitting abstract, switch peerreiewca to conference,
-%       and remove \IEEEpeerreviewmaketitle
-
 % Format notes for [conference,compsoc]
 %  - do NOT use \paragraph
 %  - for figures, use \centering and put captions after
@@ -28,11 +25,6 @@
 \begin{document}
 \maketitle
 
-% problem
-% why important (?)
-% solution
-% consequences
-
 \begin{abstract}
 Roles are in danger of being supplanted by modules in agent-oriented
 programming languages.  We argue that a more general concept of role,
@@ -41,6 +33,52 @@ modules. Conversely, modules cannot be conveniently implemented with (even
 our more general) roles. The two concepts are both useful in organising
 large agent systems.
 \end{abstract}
+
+\section{Background}
+
+We assume the reader is familiar with Java and with some agent-oriented
+programming language, not necessarily 2APL. We do \emph{not} assume that
+the reader is familiar with Haskell.
+
+\subsection{2APL Modules}
+
+In Extended 2APL, agents are module
+instances~\cite{DBLP:conf/prima/DastaniMS08}. At startup, the agent
+interpreter creates a set of agents; later, agents may create other agents.
+When an agent is created it is given a name, which can be used later to
+refer to the agent. At this point, an informal analogy with Java may aid
+the reader's intuition. Modules in 2APL are like classes in Java. The 2APL
+action $\mathit{create}(A,x)$ placed in module~$B$ is analogous to the Java
+statement $x=\mathbf{new}\,A$ placed in class~$B$ that has field~$x$.  The
+analogy breaks quickly, however. For example, in 2APL it is a fault to
+execute $\mathit{create}(A,x)$ twice without executing
+$\mathit{release}(x)$ in-between. Hence, the number of co-existing agents
+created by an instance of~$B$ is bounded by the number of distinct agent
+names that appear in~$B$'s program text.  
+
+Once an agent is created, its belief base may be queried and updated by the
+agent's creator (given the proper access modifier).
+
+Agents do \emph{not} start executing when they are instantiated. Agent~$x$
+is executed synchronously by the action $x.\mathit{execute}(t)$ and
+asynchronously by the action $x.\mathit{executeasync}(t)$. Coming back to
+our Java analogy, these actions are like the statement
+$e.\mathit{execute}(x)$, where $e$~is an instance of
+$\mathit{java}.\mathit{util}.\mathit{concurrent}.\mathit{Executor}$ and
+$x$~is an instance of $\mathit{java}.\mathit{lang}.\mathit{Runnable}$.  In
+Java, depending on the executor, a new thread may be created or not; in
+2APL, the agent is run asyncronously or not depending on which of
+\textit{execute} and \textit{executeasync} is used. But again, the analogy
+soon breaks. The test~$t$ has no counterpart in Java. In 2APL, when
+$t$~holds, $x$~stops executing.
+
+Other aspects of 2APL modules, such as how they interact with goals and
+events, do not affect the current discussion.
+
+\subsection{Haskell Modules}
+
+\subsection{Haskell Type Classes}
+
 
 \section*{Notes}
 
