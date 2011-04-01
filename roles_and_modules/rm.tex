@@ -31,12 +31,7 @@
 \maketitle
 
 \begin{abstract}
-Roles are in danger of being supplanted by modules in agent-oriented
-programming languages.  We argue that a more general concept of role,
-inspired by Haskell's type classes, cannot be conveniently implemented with
-modules. Conversely, modules cannot be conveniently implemented with (even
-our more general) roles. The two concepts are both useful in organising
-large agent systems.
+In Agent-Oriented Programming (AOP), roles and organisational structures are often treated separately to agent implementations. This contrasts with most AOSE methodologies that include the notion of a role as an integral concept in the design process. As a result, there is a significant gap between the design and implementation stages of the development process. In response to this, a number of organisational frameworks have emerged as powerful approaches to implementing organisations, however, in our mind, this complicates rather than simplifies the implementation: developers must understand and work with both the organisational framework and the AOP language. In this paper, we present an approach that introduces a general notion of a role for AOP languages, the purpose of which is to reduce the gap between design and implementation, and to offer run-time support for enforcing role compliance. Our approach, which is inspired by Haskell's type classes, cannot be conveniently implemented using existing AOP language concepts, such as modules. Conversely, modules cannot be conveniently implemented with (even our more general) roles. The two concepts are both useful in organising large agent systems.
 \end{abstract}
 
 \section{Introduction}
