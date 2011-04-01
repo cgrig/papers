@@ -56,7 +56,7 @@ concepts are both useful in organising large agent systems.
 \begin{notes}
 AO is an evolution of OO that draws from social theory. In this paper we
 illustrate how another analogy, with functional languages, helps advance 
-AO\null. \todo{x}
+AO\null. 
 \end{notes}
 
 \section{Background}
@@ -93,7 +93,8 @@ asynchronously by the action $x.\mathit{executeasync}(t)$. Coming back to
 our Java analogy, these actions are like the statement
 $e.\mathit{execute}(x)$, where $e$~is an instance of
 $\mathit{java}.\mathit{util}.\mathit{concurrent}.\mathit{Executor}$ and
-$x$~is an instance of $\mathit{java}.\mathit{lang}.\mathit{Runnable}$.  In
+$x$~is \todo{Can we rename this x if is not related to agent x? It confuses
+me.} an instance of $\mathit{java}.\mathit{lang}.\mathit{Runnable}$.  In
 Java, depending on the executor, a new thread may be created or not; in
 2APL, the agent is run asyncronously or not depending on which of
 \textit{execute} and \textit{executeasync} is used. But again, the analogy
@@ -106,7 +107,7 @@ events, do not affect the current discussion.
 \subsection{Haskell Modules}
 
 \begin{notes}
-I guess the ADT explanation should suffice.
+I guess the ADT \todo{abstract data types?} explanation should suffice.
 \end{notes}
 
 \subsection{Haskell Type Classes}
@@ -127,17 +128,19 @@ more efficient.  More importantly, modules help humans design and
 understand large systems.
 
 The \textit{create} action has no equivalent in Haskell. However, most
-Haskell modules export \emph{one} main data type and functions to
-instantiate it.  For example, the module $\mathit{Data}.\mathit{Set}$
-exports the type $\mathit{Set}\,a$ and the constant
-$\mathit{empty}::\mathit{Set}\,a$. We use this to extend the analogy: \[
-\textit{2APL module} \sim \textit{Haskell module} \sim \textit{Haskell
-type}. \]
+Haskell modules export \todo{what does it mean for a module to export?  }
+\emph{one} main data type and functions to instantiate it \todo{does this
+mean that a module is equivalent to a type?}.  For example, the module
+$\mathit{Data}.\mathit{Set}$ exports the type $\mathit{Set}\,a$ and the
+constant $\mathit{empty}::\mathit{Set}\,a$. We use this to extend the
+analogy: \[ \textit{2APL module} \sim \textit{Haskell module} \sim
+\textit{Haskell type}. \]
 
 Type classes are sets of types, all of which support similar operations.
 The analogy would then be a set of 2APL modules, all of which support
 similar operations. Except there's no notion of ``operation'' so we must
-find a suitable analogue.
+find a suitable analogue.\todo{why can't the actions that an agent can
+perform  be considered operations in the 2APL modules?}
 
 A function of type $s\to t$ takes an object of type $s$ and returns one of
 type~$t$. The analogy now cracks a bit: Haskel's types were supposed to be
@@ -170,7 +173,7 @@ cumbersome to write using only modules or only roles.
 \begin{notes}
 Do roles make sense in other agent programming languages? Since AgentFactory
 supports multiple agent programming languages, it provides a great setting
-for explring this question.
+for exploring this question.
 \end{notes}
 
 \section{Conclusion}
