@@ -65,7 +65,10 @@ analogy breaks quickly, however. For example, in 2APL it is a fault to
 execute $\mathit{create}(A,x)$ twice without executing
 $\mathit{release}(x)$ in-between. Hence, the number of co-existing agents
 created by an instance of~$B$ is bounded by the number of distinct agent
-names that appear in~$B$'s program text.  
+names that appear in~$B$'s program text. (Note, however, that the total
+number of agents is \emph{not} bounded, because an instance of~$A$ may
+create an instance of~$B$ which creates an instance of~$A$ which creates
+an instance of~$B$ and so on.)
 
 Once an agent is created, its belief base may be queried and updated by the
 agent's creator (given the proper access modifier).
