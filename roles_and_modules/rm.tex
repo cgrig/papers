@@ -3,6 +3,9 @@
 \usepackage[nocompress]{cite}
 \usepackage{microtype}
 
+\newenvironment{notes}{\medskip\hrule\nobreak\smallskip\narrower}{\smallskip\hrule\medskip}
+
+
 % Format notes for [conference,compsoc]
 %  - do NOT use \paragraph
 %  - for figures, use \centering and put captions after
@@ -33,6 +36,14 @@ modules. Conversely, modules cannot be conveniently implemented with (even
 our more general) roles. The two concepts are both useful in organising
 large agent systems.
 \end{abstract}
+
+\section{Introduction}
+
+\begin{notes}
+AO is an evolution of OO that draws from social theory. In this paper we
+illustrate how another analogy, with functional languages, helps advance 
+AO\null.
+\end{notes}
 
 \section{Background}
 
@@ -77,20 +88,80 @@ events, do not affect the current discussion.
 
 \subsection{Haskell Modules}
 
+\begin{notes}
+I guess the ADT explanation should suffice.
+\end{notes}
+
 \subsection{Haskell Type Classes}
 
+\begin{notes}
+Type Classes were originally introduced by~\cite{DBLP:conf/popl/WadlerB89}.
+
+Explain the analogy with Java interfaces and what are the differences.
+(PJ's ECOOP~2009 invited talk slides discuss this explicitly.)
+\end{notes}
+
+\section{The Analogy}
+
+\begin{notes}
+In general, modules are abstraction boundaries that help isolate
+implementation details, and may also help compilers and interpreters to be
+more efficient.  More importantly, modules help humans design and
+understand large systems.
+
+The \textit{create} action has no equivalent in Haskell. However, most
+Haskell modules export \emph{one} main data type and functions to
+instantiate it.  For example, the module $\mathit{Data}.\mathit{Set}$
+exports the type $\mathit{Set}\,a$ and the constant
+$\mathit{empty}::\mathit{Set}\,a$. We use this to extend the analogy: \[
+\textit{2APL module} \sim \textit{Haskell module} \sim \textit{Haskell
+type}. \]
+
+Type classes are sets of types, all of which support similar operations.
+The analogy would then be a set of 2APL modules, all of which support
+similar operations. Except there's no notion of ``operation'' so we must
+find a suitable analogue.
+
+A function of type $s\to t$ takes an object of type $s$ and returns one
+of type~$t$. The analogy now cracks a bit: Haskel's types were supposed
+to be like 2APL modules (at least the types that are the ``main'' ones
+in some module); however, something that takes modules and produces modules
+is more like an OCaml functor, and putting that in a type-class sounds
+$\ldots$ complicated. The goal here is to be able to mix and match different
+modules in certain context, just like type classes allow you to use different
+implementations for fixed point addition and floating point addition without
+sweating about it.
+
+So, let's take a step backward: If not all Haskell types are ``main'' and
+therefore analogue to 2APL modules, then what is their analogue? One
+possibility is messages. So a function of type $s\to t$ is like a promise:
+``If you give me message~$s$, I will (eventually) send you back a
+message~$t$.'' Another possibility is beliefs: ``If now I believe~$s$,
+(there's a good chance) I'll evolve to believe~$t$.''
+
+\end{notes}
+
+\section{Example}
+
+\begin{notes}
+Ideally, a 2APL program that uses the proposed roles, and that is 
+cumbersome to write using only modules or only roles.
+\end{notes}
+
+\section{Other Languages}
+
+\begin{notes}
+Do roles make sense in other agent programming languages? Since AgentFactory
+supports multiple agent programming languages, it provides a great setting
+for explring this question.
+\end{notes}
+
+\section{Conclusion}
 
 \section*{Notes}
 
-By ``module'', we mean whatever~\cite{DBLP:conf/prima/DastaniMS08} means.
-
-Ideally, we should have an example program that uses both modules and
-roles, and is cumbersome to write using only modules or only roles.
-
 Roles (like type classes) can have more than one implementation: Each
 agent plays a role in its own way.
-
-We should try to sneak in AgentFactory, if not too hard.
 
 
 \bibliographystyle{IEEEtran}
