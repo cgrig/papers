@@ -29,7 +29,24 @@
 \maketitle
 
 \begin{abstract}
-In Agent-Oriented Programming (AOP), roles and organisational structures are often treated separately to agent implementations. This contrasts with most AOSE methodologies that include the notion of a role as an integral concept in the design process. As a result, there is a significant gap between the design and implementation stages of the development process. In response to this, a number of organisational frameworks have emerged as powerful approaches to implementing organisations, however, in our mind, this complicates rather than simplifies the implementation: developers must understand and work with both the organisational framework and the AOP language. In this paper, we present an approach that introduces a general notion of a role for AOP languages, the purpose of which is to reduce the gap between design and implementation, and to offer run-time support for enforcing role compliance. Our approach, which is inspired by Haskell's type classes, cannot be conveniently implemented using existing AOP language concepts, such as modules. Conversely, modules cannot be conveniently implemented with (even our more general) roles. The two concepts are both useful in organising large agent systems.
+In Agent-Oriented Programming (AOP), roles and organisational structures
+are often treated separately to agent implementations. This contrasts with
+most AOSE methodologies that include the notion of a role as an integral
+concept in the design process. As a result, there is a significant gap
+between the design and implementation stages of the development process. In
+response to this, a number of organisational frameworks have emerged as
+powerful approaches to implementing organisations, however, in our mind,
+this complicates rather than simplifies the implementation: developers must
+understand and work with both the organisational framework and the AOP
+language. In this paper, we present an approach that introduces a general
+notion of a role for AOP languages, the purpose of which is to reduce the
+gap between design and implementation, and to offer run-time support for
+enforcing role compliance. Our approach, which is inspired by Haskell's
+type classes, cannot be conveniently implemented using existing AOP
+language concepts, such as modules. Conversely, modules cannot be
+conveniently implemented with (even our more general) roles. The two
+concepts are both useful in organising large agent systems.  
+
 \end{abstract}
 
 \section{Introduction}
@@ -62,8 +79,8 @@ $\mathit{release}(x)$ in-between. Hence, the number of co-existing agents
 created by an instance of~$B$ is bounded by the number of distinct agent
 names that appear in~$B$'s program text. (Note, however, that the total
 number of agents is \emph{not} bounded, because an instance of~$A$ may
-create an instance of~$B$ which creates an instance of~$A$ which creates
-an instance of~$B$ and so on.)
+create an instance of~$B$ which creates an instance of~$A$ which creates an
+instance of~$B$ and so on.)
 
 Once an agent is created, its belief base may be queried and updated by the
 agent's creator (given the proper access modifier).
@@ -120,15 +137,15 @@ The analogy would then be a set of 2APL modules, all of which support
 similar operations. Except there's no notion of ``operation'' so we must
 find a suitable analogue.
 
-A function of type $s\to t$ takes an object of type $s$ and returns one
-of type~$t$. The analogy now cracks a bit: Haskel's types were supposed
-to be like 2APL modules (at least the types that are the ``main'' ones
-in some module); however, something that takes modules and produces modules
-is more like an OCaml functor, and putting that in a type-class sounds
-$\ldots$ complicated. The goal here is to be able to mix and match different
-modules in certain context, just like type classes allow you to use different
-implementations for fixed point addition and floating point addition without
-sweating about it.
+A function of type $s\to t$ takes an object of type $s$ and returns one of
+type~$t$. The analogy now cracks a bit: Haskel's types were supposed to be
+like 2APL modules (at least the types that are the ``main'' ones in some
+module); however, something that takes modules and produces modules is more
+like an OCaml functor, and putting that in a type-class sounds $\ldots$
+complicated. The goal here is to be able to mix and match different modules
+in certain context, just like type classes allow you to use different
+implementations for fixed point addition and floating point addition
+without sweating about it.
 
 So, let's take a step backward: If not all Haskell types are ``main'' and
 therefore analogue to 2APL modules, then what is their analogue? One
@@ -158,8 +175,8 @@ for explring this question.
 
 \section*{Notes}
 
-Roles (like type classes) can have more than one implementation: Each
-agent plays a role in its own way.
+Roles (like type classes) can have more than one implementation: Each agent
+plays a role in its own way.
 
 
 \bibliographystyle{IEEEtran}
