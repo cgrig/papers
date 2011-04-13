@@ -38,7 +38,7 @@ are regarded as important concepts in the analysis and design of agent
 systems, but there is a significant lack of support for the implementation
 stage of the development process. In response to this, a number of
 organisational frameworks have emerged as powerful approaches to
-implementing organisations, however, in our mind, this complicates rather
+implementing organisations. However, in our mind, this complicates rather
 than simplifies the implementation: developers must understand and work
 with both the organisational framework and the AOP language. In this paper,
 we present an approach that introduces a general notion of a role for AOP
@@ -125,13 +125,89 @@ $t$~holds, $x$~stops executing.
 Other aspects of 2APL modules, such as how they interact with goals and
 events, do not affect the current discussion.
 
-\subsection{Modules in Haskell}
+\subsection{Modules and Type Classes in Haskell}
 
-\begin{notes}
-I guess the ADT \todo{abstract data types?} explanation should suffice.
-\end{notes}
+% modules
+%  - small example
+%  - information hiding and encapsulation
+%    (exact impl may change; but it is ONE)
+%  - separate compilation
+%  - analogy with Java classes
 
-\subsection{Type Classes in Haskell}
+Haskell modules are often use to implement abstract data types such as
+sets.  In order to illustrate the main features of modules in little space,
+the code in Figure~\ref{fig:haskell} is somewhat contrived.  The module
+\textit{Set} contains the type~$T$ and the functions \textit{add},
+\textit{has}, and \textit{sub}. The \textbf{module} line says that
+\textit{sub} is hidden. The names and types of the exported functions
+\textit{add} and \textit{has} are visible from outside the module, but
+their implementations, which are to the right of~$=$, are hidden.
+Similarly, the type name~$T$ is visible from outside, but the data
+constructor~$V$ is not.  The names and types visible from outside
+constitute the module's \emph{interface}.
+
+\begin{figure}\centering\small
+\begin{verbatim}
+-- built-in and standard library
+class Eq b where
+  eq :: b -> b -> Bool
+
+elem x [] = False
+elem x (y:ys) = eq x y || elem x ys
+
+-- file set.hs
+module Set (T, add, has) where
+  newtype T a = V [a]
+  add x (V s) = V (x:s)
+  has x s = sub (V [x]) s
+  sub (V s) (V t) =
+    all (\x -> elem x t)
+
+  instance Eq a => Eq (T a) where
+    eq s t = sub s t && sub t s
+\end{verbatim}
+\caption{A Haskell module}\label{fig:haskell}
+\end{figure}
+
+In general, modules are responsible with information hiding and
+encapsulation. Well known advantages come from modularity. For humans,
+modular programs are easier to write and to maintain. They are easier to
+write because, to a certain degree, it is enough to understand the
+interface of a module in order to use it. They are easier to maintain
+because changes to a module's implementation remain local as long as the
+interface is not affected. For compilers, modular programs enable separate
+compilation. Thus, modules are an important device in structuring large
+programs. \todo{Perhaps cite some early paper on modularity.}
+
+Haskell modules are similar, from a very high distance, with Java classes.
+A Java class hides private parts and introduces \emph{one} type at the same
+time. A Haskell module may introduce zero, one, or more types.  But many
+Haskell modules do indeed export \emph{one} main type. (Note: Because the
+module \textit{Set}, the type constructor~$T$, and the value
+constructor~$V$ live in different namespaces, in a typical program they
+would all be called \textit{Set}.)
+
+% type classes
+%  - continue example
+%  - ad-hoc polymorphism: multiple implementations with the same interface
+%  - analogy with Java interfaces
+
+The type class \textit{Eq} contains types whose values can be compared for
+equality. To make a type belong to the class \textit{Eq} one must write an
+\textbf{instance} declaration that provides an implementation for a
+function named~$eq$. \todo{Should we say that we lie here a little so that
+we don't confuse people who don't know Haskell?} The instance declaration
+in Figure~\ref{fig:haskell} says that all types constructed with the type
+constructor~$T$ are members of \textit{Eq}, provided that $T$ is applied to
+a member of \textit{Eq}.  In particular, sets of sets of integers are
+members of \textit{Eq}.
+
+Because \textit{elem} uses \textit{eq}, its first argument's type must be
+in the class \textit{Eq}. \todo{Continue, perhaps with a trace of 
+$\mathit{eq}\,s\,t$ where $s$~and~$t$ are sets of sets of integers.}
+
+Type classes~\cite{DBLP:conf/popl/WadlerB89} are an elegant solution
+to 
 
 \begin{notes}
 Type Classes were originally introduced by~\cite{DBLP:conf/popl/WadlerB89}.
@@ -143,6 +219,11 @@ Explain the analogy with Java interfaces and what are the differences.
 \section{The Analogy}
 
 \begin{notes}
+Idea: Find a clear argument of why Haskell type classes and modules are
+orthogonal feature. Then find an analogy between (a part of) Haskell and (a
+part of) 2APL that makes it possible to carry over the argument. Spend most
+of the paper in this article on explaining the latter argument.
+
 In general, modules are abstraction boundaries that help isolate
 implementation details, and may also help compilers and interpreters to be
 more efficient.  More importantly, modules help humans design and
