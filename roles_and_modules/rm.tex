@@ -66,7 +66,7 @@ We assume the reader is familiar with Java and with some agent-oriented
 programming language, not necessarily 2APL. We do \emph{not} assume that
 the reader is familiar with Haskell.
 
-\subsection{Moise+}
+\subsection{Organisational Centered Methodologies}
 
 \begin{notes}
 We need to connect to methodologies.
@@ -84,15 +84,21 @@ systems is Moise+ \cite{DBLP:conf/atal/HubnerSB05}. It has an
 organisational centered orientation, the main concern being the development
 of a framework that ensure the organisational constraints are being
 satisfied. The organisational specification focuses on three dimensions:
-structure, functionality and norms. S-Moise+
-\cite{DBLP:conf/atal/HubnerSB05} is an organisational middleware
-implementing the Moise+ methodology, which looks promising, but proves very hard to use. 
+structure (roles, relationships between roles, and groups), functionality
+(global goals, plans, and missions) and norms (permissions, and
+obligations). S-Moise+ \cite{DBLP:conf/atal/HubnerSB05} is an
+organisational middleware implementing the Moise+ methodology. S-Moise+ has
+two components: an OrgBox API, used by agents to access the organisational
+layer, and an OrgManager agent that is responsible with maintaining the
+state of the organisation.
 
-AGR model Aalaadin, Madkit
+Another example is AGR \cite{DBLP:conf/aose/FerberGM03}, a simpler model
+based on the concepts of agent, group, and role; each agent is part of one
+or more groups where plays one or more roles. -- Madkit \cite{} platform both implements and uses for its own management the AGR model. It is characterised by an extensible Agent micro-kernel (responsible of group/role management, local messaging), agentification of services (represented as roles in groups, that have been defined in an abstract organisational structure), and a graphic model based on independent components.
 
-Brain
+%Gaia
 
-Gaia
+\todo{Drawbacks}
 
 \end{notes}
 
