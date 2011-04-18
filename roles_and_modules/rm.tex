@@ -1,9 +1,12 @@
 \documentclass[conference,compsoc]{IEEEtran}
 \usepackage[cmex10]{amsmath}\interdisplaylinepenalty=2500
+\usepackage{amssymb}
 \usepackage[british]{babel}
 \usepackage[nocompress]{cite}
 \usepackage{microtype}
 \usepackage{xcolor}
+
+\usepackage{hyperref}
 
 \newcommand{\todo}[1]{{\small \textcolor{gray}{[\textcolor{red}{TODO}: #1]}}}
 \newenvironment{notes}{\medskip\hrule\nobreak\smallskip\narrower}{\smallskip\hrule\medskip}
@@ -149,37 +152,38 @@ events, do not affect the current discussion.
 %  - separate compilation
 %  - analogy with Java classes
 
-Haskell modules are often use to implement abstract data types such as
-sets.  In order to illustrate the main features of modules in little space,
-the code in Figure~\ref{fig:haskell} is somewhat contrived.  The module
-\textit{Set} contains the type~$T$ and the functions \textit{add},
-\textit{has}, and \textit{sub}. The \textbf{module} line says that
-\textit{sub} is hidden. The names and types of the exported functions
-\textit{add} and \textit{has} are visible from outside the module, but
-their implementations, which are to the right of~$=$, are hidden.
-Similarly, the type name~$T$ is visible from outside, but the data
-constructor~$V$ is not.  The names and types visible from outside
-constitute the module's \emph{interface}.
+Haskell modules are often used to implement abstract data types such as
+sets.  To illustrate the main features of modules in little space, the code
+in Figure~\ref{fig:haskell} is contrived.  The module \textit{Set} contains
+the type~$T$ and the functions \textit{add}, \textit{has}, and
+\textit{sub}. The \textbf{module} line hides \textit{sub} by not mentioning
+it. The names and types of the exported functions \textit{add} and
+\textit{has} are visible from outside the module, but their
+implementations, which are to the right of~$=$, are hidden.  Similarly, the
+type name~$T$ is visible from outside, but the value constructor~$V$ is
+not.  The names and types visible from outside constitute the module's
+\emph{interface}.
 
-\begin{figure}\centering\small
+\begin{figure}\centering\footnotesize
 \begin{verbatim}
 -- built-in and standard library
 class Eq b where
   eq :: b -> b -> Bool
+instance Eq Int where ...
 
 elem x [] = False
-elem x (y:ys) = eq x y || elem x ys
+elem x (y:ys) = eq x y || elem x ys  -- (*)
 
 -- file set.hs
 module Set (T, add, has) where
   newtype T a = V [a]
   add x (V s) = V (x:s)
   has x s = sub (V [x]) s
-  sub (V s) (V t) =
-    all (\x -> elem x t)
+  sub (V s) (V t) =  -- (**)
+    all (\x -> elem x t) s
 
   instance Eq a => Eq (T a) where
-    eq s t = sub s t && sub t s
+    eq s t = sub s t && sub t s  -- (***)
 \end{verbatim}
 \caption{A Haskell module}\label{fig:haskell}
 \end{figure}
@@ -194,13 +198,10 @@ interface is not affected. For compilers, modular programs enable separate
 compilation. Thus, modules are an important device in structuring large
 programs. \todo{Perhaps cite some early paper on modularity.}
 
-Haskell modules are similar, from a very high distance, with Java classes.
-A Java class hides private parts and introduces \emph{one} type at the same
+Haskell modules are similar, from a very high distance, to Java classes.  A
+Java class hides private parts and introduces \emph{one} type at the same
 time. A Haskell module may introduce zero, one, or more types.  But many
-Haskell modules do indeed export \emph{one} main type. (Note: Because the
-module \textit{Set}, the type constructor~$T$, and the value
-constructor~$V$ live in different namespaces, in a typical program they
-would all be called \textit{Set}.)
+Haskell modules do indeed export \emph{one} main type. 
 
 % type classes
 %  - continue example
@@ -209,20 +210,45 @@ would all be called \textit{Set}.)
 
 The type class \textit{Eq} contains types whose values can be compared for
 equality. To make a type belong to the class \textit{Eq} one must write an
-\textbf{instance} declaration that provides an implementation for a
-function named~$eq$. \todo{Should we say that we lie here a little so that
-we don't confuse people who don't know Haskell?} The instance declaration
-in Figure~\ref{fig:haskell} says that all types constructed with the type
-constructor~$T$ are members of \textit{Eq}, provided that $T$ is applied to
-a member of \textit{Eq}.  In particular, sets of sets of integers are
-members of \textit{Eq}.
+instance declaration that provides an implementation for a function
+named~$eq$. \todo{Should we say that we lie here a little so that we don't
+confuse people who don't know Haskell?} The \textbf{instance} declaration
+in module \textit{Set} says that the type constructor~$T$ transforms
+members of \textit{Eq} into members of \textit{Eq}. For example, sets of
+sets of integers are members of \textit{Eq}, because \textit{Int} is a
+member of \textit{Eq}. Here is \emph{part} of an evaluation of the
+comparison between $\{\{\}\}$~and~$\{\{\}\}$.
 
-Because \textit{elem} uses \textit{eq}, its first argument's type must be
-in the class \textit{Eq}. \todo{Continue, perhaps with a trace of 
-$\mathit{eq}\,s\,t$ where $s$~and~$t$ are sets of sets of integers.}
+\begin{align*}
+&\phantom{\;\leadsto\;}
+  \mathit{eq}\;(V[V[]])\;(V[V[]]) \\
+&\leadsto
+  \mathit{sub}\;(V[V[]])\;(V[V[]])
+  &&\text{by (***)}\\
+&\leadsto
+  \mathit{all}\;(\lambda x\to\mathit{elem}\;x\;[V[]])\;[V[]]
+  &&\text{by (**)}\\
+&\leadsto
+  \mathit{elem}\;(V[])\;[V[]]\\
+&\leadsto
+  \mathit{eq}\;(V[])\;(V[])
+  &&\text{by (*)}\\
+&\leadsto
+  \mathit{sub}\;(V[])\;(V[])
+  &&\text{by (***)}\\
+&\leadsto
+  \mathit{all}\;(\lambda x\to\mathit{elem}\;x\;[])\;[]
+  &&\text{by (**)}\\
+&\leadsto
+  \mathit{True}
+\end{align*}
 
-Type classes~\cite{DBLP:conf/popl/WadlerB89} are an elegant solution
-to 
+In general, type classes are an elegant mechanism to provide ad-hoc
+polymorphism, also known as overloading~\cite{DBLP:conf/popl/WadlerB89}:
+The same name refers to different implementations depending on the context.
+Type classes may seem similar to Java interfaces but there are several key
+differences~\cite{WEB:PJ-tc}. For example, the dispatch is based on the
+(static) type, rather than on the (dynamic) value.
 
 \begin{notes}
 Type Classes were originally introduced by~\cite{DBLP:conf/popl/WadlerB89}.
