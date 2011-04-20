@@ -166,7 +166,9 @@ it. The names and types of the exported functions \textit{add} and
 \textit{has} are visible from outside the module, but their
 implementations, which are to the right of~$=$, are hidden.  Similarly, the
 type name~$T$ is visible from outside, but the value constructor~$V$ is
-not.  The names and types visible from outside constitute the module's
+not. For example, the set $\{1,2\}$ may be represented by the value
+$V[2,1,2]$, but this is not known to the users of the module \textit{Set}.
+The names and types visible from outside constitute the module's
 \emph{interface}.
 
 \begin{figure}\centering\footnotesize
@@ -175,20 +177,20 @@ not.  The names and types visible from outside constitute the module's
 class Eq b where
   eq :: b -> b -> Bool
 instance Eq Int where ...
-
 elem x [] = False
-elem x (y:ys) = eq x y || elem x ys  -- (*)
+elem x (y:ys) = eq x y || elem x ys
+all p [] = True
+all p (x:xs) = p x && all p xs
 
 -- file set.hs
 module Set (T, add, has) where
   newtype T a = V [a]
-  add x (V s) = V (x:s)
-  has x s = sub (V [x]) s
-  sub (V s) (V t) =  -- (**)
-    all (\x -> elem x t) s
+  add (V s) x = V (x:s)
+  has (V s) x = elem x s
+  sub (V s) t = all (has t) s
 
   instance Eq a => Eq (T a) where
-    eq s t = sub s t && sub t s  -- (***)
+    eq s t = sub s t && sub t s
 \end{verbatim}
 \caption{A Haskell module}\label{fig:haskell}
 \end{figure}
@@ -222,45 +224,43 @@ in module \textit{Set} says that the type constructor~$T$ transforms
 members of \textit{Eq} into members of \textit{Eq}. For example, sets of
 sets of integers are members of \textit{Eq}, because \textit{Int} is a
 member of \textit{Eq}. Here is \emph{part} of an evaluation of the
-comparison between $\{\{\}\}$~and~$\{\{\}\}$.
-
+comparison between $V[V[1]]$ and $V[V[1,1]]$, both of which
+represent~$\{\{1\}\}$.
 \begin{align*}
 &\phantom{\;\leadsto\;}
-  \mathit{eq}\;(V[V[]])\;(V[V[]]) \\
+  \mathit{eq}\;V[V[1]]\;V[V[1,1]] \\
 &\leadsto
-  \mathit{sub}\;(V[V[]])\;(V[V[]])
-  &&\text{by (***)}\\
+  \mathit{sub}\;V[V[1]]\;V[V[1,1]]\\
 &\leadsto
-  \mathit{all}\;(\lambda x\to\mathit{elem}\;x\;[V[]])\;[V[]]
-  &&\text{by (**)}\\
+  \mathit{all}\;(\mathit{has}\;V[V[1,1]])\;[V[1]]\\
 &\leadsto
-  \mathit{elem}\;(V[])\;[V[]]\\
+  \mathit{has}\;V[V[1,1]]\;V[1]\\
 &\leadsto
-  \mathit{eq}\;(V[])\;(V[])
-  &&\text{by (*)}\\
+  \mathit{elem}\;V[1]\;[V[1,1]]\\
 &\leadsto
-  \mathit{sub}\;(V[])\;(V[])
-  &&\text{by (***)}\\
+  \mathit{eq}\;V[1]\;V[1,1]\\
 &\leadsto
-  \mathit{all}\;(\lambda x\to\mathit{elem}\;x\;[])\;[]
-  &&\text{by (**)}\\
+  \mathit{sub}\;V[1]\;V[1,1]\\
+&\leadsto
+  \mathit{all}\;(\mathit{has}\;V[1,1])\;[1]\\
+&\leadsto
+  \mathit{has}\;V[1,1]\;1 \\
+&\leadsto
+  \mathit{elem}\;1\;[1,1]\\
+&\leadsto
+  \mathit{eq}\;1\;1\\
 &\leadsto
   \mathit{True}
 \end{align*}
+Notice, in particular, that \textit{eq} is applied on $T(T\,\mathit{Int})$,
+then on $T\,\mathit{Int}$, and then on \textit{Int}.
 
 In general, type classes are an elegant mechanism to provide ad-hoc
 polymorphism, also known as overloading~\cite{DBLP:conf/popl/WadlerB89}:
 The same name refers to different implementations depending on the context.
-Type classes may seem similar to Java interfaces but there are several key
-differences~\cite{WEB:PJ-tc}. For example, the dispatch is based on the
-(static) type, rather than on the (dynamic) value.
-
-\begin{notes}
-Type Classes were originally introduced by~\cite{DBLP:conf/popl/WadlerB89}.
-
-Explain the analogy with Java interfaces and what are the differences.
-(PJ's ECOOP~2009 invited talk slides discuss this explicitly.)
-\end{notes}
+Type classes are similar to Java interfaces but there are several key
+differences~\cite{WEB:PJ-tc}. For example, in Haskell it is easy to declare
+a type from one library to be an instance of a class from another library.
 
 \section{The Analogy}
 
