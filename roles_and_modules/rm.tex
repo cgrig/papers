@@ -65,6 +65,9 @@ AO\null.
 
 \section{Background}
 
+\todo{Rem suggested to: -- simplify the organisational centered methodologies and move it in the introduction, there's not need for the details regarding other methodologies; -- think about the flow of the paper, maybe switching the 2.2 with 2.3; -- link roles and organisations}
+
+
 We assume the reader is familiar with Java and with some agent-oriented
 programming language, not necessarily 2APL. We do \emph{not} assume that
 the reader is familiar with Haskell.
@@ -74,7 +77,7 @@ the reader is familiar with Haskell.
 \begin{notes}
 We need to connect to methodologies.
 The main concepts of organisational centered multiagent systems as
-presented in \cite{DBLP:conf/aose/FerberGM03} are organisations, partition
+presented in~\cite{DBLP:conf/aose/FerberGM03} are organisations, partition
 groups, roles, tasks, and protocols. MAS analysis and design through
 organisational perspective introduce an organisational level on top of
 agent level. An organization is seen as a kind of dynamic framework where
@@ -83,21 +86,21 @@ plug-in process where a component is integrated into a framework.
 
 
 An example of a methodology for designing organisations within multiagent
-systems is Moise+ \cite{DBLP:conf/atal/HubnerSB05}. It has an
+systems is Moise+~\cite{DBLP:conf/atal/HubnerSB05}. It has an
 organisational centered orientation, the main concern being the development
 of a framework that ensure the organisational constraints are being
 satisfied. The organisational specification focuses on three dimensions:
 structure (roles, relationships between roles, and groups), functionality
 (global goals, plans, and missions) and norms (permissions, and
-obligations). S-Moise+ \cite{DBLP:conf/atal/HubnerSB05} is an
+obligations). S-Moise+~\cite{DBLP:conf/atal/HubnerSB05} is an
 organisational middleware implementing the Moise+ methodology. S-Moise+ has
 two components: an OrgBox API, used by agents to access the organisational
 layer, and an OrgManager agent that is responsible with maintaining the
 state of the organisation.
 
-Another example is AGR \cite{DBLP:conf/aose/FerberGM03}, a simpler model
+Another example is AGR~\cite{DBLP:conf/aose/FerberGM03}, a simpler model
 based on the concepts of agent, group, and role; each agent is part of one
-or more groups where plays one or more roles. -- Madkit \cite{} platform both implements and uses for its own management the AGR model. It is characterised by an extensible Agent micro-kernel (responsible of group/role management, local messaging), agentification of services (represented as roles in groups, that have been defined in an abstract organisational structure), and a graphic model based on independent components.
+or more groups where plays one or more roles. -- Madkit~\cite{} platform both implements and uses for its own management the AGR model. It is characterised by an extensible Agent micro-kernel (responsible of group/role management, local messaging), agentification of services (represented as roles in groups, that have been defined in an abstract organisational structure), and a graphic model based on independent components.
 
 %Gaia
 
@@ -258,6 +261,8 @@ Explain the analogy with Java interfaces and what are the differences.
 \end{notes}
 
 \section{The Analogy}
+
+\todo{This is the last thing that we came up with: roles -- type classes, agents -- types, obligations -- functions, permissions -- data. We also considered the analogy between functions and: capabilities, protocols, activities}
 
 \begin{notes}
 Idea: Find a clear argument of why Haskell type classes and modules are
