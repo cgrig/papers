@@ -3,6 +3,7 @@
 \usepackage{amssymb}
 \usepackage[british]{babel}
 \usepackage[nocompress]{cite}
+\usepackage{listings}
 \usepackage{microtype}
 \usepackage{xcolor}
 
@@ -11,6 +12,9 @@
 \newcommand{\todo}[1]{{\small \textcolor{gray}{[\textcolor{red}{TODO}: #1]}}}
 \newenvironment{notes}{\medskip\hrule\nobreak\smallskip\narrower}{\smallskip\hrule\medskip}
 
+\lstset{columns=fullflexible}
+\lstset{identifierstyle=\itshape,commentstyle=\rm}
+\lstdefinestyle{hs}{language=haskell,deletekeywords={elem,all,Eq}}
 
 % Format notes for [conference,compsoc]
 %  - do NOT use \paragraph
@@ -71,12 +75,11 @@ AO\null.
 
 \todo{Rem suggested to: -- simplify the organisational centered methodologies and move it in the introduction, there's not need for the details regarding other methodologies; -- think about the flow of the paper, maybe switching the 2.2 with 2.3; -- link roles and organisations}
 
-
 We assume the reader is familiar with Java and with some agent-oriented
 programming language, not necessarily 2APL. We do \emph{not} assume that
 the reader is familiar with Haskell.
 
-\subsection{Organisational Centered Methodologies}
+\subsection{Organisational Centered Methodologies} % <<<
 
 \begin{notes}
 We need to connect to methodologies.
@@ -112,7 +115,8 @@ or more groups where plays one or more roles. -- Madkit~\cite{} platform both im
 
 \end{notes}
 
-\subsection{Modules in 2APL}
+% >>>
+\subsection{Modules in 2APL} % <<<
 
 In Extended 2APL, agents are module
 instances~\cite{DBLP:conf/prima/DastaniMS08}. At startup, the agent
@@ -150,7 +154,8 @@ $t$~holds, $x$~stops executing.
 Other aspects of 2APL modules, such as how they interact with goals and
 events, do not affect the current discussion.
 
-\subsection{Modules and Type Classes in Haskell}
+% >>>
+\subsection{Modules and Type Classes in Haskell} % <<<
 
 % modules
 %  - small example
@@ -173,8 +178,10 @@ $V[2,1,2]$, but this is not known to the users of the module \textit{Set}.
 The names and types visible from outside constitute the module's
 \emph{interface}.
 
-\begin{figure}\centering\footnotesize
-\begin{verbatim}
+\begin{figure}\footnotesize % <<<
+\begin{center}
+\begin{tabular}{c}
+\begin{lstlisting}[style=hs]
 -- built-in and standard library
 class Eq b where
   eq :: b -> b -> Bool
@@ -193,9 +200,11 @@ module Set (T, add, has) where
 
   instance Eq a => Eq (T a) where
     eq s t = sub s t && sub t s
-\end{verbatim}
+\end{lstlisting}
+\end{tabular}
+\end{center}
 \caption{A Haskell module}\label{fig:haskell}
-\end{figure}
+\end{figure} % >>>
 
 In general, modules are responsible with information hiding and
 encapsulation. Well known advantages come from modularity. For humans,
@@ -333,6 +342,7 @@ for exploring this question.
 \section{Conclusion} % <<<
 
 % >>>
+% ending <<<
 \section*{Acknowledgment}
 
 \bibliographystyle{IEEEtran}
@@ -343,7 +353,7 @@ for exploring this question.
 Roles (like type classes) can have more than one implementation: Each agent
 plays a role in its own way.
 
-
+% >>>
 \end{document} % >>>
 
-% vim:tw=75:fmr=<<<,>>>:
+% vim:tw=75:fmr=<<<,>>>:fo+=t:
