@@ -273,9 +273,42 @@ Type classes are similar to Java interfaces but there are several key
 differences~\cite{WEB:PJ-tc}. For example, in Haskell it is easy to declare
 a type from one library to be an instance of a class from another library.
 
-% >>>
-\section{The Analogy} % <<<
+% >>> >>>
+\section{Connections} % <<<
 
+Haskell and 2APL are very different languages. We do not aim to establish
+any sort of formal connection between them, but rather to identify fruitful
+high-level similarities. The task is akin trying to draw the Earth's
+surface on paper---much easier to do locally than globally. We proceed,
+therefore, by finding a contact point, seeing what it tells about its
+surroundings, and then repeating.
+
+\subsection{Functions as Sessions} % <<<
+
+A function call $f\,x$ is evaluated by sending~$x$ to $f$'s body
+($\beta$-reduction~\cite[Chapter~5]{DBLP:books/daglib/0005958}), evaluating
+the body, and then receiving the result. The process is analogous to the
+exchange of a pair of messages between two agents. Such an exchange of
+messages is sometimes called a
+\emph{session}~\cite{DBLP:conf/parle/TakeuchiHK94}. The function name~$f$
+corresponds to a session identifier. The type of the argument corresponds
+to a constraint on the content of the first message; the type of the result
+corresponds to a constraint on the content of the reply message. For
+example, the role \textit{Calculator} may be specified as follows.
+\begin{lstlisting}[style=hs]
+class Calculator a where
+  eval :: Expr a -> a
+\end{lstlisting}
+\todo{continue}
+
+
+% >>>
+
+\subsection{Types as Agents} % <<<
+
+\todo{Talk about multiparty session types.}
+
+% >>>
 \todo{This is the last thing that we came up with: roles -- type classes, agents -- types, obligations -- functions, permissions -- data. We also considered the analogy between functions and: capabilities, protocols, activities. Consider modeling obligations with preconditions and postconditions.}
 
 \begin{notes}
