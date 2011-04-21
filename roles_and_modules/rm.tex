@@ -1,4 +1,4 @@
-\documentclass[conference,compsoc]{IEEEtran}
+\documentclass[conference,compsoc]{IEEEtran} % <<<
 \usepackage[cmex10]{amsmath}\interdisplaylinepenalty=2500
 \usepackage{amssymb}
 \usepackage[british]{babel}
@@ -31,10 +31,11 @@
     Belfield Campus, Dublin~4, Ireland\\
     Email: rem.collier@ucd.ie, claudia.grigore@ucdconnect.ie}}
 
-\begin{document}
+% >>>
+\begin{document} % <<<
 \maketitle
 
-\begin{abstract}
+\begin{abstract} % <<<
 
 In Agent-Oriented Programming (AOP), roles and organisational structures
 are regarded as important concepts in the analysis and design of agent
@@ -53,9 +54,9 @@ such as modules. Conversely, modules cannot be conveniently implemented
 with (even our more general) roles. The two concepts are both useful in
 organising large agent systems.  
 
-\end{abstract}
+\end{abstract} % >>>
 
-\section{Introduction}
+\section{Introduction} % <<<
 
 \todo{the gap between design and implementation of roles; we try to implement roles internal to agents}
 
@@ -65,7 +66,8 @@ illustrate how another analogy, with functional languages, helps advance
 AO\null. 
 \end{notes}
 
-\section{Background}
+% >>>
+\section{Background} % <<<
 
 \todo{Rem suggested to: -- simplify the organisational centered methodologies and move it in the introduction, there's not need for the details regarding other methodologies; -- think about the flow of the paper, maybe switching the 2.2 with 2.3; -- link roles and organisations}
 
@@ -262,7 +264,8 @@ Type classes are similar to Java interfaces but there are several key
 differences~\cite{WEB:PJ-tc}. For example, in Haskell it is easy to declare
 a type from one library to be an instance of a class from another library.
 
-\section{The Analogy}
+% >>>
+\section{The Analogy} % <<<
 
 \todo{This is the last thing that we came up with: roles -- type classes, agents -- types, obligations -- functions, permissions -- data. We also considered the analogy between functions and: capabilities, protocols, activities. Consider modeling obligations with preconditions and postconditions.}
 
@@ -309,14 +312,16 @@ message~$t$.'' Another possibility is beliefs: ``If now I believe~$s$,
 
 \end{notes}
 
-\section{Example}
+% >>>
+\section{Example} % <<<
 
 \begin{notes}
 Ideally, a 2APL program that uses the proposed roles, and that is 
 cumbersome to write using only modules or only roles.
 \end{notes}
 
-\section{Other Languages}
+% >>>
+\section{Other Languages} % <<<
 
 \begin{notes}
 Do roles make sense in other agent programming languages? Since AgentFactory
@@ -324,8 +329,10 @@ supports multiple agent programming languages, it provides a great setting
 for exploring this question.
 \end{notes}
 
-\section{Conclusion}
+% >>>
+\section{Conclusion} % <<<
 
+% >>>
 \section*{Acknowledgment}
 
 \bibliographystyle{IEEEtran}
@@ -337,6 +344,6 @@ Roles (like type classes) can have more than one implementation: Each agent
 plays a role in its own way.
 
 
-\end{document}
+\end{document} % >>>
 
-% vim:tw=75:
+% vim:tw=75:fmr=<<<,>>>:
