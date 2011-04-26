@@ -15,6 +15,7 @@
 \lstset{columns=fullflexible}
 \lstset{identifierstyle=\itshape,commentstyle=\rm}
 \lstdefinestyle{hs}{language=haskell,deletekeywords={elem,all,Eq}}
+\lstdefinestyle{me}{language=haskell,keywords={role}}
 
 % Format notes for [conference,compsoc]
 %  - do NOT use \paragraph
@@ -312,14 +313,72 @@ messages is sometimes called a
 \emph{session}~\cite{DBLP:conf/parle/TakeuchiHK94}. The function name~$f$
 corresponds to a session identifier. The type of the argument corresponds
 to a constraint on the content of the first message; the type of the result
-corresponds to a constraint on the content of the reply message. For
-example, the role \textit{Calculator} may be specified as follows.
-\begin{lstlisting}[style=hs]
-class Calculator a where
+corresponds to a constraint on the content of the reply message.
+
+For example, the role \textit{Calculator} could be specified as follows.
+\begin{lstlisting}[style=me]
+role Num a => Calculator a
   eval :: Expr a -> a
 \end{lstlisting}
-\todo{continue}
+An agent that plays the role $\mathit{Calculator}\,\mathit{Int}$ knows
+how to compute expressions such as $(3+3)\times5$, given another agent
+that plays the role $\mathit{Num}\,\mathit{Int}$.
+\begin{lstlisting}[style=me]
+role Num a
+  add :: Pair a -> a
+  multiply :: Pair a -> a
+\end{lstlisting}
+An agent that plays the role $\mathit{Num}\,\mathit{Int}$ knows how to
+compute basic operations on integers, such as $3+3$ and $6\times5$. Given a
+user agent~$u$, an agent~$c$ that plays
+$\mathit{Calculator}\,\mathit{Int}$, and an agent~$n$ that plays
+$\mathit{Num}\,\mathit{Int}$, the following is a possible exchange of
+messages.
+\begin{align*}
+u\to c &: 
+  \mathit{eval}(\mathit{call}(n),\mathit{Times}(
+    \mathit{Plus}(\mathit{Ct}(3),\mathit{Ct}(3)),\mathit{Ct}(5)))\\
+c\to n &: \mathit{add}(\mathit{call}(), \mathit{MkPair}(3, 3))\\
+n\to c &: \mathit{add}(\mathit{return}(), 6)\\
+c\to n &: \mathit{multiply}(\mathit{call}(), \mathit{MkPair}(6, 5))\\
+n\to c &: \mathit{multiply}(\mathit{return}(), 30)\\
+c\to u &: \mathit{eval}(\mathit{return}(), 30)
+\end{align*}
 
+Each function~$f$ that appears in a \textbf{role}~$r$ describes a pair of
+messages, the call $f(\mathit{call}(a_1,\ldots,a_n),p)$ and the response
+$f(\mathit{return}(),q)$. Here $a_1$, \dots,~$a_n$ are (addresses of) other
+agents; $p$~is the value sent to an agent playing~$r$; and $q$~is return
+value. The trick of sending $a_1$, \dots,~$\_n$ with every request message
+is very similar to how type classes are implemented in Haskell
+compilers~\cite{DBLP:journals/toplas/HallHJW96}.
+Messages are terms in predicate logic. In particular,
+\textit{return} is a constant (function with arity~0), and
+$\mathit{call}(a_1,\ldots,a_n)$ is a notational shorthand for
+$\mathit{call}(\mathit{cons}(a_1,\ldots,\mathit{cons}(a_n,\mathit{nil}())\ldots))$.
+The function symbol \textit{MkPair} corresponds to the (unique) value
+constructor of the type constructor \textit{Pair}.
+\begin{lstlisting}[style=hs]
+data Pair a = MkPair a a
+\end{lstlisting}
+\todo{The difference between \textbf{data} and \textbf{newtype} in Haskell
+is not interesting for the story here, but readers will wonder. What to
+do?} The function symbols \textit{Times}, \textit{Plus}, and \textit{Ct}
+correspond to value constructors for expressions.
+\begin{lstlisting}[style=hs]
+data Expr a = Times a a | Plus a a | Ct a
+\end{lstlisting}
+
+\todo{Rewrite this. Goal: overview of connection in high-level terms. IOW,
+summarize example.}
+Notice that this way of defining roles is directly inspired by type
+classes. Some implementation details, such as the \textit{initSession}
+message are also very similar to how type classes are implemented in
+Haskell compilers. More importantly, given this direct connection with type
+classes, it should be possibly to check \emph{statically} that there will
+be no type error at runtime. Of course, if the source of some agents in a
+system is not checked, then they might still send messages that cause type
+errors at runtime in the agents that were checked.
 
 % >>>
 
