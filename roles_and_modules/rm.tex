@@ -97,10 +97,10 @@ and AOP language.
 \todo{Rem suggested to: -- think about the flow of the paper, maybe switching the 2.2 with 2.3; -- link roles and organisations}
 
 We assume the reader is familiar with Java and with some agent-oriented
-programming language, not necessarily 2APL. We do \emph{not} assume that
-the reader is familiar with Haskell.
+programming language, not necessarily
+2APL~\cite{DBLP:journals/aamas/Dastani08}. We do \emph{not} assume that the
+reader is familiar with Haskell.
 
-% >>>
 \subsection{Modules in 2APL} % <<<
 
 In Extended 2APL, agents are module
@@ -178,7 +178,7 @@ all p (x:xs) = p x && all p xs
 
 -- file set.hs
 module Set (T, add, has) where
-  newtype T a = V [a]
+  data T a = V [a]
   add (V s) x = V (x:s)
   has (V s) x = elem x s
   sub (V s) t = all (has t) s
@@ -269,19 +269,12 @@ surface on paper---much easier to do locally than globally. We proceed,
 therefore, by finding a contact point, seeing what it tells about its
 surroundings, and then repeating.
 
-\subsection{Functions as Sessions} % <<<
+\subsection{Functions as Messages} % <<<
 
-A function call $f\,x$ is evaluated by sending~$x$ to $f$'s body
-($\beta$-reduction~\cite[Chapter~5]{DBLP:books/daglib/0005958}), evaluating
-the body, and then receiving the result. The process is analogous to the
-exchange of a pair of messages between two agents. Such an exchange of
-messages is sometimes called a
-\emph{session}~\cite{DBLP:conf/parle/TakeuchiHK94}. The function name~$f$
-corresponds to a session identifier. The type of the argument corresponds
-to a constraint on the content of the first message; the type of the result
-corresponds to a constraint on the content of the reply message.
-
-For example, the role \textit{Calculator} could be specified as follows.
+A function call $f\,x$ is evaluated by `sending'~$x$ to $f$'s body,
+evaluating the body, and then receiving the result. The process is
+analogous to the exchange of a pair of messages between two agents. For
+example, the role \textit{Calculator} could be specified as follows.
 \begin{lstlisting}[style=me]
 role Num a => Calculator a
   eval :: Expr a -> a
@@ -295,14 +288,22 @@ role Num a
   multiply :: Pair a -> a
 \end{lstlisting}
 An agent that plays the role $\mathit{Num}\,\mathit{Int}$ knows how to
-compute basic operations on integers, such as $3+3$ and $6\times5$. Given a
-user agent~$u$, an agent~$c$ that plays
+compute basic operations on integers, such as $3+3$ and $6\times5$. The
+types \textit{Expr} and \textit{Pair} constrain the content of messages.
+\begin{lstlisting}[style=hs]
+data Expr a = Times (Expr a) (Expr a) 
+            | Plus (Expr a) (Expr a) 
+            | Ct a
+data Pair a = MkPair a a
+\end{lstlisting}
+Given a user agent~$u$, an agent~$c$ that plays
 $\mathit{Calculator}\,\mathit{Int}$, and an agent~$n$ that plays
 $\mathit{Num}\,\mathit{Int}$, the following is a possible exchange of
 messages.
 \begin{align*}
 u\to c &: 
-  \mathit{eval}(\mathit{call}(n),\mathit{Times}(
+  \mathit{eval}(\mathit{call}(n),\\
+  &\qquad\mathit{Times}(
     \mathit{Plus}(\mathit{Ct}(3),\mathit{Ct}(3)),\mathit{Ct}(5)))\\
 c\to n &: \mathit{add}(\mathit{call}(), \mathit{MkPair}(3, 3))\\
 n\to c &: \mathit{add}(\mathit{return}(), 6)\\
@@ -311,40 +312,27 @@ n\to c &: \mathit{multiply}(\mathit{return}(), 30)\\
 c\to u &: \mathit{eval}(\mathit{return}(), 30)
 \end{align*}
 
-Each function~$f$ that appears in a \textbf{role}~$r$ describes a pair of
-messages, the call $f(\mathit{call}(a_1,\ldots,a_n),p)$ and the response
-$f(\mathit{return}(),q)$. Here $a_1$, \dots,~$a_n$ are (addresses of) other
-agents; $p$~is the value sent to an agent playing~$r$; and $q$~is return
-value. The trick of sending $a_1$, \dots,~$\_n$ with every request message
-is very similar to how type classes are implemented in Haskell
-compilers~\cite{DBLP:journals/toplas/HallHJW96}.
-Messages are terms in predicate logic. In particular,
-\textit{return} is a constant (function with arity~0), and
-$\mathit{call}(a_1,\ldots,a_n)$ is a notational shorthand for
-$\mathit{call}(\mathit{cons}(a_1,\ldots,\mathit{cons}(a_n,\mathit{nil}())\ldots))$.
-The function symbol \textit{MkPair} corresponds to the (unique) value
-constructor of the type constructor \textit{Pair}.
-\begin{lstlisting}[style=hs]
-data Pair a = MkPair a a
-\end{lstlisting}
-\todo{The difference between \textbf{data} and \textbf{newtype} in Haskell
-is not interesting for the story here, but readers will wonder. What to
-do?} The function symbols \textit{Times}, \textit{Plus}, and \textit{Ct}
-correspond to value constructors for expressions.
-\begin{lstlisting}[style=hs]
-data Expr a = Times a a | Plus a a | Ct a
-\end{lstlisting}
+In general, $f::a\to b$ says that the agent understands messages of the
+form $f(\mathit{call}(\alpha_1,\ldots,\alpha_n),x)$ and eventually replies
+to each of them with a message of the form $f(\mathit{return}(),y)$. Here,
+$\alpha_1$, \dots,~$\alpha_n$ are (addresses of) other agents, $x$~is a
+value of type~$a$, and $y$~is a value of type~$b$.
 
-\todo{Rewrite this. Goal: overview of connection in high-level terms. IOW,
-summarize example.}
-Notice that this way of defining roles is directly inspired by type
-classes. Some implementation details, such as the \textit{initSession}
-message are also very similar to how type classes are implemented in
-Haskell compilers. More importantly, given this direct connection with type
-classes, it should be possibly to check \emph{statically} that there will
-be no type error at runtime. Of course, if the source of some agents in a
-system is not checked, then they might still send messages that cause type
-errors at runtime in the agents that were checked.
+The analogy so far is already fruitful. The content of 2APL messages is a
+(ground) term or an atomic formula. Since 2APL is built on top
+JADE~\cite{DBLP:books/sp/map2005/BellifemineBCP05}, the message content may
+also be declared as part of an ontology. However, if we would show the JADE
+ontology for arithmetic expressions we would run over the page limit by a
+couple of pages. Contrast with the three short lines used here to define
+$\mathit{Expr}\,a$. The definition is not only short and readable, but also
+polymorphic in the type~$a$ of the constants, and rooted in the theory of
+algebraic data types (see, for example, \cite{DBLP:conf/ctcs/Hagino87}).
+
+
+It is unclear what is a good analogue for \textbf{instance} declarations,
+but here is an attempt.
+
+\todo{Analogue of \textbf{instance}---the implementation of roles.}
 
 % >>>
 
@@ -353,50 +341,13 @@ errors at runtime in the agents that were checked.
 \todo{Talk about multiparty session types.}
 
 % >>>
-\todo{This is the last thing that we came up with: roles -- type classes, agents -- types, obligations -- functions, permissions -- data. We also considered the analogy between functions and: capabilities, protocols, activities. Consider modeling obligations with preconditions and postconditions.}
 
-\begin{notes}
-Idea: Find a clear argument of why Haskell type classes and modules are
-orthogonal feature. Then find an analogy between (a part of) Haskell and (a
-part of) 2APL that makes it possible to carry over the argument. Spend most
-of the paper in this article on explaining the latter argument.
+\todo{This is the last thing that we came up with: roles -- type classes,
+agents -- types, obligations -- functions, permissions -- data. We also
+considered the analogy between functions and: capabilities, protocols,
+activities. Consider modeling obligations with preconditions and
+postconditions.}
 
-In general, modules are abstraction boundaries that help isolate
-implementation details, and may also help compilers and interpreters to be
-more efficient.  More importantly, modules help humans design and
-understand large systems.
-
-The \textit{create} action has no equivalent in Haskell. However, most
-Haskell modules export \emph{one} main data type and functions to
-instantiate it. For example, the module $\mathit{Data}.\mathit{Set}$
-exports the type $\mathit{Set}\,a$ and the constant
-$\mathit{empty}::\mathit{Set}\,a$.  We use this to extend the analogy: \[
-\textit{2APL module} \sim \textit{Haskell module} \sim \textit{Haskell
-type}. \]
-
-Type classes are sets of types, all of which support similar operations.
-The analogy would then be a set of 2APL modules, all of which support
-similar operations. Except there's no notion of ``operation'' so we must
-find a suitable analogue.
-
-A function of type $s\to t$ takes an object of type $s$ and returns one of
-type~$t$. The analogy now cracks a bit: Haskel's types were supposed to be
-like 2APL modules (at least the types that are the ``main'' ones in some
-module); however, something that takes modules and produces modules is more
-like an OCaml functor, and putting that in a type-class sounds $\ldots$
-complicated. The goal here is to be able to mix and match different modules
-in certain context, just like type classes allow you to use different
-implementations for fixed point addition and floating point addition
-without sweating about it.
-
-So, let's take a step backward: If not all Haskell types are ``main'' and
-therefore analogue to 2APL modules, then what is their analogue? One
-possibility is messages. So a function of type $s\to t$ is like a promise:
-``If you give me message~$s$, I will (eventually) send you back a
-message~$t$.'' Another possibility is beliefs: ``If now I believe~$s$,
-(there's a good chance) I'll evolve to believe~$t$.''
-
-\end{notes}
 
 % >>>
 \section{Example} % <<<
@@ -404,12 +355,23 @@ message~$t$.'' Another possibility is beliefs: ``If now I believe~$s$,
 \begin{notes}
 Ideally, a 2APL program that uses the proposed roles, and that is 
 cumbersome to write using only modules or only roles.
+
+Perhaps Map-Reduce, were the mappers have different implementations?
 \end{notes}
 
 % >>>
-\section{Other Languages} % <<<
+\section{Discussion} % <<<
+
+The 
+
 
 \begin{notes}
+\begin{itemize}
+\item How to implement roles?
+\item What static checking is possible?
+\item Connection to FIPA.
+\end{itemize}
+
 Do roles make sense in other agent programming languages? Since AgentFactory
 supports multiple agent programming languages, it provides a great setting
 for exploring this question.
