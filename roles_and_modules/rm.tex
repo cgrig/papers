@@ -16,7 +16,7 @@
 \lstset{identifierstyle=\itshape,commentstyle=\rm}
 \lstset{literate={->}{{$\to\;$}}1 {<-}{{$\gets\;$}}1 {=>}{{$\Rightarrow\;$}}1}
 \lstdefinestyle{hs}{language=haskell,deletekeywords={elem,all,Eq,Num}}
-\lstdefinestyle{me}{language=haskell,keywords={role,agent,plays,PG-rules,true,this,return}}
+\lstdefinestyle{me}{language=haskell,keywords={role,agent,plays,true,this,PG,R,rules}}
 
 % Format notes for [conference,compsoc]
 %  - do NOT use \paragraph
@@ -102,7 +102,7 @@ and AOP language.
 We assume the reader is familiar with Java and with some agent-oriented
 programming language, not necessarily
 2APL~\cite{DBLP:journals/aamas/Dastani08}. We do \emph{not} assume that the
-reader is familiar with Haskell.
+reader is familiar with Haskell~\cite{web:haskell}.
 
 \subsection{Modules in 2APL} % <<<
 
@@ -332,6 +332,23 @@ The definition is not only short and readable, but also polymorphic in the
 type~$a$ of the constants, and rooted in the theory of algebraic data types
 (see, for example, \cite{DBLP:conf/ctcs/Hagino87}).
 
+\begin{figure}\footnotesize % <<<
+\begin{center}
+\begin{tabular}{c}
+\begin{lstlisting}[style=me]
+agent foo plays Calculator Int(n)
+  R-rules:
+    eval(Ct(x)) <- x
+    eval(Times(x, y)) <-
+      n.multiply(MkPair(this.eval(x), this.eval(y)))
+    eval(Plus(x, y)) <-
+      n.add(MkPair(this.eval(x), this.eval(y)))
+\end{lstlisting}
+\end{tabular}
+\end{center}
+\caption{Implementing a role in 2APL}\label{fig:roleimpl2APL}
+\end{figure} % >>>
+
 The analogy is not perfect. The earlier declaration for the role
 $\mathit{Calculator}\,a$ is superficially similar to the following type
 class declaration.
@@ -348,26 +365,30 @@ $\mathit{eval}(\mathit{call}(n),\ldots)$ by messages
 $\mathit{eval}(\mathit{return}(),\ldots)$, where $n$~is an agent that plays
 $\mathit{Num}\,a$.'' Here $a$~is a type variable, which is nice but we
 expect not necessary for many roles. When implementing a role, we do need
-to name both the agent and the role it plays.
+to name both the agent and the role it plays, as seen in
+Figure~\ref{fig:roleimpl2APL}. Because \textit{foo} plays
+$\mathit{Calculator}\,\mathit{Int}$, the agent interpreter creates a goal
+$\mathit{eval}(m,\mathit{call}(n),x)$ for all messages with shape
+$\mathit{eval}(\mathit{call}(n),x)$ that come from some agent~$m$.  One
+could handle these goals using 2APL's PG-rules.
 \begin{lstlisting}[style=me]
-agent foo plays Calculator Int(n)
-  PG-rules:
-    eval(Ct(x)) <- return(x)
-    eval(Times(x, y)) <-
-      return(n.multiply(this.eval(x), this.eval(y)))
-    eval(Plus(x, y)) <-
-      return(n.add(this.eval(x), this.eval(y)))
+eval(m,call(n),Ct(x)) <- true |
+  send(m,role,eval(return(),x))
 \end{lstlisting}
-This code assumes some modifications of 2APL's syntax and, more
-importantly, some additions to its semantics. The simplest syntax
-modification is that the belief query \textbf{true} is omitted, so the
-rules above have the shape
-$\langle\mathit{GoalQuery\rangle\gets\langle\mathit{Plan}\rangle}$.  The
-semantic modifications are subtle, but aim at making the rules easy to
-write and read. When a message with the content
-$\mathit{eval}(\mathit{call}(n)),x$ is received the goal $\mathit{eval}(x)$
-is added to the goal list, the address of the sender is saved, and the
-address $n$ is saved. \todo{continue}
+The first R-rule in Figure~\ref{fig:roleimpl2APL} does exactly the same,
+but is more compact. The other two R-rules, however, are much more
+cumbersome to simulate with the other kinds of rules. The main reason is
+that the notation $n.\mathit{add}(x)$ hides sending a message
+$\mathit{add}(\mathit{call}(),x)$ to agent~$n$, waiting for a reply
+$\mathit{add}(\mathit{return}(),y)$, and extracting~$y$. The (goal) query
+of an R-rule may only be an atom; the right side of an R-rule is an
+expression that is evaluated as described and whose result is sent as a
+message.  This is a rough and informal sketch of the intended semantics
+that needs to be made precise.
+
+Note that two agents \textit{foo} and \textit{bar} may be instances of the
+same 2APL module, yet only \textit{foo} plays the role
+$\mathit{Calculator}\,\mathit{Int}$.
 
 % >>>
 
