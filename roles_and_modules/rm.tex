@@ -14,8 +14,9 @@
 
 \lstset{columns=fullflexible}
 \lstset{identifierstyle=\itshape,commentstyle=\rm}
-\lstdefinestyle{hs}{language=haskell,deletekeywords={elem,all,Eq}}
-\lstdefinestyle{me}{language=haskell,keywords={role}}
+\lstset{literate={->}{{$\to\;$}}1 {<-}{{$\gets\;$}}1 {=>}{{$\Rightarrow\;$}}1}
+\lstdefinestyle{hs}{language=haskell,deletekeywords={elem,all,Eq,Num}}
+\lstdefinestyle{me}{language=haskell,keywords={role,agent,plays,PG-rules,true,this,return}}
 
 % Format notes for [conference,compsoc]
 %  - do NOT use \paragraph
@@ -144,7 +145,8 @@ soon breaks. The test~$t$ has no counterpart in Java. In 2APL, when
 $t$~holds, $x$~stops executing.
 
 Other aspects of 2APL modules, such as how they interact with goals and
-events, do not affect the current discussion.
+events, do not affect the current discussion. \todo{Goals are used later to
+implement roles, so this statement is no longer true. Revise.}
 
 % >>>
 \subsection{Modules and Type Classes in Haskell} % <<<
@@ -329,17 +331,48 @@ The analogy so far is already fruitful. The content of 2APL messages is a
 (ground) term or an atomic formula. Since 2APL is built on top
 JADE~\cite{DBLP:books/sp/map2005/BellifemineBCP05}, the message content may
 also be declared as part of an ontology. However, if we would show the JADE
-ontology for arithmetic expressions we would run over the page limit by a
-couple of pages. Contrast with the three short lines used here to define
-$\mathit{Expr}\,a$. The definition is not only short and readable, but also
-polymorphic in the type~$a$ of the constants, and rooted in the theory of
-algebraic data types (see, for example, \cite{DBLP:conf/ctcs/Hagino87}).
+ontology for arithmetic expressions we would run over the page limit.
+Contrast with the three short lines used here to define $\mathit{Expr}\,a$.
+The definition is not only short and readable, but also polymorphic in the
+type~$a$ of the constants, and rooted in the theory of algebraic data types
+(see, for example, \cite{DBLP:conf/ctcs/Hagino87}).
 
-
-It is unclear what is a good analogue for \textbf{instance} declarations,
-but here is an attempt.
-
-\todo{Analogue of \textbf{instance}---the implementation of roles.}
+The analogy is not perfect. The earlier declaration for the role
+$\mathit{Calculator}\,a$ is superficially similar to the following type
+class declaration.
+\begin{lstlisting}[style=hs]
+class Num a => Calculator a
+  eval :: Expr a -> a
+\end{lstlisting}
+This declaration reads ``a type~$a$ that is a member of the class
+\textit{Num} is also a member of class \textit{Calculator} provided there
+exist a function \textit{eval} with the proper type.'' In contrast, the
+earlier role declaration reads ``an unnamed agent plays role
+$\mathit{Calculator}\,a$ if it answers to messages
+$\mathit{eval}(\mathit{call}(n),\ldots)$ by messages
+$\mathit{eval}(\mathit{return}(),\ldots)$, where $n$~is an agent that plays
+$\mathit{Num}\,a$.'' Here $a$~is a type variable, which is nice but we
+expect not necessary for many roles. When implementing a role, we do need
+to name both the agent and the role it plays.
+\begin{lstlisting}[style=me]
+agent foo plays Calculator Int(n)
+  PG-rules:
+    eval(Ct(x)) <- return(x)
+    eval(Times(x, y)) <-
+      return(n.multiply(this.eval(x), this.eval(y)))
+    eval(Plus(x, y)) <-
+      return(n.add(this.eval(x), this.eval(y)))
+\end{lstlisting}
+This code assumes some modifications of 2APL's syntax and, more
+importantly, some additions to its semantics. The simplest syntax
+modification is that the belief query \textbf{true} is omitted, so the
+rules above have the shape
+$\langle\mathit{GoalQuery\rangle\gets\langle\mathit{Plan}\rangle}$.  The
+semantic modifications are subtle, but aim at making the rules easy to
+write and read. When a message with the content
+$\mathit{eval}(\mathit{call}(n)),x$ is received the goal $\mathit{eval}(x)$
+is added to the goal list, the address of the sender is saved, and the
+address $n$ is saved. \todo{continue}
 
 % >>>
 
