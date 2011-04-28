@@ -43,6 +43,14 @@
 
 \begin{abstract} % <<<
 
+\todo{Say explicitly what is the position that is advocated.}
+\todo{The abstract promises something else than is found in the content.
+The Background presents 2APL modules, Haskell modules and type classes.
+Connections show how type-classes suggest adding roles (and sessions?) to
+2APL. It is conceivable that features added to 2APL can be added to other
+AOP languages, and there are good reasons for choosing 2APL in the article:
+especially with page limits it is good to stay concrete, 2APL has
+semantics, there is an article that implies that 2APL does not need roles.}
 In Agent-Oriented Programming (AOP), roles and organisational structures
 are regarded as important concepts in the analysis and design of agent
 systems, but there is a significant lack of support for the implementation
@@ -50,15 +58,28 @@ stage of the development process. In response to this, a number of
 organisational frameworks have emerged as powerful approaches to
 implementing organisations. However, in our mind, this complicates rather
 than simplifies the implementation: developers must understand and work
-with both the organisational framework and the AOP language. In this paper,
+with both the organisational framework and the AOP language.
+\todo{Unless there will be a comparison between multiparty session types
+and organisations, this seems to promise something that is not in the
+article. I think it is fine if the introduction says that we think
+methodologies are crap, so we focus only on programming languages. Or,
+perhaps, drop the crap.}
+ In this paper,
 we present an approach that introduces a general notion of a role for AOP
 languages, the purpose of which is to reduce the gap between design and
 implementation, and to offer run-time support for enforcing role
-compliance. Our approach, which is inspired by Haskell's type classes,
+compliance. 
+\todo{I find the world ``general'' bothersome. If it's supposed to mean
+``applicable to more than one PL'' then it simply isn't true: The article
+only talks about 2APL.} \todo{I think that aiming for runtime enforcement
+is idiotic. Let's leave it at this, so I don't get too hot.}
+Our approach, which is inspired by Haskell's type classes,
 cannot be conveniently implemented using existing AOP language concepts,
 such as modules. Conversely, modules cannot be conveniently implemented
 with (even our more general) roles. The two concepts are both useful in
-organising large agent systems.  
+organising large agent systems.
+\todo{As it is now, the article does not really argue that the concepts are
+orthogonal.}
 
 \end{abstract} % >>>
 
@@ -69,56 +90,32 @@ organising large agent systems.
 \begin{notes}
 AO is an evolution of OO that draws from social theory. In this paper we
 illustrate how another analogy, with functional languages, helps advance 
-AO\null. 
-
-Organisations are increasingly seen as an important concept in agent
-oriented design. However, little work has been done on applying
-organisational concepts, like the one of role, to AOP languages. The main
-approach to implementing organisations in multi agent systems are
-organisational centered methodologies (OCM). They introduce an
-organisational level built on top of the agent level. An organization is
-seen as a kind of dynamic framework where agents are components, and
-entering a group or playing a role may be seen as a plug-in process where a
-component is integrated into a framework. Well known examples of such
-methodologies are Moise+~\cite{DBLP:conf/atal/HubnerSB05} implemented in
-S-Moise+~\cite{DBLP:conf/atal/HubnerSB05},
-AGR~\cite{DBLP:conf/aose/FerberGM03} implemented in
-MadKit~\cite{DBLP:conf/agents/GutknechtF00a}, and
-Gaia~\cite{DBLP:journals/tosem/ZambonelliJW03} implemented with
-JADE~\cite{DBLP:conf/jit/MoraitisPS02}.
-
-Unfortunately the OCM's approach proves cumbersome, complicating rather
-than simplifying the implementation of multi agent systems, because
-developers must understand and work with both the organisational framework
-and AOP language.
-
-We think that integrating the organisation layer to the agent oriented
-programming languages will simplify the development process of multi agent
-systems. In pursuing this we found that the analogy with the functional
-language Haskell might prove fruitful.  
-
+AO\null. \todo{It may seem strange that the whole article is based on some
+analogies. This is why I think it is a good idea that AO in general
+profited from analogies. The Introduction is probably the right place, but
+I'm not sure what is the right form.}
 \end{notes}
 
 % >>>
 \section{Background} % <<<
 
-\todo{Rem suggested to: -- think about the flow of the paper, maybe switching the 2.2 with 2.3; -- link roles and organisations}
-
 We assume the reader is familiar with Java and with some agent-oriented
 programming language, not necessarily
 2APL~\cite{DBLP:journals/aamas/Dastani08}. We do \emph{not} assume that the
-reader is familiar with Haskell~\cite{web:haskell}.
+reader is familiar with Haskell~\cite{web:haskell}. The reader who does
+know Haskell will notice that we bend the truth in the interest of
+simplicity.
 
 \subsection{Modules in 2APL} % <<<
 
-In Extended 2APL, agents are module
+In (Extended) 2APL, agents are module
 instances~\cite{DBLP:conf/prima/DastaniMS08}. At startup, the agent
 interpreter creates a set of agents; later, agents may create other agents.
-When an agent is created it is given a name, which can be used later to
-refer to the agent. At this point, an informal analogy with Java may aid
-the reader's intuition. Modules in 2APL are like classes in Java. The 2APL
-action $\mathit{create}(A,x)$ placed in module~$B$ is analogous to the Java
-statement $x=\mathbf{new}\,A$ placed in class~$B$ that has field~$x$.  The
+When an agent is created it is given a name.  At this point, an informal
+analogy with Java may aid the reader's intuition. Modules in 2APL are like
+classes in Java. The 2APL action $\mathit{create}(A,x)$ creates an agent
+named~$x$ by instantiating module~$A$; the analogue statement in Java is
+$x=\mathbf{new}\,A()$, where $x$~is a field (of the current class).  The
 analogy breaks quickly, however. For example, in 2APL it is a fault to
 execute $\mathit{create}(A,x)$ twice without executing
 $\mathit{release}(x)$ in-between. Hence, the number of co-existing agents
@@ -144,9 +141,8 @@ Java, depending on the executor, a new thread may be created or not; in
 soon breaks. The test~$t$ has no counterpart in Java. In 2APL, when
 $t$~holds, $x$~stops executing.
 
-Other aspects of 2APL modules, such as how they interact with goals and
-events, do not affect the current discussion. \todo{Goals are used later to
-implement roles, so this statement is no longer true. Revise.}
+Other aspects of 2APL modules, such as how they interact with 
+events, do not affect the current discussion.
 
 % >>>
 \subsection{Modules and Type Classes in Haskell} % <<<
@@ -201,21 +197,6 @@ module Set (T, add, has) where
 \label{fig:haskell}
 \end{figure} % >>>
 
-In general, modules are responsible with information hiding and
-encapsulation. Well known advantages come from modularity. For humans,
-modular programs are easier to write and to maintain. They are easier to
-write because, to a certain degree, it is enough to understand the
-interface of a module in order to use it. They are easier to maintain
-because changes to a module's implementation remain local as long as the
-interface is not affected. For compilers, modular programs enable separate
-compilation. Thus, modules are an important device in structuring large
-programs. \todo{Perhaps cite some early paper on modularity.}
-
-Haskell modules are similar, from a very high distance, to Java classes.  A
-Java class hides private parts and introduces \emph{one} type at the same
-time. A Haskell module may introduce zero, one, or more types.  But many
-Haskell modules do indeed export \emph{one} main type. 
-
 % type classes
 %  - continue example
 %  - ad-hoc polymorphism: multiple implementations with the same interface
@@ -224,14 +205,12 @@ Haskell modules do indeed export \emph{one} main type.
 The type class \textit{Eq} contains types whose values can be compared for
 equality. To make a type belong to the class \textit{Eq} one must write an
 instance declaration that provides an implementation for a function
-named~$eq$. \todo{Should we say that we lie here a little so that we don't
-confuse people who don't know Haskell?} The \textbf{instance} declaration
-in module \textit{Set} says that the type constructor~$T$ transforms
-members of \textit{Eq} into members of \textit{Eq}. For example, sets of
-sets of integers are members of \textit{Eq}, because \textit{Int} is a
-member of \textit{Eq}. Here is \emph{part} of an evaluation of the
-comparison between $V[V[1]]$ and $V[V[1,1]]$, both of which
-represent~$\{\{1\}\}$.
+named~$eq$. The \textbf{instance} declaration in module \textit{Set} says
+that the type constructor~$T$ transforms members of \textit{Eq} into
+members of \textit{Eq}. For example, $T(T\,\mathit{Int})$ is in \textit{Eq}
+because \textit{Int} is in \textit{Eq.} Here is \emph{part} of an
+evaluation of the comparison between $V[V[1]]$ and $V[V[1,1]]$, both of
+which represent~$\{\{1\}\}$.
 \begin{align*}
 &\phantom{\;\leadsto\;}
   \mathit{eq}\;V[V[1]]\;V[V[1,1]] \\
@@ -261,7 +240,22 @@ represent~$\{\{1\}\}$.
 Notice, in particular, that \textit{eq} is applied on $T(T\,\mathit{Int})$,
 then on $T\,\mathit{Int}$, and then on \textit{Int}.
 
-In general, type classes are an elegant mechanism to provide ad-hoc
+In general, modules are responsible with information hiding and
+encapsulation. Well known advantages come from modularity. For humans,
+modular programs are easier to write and to maintain. They are easier to
+write because, to a certain degree, it is enough to understand the
+interface of a module in order to use it. They are easier to maintain
+because changes to a module's implementation remain local as long as the
+interface is not affected. For compilers, modular programs enable separate
+compilation. Thus, modules are an important device in structuring large
+programs. \todo{Perhaps cite some early paper on modularity.}
+
+Haskell modules, like 2APL modules,  are somewhat similar to Java classes.
+A Java class hides private parts and introduces \emph{one} type at the same
+time. A Haskell module may introduce zero, one, or more types.  But many
+Haskell modules do indeed export \emph{one} main type. 
+
+On the other hand, type classes are an elegant mechanism to provide ad-hoc
 polymorphism, also known as overloading~\cite{DBLP:conf/popl/WadlerB89}:
 The same name refers to different implementations depending on the context.
 Type classes are similar to Java interfaces but there are several key
@@ -364,18 +358,16 @@ class Num a => Calculator a
 This declaration reads ``a type~$a$ that is a member of the class
 \textit{Num} is also a member of class \textit{Calculator} provided there
 exist a function \textit{eval} with the proper type.'' In contrast, the
-earlier role declaration reads ``an unnamed agent plays role
+earlier role declaration reads ``an \emph{unnamed} agent plays role
 $\mathit{Calculator}\,a$ if it answers to messages
 $\mathit{eval}(\mathit{call}(n),\ldots)$ by messages
 $\mathit{eval}(\mathit{return}(),\ldots)$, where $n$~is an agent that plays
-$\mathit{Num}\,a$.'' Here $a$~is a type variable, which is nice but we
-expect not necessary for many roles. When implementing a role, we do need
-to name both the agent and the role it plays, as seen in
-Figure~\ref{fig:roleimpl2APL}. Because \textit{foo} plays
-$\mathit{Calculator}\,\mathit{Int}$, the agent interpreter creates a goal
-$\mathit{eval}(m,\mathit{call}(n),x)$ for all messages with shape
-$\mathit{eval}(\mathit{call}(n),x)$ that come from some agent~$m$.  One
-could handle these goals using 2APL's PG-rules.
+$\mathit{Num}\,a$.'' Here $a$~is a type variable.  When implementing a role
+the agent must be named, as seen in Figure~\ref{fig:roleimpl2APL}. Because
+\textit{foo} plays $\mathit{Calculator}\,\mathit{Int}$, the agent
+interpreter creates a goal $\mathit{eval}(m,\mathit{call}(n),x)$ for all
+messages with shape $\mathit{eval}(\mathit{call}(n),x)$ that come from some
+agent~$m$.  One could handle these goals using 2APL's PG-rules.
 \begin{lstlisting}[style=me]
 eval(m,call(n),Ct(x)) <- true |
   send(m,role,eval(return(),x))
@@ -396,14 +388,16 @@ same 2APL module, yet only \textit{foo} plays the role
 $\mathit{Calculator}\,\mathit{Int}$.
 
 % >>>
-
 \subsection{Types as Agents} % <<<
 
 \todo{Talk about multiparty session types.}
 
+\todo{If the goal is to explain what multiparty session types are, then
+move to background. The point of \emph{this} section is to say how to
+modify 2APL given the insight from `types as agents' and `session types'.}
 A session type~\cite{dblp:conf/popl/hondayc08} is an abstraction
 representing the structure of conversations, where a session denotes a
-natural unit of conversation.  Multiparty session types consists of global
+natural unit of conversation.  Multiparty session types consist of global
 types, that act like a shared agreement among communicating peers, and
 local types, that represent the end-point projections of the global types.
 The programming methodology for multiparty interactions can be summarised
@@ -412,51 +406,18 @@ in two steps:
 \begin{itemize}
    \item{ describing the
 interaction scenario as a global type, checking its linearity (to
-determine its coherence)}
+determine its coherence)} \todo{Linearity? Coherence? Am I supposed to know
+what these are?}
    \item{coding each participant, incrementally validating its conformance
    to the projection of the global type (the local type), by type-checking.}
+   \todo{Why `incremental'? Never heard of incremental type-checking.}
 \end{itemize}
 % >>>
 
-\todo{This is the last thing that we came up with: roles -- type classes,
-agents -- types, obligations -- functions, permissions -- data. We also
-considered the analogy between functions and: capabilities, protocols,
-activities. Consider modeling obligations with preconditions and
-postconditions.}
-
-
 % >>>
-
 \subsection{Type Classes as Roles} % <<<
 
-% >>>
-
-\section{Example} % <<<
-
-\begin{notes}
-Ideally, a 2APL program that uses the proposed roles, and that is 
-cumbersome to write using only modules or only roles.
-
-Perhaps Map-Reduce, were the mappers have different implementations?
-\end{notes}
-
-% >>>
-\section{Discussion} % <<<
-
-The 
-
-
-\begin{notes}
-\begin{itemize}
-\item How to implement roles?
-\item What static checking is possible?
-\item Connection to FIPA.
-\end{itemize}
-
-Do roles make sense in other agent programming languages? Since AgentFactory
-supports multiple agent programming languages, it provides a great setting
-for exploring this question.
-\end{notes}
+\todo{What is this? I thought that's what ``Functions as Messages'' does.}
 
 % >>>
 \section{Conclusion} % <<<
@@ -467,11 +428,6 @@ for exploring this question.
 
 \bibliographystyle{IEEEtran}
 \bibliography{IEEEabrv,rm}
-
-\section*{Notes}
-
-Roles (like type classes) can have more than one implementation: Each agent
-plays a role in its own way.
 
 % >>>
 \end{document} % >>>
