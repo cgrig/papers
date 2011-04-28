@@ -401,6 +401,21 @@ $\mathit{Calculator}\,\mathit{Int}$.
 
 \todo{Talk about multiparty session types.}
 
+A session type~\cite{dblp:conf/popl/hondayc08} is an abstraction
+representing the structure of conversations, where a session denotes a
+natural unit of conversation.  Multiparty session types consists of global
+types, that act like a shared agreement among communicating peers, and
+local types, that represent the end-point projections of the global types.
+The programming methodology for multiparty interactions can be summarised
+in two steps:
+
+\begin{itemize}
+   \item{ describing the
+interaction scenario as a global type, checking its linearity (to
+determine its coherence)}
+   \item{coding each participant, incrementally validating its conformance
+   to the projection of the global type (the local type), by type-checking.}
+\end{itemize}
 % >>>
 
 \todo{This is the last thing that we came up with: roles -- type classes,
