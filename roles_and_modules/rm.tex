@@ -15,8 +15,8 @@
 \lstset{columns=fullflexible}
 \lstset{identifierstyle=\itshape,commentstyle=\rm}
 \lstset{literate={->}{{$\to\;$}}1 {<-}{{$\gets\;$}}1 {=>}{{$\Rightarrow\;$}}1}
-\lstdefinestyle{hs}{language=haskell,deletekeywords={elem,all,Eq,Num}}
-\lstdefinestyle{me}{language=haskell,keywords={role,agent,plays,true,this,PG,R,rules}}
+\lstdefinestyle{hs}{language=haskell,deletekeywords={elem,all,Eq,Num,Int}}
+\lstdefinestyle{me}{language=haskell,keywords={role,agent,plays,true,this,PG,R,rules,send,session,repeat}}
 
 % Format notes for [conference,compsoc]
 %  - do NOT use \paragraph
@@ -29,12 +29,12 @@
 \title{Roles and Modules}
 \IEEEspecialpapernotice{(Position Paper)}
 \author{
-  \IEEEauthorblockN{Rem Collier and Claudia Grigore} 
+  \IEEEauthorblockN{Claudia Grigore and Rem Collier} 
   \IEEEauthorblockA{
     School of Computer Science and Informatics\\
     University College Dublin\\
     Belfield Campus, Dublin~4, Ireland\\
-    Email: rem.collier@ucd.ie, claudia.grigore@ucdconnect.ie}}
+    Email: claudia.grigore@ucdconnect.ie, rem.collier@ucd.ie}}
 
 % >>>
 \begin{document} % <<<
@@ -89,37 +89,6 @@ AO\null. \todo{It may seem strange that the whole article is based on some
 analogies. This is why I think it is a good idea that AO in general
 profited from analogies. The Introduction is probably the right place, but
 I'm not sure what is the right form.}
-
-\todo{I think we should drop (almost) all references to organizations.
-Hence, delete the paragraphs that follow in these notes.}
-
-Organisations are increasingly seen as an important concept in agent
-oriented design. However, little work has been done on applying
-organisational concepts, like the one of role, to AOP languages. The main
-approach to implementing organisations in multi agent systems are
-organisational centered methodologies (OCM). They introduce an
-organisational level built on top of the agent level. An organization is
-seen as a kind of dynamic framework where agents are components, and
-entering a group or playing a role may be seen as a plug-in process where a
-component is integrated into a framework. Well known examples of such
-methodologies are Moise+~\cite{DBLP:conf/atal/HubnerSB05} implemented in
-S-Moise+~\cite{DBLP:conf/atal/HubnerSB05},
-AGR~\cite{DBLP:conf/aose/FerberGM03} implemented in
-MadKit~\cite{DBLP:conf/agents/GutknechtF00a}, and
-Gaia~\cite{DBLP:journals/tosem/ZambonelliJW03} implemented with
-JADE~\cite{DBLP:conf/jit/MoraitisPS02}.
-
-Unfortunately the OCM's approach proves cumbersome, complicating rather
-than simplifying the implementation of multi agent systems, because
-developers must understand and work with both the organisational framework
-and AOP language.
-
-We think that integrating the organisation layer, in particular the concept
-of role, to the agent oriented programming languages will simplify the
-development process of multi agent systems. In pursuing this
-internalisation of roles we found a number of analogies that proved
-fruitful: first with the functional language Haskell's type
-classes~\cite{}, and second with the multirole session types~\cite{}.  
 \end{notes}
 
 % >>>
@@ -395,8 +364,8 @@ interpreter creates a goal $\mathit{eval}(m,\mathit{call}(n),x)$ for all
 messages with shape $\mathit{eval}(\mathit{call}(n),x)$ that come from some
 agent~$m$.  One could handle these goals using 2APL's PG-rules.
 \begin{lstlisting}[style=me]
-eval(m,call(n),Ct(x)) <- true |
-  send(m,role,eval(return(),x))
+eval(m, call(n), Ct(x)) <- true |
+  send(m, role, eval(return(), x))
 \end{lstlisting}
 The first R-rule in Figure~\ref{fig:roleimpl2APL} does exactly the same,
 but is more compact. The other two R-rules, however, are much more
@@ -413,9 +382,59 @@ Note that two agents \textit{foo} and \textit{bar} may be instances of the
 same 2APL module, yet only \textit{foo} plays the role
 $\mathit{Calculator}\,\mathit{Int}$.
 
+In summary, the vague and informal intuition that a function is like a pair
+of messages, one carrying the arguments and one carrying the result, led
+us to two interesting observations. First, algebraic data types are
+convenient for describing the content of messages. We expect to see fewer
+runtime errors once messages are typed. Second, we developed a notion of
+role in the context of the 2APL language that is independent of that of
+module.
+
 % >>>
 \subsection{Types as Agents} % <<<
 
+In the previous section, Haskell types do not have a clear analogue in
+2APL. On one hand, we proposed typing message content, so it would seem
+that the analogue of Haskell types are 2APL types for message content. On
+another hand, agents play roles and we wrote roles much like Haskell type
+classes, so it would seem that the analogue of Haskell types are 2APL
+agents. A Haskell type class is a set of Haskell types; a 2APL role is a
+set of 2APL agents that play the role. In this section we explore where
+does the intuition ``types as agents'' lead.
+
+{\def\l#1->#2:#3<#4>{\mathtt{#1}\to\mathtt{#2}:#3\langle\mathsf{#4}\rangle}
+We read $f::a\to b$ as ``message $f$ is sent by agent~$a$ to agent~$b$.'' A
+type class lists several function signatures, so its natural analogue is a
+list of messages together with their endpoints. It turns out that such a
+list is very similar to the global types that describe multiparty sessions
+in the context of $\pi$-calculus. Here is an example of such a type from
+Honda et al.~\cite{dblp:conf/popl/hondayc08}:
+\begin{align*}
+\mu\mathbf{t}. 
+  &\l DP->K:d<bool>. \\
+  &\l KP->K:k<bool>. \\
+  &\l K->C:c<bool>.\mathbf{t}
+\end{align*}
+This type means that process \texttt{K} receives two booleans, one from
+\texttt{DP} through channel~$d$ and one from \texttt{KP} through
+channel~$k$, then sends a boolean to~\texttt{C} through channel~$c$, and
+the whole process repeats. In 2APL we have agents, rather than processes,
+and there are no named channels. We would therefore like to write the
+following.
+\begin{lstlisting}[style=me]
+session ComputeBasicOperation(a, b)
+  a -> b: Pair Int
+  b -> a: Int
+session ComputeExpression(a, b, c)
+  c -> a: Expr Int
+  repeat ComputeBasicOperation(a, b)
+  a -> c: Int
+\end{lstlisting}
+\todo{Continue. Explain how to project sessions as roles.}
+}
+
+
+\begin{notes}
 \todo{Talk about multiparty session types.}
 
 \todo{If the goal is to explain what multiparty session types are, then
@@ -438,19 +457,23 @@ what these are?}
    to the projection of the global type (the local type), by type-checking.}
    \todo{Why `incremental'? Never heard of incremental type-checking.}
 \end{itemize}
-% >>>
+\end{notes}
+% >>> >>>
 
-% >>>
-\subsection{Type Classes as Roles} % <<<
+\section{Conclusion and Future Work} % <<<
 
-\todo{What is this? I thought that's what ``Functions as Messages'' does.}
-
-% >>>
-\section{Conclusion} % <<<
+\todo{Make the notion of role more precise, but keep it abstract enough so
+that we can implement it in a multi-language platform like AgentFactory.}
+\todo{We want language support for roles and organizations.}
+\todo{We aim for ease of use, succinctness, and static checking.}
+\todo{Where static checking is not possible we'll do runtime checking (in
+the framework) and we'll generate tests.}
 
 % >>>
 % ending <<<
 \section*{Acknowledgment}
+
+The authors thank IRCSET for the financial support of this research.
 
 \bibliographystyle{IEEEtran}
 \bibliography{IEEEabrv,rm}
