@@ -41,36 +41,35 @@
 \maketitle
 \begin{abstract} % <<<
 
-Methodologies for the design and development of agent-oriented programs
-emphasize concepts, such as roles and organisations, that help structure
-large agent systems. Several organisation frameworks support such concepts.
-We believe, however, that these concepts should be supported directly by
-the programming language, in order to be truly easy to use by developers.
-In this paper we draw on an analogy between Haskell and 2APL and propose
-three language features aimed at structuring large agent systems: algebraic
-types, roles, and sessions. Each existed independently in some other
-setting. We show how they fit in the context of an agent-oriented
-programming language and how they fit with each other.
+Agent-oriented methodologies emphasize organisational concepts, which give
+structure to large agent systems. Organisational frameworks, however, put
+an extra burden on developers, who need to master both an agent-oriented
+programming language and the framework itself. We believe that, instead,
+the organisation of agent systems should be directly supported by features
+of the programming language. In this paper we propose three such language
+features: algebraic data types, roles, and sessions.  They are inspired by
+functional programming languages and by session types.  How they fit
+together in the context of agent-oriented programming is new.
 
 \end{abstract} % >>>
 \section{Introduction} % <<<
 
 Many developers ignore methodologies, but none can ignore the programming
 language she uses. Thus, concepts with support in programming languages
-have better chances of wide adoption compared to concepts that appear only
+have better chances of wide adoption, compared to concepts that appear only
 in methodologies. We feel that discussion of how to structure large agent
-systems needs to change focus from methodologies to programming languages.
+systems needs to change focus from
+methodologies~\cite{dblp:conf/aose/ferbergm03} to programming languages.
 In this article, we illustrate the kind of issues on which we intend to
 focus in the future, and in which we hope other researchers will become
 more interested. By necessity, the style is informal---a precise solution
-would require much more than four pages, even a precise solution for a
-single issue out of those discussed.
+would require much more than four pages.
 
 The general approach is to get inspiration from analogies between
 agent-oriented programming languages and functional languages. Analogies
-are relatively common in the agents research community, but usually they
-are made with theories in sociology. To avoid the temptation to be overly
-abstract we decided in the beginning to stick to one particular
+are relatively common in research involving agents, but usually they are
+made with theories in sociology. To avoid the temptation to be overly
+abstract, we decided in the beginning to stick to one particular
 agent-oriented programming language,
 2APL~\cite{DBLP:journals/aamas/Dastani08}, and one particular functional
 programming language, Haskell~\cite{web:haskell}. We chose 2APL mainly
@@ -78,19 +77,14 @@ because it has formal syntax and semantics, and is therefore easy to
 understand. Also, it was suggested that 2APL with modules does not need
 roles~\cite{dblp:conf/prima/dastanims08}, a view we disagree with.
 
-\todo{Continue here.}
-
 % >>>
 \section{Background} % <<<
 
-We assume the reader is familiar with 2APL.
-
-We assume the reader is familiar with Java and with some agent-oriented
-programming language, not necessarily
-2APL~\cite{DBLP:journals/aamas/Dastani08}. We do \emph{not} assume that the
-reader is familiar with Haskell~\cite{web:haskell}. The reader who does
-know Haskell will notice that we bend the truth in the interest of
-simplicity.
+We assume the reader is familiar with 2APL. We assume the reader is
+familiar with some functional programming language, not necessarily Haskell.
+The rest of this section reviews Haskell type classes, because they later
+inspire our notion of `role', and Haskell modules, so that it is clear they
+are very different from type classes.
 
 % modules
 %  - small example
@@ -193,12 +187,8 @@ degree, it is enough to understand the interface of a module in order to
 use it. They are easier to maintain because changes to a module's
 implementation remain local as long as the interface is not affected. For
 compilers, modular programs enable separate compilation. Thus, modules are
-an important device in structuring large programs.
-
-Haskell modules, like 2APL modules,  are somewhat similar to Java classes.
-A Java class hides private parts and introduces \emph{one} type at the same
-time. A Haskell module may introduce zero, one, or more types.  But many
-Haskell modules do indeed export \emph{one} main type. 
+an important device in structuring large programs. Exactly the same is true
+of 2APL modules.
 
 On the other hand, type classes are an elegant mechanism to provide ad-hoc
 polymorphism, also known as overloading~\cite{DBLP:conf/popl/WadlerB89}:
@@ -206,6 +196,7 @@ The same name refers to different implementations depending on the context.
 Type classes are similar to Java interfaces but there are several key
 differences~\cite{WEB:PJ-tc}. For example, in Haskell it is easy to declare
 a type from one library to be an instance of a class from another library.
+The notion of role we propose later has similar characteristics.
 
 % >>>
 \section{Connections} % <<<
@@ -352,6 +343,23 @@ agents. A Haskell type class is a set of Haskell types; a 2APL role is a
 set of 2APL agents that play the role. In this section we explore where
 does the intuition ``types as agents'' lead.
 
+\begin{figure}\footnotesize % <<<
+\begin{center}
+\begin{tabular}{c}
+\begin{lstlisting}[style=me]
+session ComputeBasicOperation(a, b)
+  a -> b: Pair Int
+  b -> a: Int
+session ComputeExpression(a, b, c)
+  c -> a: Expr Int
+  repeat ComputeBasicOperation(a, b)
+  a -> c: Int
+\end{lstlisting}
+\end{tabular}
+\end{center}
+\caption{Sessions for 2APL}\label{fig:sessions}
+\end{figure} % >>>
+
 {\def\l#1->#2:#3<#4>{\mathtt{#1}\to\mathtt{#2}:#3\langle\mathsf{#4}\rangle}
 We read $f::a\to b$ as ``message $f$ is sent by agent~$a$ to agent~$b$.'' A
 type class lists several function signatures, so its natural analogue is a
@@ -369,21 +377,11 @@ This type means that process \texttt{K} receives two booleans, one from
 \texttt{DP} through channel~$d$ and one from \texttt{KP} through
 channel~$k$, then sends a boolean to~\texttt{C} through channel~$c$, and
 the whole process repeats. In 2APL we have agents, rather than processes,
-and there are no named channels. We would therefore like to write the
-following.
-\begin{lstlisting}[style=me]
-session ComputeBasicOperation(a, b)
-  a -> b: Pair Int
-  b -> a: Int
-session ComputeExpression(a, b, c)
-  c -> a: Expr Int
-  repeat ComputeBasicOperation(a, b)
-  a -> c: Int
-\end{lstlisting}
-These sessions are a global description of the messages that should flow
-within an agent system. When we project $\mathit{ComputeExpression}(a,b,c)$
-on agent~$a$ we obtain the role $\mathit{Calculator}\,\mathit{Int}$ from
-the previous section.}
+and there are no named channels. We would therefore like to write code like
+that in Figure~\ref{fig:sessions}.  These sessions are a global description
+of the messages that should flow within an agent system. When we project
+$\mathit{ComputeExpression}(a,b,c)$ on agent~$a$ we obtain the role
+$\mathit{Calculator}\,\mathit{Int}$ from the previous section.}
 
 In agent-oriented methodologies it is standard to say that ``an agent plays
 a role within an organisation,'' and therefore organisations are somehow
@@ -407,32 +405,27 @@ session and the roles proposed in the previous section can be found.
 Starting from high-level similarities between certain aspects of an
 agent-oriented programming language (2APL) and a functional programming
 language (Haskell), we described three new features for the former:
-(1)~algebraic data type declarations for constraining the content of
-messages, (2)~roles that are static but orthogonal to modules, and
-(3)~sessions that describe slices of the global interactions in the agent
-system. Together, these features offer support at the level of the
-programming language for concepts that tend to be discussed mostly in the
-literature on methodologies for agent-oriented design and development.
+(1)~algebraic data types, which constrain the content of messages,
+(2)~roles, which complement modules, and (3)~sessions, which describe
+slices of the global interactions in the agent system. Together, these
+\emph{language} features support organisational concepts, which are so far
+discussed mostly in the literature on agent-oriented methodologies.
 
-We described the proposed language features informally but, we hope, with
-enough detail to convince the reader that pursuing their implementation is
-a feasible and worthwhile endeavor. Our position is that many
-agent-oriented programming languages would benefit from implementing these
-three features. In the future, we will focus on implementing these language
-features in AgentFactory~\cite{phd:rem}. This will force us to be more
-precise about the semantics while staying fairly general, because
-AgentFactory supports several agent-oriented programming languages. We aim
-for a solution that has clear semantics, is easy to understand and use by
-programmers, and enables static checking. Even if we aim for static
-checking, we do plan to have runtime checks in the framework for
-compliance with roles\slash sessions\slash types, because not all agents
-can be trusted.
+Our description is informal but, we hope, with enough detail to convince
+the reader that pursuing their implementation is a feasible and worthwhile
+endeavor. Our position is that many agent-oriented programming languages
+would benefit from implementing these three features. In the future, we
+will focus on implementing them, which will force us to be precise about
+their semantics. We wish to implement them in AgentFactory~\cite{phd:rem},
+a framework that supports multiple agent-oriented programming languages,
+such that our notion of role is not overly tied into one language.
 
 % >>>
 % ending <<<
 \section*{Acknowledgment}
 
-The authors thank IRCSET for the financial support of this research.
+The authors thank the Irish Research Council for Science, Engineering and
+Technology for funding.
 
 \bibliographystyle{IEEEtran}
 \bibliography{IEEEabrv,rm}
