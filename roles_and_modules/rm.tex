@@ -41,46 +41,21 @@
 \maketitle
 \begin{abstract} % <<<
 
-\todo{Say explicitly what is the position that is advocated.}
-\todo{The abstract promises something else than is found in the content.
-The Background presents 2APL modules, Haskell modules and type classes.
-Connections show how type-classes suggest adding roles (and sessions?) to
-2APL. It is conceivable that features added to 2APL can be added to other
-AOP languages, and there are good reasons for choosing 2APL in the article:
-especially with page limits it is good to stay concrete, 2APL has
-semantics, there is an article that implies that 2APL does not need roles.}
-In Agent-Oriented Programming (AOP), roles and organisational structures
-are regarded as important concepts in the analysis and design of agent
-systems, but there is a significant lack of support for the implementation
-stage of the development process. In response to this, a number of
-organisational frameworks have emerged as powerful approaches to
-implementing organisations. However, in our mind, this complicates rather
-than simplifies the implementation: developers must understand and work
-with both the organisational framework and the AOP language.
-\todo{Unless there will be a comparison between multiparty session types
-and organisations, this seems to promise something that is not in the
-article. I think it is fine if the introduction says that we think
-methodologies are crap, so we focus only on programming languages. Or,
-perhaps, drop the crap.}
- In this paper,
-we present an approach that introduces a general notion of a role for AOP
-languages, the purpose of which is to reduce the gap between design and
-implementation, and to offer run-time support for enforcing role
-compliance. 
-\todo{I find the world ``general'' bothersome. If it's supposed to mean
-``applicable to more than one PL'' then it simply isn't true: The article
-only talks about 2APL.} \todo{I think that aiming for runtime enforcement
-is idiotic. Let's leave it at this, so I don't get too hot.}
-Our approach, which is inspired by Haskell's type classes,
-cannot be conveniently implemented using existing AOP language concepts,
-such as modules. Conversely, modules cannot be conveniently implemented
-with (even our more general) roles. The two concepts are both useful in
-organising large agent systems.
-\todo{As it is now, the article does not really argue that the concepts are
-orthogonal.}
+Methodologies for the design and development of agent-oriented programs
+emphasize concepts, such as roles and organisations, that help structure
+large agent systems. Several organisation frameworks support such concepts.
+We believe, however, that these concepts should be supported directly by
+the programming language, in order to be truly easy to use by developers.
+In this paper we draw on an analogy between Haskell and 2APL and propose
+three language features aimed at structuring large agent systems: algebraic
+types, roles, and sessions. Each existed independently in some other
+setting. We show how they fit in the context of an agent-oriented
+programming language and how they fit with each other.
 
 \end{abstract} % >>>
 \section{Introduction} % <<<
+
+Agent-oriented programming research
 
 \begin{notes}
 AO is an evolution of OO that draws from social theory. In this paper we
@@ -89,6 +64,12 @@ AO\null. \todo{It may seem strange that the whole article is based on some
 analogies. This is why I think it is a good idea that AO in general
 profited from analogies. The Introduction is probably the right place, but
 I'm not sure what is the right form.}
+
+ We used a particular language for concreteness. We chose
+2APL because it has formal semantics~\cite{} and is therefore easy to
+understand, and because Dastani et al.~\cite{} suggested (in the context of
+2APL) that 
+
 \end{notes}
 
 % >>>
@@ -430,44 +411,53 @@ session ComputeExpression(a, b, c)
   repeat ComputeBasicOperation(a, b)
   a -> c: Int
 \end{lstlisting}
-\todo{Continue. Explain how to project sessions as roles.}
-}
+These sessions are a global description of the messages that should flow
+within an agent system. When we project $\mathit{ComputeExpression}(a,b,c)$
+on agent~$a$ we obtain the role $\mathit{Calculator}\,\mathit{Int}$ from
+the previous section.}
 
+In agent-oriented methodologies it is standard to say that ``an agent plays
+a role within an organisation,'' and therefore organisations are somehow
+collections of interacting roles, just as the sessions above are in a way
+putting together interacting roles. Similarly, in multiparty session types
+there is a notion of projecting global types onto local types. The
+essential advantage of session types is that the projection can be done
+automatically. By imitating session types, we hope that it will be possible
+to at least check automatically that the projection of a certain session on
+a certain agent matches a certain role, which the agent implements.
 
-\begin{notes}
-\todo{Talk about multiparty session types.}
+In summary, the vague and informal intuition that a Haskell type is
+sometimes like a 2APL agent led us to the proposal of specifying global
+interactions in agent-oriented programming languages in terms of sessions.
+Moreover, it seems reasonable to expect that a precise link between these
+session and the roles proposed in the previous section can be found.
 
-\todo{If the goal is to explain what multiparty session types are, then
-move to background. The point of \emph{this} section is to say how to
-modify 2APL given the insight from `types as agents' and `session types'.}
-A session type~\cite{dblp:conf/popl/hondayc08} is an abstraction
-representing the structure of conversations, where a session denotes a
-natural unit of conversation.  Multiparty session types consist of global
-types, that act like a shared agreement among communicating peers, and
-local types, that represent the end-point projections of the global types.
-The programming methodology for multiparty interactions can be summarised
-in two steps:
-
-\begin{itemize}
-   \item{ describing the
-interaction scenario as a global type, checking its linearity (to
-determine its coherence)} \todo{Linearity? Coherence? Am I supposed to know
-what these are?}
-   \item{coding each participant, incrementally validating its conformance
-   to the projection of the global type (the local type), by type-checking.}
-   \todo{Why `incremental'? Never heard of incremental type-checking.}
-\end{itemize}
-\end{notes}
 % >>> >>>
+\section{Conclusions and Future Work} % <<<
 
-\section{Conclusion and Future Work} % <<<
+Starting from high-level similarities between certain aspects of an
+agent-oriented programming language (2APL) and a functional programming
+language (Haskell), we described three new features for the former:
+(1)~algebraic data type declarations for constraining the content of
+messages, (2)~roles that are static but orthogonal to modules, and
+(3)~sessions that describe slices of the global interactions in the agent
+system. Together, these features offer support at the level of the
+programming language for concepts that tend to be discussed mostly in the
+literature on methodologies for agent-oriented design and development.
 
-\todo{Make the notion of role more precise, but keep it abstract enough so
-that we can implement it in a multi-language platform like AgentFactory.}
-\todo{We want language support for roles and organizations.}
-\todo{We aim for ease of use, succinctness, and static checking.}
-\todo{Where static checking is not possible we'll do runtime checking (in
-the framework) and we'll generate tests.}
+We described the proposed language features informally but, we hope, with
+enough detail to convince the reader that pursuing their implementation is
+a feasible and worthwhile endeavor. Our position is that many
+agent-oriented programming languages would benefit from implementing these
+three features. In the future, we will focus on implementing these language
+features in AgentFactory~\cite{phd:rem}. This will force us to be more
+precise about the semantics while staying fairly general, because
+AgentFactory supports several agent-oriented programming languages. We aim
+for a solution that has clear semantics, is easy to understand and use by
+programmers, and enables static checking. Even if we aim for static
+checking, we do plan to have runtime checks in the framework for
+compliance with roles\slash sessions\slash types, because not all agents
+can be trusted.
 
 % >>>
 % ending <<<
