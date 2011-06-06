@@ -37,6 +37,56 @@
     Email: claudia.grigore@ucdconnect.ie, rem.collier@ucd.ie}}
 
 % >>>
+% reviewer comments <<<
+% Q: results are very preliminary
+% A: Yes, we say that  precise solution (that is, a non-preliminary one)
+%   cannot possibly fit in the workshop format. We basically outline the
+%   path for future conference papers.
+% Q: approach is bottom-up, it would be nicer to also look at the issue
+%   top-down: abstract from the particular languages, generalize concepts;
+%   e.g., "role" is not defined as a high-level concept
+% A: [Introduction] We'll add a short history of related research to
+%   clarify how we see our relation with sociology, organizational
+%   methodologies and frameworks, and other languages (powerJade and
+%   powerJava)
+% Q: ignores powerJade and powerJava
+% A: See above.
+% Q: focuses too much on sets (wtf?)
+% A: Say once again that the point is to illustrate type classes and
+%   modules in Haskell?
+% Q: make Background more accessible for those not knowing Haskell
+% A: We're skeptical that we can do a much better job in so little space,
+%    but we'll rewrite this section. (Ask Luci to read it and say what he
+%    can't understand, or finds hard to understand. We expect all of it to
+%    be hard. :P)
+% Q: typing for goals and beliefs could be future work
+% A: Nice idea! We should say this in future work.
+% Q: functions as messages: say explicitly that
+%   - first message is an "ask" message ??
+%   - we aim for roles to be a bit like interfaces ??
+% A: We don't understand the first issue. For the second, we'll update
+%    conclusions (we added todo note there). Also, say something at the and
+%    of ``fun as msg'' section.
+% Q: organizational frameworks put a burden on the programmer but bla-bla
+%   ... reuse; why do something that can't be reused (huh?)
+% A: We'll make it clear in the introduction that our features can coexist
+%   with organisational frameworks and the point is to give more choice to
+%   developers and see what they like in the long term. Type classes are
+%   quite good with reuse, because they can be retro-fitted on already
+%   existing types. Perhaps we can explain this in the section on roles.
+% Q: can you interact with agents not developed by you (open MAS)?
+% A: Again, adding features to a language does not make it able to do less;
+%    quite the contrary. Say this in the conclusions?
+% Q; related work: a whole survey on organisations, it seems
+% A: We'll give some pointer in the history we add in the intro.
+% Q: related work: what features of agent-oriented programming languages
+%   are now used to implement organisational concepts.
+% A: We know of modules in 2APL and some old roles in AFAPL. We also know
+%    a few approaches where roles are a type of agent (e.g., powerJade),
+%    but this is not a language feature, strictly speaking.
+%    We might need to do a bit of literature review to find others. In any
+%    case, we'll add this in the intro.
+% >>>
 \begin{document} % <<<
 \maketitle
 \begin{abstract} % <<<
@@ -54,11 +104,21 @@ together in the context of agent-oriented programming is new.
 \end{abstract} % >>>
 \section{Introduction} % <<<
 
-Many developers ignore methodologies, but none can ignore the programming
-language she uses. Thus, concepts with support in programming languages
-have better chances of wide adoption, compared to concepts that appear only
-in methodologies. We feel that discussion of how to structure large agent
-systems needs to change focus from
+\todo{Add, perhaps towards the end, a short history of prior research, so
+that we explicitly say how we view our position in a community sense. For
+example, we want to make clear that we \emph{do not} aim to replace
+organisational frameworks, but simply want to explore how extra features of
+the programming language could be useful. We give extra choice to
+programmers and we want to get their feedback, rather than decreeing what
+they should use.  We also want to say something like ``in sociology a role
+is the set of rights and obligations of a person within an organisation.''
+We should mention (a)~old roles in AFAPL, (b)~implementing roles with 2APL
+modules, (c)~viewing roles as a type of agents in powerJade (and others
+IIRC).} Many developers ignore methodologies, but none can ignore the
+programming language she uses. Thus, concepts with support in programming
+languages have better chances of wide adoption, compared to concepts that
+appear only in methodologies. We feel that discussion of how to structure
+large agent systems needs to change focus from
 methodologies~\cite{dblp:conf/aose/ferbergm03} to programming languages.
 In this article, we illustrate the kind of issues on which we intend to
 focus in the future, and in which we hope other researchers will become
@@ -80,11 +140,20 @@ roles~\cite{dblp:conf/prima/dastanims08}, a view we disagree with.
 % >>>
 \section{Background} % <<<
 
+\todo{Rewrite this section.}
+
 We assume the reader is familiar with 2APL. We assume the reader is
 familiar with some functional programming language, not necessarily Haskell.
 The rest of this section reviews Haskell type classes, because they later
 inspire our notion of `role', and Haskell modules, so that it is clear they
-are very different from type classes.
+are very different from type classes. \todo{Add something like ``We use
+sets and equality as examples because we assume all readers are familiar
+with these basic mathematical concepts.''} \todo{Add a warning: We expect
+those who know Haskell to read this section quickly and to notice a few
+shortcuts we took in the interest of sticking to basic Haskell; we expect
+those who don't know Haskell to find this section quite difficult because
+of the space, but it is important to understand it in order to fully
+appreciate the rest.}
 
 % modules
 %  - small example
@@ -329,7 +398,12 @@ us to two interesting observations. First, algebraic data types are
 convenient for describing the content of messages. We expect to see fewer
 runtime errors once messages are typed. Second, we developed a notion of
 role in the context of the 2APL language that is independent of that of
-module.
+module. \todo{Add something like ``roles act like typed interfaces between
+agents.''}
+
+\todo{Explain how roles help reuse: You can make an existing agent play an
+extra role, \emph{without having access to the implementation of the
+agent}.}
 
 % >>>
 \subsection{Types as Agents} % <<<
@@ -406,10 +480,17 @@ Starting from high-level similarities between certain aspects of an
 agent-oriented programming language (2APL) and a functional programming
 language (Haskell), we described three new features for the former:
 (1)~algebraic data types, which constrain the content of messages,
-(2)~roles, which complement modules, and (3)~sessions, which describe
-slices of the global interactions in the agent system. Together, these
-\emph{language} features support organisational concepts, which are so far
-discussed mostly in the literature on agent-oriented methodologies.
+(2)~roles, which complement modules \todo{Be more specific, something like
+``roles at as a typed interface between agents''}, and (3)~sessions, which
+describe slices of the global interactions in the agent system. Together,
+these \emph{language} features support organisational concepts, which are
+so far discussed mostly in the literature on agent-oriented methodologies.
+
+\todo{Say explicitly that adding features to a language does not preclude
+one from doing whatever one could do before: interact with agents written
+in other languages, use organizations, whatever you could do before. You
+also can't do \emph{more} because we're assuming Turing completeness.
+However, you can do certain things nicer.}
 
 Our description is informal but, we hope, with enough detail to convince
 the reader that pursuing their implementation is a feasible and worthwhile
