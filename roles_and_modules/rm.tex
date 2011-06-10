@@ -137,17 +137,17 @@ specific purpose of supporting organisational concepts.
 % Rem's roles in AFAPL
 % Anything else? RoleEP? ROPE? (see survey)
 
-\todo{Add, perhaps towards the end, a short history of prior research, so
-that we explicitly say how we view our position in a community sense. For
-example, we want to make clear that we \emph{do not} aim to replace
-organisational frameworks, but simply want to explore how extra features of
-the programming language could be useful. We give extra choice to
-programmers and we want to get their feedback, rather than decreeing what
-they should use.  We also want to say something like ``in sociology a role
-is the set of rights and obligations of a person within an organisation.''
-We should mention (a)~old roles in AFAPL, (b)~implementing roles with 2APL
-modules, (c)~viewing roles as a type of agents in powerJade (and others
-IIRC).}
+% \todo{Add, perhaps towards the end, a short history of prior research, so
+% that we explicitly say how we view our position in a community sense. For
+% example, we want to make clear that we \emph{do not} aim to replace
+% organisational frameworks, but simply want to explore how extra features of
+% the programming language could be useful. We give extra choice to
+% programmers and we want to get their feedback, rather than decreeing what
+% they should use.  We also want to say something like ``in sociology a role
+% is the set of rights and obligations of a person within an organisation.''
+% We should mention (a)~old roles in AFAPL, (b)~implementing roles with 2APL
+% modules, (c)~viewing roles as a type of agents in powerJade (and others
+% IIRC).}
 
 Many developers ignore methodologies, but none can ignore the programming
 language she uses. Thus, concepts with support in programming languages
@@ -177,18 +177,27 @@ roles~\cite{dblp:conf/prima/dastanims08}, a view we disagree with.
 
 \todo{Rewrite this section.}
 
-We assume the reader is familiar with 2APL. We assume the reader is
-familiar with some functional programming language, not necessarily Haskell.
-The rest of this section reviews Haskell type classes, because they later
-inspire our notion of `role', and Haskell modules, so that it is clear they
-are very different from type classes. \todo{Add something like ``We use
-sets and equality as examples because we assume all readers are familiar
-with these basic mathematical concepts.''} \todo{Add a warning: We expect
+We assume the reader is familiar with 2APL, and with some functional
+programming language, not necessarily Haskell.  The rest of this section
+reviews Haskell type classes, because they later inspire our notion of
+`role', and Haskell modules, so that it is clear they are very different
+from type classes. We use sets and equality as examples because we assume
+all readers are familiar with these basic mathematical concepts. We expect
 those who know Haskell to read this section quickly and to notice a few
 shortcuts we took in the interest of sticking to basic Haskell; we expect
 those who don't know Haskell to find this section quite difficult because
 of the space, but it is important to understand it in order to fully
-appreciate the rest.}
+appreciate the rest.
+
+% \todo{Add something like ``We use sets and equality as
+% examples because we assume all readers are familiar with these basic
+% mathematical concepts.''} 
+
+% \todo{Add a warning: We expect those who know Haskell to read this section
+% quickly and to notice a few shortcuts we took in the interest of sticking
+% to basic Haskell; we expect those who don't know Haskell to find this
+% section quite difficult because of the space, but it is important to
+% understand it in order to fully appreciate the rest.}
 
 % modules
 %  - small example
@@ -251,37 +260,44 @@ instance declaration that provides an implementation for a function
 named~$eq$. The \textbf{instance} declaration in module \textit{Set} says
 that the type constructor~$T$ transforms members of \textit{Eq} into
 members of \textit{Eq}. For example, $T(T\,\mathit{Int})$ is in \textit{Eq}
-because \textit{Int} is in \textit{Eq.} Here is \emph{part} of an
-evaluation of the comparison between $V[V[1]]$ and $V[V[1,1]]$, both of
-which represent~$\{\{1\}\}$.
-\begin{align*}
-&\phantom{\;\leadsto\;}
-  \mathit{eq}\;V[V[1]]\;V[V[1,1]] \\
-&\leadsto
-  \mathit{sub}\;V[V[1]]\;V[V[1,1]]\\
-&\leadsto
-  \mathit{all}\;(\mathit{has}\;V[V[1,1]])\;[V[1]]\\
-&\leadsto
-  \mathit{has}\;V[V[1,1]]\;V[1]\\
-&\leadsto
-  \mathit{elem}\;V[1]\;[V[1,1]]\\
-&\leadsto
-  \mathit{eq}\;V[1]\;V[1,1]\\
-&\leadsto
-  \mathit{sub}\;V[1]\;V[1,1]\\
-&\leadsto
-  \mathit{all}\;(\mathit{has}\;V[1,1])\;[1]\\
-&\leadsto
-  \mathit{has}\;V[1,1]\;1 \\
-&\leadsto
-  \mathit{elem}\;1\;[1,1]\\
-&\leadsto
-  \mathit{eq}\;1\;1\\
-&\leadsto
-  \mathit{True}
-\end{align*}
-Notice, in particular, that \textit{eq} is applied on $T(T\,\mathit{Int})$,
-then on $T\,\mathit{Int}$, and then on \textit{Int}.
+because \textit{Int} is in \textit{Eq.} To be more precise consider the
+comparison between  $V[V[1]]$ and $V[V[1,1]]$, both of which
+represent~$\{\{1\}\}$. \textit{Eq} is first applied on
+$T(T\,\mathit{Int})$, then on $T\,\mathit{Int}$, and then on \textit{Int}.
+
+
+
+% Here is \emph{part} of an evaluation of the comparison between $V[V[1]]$
+% and $V[V[1,1]]$, both of which represent~$\{\{1\}\}$.
+
+% \begin{align*}
+% &\phantom{\;\leadsto\;}
+%   \mathit{eq}\;V[V[1]]\;V[V[1,1]] \\
+% &\leadsto
+%   \mathit{sub}\;V[V[1]]\;V[V[1,1]]\\
+% &\leadsto
+%   \mathit{all}\;(\mathit{has}\;V[V[1,1]])\;[V[1]]\\
+% &\leadsto
+%   \mathit{has}\;V[V[1,1]]\;V[1]\\
+% &\leadsto
+%   \mathit{elem}\;V[1]\;[V[1,1]]\\
+% &\leadsto
+%   \mathit{eq}\;V[1]\;V[1,1]\\
+% &\leadsto
+%   \mathit{sub}\;V[1]\;V[1,1]\\
+% &\leadsto
+%   \mathit{all}\;(\mathit{has}\;V[1,1])\;[1]\\
+% &\leadsto
+%   \mathit{has}\;V[1,1]\;1 \\
+% &\leadsto
+%   \mathit{elem}\;1\;[1,1]\\
+% &\leadsto
+%   \mathit{eq}\;1\;1\\
+% &\leadsto
+%   \mathit{True}
+% \end{align*}
+% Notice, in particular, that \textit{eq} is applied on $T(T\,\mathit{Int})$,
+% then on $T\,\mathit{Int}$, and then on \textit{Int}.
 
 In general, modules are responsible with information
 hiding~\cite{DBLP:journals/cacm/Parnas72a} and encapsulation. Well known
@@ -433,8 +449,9 @@ us to two interesting observations. First, algebraic data types are
 convenient for describing the content of messages. We expect to see fewer
 runtime errors once messages are typed. Second, we developed a notion of
 role in the context of the 2APL language that is independent of that of
-module. \todo{Add something like ``roles act like typed interfaces between
-agents.''}
+module. These roles act like typed interfaces between agents. 
+
+% \todo{Add something like ``roles act like typed interfaces between agents.''}
 
 \todo{Explain how roles help reuse: You can make an existing agent play an
 extra role, \emph{without having access to the implementation of the
@@ -515,12 +532,14 @@ Starting from high-level similarities between certain aspects of an
 agent-oriented programming language (2APL) and a functional programming
 language (Haskell), we described three new features for the former:
 (1)~algebraic data types, which constrain the content of messages,
-(2)~roles, which complement modules \todo{Be more specific, something like
-``roles at as a typed interface between agents''}, and (3)~sessions, which
-describe slices of the global interactions in the agent system. Together,
-these \emph{language} features support organisational concepts, which are
-so far discussed mostly in the literature on agent-oriented methodologies.
+(2)~roles, as typed interfaces between agents, which complement modules,
+and (3)~sessions, which describe slices of the global interactions in the
+agent system. Together, these \emph{language} features support
+organisational concepts, which are so far discussed mostly in the
+literature on agent-oriented methodologies.
 
+% \todo{Be more specific, something like ``roles at as a typed interface
+% between agents''}
 \todo{Say explicitly that adding features to a language does not preclude
 one from doing whatever one could do before: interact with agents written
 in other languages, use organizations, whatever you could do before. You
