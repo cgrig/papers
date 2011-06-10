@@ -104,6 +104,39 @@ together in the context of agent-oriented programming is new.
 \end{abstract} % >>>
 \section{Introduction} % <<<
 
+% prior work
+% - pb: structuring large systems
+% - inspiration from sociology
+%   - organizations
+%   - roles
+% - led to
+%   - methodologies (Gaia, Moise, AGR)
+%   - organizational frameworks (J-Moise, MadKit)
+%   - Java libraries (Jade, powerJava, powerJade)
+%   - how to use APL lang features
+
+Researchers working on agents recognized for some time the need for better
+mechanisms to structure large systems~\cite{todo} and they looked for
+inspiration elsewhere. Economists have a well developed theory of
+organizations, which studies how \emph{formal} rules of interaction between
+people help groups achieve common goals. Sociologists developed a theory of
+roles, which focuses on how individuals fit in multiple groups. The
+concepts of organization and role influenced AOP (Agent-Oriented
+Programming) in a few ways. First, several AO methodologies (for example,
+Gaia, Moise+, AGR) are centered around the concept of organisation and led
+to the development of organisational frameworks (for example, J-Moise+ and
+MadKit). Second, existing AO frameworks (such as Jade) were enhanced to
+incorporate organisational concepts (see, for example, powerJade). Third,
+researchers identified how existing AOPL (Agent-Oriented Programming
+Language) features support organisational concepts (for example, 2APL
+modules could be used to implement a certain type of role). \todo{Rewrite.
+At least say `organisational concepts' less often.}
+
+However, there is little work on designing language features with the
+specific purpose of supporting organisational concepts.
+% Rem's roles in AFAPL
+% Anything else? RoleEP? ROPE? (see survey)
+
 \todo{Add, perhaps towards the end, a short history of prior research, so
 that we explicitly say how we view our position in a community sense. For
 example, we want to make clear that we \emph{do not} aim to replace
@@ -114,11 +147,13 @@ they should use.  We also want to say something like ``in sociology a role
 is the set of rights and obligations of a person within an organisation.''
 We should mention (a)~old roles in AFAPL, (b)~implementing roles with 2APL
 modules, (c)~viewing roles as a type of agents in powerJade (and others
-IIRC).} Many developers ignore methodologies, but none can ignore the
-programming language she uses. Thus, concepts with support in programming
-languages have better chances of wide adoption, compared to concepts that
-appear only in methodologies. We feel that discussion of how to structure
-large agent systems needs to change focus from
+IIRC).}
+
+Many developers ignore methodologies, but none can ignore the programming
+language she uses. Thus, concepts with support in programming languages
+have better chances of wide adoption, compared to concepts that appear only
+in methodologies. We feel that discussion of how to structure large agent
+systems needs to change focus from
 methodologies~\cite{dblp:conf/aose/ferbergm03} to programming languages.
 In this article, we illustrate the kind of issues on which we intend to
 focus in the future, and in which we hope other researchers will become
