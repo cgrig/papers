@@ -27,7 +27,7 @@
 %  - \section*{Acknowledgment}
 
 \title{Supporting Agent Systems in the Programming Language}
-\IEEEspecialpapernotice{(Position Paper)}
+%\IEEEspecialpapernotice{(Position Paper)}
 \author{
   \IEEEauthorblockN{Claudia Grigore and Rem Collier} 
   \IEEEauthorblockA{
@@ -104,100 +104,26 @@ together in the context of agent-oriented programming is new.
 \end{abstract} % >>>
 \section{Introduction} % <<<
 
-% prior work
-% - pb: structuring large systems
-% - inspiration from sociology
-%   - organizations
-%   - roles
-% - led to
-%   - methodologies (Gaia, Moise, AGR)
-%   - organizational frameworks (J-Moise, MadKit)
-%   - Java libraries (Jade, powerJava, powerJade)
-%   - how to use APL lang features
-
-Researchers working on agents recognized for some time the need for better
-mechanisms to structure large systems~\cite{todo} and they looked for
-inspiration elsewhere. Economists have a well developed theory of
-organizations, which studies how \emph{formal} rules of interaction between
-people help groups achieve common goals. Sociologists developed a theory of
-roles, which focuses on how individuals fit in multiple groups. The
-concepts of organization and role influenced AOP (Agent-Oriented
-Programming) in a few ways. First, several AO methodologies (for example,
-Gaia, Moise+, AGR) are centered around the concept of organisation and led
-to the development of organisational frameworks (for example, J-Moise+ and
-MadKit). Second, existing AO frameworks (such as Jade) were enhanced to
-incorporate organisational concepts (see, for example, powerJade). Third,
-researchers identified how existing AOPL (Agent-Oriented Programming
-Language) features support organisational concepts (for example, 2APL
-modules could be used to implement a certain type of role). \todo{Rewrite.
-At least say `organisational concepts' less often.}
-
-However, there is little work on designing language features with the
-specific purpose of supporting organisational concepts.
-% Rem's roles in AFAPL
-% Anything else? RoleEP? ROPE? (see survey)
-
-% \todo{Add, perhaps towards the end, a short history of prior research, so
-% that we explicitly say how we view our position in a community sense. For
-% example, we want to make clear that we \emph{do not} aim to replace
-% organisational frameworks, but simply want to explore how extra features of
-% the programming language could be useful. We give extra choice to
-% programmers and we want to get their feedback, rather than decreeing what
-% they should use.  We also want to say something like ``in sociology a role
-% is the set of rights and obligations of a person within an organisation.''
-% We should mention (a)~old roles in AFAPL, (b)~implementing roles with 2APL
-% modules, (c)~viewing roles as a type of agents in powerJade (and others
-% IIRC).}
-
-Many developers ignore methodologies, but none can ignore the programming
-language she uses. Thus, concepts with support in programming languages
-have better chances of wide adoption, compared to concepts that appear only
-in methodologies. We feel that discussion of how to structure large agent
-systems needs to change focus from
-methodologies~\cite{dblp:conf/aose/ferbergm03} to programming languages.
-In this article, we illustrate the kind of issues on which we intend to
-focus in the future, and in which we hope other researchers will become
-more interested. By necessity, the style is informal---a precise solution
-would require much more than four pages.
-
-The general approach is to get inspiration from analogies between
-agent-oriented programming languages and functional languages. Analogies
-are relatively common in research involving agents, but usually they are
-made with theories in sociology. To avoid the temptation to be overly
-abstract, we decided in the beginning to stick to one particular
-agent-oriented programming language,
-2APL~\cite{DBLP:journals/aamas/Dastani08}, and one particular functional
-programming language, Haskell~\cite{web:haskell}. We chose 2APL mainly
-because it has formal syntax and semantics, and is therefore easy to
-understand. Also, it was suggested that 2APL with modules does not need
-roles~\cite{dblp:conf/prima/dastanims08}, a view we disagree with.
+The theory of organisations from economy studies how formal rules of
+interaction enable groups of people to achieve common goals; the theory of
+roles from sociology studies how individuals fit in multiple informal
+groups. Both theories influenced prior attempts to structure agent systems.
+Several agent-oriented methodologies and libraries incorporate the concept
+of organisation and the concept of role.  However, there is little work on
+designing language features with the specific purpose of supporting large
+agent systems. We approach this language design problem by drawing
+inspiration from analogies between agent-oriented programming languages and
+functional languages. For concreteness, we focus on
+2APL~\cite{DBLP:journals/aamas/Dastani08} and Haskell~\cite{web:haskell}.
+We assume the reader is familiar with~both.
 
 % >>>
 \section{Background} % <<<
 
-\todo{Rewrite this section.}
-
-We assume the reader is familiar with 2APL, and with some functional
-programming language, not necessarily Haskell.  The rest of this section
-reviews Haskell type classes, because they later inspire our notion of
-`role', and Haskell modules, so that it is clear they are very different
-from type classes. We use sets and equality as examples because we assume
-all readers are familiar with these basic mathematical concepts. We expect
-those who know Haskell to read this section quickly and to notice a few
-shortcuts we took in the interest of sticking to basic Haskell; we expect
-those who don't know Haskell to find this section quite difficult because
-of the space, but it is important to understand it in order to fully
-appreciate the rest.
-
-% \todo{Add something like ``We use sets and equality as
-% examples because we assume all readers are familiar with these basic
-% mathematical concepts.''} 
-
-% \todo{Add a warning: We expect those who know Haskell to read this section
-% quickly and to notice a few shortcuts we took in the interest of sticking
-% to basic Haskell; we expect those who don't know Haskell to find this
-% section quite difficult because of the space, but it is important to
-% understand it in order to fully appreciate the rest.}
+This section reviews Haskell type classes, because they later inspire our
+notion of `role', and Haskell modules, so that it is clear they are very
+different from type classes. We use sets and equality as examples because
+we assume all readers are familiar with these basic mathematical concepts.
 
 % modules
 %  - small example
@@ -260,63 +186,16 @@ instance declaration that provides an implementation for a function
 named~$eq$. The \textbf{instance} declaration in module \textit{Set} says
 that the type constructor~$T$ transforms members of \textit{Eq} into
 members of \textit{Eq}. For example, $T(T\,\mathit{Int})$ is in \textit{Eq}
-because \textit{Int} is in \textit{Eq.} To be more precise consider the
-comparison between  $V[V[1]]$ and $V[V[1,1]]$, both of which
-represent~$\{\{1\}\}$. \textit{Eq} is first applied on
-$T(T\,\mathit{Int})$, then on $T\,\mathit{Int}$, and then on \textit{Int}.
-
-
-
-% Here is \emph{part} of an evaluation of the comparison between $V[V[1]]$
-% and $V[V[1,1]]$, both of which represent~$\{\{1\}\}$.
-
-% \begin{align*}
-% &\phantom{\;\leadsto\;}
-%   \mathit{eq}\;V[V[1]]\;V[V[1,1]] \\
-% &\leadsto
-%   \mathit{sub}\;V[V[1]]\;V[V[1,1]]\\
-% &\leadsto
-%   \mathit{all}\;(\mathit{has}\;V[V[1,1]])\;[V[1]]\\
-% &\leadsto
-%   \mathit{has}\;V[V[1,1]]\;V[1]\\
-% &\leadsto
-%   \mathit{elem}\;V[1]\;[V[1,1]]\\
-% &\leadsto
-%   \mathit{eq}\;V[1]\;V[1,1]\\
-% &\leadsto
-%   \mathit{sub}\;V[1]\;V[1,1]\\
-% &\leadsto
-%   \mathit{all}\;(\mathit{has}\;V[1,1])\;[1]\\
-% &\leadsto
-%   \mathit{has}\;V[1,1]\;1 \\
-% &\leadsto
-%   \mathit{elem}\;1\;[1,1]\\
-% &\leadsto
-%   \mathit{eq}\;1\;1\\
-% &\leadsto
-%   \mathit{True}
-% \end{align*}
-% Notice, in particular, that \textit{eq} is applied on $T(T\,\mathit{Int})$,
-% then on $T\,\mathit{Int}$, and then on \textit{Int}.
+because \textit{Int} is in \textit{Eq.}
 
 In general, modules are responsible with information
-hiding~\cite{DBLP:journals/cacm/Parnas72a} and encapsulation. Well known
-advantages come from modularity. For humans, modular programs are easier to
-write and to maintain. They are easier to write because, to a certain
-degree, it is enough to understand the interface of a module in order to
-use it. They are easier to maintain because changes to a module's
-implementation remain local as long as the interface is not affected. For
-compilers, modular programs enable separate compilation. Thus, modules are
-an important device in structuring large programs. Exactly the same is true
-of 2APL modules.
-
-On the other hand, type classes are an elegant mechanism to provide ad-hoc
-polymorphism, also known as overloading~\cite{DBLP:conf/popl/WadlerB89}:
-The same name refers to different implementations depending on the context.
-Type classes are similar to Java interfaces but there are several key
-differences~\cite{WEB:PJ-tc}. For example, in Haskell it is easy to declare
-a type from one library to be an instance of a class from another library.
-The notion of role we propose later has similar characteristics.
+hiding~\cite{DBLP:journals/cacm/Parnas72a} and encapsulation.  On the other
+hand, type classes are an elegant mechanism to provide ad-hoc polymorphism,
+also known as overloading~\cite{DBLP:conf/popl/WadlerB89}: The same name
+refers to different implementations depending on the context.  Just as
+Haskell type classes are different from Haskell modules, the roles we
+introduce later are different from existing 2APL
+modules~\cite{dblp:conf/prima/dastanims08}.
 
 % >>>
 \section{Connections} % <<<
@@ -441,21 +320,19 @@ that needs to be made precise.
 
 Note that two agents \textit{foo} and \textit{bar} may be instances of the
 same 2APL module, yet only \textit{foo} plays the role
-$\mathit{Calculator}\,\mathit{Int}$.
+$\mathit{Calculator}\,\mathit{Int}$. Also, note that an agent may be
+declared as playing a role without having access to its implementation. In
+fact, it may be that the basic behaviour of the agent is programmed in a
+different language than 2APL. Such flexibility helps code reuse.
 
 In summary, the vague and informal intuition that a function is like a pair
-of messages, one carrying the arguments and one carrying the result, led
-us to two interesting observations. First, algebraic data types are
-convenient for describing the content of messages. We expect to see fewer
-runtime errors once messages are typed. Second, we developed a notion of
-role in the context of the 2APL language that is independent of that of
-module. These roles act like typed interfaces between agents. 
-
-% \todo{Add something like ``roles act like typed interfaces between agents.''}
-
-\todo{Explain how roles help reuse: You can make an existing agent play an
-extra role, \emph{without having access to the implementation of the
-agent}.}
+of messages, one carrying the arguments and one carrying the result, led us
+to two interesting observations. First, algebraic data types are convenient
+for describing the content of messages. We expect to see fewer runtime
+errors once messages are typed. Second, we developed a notion of role in
+the context of the 2APL language. These roles have certain similarities
+with existing 2APL modules and with Java interfaces, but are nevertheless
+distinct concepts.
 
 % >>>
 \subsection{Types as Agents} % <<<
@@ -532,28 +409,31 @@ Starting from high-level similarities between certain aspects of an
 agent-oriented programming language (2APL) and a functional programming
 language (Haskell), we described three new features for the former:
 (1)~algebraic data types, which constrain the content of messages,
-(2)~roles, as typed interfaces between agents, which complement modules,
-and (3)~sessions, which describe slices of the global interactions in the
-agent system. Together, these \emph{language} features support
-organisational concepts, which are so far discussed mostly in the
-literature on agent-oriented methodologies.
+(2)~roles, which constrain how particular agents interact, and
+(3)~sessions, which describe slices of the global interactions in the agent
+system. Together, these \emph{language features} support organisational
+concepts, which are so far discussed mostly in the literature on
+agent-oriented methodologies and frameworks.
 
-% \todo{Be more specific, something like ``roles at as a typed interface
-% between agents''}
-\todo{Say explicitly that adding features to a language does not preclude
-one from doing whatever one could do before: interact with agents written
-in other languages, use organizations, whatever you could do before. You
-also can't do \emph{more} because we're assuming Turing completeness.
-However, you can do certain things nicer.}
+Programmers now have a wider set of options at their disposal for
+structuring large agent systems. For example, they can use existing
+methodologies during the design phase and they can use a mixture of our
+proposed language features and existing organisational frameworks during
+the implementation phase. First-class language support has at least two
+advantages over organisational frameworks. First, implementations tend to
+be shorter and more readable. Second, implementations have stronger
+correctness guarantees because of the extra type-checking. On the other
+hand, organisational frameworks may be preferred when one needs to interact
+with legacy code.
 
 Our description is informal but, we hope, with enough detail to convince
-the reader that pursuing their implementation is a feasible and worthwhile
-endeavor. Our position is that many agent-oriented programming languages
-would benefit from implementing these three features. In the future, we
-will focus on implementing them, which will force us to be precise about
-their semantics. We wish to implement them in AgentFactory~\cite{phd:rem},
-a framework that supports multiple agent-oriented programming languages,
-such that our notion of role is not overly tied into one language.
+the reader that pursuing the implementation of algebraic data types, roles,
+and sessions is a feasible and worthwhile endeavor. We believe that many
+agent-oriented programming languages would benefit from having these
+features. We will focus on implementing them in
+AgentFactory~\cite{phd:rem}, a framework that supports multiple
+agent-oriented programming languages.  We also wish to implement typing of
+beliefs and of goals.
 
 % >>>
 % ending <<<
