@@ -1,8 +1,7 @@
-\documentclass{article} % <<<
-\usepackage[cmex10]{amsmath}\interdisplaylinepenalty=2500
+\documentclass[preprint]{sigplanconf} % <<<
+\usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage[british]{babel}
-\usepackage[nocompress]{cite}
 \usepackage{listings}
 \usepackage{microtype}
 \usepackage{xcolor}
@@ -18,22 +17,11 @@
 \lstdefinestyle{hs}{language=haskell,deletekeywords={elem,all,Eq,Num,Int}}
 \lstdefinestyle{me}{language=haskell,keywords={role,agent,plays,true,this,PG,R,rules,send,session,repeat}}
 
-% Format notes for [conference,compsoc]
-%  - do NOT use \paragraph
-%  - for figures, use \centering and put captions after
-%  - refer to figures with "Figure", not "Fig" (you can use \figurename)
-%  - put algorithms in figures, not other floats
-%  - for tables, the caption comes *before*
-%  - \section*{Acknowledgment}
-
 \title{Type-checking in Agent Oriented Programming}
-%\IEEEspecialpapernotice{(Position Paper)}
-\author{
-   Claudia Grigore and Rem Collier\\ 
-   School of Computer Science and Informatics\\
-    University College Dublin\\
-    Belfield Campus, Dublin~4, Ireland\\
-    Email: claudia.grigore@ucdconnect.ie, rem.collier@ucd.ie}
+\authorinfo
+  {Claudia Grigore and Rem W.~Collier}
+  {University College Dublin}
+  {claudia.grigore@ucdconnect.ie}
 
 \begin{document} % <<<
 \maketitle
@@ -41,7 +29,10 @@
 There is virtually no type-checking in Agent Oriented Programming at the moment. Type errors can lead to erroneous calculations. We propose typing message content using abstract data types and typing agent interactions using roles and sessions. We provide a type-checking implementation.
 
 \end{abstract} % >>>
-%\section{Introduction} % <<<
+\section{Introduction} % <<<
+
+We want types~\cite{DBLP:conf/ctcs/Hagino87}.
+
 % >>>
 % ending <<<
 \section*{Acknowledgment}
@@ -49,8 +40,8 @@ There is virtually no type-checking in Agent Oriented Programming at the moment.
 The authors thank the Irish Research Council for Science, Engineering and
 Technology for funding.
 
-\bibliographystyle{IEEEtran}
-\bibliography{IEEEabrv,rm}
+\bibliographystyle{abbrvnat}
+\bibliography{types}
 
 % >>>
 \end{document} % >>>
