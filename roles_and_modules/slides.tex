@@ -1,0 +1,124 @@
+\documentclass{beamer}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage{amsmath}
+\usepackage{concmath}
+\usepackage{graphics}
+\usepackage{listings}
+\usepackage{microtype}
+
+\usefonttheme{serif}
+\usetheme{Rochester}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{background}{\includegraphics[width=\paperwidth]{back.jpg}}
+
+\lstset{language=Haskell}
+\lstset{columns=flexible}
+\lstset{keywordstyle=\rmfamily\underbar}
+\lstset{morekeywords={role,session}}
+\lstset{deletekeywords={Num}}
+
+\title{Supporting Agent Systems in the Programming Language}
+\author{Claudia Grigore \and Rem W.~Collier}
+\institute{
+  School of Computer Science\\
+  University College Dublin}
+\date[COIN~2011]{Coordination, Organizations, Institutions and Norms
+  in Agent Systems, 2011}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}[fragile]{Functional Programming (in Haskell)\,---\,Type Classes}
+
+\begin{lstlisting}
+class Eq b where
+  eq :: b -> b -> Bool
+
+instance Eq Int where
+  elem x [] = False
+  elem x (y:ys) = eq x y || elem x ys
+  all p [] = True
+  all p (x:xs) = p x && all p xs
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Functional Programming (in Haskell)\,---\,Modules}
+\begin{lstlisting}
+module Set (T, add, has) where
+  data T a = V [a]
+  add (V s) x = V (x:s)
+  has (V s) x = elem x s
+  sub (V s) t = all (has t) s
+  eq s t = sub s t && sub t s
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Functions as Messages\,---\,Function and Message Types}
+\begin{align*}
+f :: a \to b
+\end{align*}
+means that we send pairs of messages like
+\begin{align*}
+&f(\mathrm{call}(\alpha_1,\ldots,\alpha_n), x) &&\text{where $x::a$}\\
+&f(\mathrm{return}(),y) &&\text{where $y::b$}
+\end{align*}
+\end{frame}
+
+\begin{frame}[fragile]{Functions as Messages\,---\,Roles}
+\begin{lstlisting}
+role Num a => Calculator a
+  eval :: Expr a -> a
+
+role Num a
+  add :: Pair a -> a
+  multiply :: Pair a -> a
+
+data Expr a =
+    Times (Expr a) (Expr a)
+  | Plus (Expr a) (Expr a)
+  | Ct a
+
+data Pair a = MkPair a a
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Types as Agents\,---\,Intuition}
+\begin{block}{Idea}
+We read \[f :: a \to b\] as
+``message~$f$ is sent by agent~$a$ to agent~$b$.''
+\end{block}
+\begin{block}{Like Session Types!}
+\begin{align*}
+\mu\mathbf{t}&.\mathtt{DP}\to\mathtt{K}:d\langle\mathsf{bool}\rangle \\
+  &.\mathtt{KP}\to\mathtt{K}:k\langle\mathsf{bool}\rangle\\
+  &.\mathtt{K}\to\mathtt{C}:c\langle\mathsf{bool}\rangle\\
+  &.\mathbf{t}
+\end{align*}
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]{Types as Agents\,---\,Example}
+\begin{lstlisting}
+session ComputeBasicOperation(a, b)
+  a -> b: Pair Int
+  b -> a: Int
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}{Conclusions}
+\begin{itemize}
+\item \alert{algebraic data types}
+\item roles
+\item sessions
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\centerline{Thank you!}
+\end{frame}
+
+\end{document}
