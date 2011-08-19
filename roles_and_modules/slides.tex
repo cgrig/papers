@@ -22,7 +22,8 @@
 \author{Claudia Grigore \and Rem W.~Collier}
 \institute{
   School of Computer Science\\
-  University College Dublin}
+  University College Dublin\\
+  IRCSET}
 \date[COIN~2011]{Coordination, Organizations, Institutions and Norms
   in Agent Systems, 2011}
 
@@ -86,6 +87,18 @@ data Pair a = MkPair a a
 \end{lstlisting}
 \end{frame}
 
+\begin{frame}[fragile]{Functions as Messages\,---\,Example}
+Message exchange:
+\begin{lstlisting}
+  u -> c: eval(call(n), Times(Plus(Ct(3), Ct(3), Ct(5))))
+  c -> n: add(call(), MkPair(3,3))
+  n -> c: add(return(),6)
+  c -> n: multiply(call(),MkPair(6,5))
+  n -> c: multiply(return(), 30)
+  c -> n: eval(return(), 30)
+\end{lstlisting}
+\end{frame}
+
 \begin{frame}[fragile]{Types as Agents\,---\,Intuition}
 \begin{block}{Idea}
 We read \[f :: a \to b\] as
@@ -106,6 +119,11 @@ We read \[f :: a \to b\] as
 session ComputeBasicOperation(a, b)
   a -> b: Pair Int
   b -> a: Int
+
+session ComputeExpression(a, b, c)
+  c -> a: Expr Int
+  repeat ComputeBasicOperation(a, b)
+  a -> c: Int
 \end{lstlisting}
 \end{frame}
 
