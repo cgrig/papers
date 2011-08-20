@@ -11,12 +11,14 @@
 \usetheme{Rochester}
 \setbeamertemplate{navigation symbols}{}
 \setbeamertemplate{background}{\includegraphics[width=\paperwidth]{back.jpg}}
+\setbeamerfont{note page}{size*={8}{10pt}}
+\setbeameroption{show notes}
 
 \lstset{language=Haskell}
 \lstset{columns=flexible}
 \lstset{keywordstyle=\rmfamily\underbar}
 \lstset{morekeywords={role,session}}
-\lstset{deletekeywords={Num}}
+\lstset{deletekeywords={Eq,Num}}
 
 \title{Supporting Agent Systems in the Programming Language}
 \author{Claudia Grigore \and Rem W.~Collier}
@@ -31,34 +33,52 @@
 
 \begin{frame}
   \titlepage
+\note[item]{Agent systems need to be organized. There are many interesting
+  and useful ways being explored, such as organizational frameworks. It seems,
+  however, that providing some support directly in the language is an direction
+  not very well explored.}
+\note[item]{First-class support in the language should have a big impact on
+  software developers. On the other hand, it is not realistic to expect the
+  language to have all the tools necessary to organize all agent systems:
+  Such a language would be too complicated, like C++.}
+\note[item]{This work is a first step in taking ideas from functional
+  programming to improve agent-oriented programming languages.}
 \end{frame}
 
-\begin{frame}[fragile]{Functional Programming (in Haskell)\,---\,Type Classes}
+\begin{frame}[fragile]
+\frametitle{Modules and Type Classes in Haskell}
+\begin{lstlisting}
+module Set (SetType, add, has) where
+  data SetType a = SetConstructor [a]
+  add (SetConstructor s) x = SetConstructor (x:s)
+  has (SetConstructor s) x = elem x s
+  sub (SetConstructor s) t = all (has t) s
 
+  instance Eq a => Eq (SetType a) where
+    eq s t = sub s t && sub t s
+\end{lstlisting}
+\medskip
 \begin{lstlisting}
 class Eq b where
   eq :: b -> b -> Bool
-
-instance Eq Int where
-  elem x [] = False
-  elem x (y:ys) = eq x y || elem x ys
-  all p [] = True
-  all p (x:xs) = p x && all p xs
 \end{lstlisting}
+\note[item]{Nice and compact notation.}
+\note[item]{In Java code is grouped into modules; in Haskell code is grouped into modules.}
+\note[item]{In Java each class is a type; in Haskell a module usually defines one type (here, Set defines SetType), but may define more.}
+\note[item]{The element type~$a$ is variable, like with Java generics.}
+\note[item]{To construct a set, say SetConstructor followed by a list.
+  (Lists are built in.)}
+\note[item]{This representation, however, is \emph{not} visible from outside.
+  The exposed parts are listed on the first line.}
+\note[item]{Warning: Eq is in Haskell's prelude and is slightly different.}
+\note[item]{(Eq t) says that type t is in the class Eq. A type is in the
+  class Eq if there is a function eq with the proper type.}
+\note[item]{The last two lines of the module say that if some type~$a$
+  is in the class Eq, then the type (SetType a) is also in the class Eq.}
 \end{frame}
 
-\begin{frame}[fragile]{Functional Programming (in Haskell)\,---\,Modules}
-\begin{lstlisting}
-module Set (T, add, has) where
-  data T a = V [a]
-  add (V s) x = V (x:s)
-  has (V s) x = elem x s
-  sub (V s) t = all (has t) s
-  eq s t = sub s t && sub t s
-\end{lstlisting}
-\end{frame}
-
-\begin{frame}[fragile]{Functions as Messages\,---\,Function and Message Types}
+\begin{frame}[fragile]
+\frametitle{Functions as Messages}
 \begin{align*}
 f :: a \to b
 \end{align*}
@@ -67,27 +87,69 @@ means that we send pairs of messages like
 &f(\mathrm{call}(\alpha_1,\ldots,\alpha_n), x) &&\text{where $x::a$}\\
 &f(\mathrm{return}(),y) &&\text{where $y::b$}
 \end{align*}
+\note[item]{Approach: Let's look at some pieces of notation and try to give
+  them sensible semantics in the AOP setting.}
+\note[item]{Agents communicate thru messages. We could introduce functions
+  as a more abstract mechanism build on top of messages. The call would
+  be a message; the return would be another message.}
+\note[item]{Then $f::a\to b$ would denote such exchanges of messages---a
+  query followed by a reply.}
+\note[item]{Here I assume that the whole payload is some first-order structure.
+  With a standard like FIPA, one might like to encode call/return using
+  performatives rather than a special function-term.}
+\note[item]{Here $\alpha_1,\ldots,\alpha_n$ are agent addresses. Their role
+  will become clear a little later.}
+\note[item]{Once we agree on a structure for the message, it is natural to
+  want for the payload to be typed.}
 \end{frame}
 
-\begin{frame}[fragile]{Functions as Messages\,---\,Roles}
+\begin{frame}[fragile]
+\frametitle{Algebraic Data Types}
+\begin{block}{Type Declarations}
 \begin{lstlisting}
-role Num a => Calculator a
-  eval :: Expr a -> a
+data Expr a =
+    Times (Expr a) (Expr a) | Plus (Expr a) (Expr a) | Ct a
+data Pair a = MkPair a a
+\end{lstlisting}
+\end{block}
+\begin{block}{Examples}
+{ \def\.#1({\mathit{#1}(}
+  \def\ei{\mathit{Expr}\,\mathit{Int}}
+\begin{align*}
+\.Ct(2) &::\ei\\
+\.Plus(\.Ct(2),\.Ct(3)) &::\ei \\
+\.Times(\.Plus(\.Ct(2),\.Ct(3)),\.Ct(4)) &::\ei \\
+\.MkPair(\text{``foo''}, \text{``bar''}) &:: \mathit{Pair}\,\mathit{String}
+\end{align*}}
+\end{block}
+\note[item]{Algebraic data types are a very good way of typing first-order
+  structures used in messages by many agent-platforms!}
+\note[item]{Haskell values essentially \emph{are} first-order structures.}
+\end{frame}
 
+
+\begin{frame}[fragile]
+\frametitle{Roles}
+\begin{lstlisting}
 role Num a
   add :: Pair a -> a
   multiply :: Pair a -> a
 
-data Expr a =
-    Times (Expr a) (Expr a)
-  | Plus (Expr a) (Expr a)
-  | Ct a
-
-data Pair a = MkPair a a
+role Num a => Calculator a
+  evaluate :: Expr a -> a
 \end{lstlisting}
+\note[item]{By analogy with type-classes, we \emph{define} a role to be
+  a set of function signatures. But we restrict the types to have exactly
+  one arrow, because that's the kind of types for which we have semantics.}
+\note[item]{An agent that plays the role Num knows how to add and how to
+  multiply terms of the type~$a$.}
+\note[item]{An agent may play the role Calculator only if it is given
+  the address of another agent that plays the role Num.}
+\note[item]{A Calculator can evaluate expressions.}
 \end{frame}
 
-\begin{frame}[fragile]{Functions as Messages\,---\,Example}
+\begin{frame}[fragile]
+\frametitle{Functions as Messages\,---\,Example}
 Message exchange:
 \begin{lstlisting}
   u -> c: eval(call(n), Times(Plus(Ct(3), Ct(3), Ct(5))))
@@ -97,9 +159,11 @@ Message exchange:
   n -> c: multiply(return(), 30)
   c -> n: eval(return(), 30)
 \end{lstlisting}
+\note[item]{}
 \end{frame}
 
-\begin{frame}[fragile]{Types as Agents\,---\,Intuition}
+\begin{frame}[fragile]
+\frametitle{Types as Agents\,---\,Intuition}
 \begin{block}{Idea}
 We read \[f :: a \to b\] as
 ``message~$f$ is sent by agent~$a$ to agent~$b$.''
@@ -112,9 +176,11 @@ We read \[f :: a \to b\] as
   &.\mathbf{t}
 \end{align*}
 \end{block}
+\note[item]{}
 \end{frame}
 
-\begin{frame}[fragile]{Types as Agents\,---\,Example}
+\begin{frame}[fragile]
+\frametitle{Types as Agents\,---\,Example}
 \begin{lstlisting}
 session ComputeBasicOperation(a, b)
   a -> b: Pair Int
@@ -125,18 +191,22 @@ session ComputeExpression(a, b, c)
   repeat ComputeBasicOperation(a, b)
   a -> c: Int
 \end{lstlisting}
+\note[item]{}
 \end{frame}
 
-\begin{frame}{Conclusions}
+\begin{frame}
+\frametitle{Conclusions}
 \begin{itemize}
 \item \alert{algebraic data types}
 \item roles
 \item sessions
 \end{itemize}
+\note[item]{I am now implementing support for ADTs in AgentFactory.}
 \end{frame}
 
 \begin{frame}
 \centerline{Thank you!}
+\note[item]{}
 \end{frame}
 
 \end{document}
