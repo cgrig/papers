@@ -16,7 +16,7 @@
 \lstset{columns=flexible}
 \lstset{keywordstyle=\rmfamily\underbar}
 \lstset{morekeywords={role,session}}
-\lstset{deletekeywords={Num}}
+\lstset{deletekeywords={Eq,Num}}
 
 \title{Supporting Agent Systems in the Programming Language}
 \author{Claudia Grigore \and Rem W.~Collier}
@@ -33,28 +33,24 @@
   \titlepage
 \end{frame}
 
-\begin{frame}[fragile]{Functional Programming (in Haskell)\,---\,Type Classes}
-
-\begin{lstlisting}
-class Eq b where
-  eq :: b -> b -> Bool
-
-instance Eq Int where
-  elem x [] = False
-  elem x (y:ys) = eq x y || elem x ys
-  all p [] = True
-  all p (x:xs) = p x && all p xs
-\end{lstlisting}
-\end{frame}
-
-\begin{frame}[fragile]{Functional Programming (in Haskell)\,---\,Modules}
+\begin{frame}[fragile]{Modules and Type Classes}
 \begin{lstlisting}
 module Set (T, add, has) where
   data T a = V [a]
   add (V s) x = V (x:s)
   has (V s) x = elem x s
   sub (V s) t = all (has t) s
-  eq s t = sub s t && sub t s
+
+  instance Eq a => Eq (T a) where
+    eq s t = sub s t && sub t s
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Modules and Type Classes}
+
+\begin{lstlisting}
+class Eq b where
+  eq :: b -> b -> Bool
 \end{lstlisting}
 \end{frame}
 
@@ -89,14 +85,14 @@ data Pair a = MkPair a a
 
 \begin{frame}[fragile]{Functions as Messages\,---\,Example}
 Message exchange:
-\begin{lstlisting}
-  u -> c: eval(call(n), Times(Plus(Ct(3), Ct(3), Ct(5))))
-  c -> n: add(call(), MkPair(3,3))
-  n -> c: add(return(),6)
-  c -> n: multiply(call(),MkPair(6,5))
-  n -> c: multiply(return(), 30)
-  c -> n: eval(return(), 30)
-\end{lstlisting}
+\begin{align*}
+&u\to c: eval(call(n), Times(Plus(Ct(3), Ct(3), Ct(5))))\\
+&c\to n: add(call(), MkPair(3,3))\\
+&n\to c: add(return(),6)\\
+&c\to n: multiply(call()(), MkPair(6,5))\\
+&n\to c: multiply(return(), 30)\\
+&c\to n: eval(return(), 30)
+\end{align*}
 \end{frame}
 
 \begin{frame}[fragile]{Types as Agents\,---\,Intuition}
