@@ -1,4 +1,5 @@
-\frametitle {Types as Agents\,---\,Example}\begin {lstlisting}
+\frametitle {Types as Agents\,---\,Example}
+\begin{lstlisting}
 session ComputeBasicOperation(a, b)
   a -> b: Pair Int
   b -> a: Int
@@ -8,3 +9,4 @@ session ComputeExpression(a, b, c)
   repeat ComputeBasicOperation(a, b)
   a -> c: Int
 \end{lstlisting}
+\note[item]{}
