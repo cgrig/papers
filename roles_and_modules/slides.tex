@@ -13,7 +13,7 @@
 \setbeamertemplate{navigation symbols}{}
 \setbeamertemplate{background}{\includegraphics[width=\paperwidth]{back.jpg}}
 \setbeamerfont{note page}{size*={8}{10pt}}
-\setbeameroption{show notes}
+%\setbeameroption{show notes}
 
 \lstset{language=Haskell}
 \lstset{columns=flexible}
@@ -158,29 +158,25 @@ role Num a => Calculator a
 \node[agent] (u) at (0,4) {$\mathit{user}$};
 \node[agent] (n) at (4,0) {$\mathit{num}$};
 \node[agent] (c) at (8,4) {$\mathit{calculator}$};
-\uncover<2>{\node[anchor=north west,red] at (u.south west) {$f(\mathit{Times}(\mathit{Plus}(\mathit{Ct}(2),\mathit{Ct}(3)), \mathit{Ct}(4)))$};}
-\uncover<3>{\node[anchor=north,red] at (u.south) {$f((2+3)\times4)$};}
-\uncover<4->{\node[anchor=north] at (u.south) {$f((2+3)\times4)$};}
-\uncover<4>{\draw[msg] (u) -- node[below]{$f(\mathrm{call}(\mathit{num}), (2+3)\times4$)} (c);}
+\uncover<2>{\node[anchor=north west,red] at (u.south west) {$\mathit{evaluate}(\mathit{Times}(\mathit{Plus}(\mathit{Ct}(2),\mathit{Ct}(3)), \mathit{Ct}(4)))$};}
+\uncover<3>{\node[anchor=north,red] at (u.south) {$\mathit{evaluate}((2+3)\times4)$};}
+\uncover<4-9>{\node[anchor=north] at (u.south) {$\mathit{evaluate}((2+3)\times4)$};}
+\uncover<4>{\draw[msg] (u) -- node[below]{$\mathit{evaluate}(\mathrm{call}(\mathit{num}), (2+3)\times4$)} (c);}
 \uncover<5>{\draw[msg] (c) -- node[left]{$\mathit{add}(\mathrm{call}(), \mathit{MkPair}(2,3))$}(n);}
 \uncover<6>{\draw[msg] (n) -- node[left]{$\mathit{add}(\mathrm{return}(),5)$}(c);}
+\uncover<7>{\draw[msg] (c) -- node[left]{$\mathit{multiply}(\mathrm{call}(),\mathit{MkPair}(5,4))$} (n);}
+\uncover<8>{\draw[msg] (n) -- node[left]{$\mathit{multiply}(\mathrm{return}(),20)$}(c);}
+\uncover<9>{\draw[msg] (c) -- node[below]{$\mathit{evaluate}(\mathrm{return}(), 20)$} (u);}
+\uncover<10>{\node[anchor=north,red] at (u.south) {$20$};}
+\uncover<11>{\node[anchor=north,red] at (u.south) {$\mathit{Ct}(20)$};}
 \end{tikzpicture}
 \end{center}
 \end{frame}
 
-\begin{frame}[fragile]
-\frametitle{Functions as Messages\,---\,Example}
-Message exchange:
-\begin{lstlisting}
-  u -> c: eval(call(n), Times(Plus(Ct(3), Ct(3), Ct(5))))
-  c -> n: add(call(), MkPair(3,3))
-  n -> c: add(return(),6)
-  c -> n: multiply(call(),MkPair(6,5))
-  n -> c: multiply(return(), 30)
-  c -> n: eval(return(), 30)
-\end{lstlisting}
-\note[item]{}
-\end{frame}
+\note{(1)~Might need an ID to link \texttt{return} to corresponding \texttt{call}.\\
+(2)~It's not clear that we want \textit{user} to choose \textit{num}.
+Perhaps it's better if the choice is made one when \textit{calculator}
+starts playing the role \textit{Calculator}.}
 
 \begin{frame}[fragile]
 \frametitle{Types as Agents\,---\,Intuition}
