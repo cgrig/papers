@@ -6,6 +6,7 @@
 \usepackage{graphics}
 \usepackage{listings}
 \usepackage{microtype}
+\usepackage{tikz}
 
 \usefonttheme{serif}
 \usetheme{Rochester}
@@ -146,6 +147,25 @@ role Num a => Calculator a
 \note[item]{An agent may play the role Calculator only if it is given
   the address of another agent that plays the role Num.}
 \note[item]{A Calculator can evaluate expressions.}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Exchange of Messages\,---\,Example}
+\begin{center}
+\begin{tikzpicture}
+\tikzset{agent/.style={rectangle,draw,minimum width=5em,minimum height=4ex}}
+\tikzset{msg/.style={draw,->,>=stealth,red}}
+\node[agent] (u) at (0,4) {$\mathit{user}$};
+\node[agent] (n) at (4,0) {$\mathit{num}$};
+\node[agent] (c) at (8,4) {$\mathit{calculator}$};
+\uncover<2>{\node[anchor=north west,red] at (u.south west) {$f(\mathit{Times}(\mathit{Plus}(\mathit{Ct}(2),\mathit{Ct}(3)), \mathit{Ct}(4)))$};}
+\uncover<3>{\node[anchor=north,red] at (u.south) {$f((2+3)\times4)$};}
+\uncover<4->{\node[anchor=north] at (u.south) {$f((2+3)\times4)$};}
+\uncover<4>{\draw[msg] (u) -- node[below]{$f(\mathrm{call}(\mathit{num}), (2+3)\times4$)} (c);}
+\uncover<5>{\draw[msg] (c) -- node[left]{$\mathit{add}(\mathrm{call}(), \mathit{MkPair}(2,3))$}(n);}
+\uncover<6>{\draw[msg] (n) -- node[left]{$\mathit{add}(\mathrm{return}(),5)$}(c);}
+\end{tikzpicture}
+\end{center}
 \end{frame}
 
 \begin{frame}[fragile]
