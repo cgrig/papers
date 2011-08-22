@@ -152,12 +152,12 @@ role Num a => Calculator a
 \frametitle{Functions as Messages\,---\,Example}
 Message exchange:
 \begin{align*}
-&u\to c: eval(call(n), Times(Plus(Ct(3), Ct(3), Ct(5))))\\
+&u\to c: eval(call(n), Times(Plus(Ct(3), Ct(3)), Ct(5)))\\
 &c\to n: add(call(), MkPair(3,3))\\
 &n\to c: add(return(),6)\\
 &c\to n: multiply(call()(), MkPair(6,5))\\
 &n\to c: multiply(return(), 30)\\
-&c\to n: eval(return(), 30)
+&c\to u: eval(return(), 30)
 \end{align*}
 \note[item]{}
 \end{frame}
