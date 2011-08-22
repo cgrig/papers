@@ -161,12 +161,12 @@ role Num a => Calculator a
 \uncover<2>{\node[anchor=north west,red] at (u.south west) {$\mathit{evaluate}(\mathit{Times}(\mathit{Plus}(\mathit{Ct}(2),\mathit{Ct}(3)), \mathit{Ct}(4)))$};}
 \uncover<3>{\node[anchor=north,red] at (u.south) {$\mathit{evaluate}((2+3)\times4)$};}
 \uncover<4-9>{\node[anchor=north] at (u.south) {$\mathit{evaluate}((2+3)\times4)$};}
-\uncover<4>{\draw[msg] (u) -- node[below]{$\mathit{evaluate}(\mathrm{call}(\mathit{num}), (2+3)\times4$)} (c);}
+\uncover<4>{\draw[msg] (u) -- node[above]{$\mathit{evaluate}(\mathrm{call}(\mathit{num}), (2+3)\times4$)} (c);}
 \uncover<5>{\draw[msg] (c) -- node[left]{$\mathit{add}(\mathrm{call}(), \mathit{MkPair}(2,3))$}(n);}
 \uncover<6>{\draw[msg] (n) -- node[left]{$\mathit{add}(\mathrm{return}(),5)$}(c);}
 \uncover<7>{\draw[msg] (c) -- node[left]{$\mathit{multiply}(\mathrm{call}(),\mathit{MkPair}(5,4))$} (n);}
 \uncover<8>{\draw[msg] (n) -- node[left]{$\mathit{multiply}(\mathrm{return}(),20)$}(c);}
-\uncover<9>{\draw[msg] (c) -- node[below]{$\mathit{evaluate}(\mathrm{return}(), 20)$} (u);}
+\uncover<9>{\draw[msg] (c) -- node[above]{$\mathit{evaluate}(\mathrm{return}(), 20)$} (u);}
 \uncover<10>{\node[anchor=north,red] at (u.south) {$20$};}
 \uncover<11>{\node[anchor=north,red] at (u.south) {$\mathit{Ct}(20)$};}
 \end{tikzpicture}
