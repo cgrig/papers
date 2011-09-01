@@ -26,7 +26,9 @@
 \begin{document} % <<<
 \maketitle
 \begin{abstract} % <<<
-There is virtually no type-checking in Agent Oriented Programming at the moment. Type errors can lead to erroneous calculations. We propose typing message content using abstract data types and typing agent interactions using roles and sessions. We provide a type-checking implementation.
+There is virtually no type-checking in Agent Oriented Programming at the
+moment. Type errors can lead to erroneous calculations. We propose typing
+beliefs and message content using abstract data types. We present a type-checking implementation.
 
 \end{abstract} % >>>
 \category{I.2.11}{Artificial Intelligence}{Distributed Artificial
@@ -47,110 +49,39 @@ We want types~\cite{DBLP:conf/ctcs/Hagino87}.
 
 % >>>
 \section{Agent Factory} %<<<
-Agent Factory (AF) [1], an open-source Java-based development framework that
-provides support for the development and deployment of agent-oriented
+Agent Factory~\cite{}1 is an open-source Java-based development framework
+that provides support for the development and deployment of agent-oriented
 applications.
 
-Agent Factory provides a generic run-time environment for deploying agent-
-based systems that is based on the FIPA standards [7]. Central to this
-environment is a configurable agent platform that supports the concurrent
-deployment of heterogeneous agent types employing a range of agent
-architectures and interpreters. AF also supports the deployment of
+Agent Factory (AF) provides a generic run-time environment for deploying
+agent-based systems that is based on the FIPA standards~\cite{}7. Central
+to this environment is a configurable agent platform that supports the
+concurrent deployment of heterogeneous agent types employing a range of
+agent architectures and interpreters. AF also supports the deployment of
 platform-level resources in the form of platform services that are shared
 amongst agents, along with monitoring and inspection tools that aid the
-developer in debugging their implementations.
+developer in debugging their implementations. 
 
-Support for the implementation of specific types of agents is realised via
-the notion of a development kit, an example of which is the Agent Factory
-Agent Programming Language (AFAPL) [8] Development Kit, which provides
-support for the fabrication of agents based on the AFAPL agent-oriented
-programming language. This kit consists of a purpose-built interpreter, a
-plugin for the Net-Beans IDE and a custom set of views for the AF Debugger
-that allow the developer to inspect the internal state of AFAPL agents. A
-library of partial AFAPL programs is also provided to simplify the task of
-implementing an AFAPL agent.
+The Common Language Framework (CLF) is a collection of components that
+facilitates the design and implementation of diverse Agent Programming
+Languages in AF. CLF includes a generic logic framework, a planning and
+plan execution framework, a common API model based on sensors, actions and
+modules, an outline Grammar and template compiler implementation based on
+JavaCC, and a configurable debugging tool.
 
-In practice, AFAPL shares characteristics with Agent-0 [9], in that the key
-mental attitudes underpinning its mental state are Beliefs (an agent's view
-of the current state of its environment) and Commitments (the activities
-that the agent has chosen to perform).
+Currently there are four Agent Programming Languages that have been built
+using the CLF: AFAPL, a reimplementation of the original Agent Factory
+agent programming language that is based on commitment rules,
+AF-AgentSpeak, an implementation of the AgentSpeak language based on
+Jason, AF-TeleoReactive, an implementation of Nilsson's teleo-reactive
+programming model, and AF-Raf.
 
-These are accompanied by the notion of a Commitment Rule, which encodes
-situations in which the agent should commit to a specific activity; together
-with a set of labelled plans and primitive actions that jointly represent the
-potential activities that an agent may commit to. Primitive actions are
-implemented as Java classes, known as Actuators. Preconditions and
-postconditions are specified as part of the declaration of each plan or action.
+Agent Factory is fully integrated with Eclipse in a way that simplifies
+the task of providing support for new languages and architectures.
 
-Information about the current state of the environment is gathered via a set of
-Perceptors: Java classes that convert raw sensor data into beliefs that are
-added to the agents belief set. To handle the potentially dynamic nature of the
-environment that the agent is sensing, beliefs stored in the AFAPL belief base
-do not persist by default. Instead they are wiped at the start of each
-iteration of the agent interpreter. To cater for beliefs that should persist,
-AFAPL introduces the notion of a Temporal Belief, which is described elsewhere
-in [10]. Whether a belief should persist or not depends on the nature of the
-item being observed. For instance, in the context of the agent contest, it
-would safe to adopt a temporal belief regarding the position of a wall within
-an arena (which by its very nature cannot move) whereas a belief about the
-location of a cow will change over time.
-
-One of the key motivations for the use of commitments rather than the more
-standard plans-as-intentions approach is that it allows for a notion of
-commitment strength (i.e. how committed the agent is to an activity) that is
-motivated by the notion of blind, single-minded, and open-minded commitment
-strategies [11]. AFAPL achieves this by including a maintenance condition as
-part of every commitment. For blind commitment, this condition is BELIEF(true),
-while for single-mindedness, the condition would encode the situation(s) in
-which the agent should view the commitment as being unachievable. Support for
-open- mindedness has recently been realised through the introduction of
-explicit goals.
-
-Explicit goals are supported in AFAPL through the extension of the mental state
-to include a goal attitude that models future states of the environment (i.e.
-future beliefs) that the agent should attempt to realise. That is, if the agent
-does not have a belief that corresponds to a goal that it should attempt to
-satisfy that goal by committing to an activity that it believes will bring
-about a belief that corresponds to the goal. Potential activities are
-identified by matching the postconditions of actions and plans (actions are
-preferred to plans). The agent then selects an action or plan based on the
-first one whose preconditions are satisfied and then commits itself to the
-selected action or plan.
-
-Currently, AFAPL supports two types of goal. Achievement goals are goals
-that are dropped once they are either satisfied or are considered to be
-unachievable, whereas Maintenance goals are goals that are maintained even
-when they have been achieved. The agent attempts to achieve the goal
-whenever it believes that the goal is not satisfied.
-
-As can be seen in the sample snippet of Herder agents AFAPL code shown in
-Figure 2, the AF-ABLE system uses only achievement goals. Specifically, as
-can be seen in the commitment rule (lines 26-32), the agent adopts an
-achievement goal in response to receiving a task assignment request from
-the Leader agent (actually, we assume naively that the agent sending the
-message is the Leader agent). In the event that the agent already has a
-goal to achieve a previously assigned task, lines 28-29 of the plan cause
-the agent to drop the outstanding goal prior to the adoption of the new
-goal on line 30.
-
-The goal itself is satisfied by the agent committing itself to one of the four
-plans that are specified below:
-
-{ exploreArea: the agent explores the region of space around the given area
-
-{ singleHerd : the agent starts herding cows at a given set of coordinates
-
-{ stop: the agent stops moving
-
-{ openFence: the agent opens the fence at the given coordinates
-
-The plan adopted by the agent depends of the specific task that the agent
-has been assigned to perform.
-
-For further details on the current incarnation of Agent Factory and the non-
-goal based version of the AFAPL language, the reader is directed to [10]. Also,
-a discussion on the evolution of Agent Factory since its inception in the early
-1990s can be found in [12].
+For further details on the current incarnation of Agent Factory the reader
+is directed to~\cite{}10. Also, a discussion on the evolution of Agent
+Factory since its inception in the early 1990s can be found in~\cite{}12.
 
 % >>>
 % ending <<<
