@@ -84,6 +84,42 @@ is directed to~\cite{}10. Also, a discussion on the evolution of Agent
 Factory since its inception in the early 1990s can be found in~\cite{}12.
 
 % >>>
+\section{Overview} % <<<
+
+In AgentFactory, beliefs and messages are logic terms. A \emph{term} is a
+variable or a function applied to other terms.
+\begin{align}
+\mathit{Term}\quad\tau
+  &::= \omega
+  \mid \phi(\tau_1,\ldots,\tau_n) \\
+\mathit{Variable}\quad\omega
+  &::= x, y, z, \ldots \\
+\mathit{Function}\quad\phi
+  &::= f, g, h, \ldots
+\end{align}
+During development, it often happens that agents fail with run-time errors
+caused by terms not having the expected form. For example, an agent might
+expect to receive a message with a constant integer, but gets a string.  (A
+\emph{constant} is a function of arity~$0$.) Often the bug is in the code
+that constructed the message, rather than in the code that parses the
+message and fails at run-time. In order to get better diagnostic support
+during development, we added sorts to the AgentFactory framework.
+
+Agents should be autonomous, so they should not crash. Instead, illegal
+operations (such as division by~$0$) should be caught and turned into
+beliefs that allow the agent to subsequently adjust. However, this is true
+for a release build. During development we want to ensure that the agent
+will seldom need to take exceptional corrective measures. Hence, during
+development we \emph{do} want agents to fail close to the buggy code.
+
+Traditionally, in a multi-sorted logic each term has a sort~$\sigma$ and
+each function symbol~$\phi$ has a \emph{signature}
+$\sigma_1\times\cdots\times\sigma_n\to\sigma$: The term it constructs has
+sort~$\sigma$, and the $k$th argument must be a term of sort~$\sigma_k$. We
+opt, however, for a more flexible approach. We define a \emph{sort} to be a
+set of terms.
+
+% >>>
 % ending <<<
 \acks
 
@@ -96,4 +132,4 @@ Technology for funding.
 % >>>
 \end{document} % >>>
 
-% vim:tw=75:fmr=<<<,>>>:fo+=t:
+% vim:tw=75:fmr=<<<,>>>:fo+=t:nosi:
