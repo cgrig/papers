@@ -48,7 +48,8 @@ and with Java interfaces, but are nevertheless distinct concepts.
 We want types~\cite{DBLP:conf/ctcs/Hagino87}.
 
 % >>>
-\section{Agent Factory} %<<<
+\section{Agent Factory framework and AF-Raf programming language} %<<<
+\subsection{Agent Factory}
 Agent Factory~\cite{collier2002agent} is an open-source Java-based
 development framework that provides support for the development and
 deployment of agent-oriented applications.
@@ -70,20 +71,44 @@ modules, an outline Grammar and template compiler implementation based on
 JavaCC, and a configurable debugging tool.
 
 Currently there are four Agent Programming Languages that have been built
-using the CLF: AFAPL, a reimplementation of the original Agent Factory
-agent programming language that is based on commitment rules,
-AF-AgentSpeak, an implementation of the AgentSpeak language based on
-Jason, AF-TeleoReactive, an implementation of Nilsson's teleo-reactive
-programming model, and AF-Raf, described in the next section.
+using the CLF: 
+\begin{enumerate}
+
+\item \textit{AFAPL}, a reimplementation of the original Agent Factory
+agent programming language that is based on commitment rules;
+
+\item \textit{AF-AgentSpeak}, an implementation of the AgentSpeak language based on Jason;
+
+\item \textit{AF-TeleoReactive}, an implementation of Nilsson's teleo-reactive
+programming model; 
+
+\item and our new \textit{AF-Raf}, described in the next section.
+\end{enumerate}
 
 Agent Factory is fully integrated with Eclipse in a way that simplifies
 the task of providing support for new languages and architectures.
 
-For further details on the current incarnation of Agent Factory the reader
-is directed to~\cite{collier2009modeling}. Also, a discussion on the
-evolution of Agent Factory since its inception in the early 1990s can be
-found in~\cite{muldoon2009towards}.
+For further details on the current state of Agent Factory the reader is
+directed to~\cite{collier2009modeling}. Also, a discussion on the evolution
+of Agent Factory since it was created in the early 1990s can be found
+in~\cite{muldoon2009towards}.
 
+\subsection{AF-Raf}
+AF-Raf is a new programming language we created to incorporate
+type-checking. AF-Raf is inspired by AFAPL~\cite{ross2005af}, and shares
+characteristics with Agent-0~\cite{DBLP:journals/ai/Shoham93}, in that the
+fundamental components of its mental state are \textit{Beliefs} (an agent
+view of the current state of its environment) and \textit{Commitments} (the
+activities that an agent has chosen to perform).
+
+These are accompanied by the \textit{Commitment Rules}, that describe the
+situation in which the agent should commit to a specific activity. The
+activities are represented by \textit{Primitive Actions} implemented as
+Java Classes.
+
+Information about the current state of the environment is obtained through
+a set of \textit{Sensors}, as well implemented as Java classes, and added
+to the agent's belief set.
 % >>>
 \section{Overview} % <<<
 
