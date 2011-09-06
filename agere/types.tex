@@ -95,20 +95,67 @@ in~\cite{muldoon2009towards}.
 
 \subsection{AF-Raf}
 AF-Raf is a new programming language we created to incorporate
-type-checking. AF-Raf is inspired by AFAPL~\cite{ross2005af}, and shares
-characteristics with Agent-0~\cite{DBLP:journals/ai/Shoham93}, in that the
-fundamental components of its mental state are \textit{Beliefs} (an agent
-view of the current state of its environment) and \textit{Commitments} (the
-activities that an agent has chosen to perform).
+type-checking. The AF-Raf agent has two fundamental components a
+\textit{belief base} (to model the agent's view of the current state of its
+environment) and a \textit{rule base} (to model the agent's behaviour).
 
-These are accompanied by the \textit{Commitment Rules}, that describe the
-situation in which the agent should commit to a specific activity. The
-activities are represented by \textit{Primitive Actions} implemented as
-Java Classes.
+Beliefs are terms, where a term denotes an expression that can be obtained
+from either a constant symbol, a variable or a function symbol. Rules are
+represented by a name, a query and an action.  The name is optional. The
+code in Figure~\ref{fig:AF-Raf} illustrates an AF-Raf agent.
 
-Information about the current state of the environment is obtained through
-a set of \textit{Sensors}, as well implemented as Java classes, and added
-to the agent's belief set.
+
+\begin{figure}\footnotesize % <<<
+\begin{center}
+\begin{tabular}{c}
+\begin{lstlisting}[style=hs]
+
+include stdio
+
+rule State(initialized()) & Name(n) {
+    println("hello from " + n);
+}
+  
+rule Monitoring(name, addr) {
+    println("ask " + name + " for status");
+    send(agentID(name, addr), request(status()));
+}
+
+rule Message(inform(), agentID(name, addr()), status(alive())) {
+    println("OK, ask again.");
+    send(agentID(name, addr), request(status())); 
+}
+    
+rule Message(request(), sender, status()) {
+    println("Oh, someone wants me alive!");
+    send(sender, inform(status(alive())));
+}
+
+
+\end{lstlisting}
+\end{tabular}
+\end{center}
+\caption{a monitoring AF-Raf agent}
+\label{fig:AF-Raf}
+\end{figure} % >>>
+
+At each time-step the rules are evaluated. The first step of evaluating a
+rule is to evaluate the query on the current belief base. The result is a
+(possibly empty) set of query results. The action is then evaluated for
+each query result. Each query result says with what term to substitute each
+free variable in the action. In other words, a query result is a set of
+bindings that covers all the free variable in the action (of the rule). The
+first step of evaluating the action is to apply these substitutions. The
+next step is to execute it. An action is either a simple action or a
+composed action. (We sometimes say "plan" for composed actions.) Executing
+a simple action means executing a piece of associated Java code. Examples
+of simple actions include sending a message (send), logging a string
+(println), and adopting a belief (adopt). Composed actions include sequence
+and while loops.
+
+Sensors are pieces of Java code that are run at each time-step. They
+typically add stuff to the belief base.
+
 % >>>
 \section{Overview} % <<<
 
