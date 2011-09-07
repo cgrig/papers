@@ -88,10 +88,10 @@ programming model;
 Agent Factory is fully integrated with Eclipse in a way that simplifies
 the task of providing support for new languages and architectures.
 
-For further details on the current state of Agent Factory the reader is
-directed to~\cite{collier2009modeling}. Also, a discussion on the evolution
-of Agent Factory since it was created in the early 1990s can be found
-in~\cite{muldoon2009towards}.
+For further details on Agent Factory the reader is directed
+to~\cite{collier2009modeling}. The Common Language Framework is described
+in~\cite{russell2011af}. Also, a discussion on the evolution of Agent Factory since it
+was created in the early 1990s can be found in~\cite{muldoon2009towards}.
 
 \subsection{AF-Raf}
 AF-Raf is a new programming language we created to incorporate
@@ -101,8 +101,8 @@ environment) and a \textit{rule base} (to model the agent's behaviour).
 
 Beliefs are terms, where a term denotes an expression that can be obtained
 from either a constant symbol, a variable or a function symbol. Rules are
-represented by a name, a query and an action.  The name is optional. The
-code in Figure~\ref{fig:AF-Raf} illustrates an AF-Raf agent.
+represented by a name (optional), a query and an action.  The code in
+Figure~\ref{fig:AF-Raf} illustrates an AF-Raf agent.
 
 
 \begin{figure}\footnotesize % <<<
@@ -139,22 +139,24 @@ rule Message(request(), sender, status()) {
 \label{fig:AF-Raf}
 \end{figure} % >>>
 
-At each time-step the rules are evaluated. The first step of evaluating a
+The rules are evaluated at each time-step. The first stage of evaluating a
 rule is to evaluate the query on the current belief base. The result is a
-(possibly empty) set of query results. The action is then evaluated for
-each query result. Each query result says with what term to substitute each
-free variable in the action. In other words, a query result is a set of
-bindings that covers all the free variable in the action (of the rule). The
-first step of evaluating the action is to apply these substitutions. The
-next step is to execute it. An action is either a simple action or a
-composed action. (We sometimes say "plan" for composed actions.) Executing
-a simple action means executing a piece of associated Java code. Examples
-of simple actions include sending a message (send), logging a string
-(println), and adopting a belief (adopt). Composed actions include sequence
-and while loops.
+set of query results. If the set is not empty, the action is then evaluated
+for every query result. A particular query result says with what term to
+substitute each free variable in the action. In other words, a query result
+is a set of bindings that covers all the free variable in the action (of
+the rule). The first step of evaluating the action is to apply these
+substitutions. The next step is to execute it. 
 
-Sensors are pieces of Java code that are run at each time-step. They
-typically add stuff to the belief base.
+An action is either a simple action or a composed action. Executing a
+simple action means executing a piece of associated Java code. Examples of
+simple actions include sending a message (\textit{send}), logging a string
+(\textit{println}), and adopting a belief (\textit{adopt}).  Composed
+actions, also referred to as plans, include sequence and while loops.
+
+Sensors are pieces of Java code that are run at each time-step. They are
+used to update the belief base according to the changes in the environment.
+An example of a sensor is the \textit{RafStandardSensor}.
 
 % >>>
 \section{Overview} % <<<
