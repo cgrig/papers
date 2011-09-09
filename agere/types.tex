@@ -1,6 +1,7 @@
 \documentclass[preprint]{sigplanconf} % <<<
 \usepackage{amsmath}
 \usepackage{amssymb}
+\usepackage{amsthm}
 \usepackage[british]{babel}
 \usepackage{listings}
 \usepackage{microtype}
@@ -8,8 +9,16 @@
 
 \usepackage[colorlinks]{hyperref}
 
+\newcommand{\B}{\mathbb{B}}
+
 \renewcommand{\sectionautorefname}{Section}
 \renewcommand{\subsectionautorefname}{\sectionautorefname}
+
+%\theoremstyle{definition}
+%\newtheorem{example}{Example}
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}
+%\newtheorem{notation}{Notation}
 
 \definecolor{darkblue}{rgb}{0,0,0.4}
 \hypersetup{colorlinks,linkcolor=darkblue,citecolor=darkblue,urlcolor=darkblue}
@@ -187,6 +196,62 @@ An example of a sensor is the \textit{RafStandardSensor}.
 
 % >>>
 \section{Multi-Sorted Predicate Logic} \label{sec:multi-sorted} % <<<
+
+In this section we recall basic notions from mathematical logic that are
+necessary to understand the next section. We also introduce notational
+conventions used in AF-Raf.
+
+A \emph{term} is a variable or a function applied to other terms.
+\begin{align}
+\mathit{Term}\quad\tau &::= \omega \mid \phi \\
+\mathit{Variable}\quad\omega &::= \nu \\
+\mathit{Function}\quad\phi &::= \nu(\tau_1,\ldots,\tau_n) \\
+\mathit{Name}\quad\nu
+\end{align}
+In AF-Raf, term names are strings.  Because term names uniquely identify a
+variable or a function we will say ``the function~$\nu$'' rather than ``the
+function with name~$\nu$.'' A term not containing variables is said to be
+\emph{ground}.
+
+\begin{remark}
+Ground terms are essentially trees of strings.
+\end{remark}
+
+A multi-sorted logic has a set~$S$ of sorts.  We use the letter~$\sigma$ to
+denote sorts.
+\begin{align}
+\sigma, \sigma_1, \sigma_2, \sigma_3, \ldots &\in S
+\end{align}
+Each function~$\nu$ has a signature
+$(\sigma_1\times\cdots\times\sigma_n)\to\sigma$.  Function~$\nu$ is always
+applied to $n$~terms whose sorts must be, respectively,
+$\sigma_1$,~$\sigma_2$, \dots,~$\sigma_n$, and the resulting term has
+sort~$\sigma$. We say that $\nu$~has \emph{arity}~$n$. \emph{Constants} are
+functions with arity~$0$.
+
+Typically, in mathematical logic, the set~$S$ of sorts and the function
+signatures are required to satisfy further constraints. The set~$\B$ of
+booleans must be one of the sorts. \emph{Formulas} are terms with
+sort~$\B$.  The argument sorts ($\sigma_1$,~$\sigma_2$, \dots,~$\sigma_n$)
+either are all~$\B$, or none is~$\B$. If the argument sorts are~$\B$, then
+the result sort~$\sigma$ must also be~$\B$, and $\nu$ is said to be a
+\emph{boolean connective}. If the argument sorts are not~$\B$ and the
+result sort~$\sigma$ is~$\B$, then $\nu$ is said to be a \emph{predicate}.
+Agent~Factory has these constraints and AF-Raf inherits them. In addition,
+AF-Raf uses an infix notation (described later) for boolean connectives,
+letter strings starting with uppercase for predicate names, and letter
+strings starting with lowercase for other function names.
+
+\begin{remark}
+The definitions given here are in-between what applied computer scientists
+tend to prefer and what pure logicians tend to prefer.  Computer scientists
+work with \emph{expressions} and do not have constraints on function
+signatures with respect to booleans. Logicians, on the other hand, do have
+these constraints and, moreover, define terms in such a way that formulas
+are not terms, and predicates are not functions.
+\end{remark}
+
+In AF-Raf, a \emph{belief base} is a set of boolean ground terms.
 
 % >>>
 \section{AF-Raf with Types} \label{sec:af-raf.types} % <<<
