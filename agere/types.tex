@@ -23,7 +23,8 @@
 \lstdefinestyle{hs}{language=haskell,deletekeywords={elem,all,Eq,Num,Int}}
 \lstdefinestyle{me}{language=haskell,keywords={role,agent,plays,true,this,PG,R,rules,send,session,repeat}}
 
-\title{Type-checking in Agent Oriented Programming}
+\title{
+  AF-Raf: An Agent-Oriented Programming Language with Algebraic Data Types}
 \authorinfo
   {Claudia Grigore and Rem W.~Collier}
   {University College Dublin}
@@ -45,36 +46,34 @@ Intelligence}[Multiagent Systems]
 
 \section{Introduction} % <<<
 
-% plan
-%   - previous work: rough plan for getting ideas from FP into AOP
-%   - algebraic data-types and multi-sorted logic
-%   - transition in AgentFactory
-%   - implementation in AgentFactory
-
 In previous work~\cite{grigore2011}, we argue for incorporating ideas from
 functional programming into agent-oriented programming. Specifically, we
 argue (1)~for importing algebraic data types, (2)~for making roles similar
 to type classes, and (3)~for orchestrating global interactions using
 session types. In this article we explain how algebraic data types fit in
-an agent-oriented programming language. Using the AgentFactory
+an agent-oriented programming language. Using the Agent~Factory
 framework~\cite{russell2011af} (\autoref{sec:af}), we developed a
-programming language called AF-Raf that has beliefs, behaviour rules,
+programming language called AF-Raf that has beliefs, (behaviour) rules,
 (FIPA~\cite{poslad2000fipa}) messages, and algebraic data
-types~(\autoref{sec:af-raf}).
+types~(\autoref{sec:af-raf} and \autoref{sec:af-raf.types}).
 
 The state of an agent is a belief base, and agents communicate through
 messages. Both beliefs and messages are typically formulas in some
-predicate logic. Our proposal to integrate algebraic data types is
-essentially equivalent to using a \emph{multi-sorted} predicate logic for
-beliefs and for messages (\autoref{sec:multi-sorted}). There are two
-benefits. First, bugs are easier to identify, because type errors tend to
-occur close to buggy code~(\autoref{sec:bugs}). Second, queries to the
-belief base are faster~(\autoref{sec:queries}).
+predicate logic. Our proposal to add algebraic data types to the
+programming language is essentially equivalent to using a
+\emph{multi-sorted} predicate logic for beliefs and for
+messages~(\autoref{sec:multi-sorted}). The main benefit is that bugs are
+easier to identify, both by developers and by agents~(\autoref{sec:bugs}).
+
+In Agent~Factory, agents written in different languages may interact
+through messages. Hence, agents that use multi-sorted logic may interact
+with agents that use unsorted logic~(\autoref{sec:unsorted}).
+
+Our main contribution is AF-Raf, a simple agent-oriented programming
+language that has algebraic data types~\cite{site:af-raf}.
 
 % >>>
-\section{Agent Factory framework and AF-Raf programming language} %<<<
-
-\subsection{Agent Factory} \label{sec:af} % <<<
+\section{The Agent Factory Framework} \label{sec:af} % <<<
 
 Agent Factory~\cite{collier2002agent} is an open-source Java-based
 development framework that provides support for the development and
@@ -120,7 +119,7 @@ in~\cite{russell2011af}. Also, a discussion on the evolution of Agent Factory si
 was created in the early 1990s can be found in~\cite{muldoon2009towards}.
 
 % >>>
-\subsection{AF-Raf} \label{sec:af-raf} % <<<
+\section{AF-Raf without Types} \label{sec:af-raf} % <<<
 
 AF-Raf is a new programming language we created to incorporate
 type-checking. The AF-Raf agent has two fundamental components a
@@ -187,13 +186,27 @@ used to update the belief base according to the changes in the environment.
 An example of a sensor is the \textit{RafStandardSensor}.
 
 % >>>
-\subsection{Multi-Sorted Predicate Logic} \label{sec:multi-sorted} % <<<
+\section{Multi-Sorted Predicate Logic} \label{sec:multi-sorted} % <<<
 
 % >>>
-% >>>
-\section{Overview} % <<<
+\section{AF-Raf with Types} \label{sec:af-raf.types} % <<<
 
-In AgentFactory, beliefs and messages are logic terms. A \emph{term} is a
+% >>>
+\section{Debugging and Autonomy} \label{sec:bugs} % <<<
+
+% >>>
+\section{Interactions with Other Languages} \label{sec:unsorted} % <<<
+
+% >>>
+\section{Related Work} \label{sec:related} % <<<
+
+% >>>
+\section{Conclusions} \label{sec:conclusions} % <<<
+
+% >>>
+\section{To Move} % <<<
+
+In Agent~Factory, beliefs and messages are logic terms. A \emph{term} is a
 variable or a function applied to other terms.
 \begin{align}
 \mathit{Term}\quad\tau
@@ -210,7 +223,7 @@ expect to receive a message with a constant integer, but gets a string.  (A
 \emph{constant} is a function of arity~$0$.) Often the bug is in the code
 that constructed the message, rather than in the code that parses the
 message and fails at run-time. In order to get better diagnostic support
-during development, we added sorts to the AgentFactory framework.
+during development, we added sorts to the Agent~Factory framework.
 
 Agents should be autonomous, so they should not crash. Instead, illegal
 operations (such as division by~$0$) should be caught and turned into
@@ -225,18 +238,6 @@ $\sigma_1\times\cdots\times\sigma_n\to\sigma$: The term it constructs has
 sort~$\sigma$, and the $k$th argument must be a term of sort~$\sigma_k$. We
 opt, however, for a more flexible approach. We define a \emph{sort} to be a
 set of terms.
-
-% >>>
-\section{Debugging and Autonomy} \label{sec:bugs} % <<<
-
-% >>>
-\section{Multi-Sorted Queries} \label{sec:queries} % <<<
-
-% >>>
-\section{Related Work} \label{sec:related} % <<<
-
-% >>>
-\section{Conclusions} \label{sec:conclusions} % <<<
 
 % >>>
 % ending <<<
