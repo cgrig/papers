@@ -6,7 +6,13 @@
 \usepackage{microtype}
 \usepackage{xcolor}
 
-\usepackage{hyperref}
+\usepackage[colorlinks]{hyperref}
+
+\renewcommand{\sectionautorefname}{Section}
+\renewcommand{\subsectionautorefname}{\sectionautorefname}
+
+\definecolor{darkblue}{rgb}{0,0,0.4}
+\hypersetup{colorlinks,linkcolor=darkblue,citecolor=darkblue,urlcolor=darkblue}
 
 \newcommand{\todo}[1]{{\small \textcolor{gray}{[\textcolor{red}{TODO}: #1]}}}
 \newenvironment{notes}{\medskip\hrule\nobreak\smallskip\narrower}{\smallskip\hrule\medskip}
@@ -23,6 +29,7 @@
   {University College Dublin}
   {claudia.grigore@ucdconnect.ie}
 
+% >>>
 \begin{document} % <<<
 \maketitle
 \begin{abstract} % <<<
@@ -37,26 +44,38 @@ Intelligence}[Multiagent Systems]
 \keywords Types, Messages, Beliefs
 
 \section{Introduction} % <<<
-In our previous paper~\cite{} we followed two analogies between
-functional languages, like Haskell, and agent oriented programming
-languages. 
 
-We noticed that a function can be seen like a pair of messages,
-one carrying the arguments and one carrying the result. This led us to two
-interesting observations.  First, algebraic data types are convenient for
-describing the content of messages. We expect to see fewer runtime errors
-once messages are typed.  Second, we developed a notion of role for
-constraining agent interactions.  These roles have certain similarities
-with existing Haskell type classes, 2APL modules and with Java interfaces,
-but are nevertheless distinct concepts.
+% plan
+%   - previous work: rough plan for getting ideas from FP into AOP
+%   - algebraic data-types and multi-sorted logic
+%   - transition in AgentFactory
+%   - implementation in AgentFactory
 
-The other informal intuition that a Haskell type is similar to an agent led us to the proposal of specifying global interactions in agent oriented programming languages in terms of sessions.
+In previous work~\cite{grigore2011}, we argue for incorporating ideas from
+functional programming into agent-oriented programming. Specifically, we
+argue (1)~for importing algebraic data types, (2)~for making roles similar
+to type classes, and (3)~for orchestrating global interactions using
+session types. In this article we explain how algebraic data types fit in
+an agent-oriented programming language. Using the AgentFactory
+framework~\cite{russell2011af} (\autoref{sec:af}), we developed a
+programming language called AF-Raf that has beliefs, behaviour rules,
+(FIPA~\cite{poslad2000fipa}) messages, and algebraic data
+types~(\autoref{sec:af-raf}).
 
-We want types~\cite{DBLP:conf/ctcs/Hagino87}.
+The state of an agent is a belief base, and agents communicate through
+messages. Both beliefs and messages are typically formulas in some
+predicate logic. Our proposal to integrate algebraic data types is
+essentially equivalent to using a \emph{multi-sorted} predicate logic for
+beliefs and for messages (\autoref{sec:multi-sorted}). There are two
+benefits. First, bugs are easier to identify, because type errors tend to
+occur close to buggy code~(\autoref{sec:bugs}). Second, queries to the
+belief base are faster~(\autoref{sec:queries}).
 
 % >>>
 \section{Agent Factory framework and AF-Raf programming language} %<<<
-\subsection{Agent Factory}
+
+\subsection{Agent Factory} \label{sec:af} % <<<
+
 Agent Factory~\cite{collier2002agent} is an open-source Java-based
 development framework that provides support for the development and
 deployment of agent-oriented applications.
@@ -100,7 +119,9 @@ to~\cite{collier2009modeling}. The Common Language Framework is described
 in~\cite{russell2011af}. Also, a discussion on the evolution of Agent Factory since it
 was created in the early 1990s can be found in~\cite{muldoon2009towards}.
 
-\subsection{AF-Raf}
+% >>>
+\subsection{AF-Raf} \label{sec:af-raf} % <<<
+
 AF-Raf is a new programming language we created to incorporate
 type-checking. The AF-Raf agent has two fundamental components a
 \textit{belief base} (to model the agent's view of the current state of its
@@ -166,6 +187,10 @@ used to update the belief base according to the changes in the environment.
 An example of a sensor is the \textit{RafStandardSensor}.
 
 % >>>
+\subsection{Multi-Sorted Predicate Logic} \label{sec:multi-sorted} % <<<
+
+% >>>
+% >>>
 \section{Overview} % <<<
 
 In AgentFactory, beliefs and messages are logic terms. A \emph{term} is a
@@ -202,6 +227,18 @@ opt, however, for a more flexible approach. We define a \emph{sort} to be a
 set of terms.
 
 % >>>
+\section{Debugging and Autonomy} \label{sec:bugs} % <<<
+
+% >>>
+\section{Multi-Sorted Queries} \label{sec:queries} % <<<
+
+% >>>
+\section{Related Work} \label{sec:related} % <<<
+
+% >>>
+\section{Conclusions} \label{sec:conclusions} % <<<
+
+% >>>
 % ending <<<
 \acks
 
@@ -214,4 +251,4 @@ Technology for funding.
 % >>>
 \end{document} % >>>
 
-% vim:tw=75:fmr=<<<,>>>:fo+=t:nosi:
+% vim:tw=75:fmr=<<<,>>>:fo+=t:nosi:spl=en_gb:
