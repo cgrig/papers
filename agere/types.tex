@@ -37,13 +37,20 @@ Intelligence}[Multiagent Systems]
 \keywords Types, Messages, Beliefs
 
 \section{Introduction} % <<<
-The intuition that a function is like a pair of messages, one carrying the
-arguments and one carrying the result, led us to two interesting
-observations. First, algebraic data types are convenient for describing the
-content of messages. We expect to see fewer runtime errors once messages
-are typed. Second, we developed a notion of role in the context of the 2APL
-language. These roles have certain similarities with existing 2APL modules
-and with Java interfaces, but are nevertheless distinct concepts.
+In our previous paper~\cite{} we followed two analogies between
+functional languages, like Haskell, and agent oriented programming
+languages. 
+
+We noticed that a function can be seen like a pair of messages,
+one carrying the arguments and one carrying the result. This led us to two
+interesting observations.  First, algebraic data types are convenient for
+describing the content of messages. We expect to see fewer runtime errors
+once messages are typed.  Second, we developed a notion of role for
+constraining agent interactions.  These roles have certain similarities
+with existing Haskell type classes, 2APL modules and with Java interfaces,
+but are nevertheless distinct concepts.
+
+The other informal intuition that a Haskell type is similar to an agent led us to the proposal of specifying global interactions in agent oriented programming languages in terms of sessions.
 
 We want types~\cite{DBLP:conf/ctcs/Hagino87}.
 
