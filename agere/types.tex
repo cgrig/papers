@@ -14,6 +14,7 @@
 \renewcommand{\sectionautorefname}{Section}
 \renewcommand{\subsectionautorefname}{\sectionautorefname}
 
+\newtheorem{proposition}{Proposition}
 %\theoremstyle{definition}
 %\newtheorem{example}{Example}
 \theoremstyle{remark}
@@ -43,10 +44,11 @@
 \begin{document} % <<<
 \maketitle
 \begin{abstract} % <<<
-There is virtually no type-checking in Agent Oriented Programming at the
-moment. Type errors can lead to erroneous calculations. We propose typing
-beliefs and message content using abstract data types. We present a type-checking implementation.
-
+Agent-oriented programming languages used in practice do not have good type
+system. It is generally accepted in the programming languages community
+that types help developers to write correct programs. We present an
+agent-oriented programming language that uses algebraic data types for
+dynamically checking beliefs and messages.
 \end{abstract} % >>>
 \category{I.2.11}{Artificial Intelligence}{Distributed Artificial
 Intelligence}[Multiagent Systems]
@@ -69,14 +71,10 @@ types~(\autoref{sec:af-raf} and \autoref{sec:af-raf.types}).
 The state of an agent is a belief base, and agents communicate through
 messages. Both beliefs and messages are typically formulas in some
 predicate logic. Our proposal to add algebraic data types to the
-programming language is essentially equivalent to using a
-\emph{multi-sorted} predicate logic for beliefs and for
-messages~(\autoref{sec:multi-sorted}). The main benefit is that bugs are
-easier to identify, both by developers and by agents~(\autoref{sec:bugs}).
-
-In Agent~Factory, agents written in different languages may interact
-through messages. Hence, agents that use multi-sorted logic may interact
-with agents that use unsorted logic~(\autoref{sec:unsorted}).
+programming language is similar to using a \emph{multi-sorted} predicate
+logic for beliefs and for messages~(\autoref{sec:multi-sorted}). The main
+benefit is that bugs are easier to identify, both by developers and by
+agents~(\autoref{sec:bugs}).
 
 Our main contribution is AF-Raf, a simple agent-oriented programming
 language that has algebraic data types~\cite{site:af-raf}.
@@ -145,33 +143,30 @@ Figure~\ref{fig:AF-Raf} illustrates an AF-Raf agent.
 \begin{center}
 \begin{tabular}{c}
 \begin{lstlisting}[style=hs]
-
 include stdio
 
 rule State(initialized()) & Name(n) {
     println("hello from " + n);
 }
-  
+
 rule Monitoring(name, addr) {
     println("ask " + name + " for status");
     send(agentID(name, addr), request(status()));
 }
 
-rule Message(inform(), agentID(name, addr()), status(alive())) {
+rule Message(other, status(alive())) {
     println("OK, ask again.");
-    send(agentID(name, addr), request(status())); 
+    send(other, request(status()));
 }
-    
-rule Message(request(), sender, status()) {
+
+rule Message(other, status()) {
     println("Oh, someone wants me alive!");
-    send(sender, inform(status(alive())));
+    send(other, inform(status(alive())));
 }
-
-
 \end{lstlisting}
 \end{tabular}
 \end{center}
-\caption{a monitoring AF-Raf agent}
+\caption{The code of an AF-Raf agent}
 \label{fig:AF-Raf}
 \end{figure} % >>>
 
@@ -182,7 +177,7 @@ for every query result. A particular query result says with what term to
 substitute each free variable in the action. In other words, a query result
 is a set of bindings that covers all the free variable in the action (of
 the rule). The first step of evaluating the action is to apply these
-substitutions. The next step is to execute it. 
+substitutions. The next step is to execute it.
 
 An action is either a simple action or a composed action. Executing a
 simple action means executing a piece of associated Java code. Examples of
@@ -191,15 +186,18 @@ simple actions include sending a message (\textit{send}), logging a string
 actions, also referred to as plans, include sequence and while loops.
 
 Sensors are pieces of Java code that are run at each time-step. They are
-used to update the belief base according to the changes in the environment.
-An example of a sensor is the \textit{RafStandardSensor}.
+typically used to update the belief base according to the changes in the
+environment. For example, there is a standard sensor (defined in
+\texttt{stdio}) that adds a belief $\mathit{Message}(s,c)$ when a message
+with content~$c$ is received from sender~$s$.
 
 % >>>
 \section{Multi-Sorted Predicate Logic} \label{sec:multi-sorted} % <<<
 
 In this section we recall basic notions from mathematical logic that are
 necessary to understand the next section. We also introduce notational
-conventions used in AF-Raf.
+conventions used in AF-Raf. Moreover, although these notions are simple,
+their definitions in literature tend to have subtle but differences.
 
 A \emph{term} is a variable or a function applied to other terms.
 \begin{align}
@@ -230,86 +228,286 @@ sort~$\sigma$. We say that $\nu$~has \emph{arity}~$n$. \emph{Constants} are
 functions with arity~$0$.
 
 Typically, in mathematical logic, the set~$S$ of sorts and the function
-signatures are required to satisfy further constraints. The set~$\B$ of
-booleans must be one of the sorts. \emph{Formulas} are terms with
-sort~$\B$.  The argument sorts ($\sigma_1$,~$\sigma_2$, \dots,~$\sigma_n$)
-either are all~$\B$, or none is~$\B$. If the argument sorts are~$\B$, then
-the result sort~$\sigma$ must also be~$\B$, and $\nu$ is said to be a
-\emph{boolean connective}. If the argument sorts are not~$\B$ and the
-result sort~$\sigma$ is~$\B$, then $\nu$ is said to be a \emph{predicate}.
-Agent~Factory has these constraints and AF-Raf inherits them. In addition,
-AF-Raf uses an infix notation (described later) for boolean connectives,
-letter strings starting with uppercase for predicate names, and letter
-strings starting with lowercase for other function names.
+signatures are required to satisfy further constraints. \textit{Bool} must
+be one of the sorts. \emph{Formulas} are terms with sort \textit{Bool}.
+The argument sorts ($\sigma_1$,~$\sigma_2$, \dots,~$\sigma_n$) either are
+all \textit{Bool}, or none is \textit{Bool}.  If the argument sorts are
+\textit{Bool}, then the result sort~$\sigma$ must also be \textit{Bool},
+and $\nu$ is said to be a \emph{boolean connective}.  If the argument sorts
+are not \textit{Bool} and the result sort~$\sigma$ is \textit{Bool}, then
+$\nu$ is said to be a \emph{predicate}.  Agent~Factory has these
+constraints and AF-Raf inherits them. In addition, AF-Raf uses an infix
+notation (described later) for boolean connectives, letter strings starting
+with uppercase for predicate names, and letter strings starting with
+lowercase for other function names and for variable names.
 
 \begin{remark}
 The definitions given here are in-between what applied computer scientists
 tend to prefer and what pure logicians tend to prefer.  Computer scientists
-work with \emph{expressions} and do not have constraints on function
-signatures with respect to booleans. Logicians, on the other hand, do have
-these constraints and, moreover, define terms in such a way that formulas
-are not terms, and predicates are not functions.
+work with \emph{expressions} (rather than terms and formulas) and do not
+have constraints on function signatures with respect to booleans.
+Logicians, on the other hand, do have these constraints and, moreover,
+define terms in such a way that formulas are not terms, and predicates are
+not functions. Moreover, logicians single out equality between terms as
+being a special predicate.
 \end{remark}
 
-In AF-Raf, a \emph{belief base} is a set of boolean ground terms.
+In AF-Raf, a \emph{belief} is a boolean ground term; in AF-Raf, a
+\emph{message} is a non-boolean ground term.
+
+The sort~$\sigma$ determines a set of ground terms, namely those of the
+form $\nu(*)$, where $\nu$ has a signature of the form $*\to\sigma$.  For
+example, the sort \textit{Bool} determines the set of terms that are
+formulas.  Algebraic data types offer an alternative way of defining sets
+of ground terms. Syntactically, a type~$\delta$ is defined by a sequence of
+patterns, each of the form $\nu(\delta_1,\ldots,\delta_n)$. For example,
+one could define the types \textit{nat}, $e$, and~$o$ as follows.
+\begin{align}
+&\mathbf{type}\,\mathit{nat} =
+      \mathit{zero}()
+  \mid\mathit{succ}(\mathit{nat})
+  \mid\mathit{add}(\mathit{nat},\mathit{nat}) \\
+&\mathbf{type}\,e =
+      \mathit{zero}()
+  \mid\mathit{succ}(o)
+  \mid\mathit{add}(e,e)
+  \mid\mathit{add}(o,o) \\
+&\mathbf{type}\,o =
+      \mathit{succ}(e)
+  \mid\mathit{add}(o,e)
+  \mid\mathit{add}(e,o)
+\end{align}
+We make the following observations.
+\begin{enumerate}
+\item
+  Function names may appear in multiple definitions. For example,
+  \textit{zero} appears in the definition of~$\mathit{nat}$ and also in the
+  definition of~$e$. In particular, the term $\mathit{zero}()$ belongs both
+  to the set of ground terms defined by the type~$\mathit{nat}$ and to the
+  one defined by the type~$e$.
+\item
+  Function names may appear multiple times in the same definition. For
+  example, \textit{add} appears twice in the definition of~$e$. (This
+  property distinguishes our types from polymorphic
+  variants~\cite{garrigue1998}.)
+\item
+  Type definitions may be recursive or mutually recursive. For example,
+  $\mathit{nat}$~appears within the definition of~$\mathit{nat}$.
+\end{enumerate}
+The set of ground terms corresponding to type~$\mathit{nat}$ is the following.
+\begin{equation}
+\begin{aligned}
+\{\,&\mathit{zero}(), \\
+    &\mathit{succ}(\mathit{zero}()),
+        \mathit{succ}(\mathit{succ}(\mathit{zero}())), \ldots \\
+    &\mathit{add}(\mathit{zero}(), \mathit{zero}()),
+        \mathit{add}(\mathit{zero}(), \mathit{succ}(\mathit{zero}())),
+        \ldots \\
+    &\mathit{succ}(\mathit{add}(\mathit{zero}(), \mathit{zero}())),
+        \ldots \\
+    &\ldots\, \}
+\end{aligned}
+\end{equation}
+Moreover, $e$~and~$o$ partition~$\mathit{nat}$.
+
+\begin{proposition}
+Algebraic data types (as defined above) are strictly more expressive than
+sorts. More precisely, (1)~all sets of ground terms that can be defined by
+sorts can also be defined by algebraic data types, and (2)~there are pairs
+of sets of ground terms that can be defined by algebraic data types but
+cannot be defined by sorts.
+\end{proposition}
+
+\begin{proof}
+For~(1), we define a type~$\delta(\sigma)$ for each sort~$\sigma$ as
+follows: For each signature $\nu:(\sigma_1,\ldots,\sigma_n)\to\sigma$ we
+add a pattern $\nu(\delta(\sigma_1),\ldots,\delta(\sigma_n))$. It is easy
+to see, by structural induction, that the sort~$\sigma$ and the
+type~$\delta(\sigma)$ define the same sets of ground terms.
+
+For~(2), note that, given a fixed set of function signatures, the sets of
+ground terms defined by distinct sorts are disjoint. In the previous
+example, however, the sets of ground terms defined by the types
+$\mathit{nat}$~and~$e$ have (at least) a common element, namely
+$\mathit{zero}()$.
+\end{proof}
+
+Finally, let us note that there are sets of ground terms for which it is
+undecidable whether a given term is an element.  (A classic result of
+computability theory is that there are undecidable sets of bit-strings, and
+sorted ground terms can encode bit-strings.) In particular, there exist
+sets of ground terms that cannot be defined using algebraic data types.
 
 % >>>
 \section{AF-Raf with Types} \label{sec:af-raf.types} % <<<
 
-% >>>
-\section{Debugging and Autonomy} \label{sec:bugs} % <<<
+In this section we describe how algebraic data types (as described in
+\autoref{sec:multi-sorted}) are integrated in AF-Raf.
 
-% >>>
-\section{Interactions with Other Languages} \label{sec:unsorted} % <<<
+\subsection{Primitive Types and Aliases}
 
-% >>>
-\section{Related Work} \label{sec:related} % <<<
-Very few approaches were made to establish a type systems in the area of
-agent systems. AMETAS~\cite{} incorporates preliminary work on a such type
-system, where a type is represented by a textual description which declares input and output messages. To structure interactions they adopt the notion of state to which associate a set of acceptable messages and the possible output messages. The state transition is represented using a non-deterministic finite automaton.
+\autoref{sec:multi-sorted} represents the number~$2$ by the term
+$\mathit{succ}(\mathit{succ}(\mathit{zero}()))$, which would be cumbersome
+in practice. In Agent~Factory, string literals and integer literals are
+also terms, and AF-Raf inherits this decision. Moreover, AF-Raf has
+predefined corresponding primitive types \textit{string} and
+\textit{integer}.
 
-There were also a few type systems proposed in the context of mobile agents to
-tackle some of the issues of distributed programming like controlling the
-use of resources (channels, locations, values)~\cite{}KLAIM
-% >>>
-\section{Conclusions} \label{sec:conclusions} % <<<
+Binary operators such as $+$ are also inherited from Agent~Factory. From
+the point of view of type-checking, an expressions like $2+3$ is equivalent
+to $+(2,3)$. Standard conventions on precedence and associativity are
+obeyed.
 
-% >>>
-\section{To Move} % <<<
+More interestingly, AF-Raf has built-in the type $\mathit{integer}[\tau]$,
+where $\tau$ is a formula that may use the special variable \textbf{this}.
+For example, the type $\mathit{integer}[\mathbf{this}\%2==0]$ defines the
+set of ground terms $\{\,\ldots,-4,-2,0,2,4,\ldots\,\}$. Similarly, AF-Raf
+has built-in the type $\mathit{string}[\tau]$. For example, the type
+\[\mathit{string}[\mathbf{this}\;\mathbf{matches}\;\verb|"[a-z]+"|]\]
+defines the set of string literals that match the given regular expression.
 
-In Agent~Factory, beliefs and messages are logic terms. A \emph{term} is a
-variable or a function applied to other terms.
+To support the interaction with untyped languages, AF-Raf also has built-in
+the type \textit{Any}, which defines the set of all ground terms.
+
+Finally, one may define type aliases.
 \begin{align}
-\mathit{Term}\quad\tau
-  &::= \omega
-  \mid \phi(\tau_1,\ldots,\tau_n) \\
-\mathit{Variable}\quad\omega
-  &::= x, y, z, \ldots \\
-\mathit{Function}\quad\phi
-  &::= f, g, h, \ldots
+\mathbf{type}\,\delta=\delta'
 \end{align}
-During development, it often happens that agents fail with run-time errors
-caused by terms not having the expected form. For example, an agent might
-expect to receive a message with a constant integer, but gets a string.  (A
-\emph{constant} is a function of arity~$0$.) Often the bug is in the code
-that constructed the message, rather than in the code that parses the
-message and fails at run-time. In order to get better diagnostic support
-during development, we added sorts to the Agent~Factory framework.
+Such aliases are especially useful when $\delta'$ is of the form
+$\mathit{integer}[\tau]$ or $\mathit{string}[\tau]$, and $\tau$~is long.
 
-Agents should be autonomous, so they should not crash. Instead, illegal
-operations (such as division by~$0$) should be caught and turned into
-beliefs that allow the agent to subsequently adjust. However, this is true
-for a release build. During development we want to ensure that the agent
-will seldom need to take exceptional corrective measures. Hence, during
-development we \emph{do} want agents to fail close to the buggy code.
+\subsection{Types and Agents}
 
-Traditionally, in a multi-sorted logic each term has a sort~$\sigma$ and
-each function symbol~$\phi$ has a \emph{signature}
-$\sigma_1\times\cdots\times\sigma_n\to\sigma$: The term it constructs has
-sort~$\sigma$, and the $k$th argument must be a term of sort~$\sigma_k$. We
-opt, however, for a more flexible approach. We define a \emph{sort} to be a
-set of terms.
+More interesting is the relation between types, messages, beliefs, and
+agents. From a practical point of view, our effort tries to improve upon
+the following scenario.
 
+\paragraph{Bad Scenario.}
+
+Agent~$a$ sends message $\tau_{ab}$ to agent~$b$. Agent~$b$ stores a
+subterm~$\tau_b$ of~$\tau_{ab}$ into its belief base. Later, when some
+other condition is satisfied, agent~$b$ extracts a subterm~$\tau_{bc}$ of
+term~$\tau_b$ and sends it to agent~$c$. Agent~$c$ extracts a
+subterm~$\tau_c$ of term~$\tau_{bc}$ and stores it in its belief base.
+Later, when some other condition is satisfied, agent~$c$ extracts a
+subterm~$\tau$ of~$\tau_c$. Agent~$c$ expects $\tau$ to be an integer
+literal, but instead $\tau$ is a string literal. Agent~$c$ notices the
+problem, but many things happened since agent~$a$ sent an invalid message.
+
+The goal of our dynamic typing is to notice such errors early.
+
+For this purpose, each agent~$a$ has two attached types, the type
+$\delta_b(a)$ of $a$'s beliefs and the type $\delta_m(a)$ of messages that
+$a$ can process. These types are selected when the agent is created.
+Whenever a belief $\tau$ is added to $a$'s belief base, Agent~Factory
+checks whether the belief is in the set of terms defined by the belief type
+of~$a$; that is, the expression $\tau:\delta_b(a)$ is evaluated. Whenever a
+message~$\tau$ is sent to agent~$a$, the expression $\tau:\delta_m(a)$ is
+evaluated. In order to send a message to agent~$a$, other agent need the
+agent identifier of agent~$a$. Agent identifiers typically consist of a
+name and an IP address. To support the check for messages we add
+$\delta_m(a)$ to the agent identifier of agent~$a$.
+
+% >>>
+\section{Autonomy and Debugging} \label{sec:bugs} % <<<
+
+Agents are supposed to be autonomous. In particular, illegal operations
+should be caught and turned into beliefs that allow the agent to inspect
+itself and adjust. An attempt to divide by zero or to apply numerical
+addition to strings should not result in a run-time error that terminates
+the agent program. Similarly, the failure of a dynamic type-check stops
+only the execution of a small part of the agent program and introduces a
+new belief that enables introspection. The failure of a message type-check
+$\tau:\delta_m(a)$ stops the message~$\tau$ from being sent and adds the
+belief \[\mathit{typeError}(\mathit{messageTo}(a), \tau, \tau(\delta_m(a)))
+\] to the belief base of the sender agent. Here,
+$\tau(\delta_m(a))$~denotes a term representation of the
+type~$\delta_m(a)$.  The failure of a belief type-check $\tau:\delta_m$
+stops the belief from being adopted and adds the belief
+\[\mathit{typeError}(\mathit{belief}(), \tau, \tau(\delta_b(a))) \] to the
+belief base of agent~$a$. The addition of \textit{typeError} beliefs is not
+itself subjected to type-checks, otherwise it is easy to enter infinite
+loops.
+
+The term representation~$\tau(\delta)$ of the type~$\delta$ is is simply a
+constant whose name is the same name as the name of~$\delta$. For example,
+$\tau(\mathit{nat})$ is~$\mathit{nat}()$.
+
+In the bad scenario of the previous section, agent~$a$ will notice that it
+is trying to send an ill-formed message, will stop sending~$\tau_{ab}$, and
+will get the chance to take corrective measures. In contrast, without
+typing, agent~$c$ notices that there is a problem and, with difficulty, may
+be able to determine that agent~$a$ is the source of the problem and inform
+it.
+
+In fact, while an agent program is being debugged we want illegal
+operations pause the execution. This way, developers see which illegal
+operation they need to worry about. On case-by-case basis, they may decide
+to prevent the illegal operation from taking place, or to add code that
+handles the exceptional circumstances in which the illegal operation takes
+place.
+
+% >>>
+%\section{Related Work} \label{sec:related} % <<<
+%
+%Very few approaches were made to establish a type systems in the area of
+%agent systems. AMETAS~\cite{} incorporates preliminary work on a such type
+%system, where a type is represented by a textual description which declares input and output messages. To structure interactions they adopt the notion of state to which associate a set of acceptable messages and the possible output messages. The state transition is represented using a non-deterministic finite automaton.
+%
+%There were also a few type systems proposed in the context of mobile agents to
+%tackle some of the issues of distributed programming like controlling the
+%use of resources (channels, locations, values)~\cite{}KLAIM
+% >>>
+\section{Conclusions and Future Work} \label{sec:conclusions} % <<<
+
+We briefly described AF-Raf~\cite{site:af-raf}, an agent-oriented
+programming language implemented in the Agent Factory framework. AF-Raf
+features algebraic data-types. The dynamic type-checks are done by the
+Agent Factory framework itself, so that it is possible for other languages
+to take advantage of these checks. However, Agent Factory performs no
+type-check for existing untyped languages.
+
+The current design and implementation attaches a type~$\delta_m(a)$ to each
+agent~$a$, which is rather coarse grained. We would like to express more
+specific requirements, such as ``the reply to message~$m$ must be a message
+with the type~$\delta$.''
+
+% >>>
+%\section{To Move} % <<<
+%
+%In Agent~Factory, beliefs and messages are logic terms. A \emph{term} is a
+%variable or a function applied to other terms.
+%\begin{align}
+%\mathit{Term}\quad\tau
+%  &::= \omega
+%  \mid \phi(\tau_1,\ldots,\tau_n) \\
+%\mathit{Variable}\quad\omega
+%  &::= x, y, z, \ldots \\
+%\mathit{Function}\quad\phi
+%  &::= f, g, h, \ldots
+%\end{align}
+%During development, it often happens that agents fail with run-time errors
+%caused by terms not having the expected form. For example, an agent might
+%expect to receive a message with a constant integer, but gets a string.  (A
+%\emph{constant} is a function of arity~$0$.) Often the bug is in the code
+%that constructed the message, rather than in the code that parses the
+%message and fails at run-time. In order to get better diagnostic support
+%during development, we added sorts to the Agent~Factory framework.
+%
+%Agents should be autonomous, so they should not crash. Instead, illegal
+%operations (such as division by~$0$) should be caught and turned into
+%beliefs that allow the agent to subsequently adjust. However, this is true
+%for a release build. During development we want to ensure that the agent
+%will seldom need to take exceptional corrective measures. Hence, during
+%development we \emph{do} want agents to fail close to the buggy code.
+%
+%Traditionally, in a multi-sorted logic each term has a sort~$\sigma$ and
+%each function symbol~$\phi$ has a \emph{signature}
+%$\sigma_1\times\cdots\times\sigma_n\to\sigma$: The term it constructs has
+%sort~$\sigma$, and the $k$th argument must be a term of sort~$\sigma_k$. We
+%opt, however, for a more flexible approach. We define a \emph{sort} to be a
+%set of terms.
+%
 % >>>
 % ending <<<
 \acks
