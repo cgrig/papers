@@ -32,6 +32,7 @@
 \lstset{literate={->}{{$\to\;$}}1 {<-}{{$\gets\;$}}1 {=>}{{$\Rightarrow\;$}}1}
 \lstdefinestyle{hs}{language=haskell,deletekeywords={elem,all,Eq,Num,Int}}
 \lstdefinestyle{me}{language=haskell,keywords={role,agent,plays,true,this,PG,R,rules,send,session,repeat}}
+\lstdefinestyle{ocaml}{language=caml}
 
 \title{
   AF-Raf: An Agent-Oriented Programming Language with Algebraic Data Types}
@@ -45,7 +46,7 @@
 \maketitle
 \begin{abstract} % <<<
 Agent-oriented programming languages used in practice do not have good type
-system. It is generally accepted in the programming languages community
+systems. It is generally accepted in the programming languages community
 that types help developers to write correct programs. We present an
 agent-oriented programming language that uses algebraic data types for
 dynamically checking beliefs and messages.
@@ -349,9 +350,10 @@ In this section we describe how algebraic data types (as described in
 \autoref{sec:multi-sorted} represents the number~$2$ by the term
 $\mathit{succ}(\mathit{succ}(\mathit{zero}()))$, which would be cumbersome
 in practice. In Agent~Factory, string literals and integer literals are
-also terms, and AF-Raf inherits this decision. Moreover, AF-Raf has
+also terms, and AF-Raf inherits this decision. AF-Raf has
 predefined corresponding primitive types \textit{string} and
-\textit{integer}.
+\textit{integer}. Moreover, any Java type is suitable to be an AF-Raf
+primitive type.
 
 Binary operators such as $+$ are also inherited from Agent~Factory. From
 the point of view of type-checking, an expressions like $2+3$ is equivalent
@@ -408,6 +410,51 @@ agent identifier of agent~$a$. Agent identifiers typically consist of a
 name and an IP address. To support the check for messages we add
 $\delta_m(a)$ to the agent identifier of agent~$a$.
 
+\subsection{The Type Checker}
+
+The type checking is performed at run-time. Being given a ground term
+(message or belief) of the form $\nu(\tau_1,\ldots,\tau_n)$, where $n>=0$
+and the type it has to match $\delta = \nu_1(\delta_1, \ldots, \delta_n)
+\mid \ldots \mid \nu_k(\delta_1, \ldots, \delta_m)$, where $k >= 1$, and
+$n,m >= 0$, the algorithm of the type checking can be defined recursively
+as follows: First check if the name $\nu$ matches any of the pattern names
+$\nu_1,\ldots, \nu_k$. If it doesn't returns \textit{FALSE}, else, checks
+if the number of arguments matches (if it doesn't returns \textit{FALSE}),
+then recursively do the type check for every argument. 
+
+The code in Figure~\ref{fig:Type-checker} illustrates the type checking
+algorithm for the types defined in \autoref{sec:multi-sorted}.
+
+\begin{figure}\footnotesize % <<<
+\begin{center}
+\begin{tabular}{c}
+\begin{lstlisting}[style=ocaml]
+type type_ = (string * type_ list) list
+type term = string * term list
+
+let rec nat : type_= ["zero", []; "succ", [nat]; "add", [nat; nat]]
+let rec even : type_ =
+  ["zero", []; "succ", [odd]; "add", [even; even]; "add", [odd; odd]]
+and odd : type_ =
+  ["succ", [even]; "add", [odd; even]; "add", [even; odd]]
+
+let zero : term = "zero", []
+let one : term = "succ", [zero]
+let two : term = "succ", [one]
+let three : term = "succ", [two]
+let three' : term = "add", [one; two]
+
+let rec check v ts =
+  let f (v, vs) (t, ts) =
+    v = t &&
+    (try List.for_all2 check vs ts with Invalid_argument _ -> false) in
+  List.exists (f v) ts
+\end{lstlisting}
+\end{tabular}
+\end{center}
+\caption{Type checking illustration in Ocaml}
+\label{fig:Type-checker}
+\end{figure} % >>>
 % >>>
 \section{Autonomy and Debugging} \label{sec:bugs} % <<<
 
@@ -508,8 +555,7 @@ with the type~$\delta$.''
 %opt, however, for a more flexible approach. We define a \emph{sort} to be a
 %set of terms.
 %
-% >>>
-% ending <<<
+% >>>% ending <<<
 \acks
 
 The authors thank the Irish Research Council for Science, Engineering and
