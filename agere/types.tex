@@ -195,10 +195,13 @@ with content~$c$ is received from sender~$s$.
 % >>>
 \section{Multi-Sorted Predicate Logic} \label{sec:multi-sorted} % <<<
 
-In this section we recall basic notions from mathematical logic that are
-necessary to understand the next section. We also introduce notational
-conventions used in AF-Raf. Moreover, although these notions are simple,
-their definitions in literature tend to have subtle but differences.
+Agent oriented programming languages use first order logic, more
+specifically predicate logic, to represent beliefs and messages. As a
+consequence we look at how the introduction of types is managed in
+mathematical logic, and recall basic notions necessary to our
+understanding. We also introduce notational conventions used in AF-Raf.
+Moreover, although these notions are simple, their definitions in
+literature tend to have subtle but differences.
 
 A \emph{term} is a variable or a function applied to other terms.
 \begin{align}
@@ -256,13 +259,14 @@ being a special predicate.
 In AF-Raf, a \emph{belief} is a boolean ground term; in AF-Raf, a
 \emph{message} is a non-boolean ground term.
 
-The sort~$\sigma$ determines a set of ground terms, namely those of the
-form $\nu(*)$, where $\nu$ has a signature of the form $*\to\sigma$.  For
-example, the sort \textit{Bool} determines the set of terms that are
-formulas.  Algebraic data types offer an alternative way of defining sets
-of ground terms. Syntactically, a type~$\delta$ is defined by a sequence of
-patterns, each of the form $\nu(\delta_1,\ldots,\delta_n)$. For example,
-one could define the types \textit{nat}, $e$, and~$o$ as follows.
+Algebraic data types offer an alternative way of defining sets of ground
+terms. In multi-sorted predicate logic, the sort~$\sigma$ determines a set
+of ground terms, namely those of the form $\nu(*)$, where $\nu$ has a
+signature of the form $*\to\sigma$.  For example, the sort \textit{Bool}
+determines the set of terms that are formulas.  With algebraic data types,
+a type~$\delta$ is defined by a sequence of patterns, each of the form
+$\nu(\delta_1,\ldots,\delta_n)$. For example, one could define the types
+\textit{nat}, $e$, and~$o$ as follows.
 \begin{align}
 &\mathbf{type}\,\mathit{nat} =
       \mathit{zero}()
