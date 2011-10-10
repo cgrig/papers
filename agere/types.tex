@@ -129,8 +129,8 @@ was created in the early 1990s can be found in~\cite{muldoon2009towards}.
 % >>>
 \section{AF-Raf without Types} \label{sec:af-raf} % <<<
 
-AF-Raf is a new programming language we created to incorporate
-type-checking. The AF-Raf agent has two fundamental components a
+AF-Raf is a new programming language we created in the context of Agent
+Factory framework. The AF-Raf agent has two fundamental components a
 \textit{belief base} (to model the agent's view of the current state of its
 environment) and a \textit{rule base} (to model the agent's behaviour).
 
@@ -368,6 +368,11 @@ has built-in the type $\mathit{string}[\tau]$. For example, the type
 \[\mathit{string}[\mathbf{this}\;\mathbf{matches}\;\verb|"[a-z]+"|]\]
 defines the set of string literals that match the given regular expression.
 
+Enhanced with algebraic data types, the AF-Raf programming language has
+virtually endless possibilities to define new types. The primitive types
+are combined using discriminated union and Cartesian product in the manner
+described in \autoref{sec:multi-sorted}.
+
 To support the interaction with untyped languages, AF-Raf also has built-in
 the type \textit{Any}, which defines the set of all ground terms.
 
@@ -412,15 +417,17 @@ $\delta_m(a)$ to the agent identifier of agent~$a$.
 
 \subsection{The Type Checker}
 
-The type checking is performed at run-time. Being given a ground term
-(message or belief) of the form $\nu(\tau_1,\ldots,\tau_n)$, where $n>=0$
-and the type it has to match $\delta = \nu_1(\delta_1, \ldots, \delta_n)
-\mid \ldots \mid \nu_k(\delta_1, \ldots, \delta_m)$, where $k >= 1$, and
-$n,m >= 0$, the algorithm of the type checking can be defined recursively
-as follows: First check if the name $\nu$ matches any of the pattern names
-$\nu_1,\ldots, \nu_k$. If it doesn't returns \textit{FALSE}, else, checks
-if the number of arguments matches (if it doesn't returns \textit{FALSE}),
-then recursively do the type check for every argument. 
+The type checking is performed at run-time. Being given a message or a
+belief represented by a \[\mathit{ground\
+term}\quad\nu(\tau_1,\ldots,\tau_n),\ n>=0,\] and the \textit{type} it has
+to match \[\delta = \nu_1(\delta_1, \ldots, \delta_l) \mid \ldots \mid
+\nu_k(\delta_1, \ldots, \delta_m),\ k >= 1,\ l,m >= 0,\] the algorithm of
+the type checking can be defined recursively as follows: First it checks if
+the name $\nu$ matches any of the pattern names $\nu_1,\ldots, \nu_k$. If
+it doesn't returns $false$, else if the number of arguments, $n,$ matches
+the pattern's number of arguments (if it doesn't returns $false$),
+recursively does the type check for every argument. If by the end no match
+is to be found, the type checker should return a \textit{typeError}.
 
 The code in Figure~\ref{fig:Type-checker} illustrates the type checking
 algorithm for the types defined in \autoref{sec:multi-sorted}.
