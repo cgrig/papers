@@ -1,25 +1,36 @@
 open Format
 
-type type_ = (string * type_ list) list
-type term = string * term list
+type type_ =
+  | AT of (string * type_ list) list
+  | IT of (int -> bool)
+  | ST of (string -> bool)
+type term =
+  | A of string * term list
+  | I of int
+  | S of string
 
-let rec nat : type_= ["zero", []; "succ", [nat]; "add", [nat; nat]]
+let rec nat : type_= AT ["zero", []; "succ", [nat]; "add", [nat; nat]]
 let rec even : type_ =
-  ["zero", []; "succ", [odd]; "add", [even; even]; "add", [odd; odd]]
+  AT ["zero", []; "succ", [odd]; "add", [even; even]; "add", [odd; odd]]
 and odd : type_ =
-  ["succ", [even]; "add", [odd; even]; "add", [even; odd]]
+  AT ["succ", [even]; "add", [odd; even]; "add", [even; odd]]
 
-let zero : term = "zero", []
-let one : term = "succ", [zero]
-let two : term = "succ", [one]
-let three : term = "succ", [two]
-let three' : term = "add", [one; two]
+let zero : term = A ("zero", [])
+let one : term = A ("succ", [zero])
+let two : term = A ("succ", [one])
+let three : term = A ("succ", [two])
+let three' : term = A ("add", [one; two])
 
-let rec check v ts =
-  let f (v, vs) (t, ts) =
-    v = t &&
-    (try List.for_all2 check vs ts with Invalid_argument _ -> false) in
-  List.exists (f v) ts
+let all2 f xs ys =
+  try List.for_all2 f xs ys
+  with Invalid_argument _ -> false
+
+let rec check v ts = match (v, ts) with
+  | A (v, vs), AT ts ->
+      List.exists (fun (t, ts) -> v = t && all2 check vs ts) ts
+  | I v, IT ts -> ts v
+  | S v, ST ts -> ts v
+  | _ -> false
 
 let p v t = printf "@[%b@." (check v t)
 

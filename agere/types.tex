@@ -419,53 +419,84 @@ agent identifier of agent~$a$. Agent identifiers typically consist of a
 name and an IP address. To support the check for messages we add
 $\delta_m(a)$ to the agent identifier of agent~$a$.
 
-\subsection{The Type Checker}
+\subsection{Type-Checking Algorithm}
 
-The type checking is performed at run-time. Being given a message or a
-belief represented by a \[\mathit{ground\
-term}\quad\nu(\tau_1,\ldots,\tau_n),\ n>=0,\] and the \textit{type} it has
-to match \[\delta = \nu_1(\delta_1, \ldots, \delta_l) \mid \ldots \mid
-\nu_k(\delta_1, \ldots, \delta_m),\ k >= 1,\ l,m >= 0,\] the algorithm of
-the type checking can be defined recursively as follows: First it checks if
-the name $\nu$ matches any of the pattern names $\nu_1,\ldots, \nu_k$. If
-it doesn't returns $false$, else if the number of arguments, $n,$ matches
-the pattern's number of arguments (if it doesn't returns $false$),
-recursively does the type check for every argument. If by the end no match
-is to be found, the type checker should return a \textit{typeError}.
+By \emph{type-checking} we mean deciding whether a given ground term~$\tau$
+belongs to a given type~$\delta$. This is the operation performed, for
+example, on the content of a message before sending it. We include here a
+reference implementation for type-checking. We use the language OCaml, for
+it is terse.
 
-The code in Figure~\ref{fig:Type-checker} illustrates the type checking
-algorithm for the types defined in \autoref{sec:multi-sorted}.
+First, we need data structures for representing terms and types. Terms are
+either non-primitive (abstract) or primitive (integers or strings).
+\begin{verbatim}
+    type term =
+      | A of string * term list
+      | I of int
+      | S of string
+\end{verbatim}
+A non-primitive type has the shape $A(\nu,\Theta)$, where $\nu$~is a
+function name and $\Theta$~is a list of terms. A primitive type simply maps
+to the primitive types of the language in which the type-checker is
+written.
 
-\begin{figure}\footnotesize % <<<
-\begin{center}
-\begin{tabular}{c}
-\begin{lstlisting}[style=ocaml]
-type type_ = (string * type_ list) list
-type term = string * term list
+Similarly, types are either abstract or primitive.
+\begin{verbatim}
+    type type_ =
+      | AT of (string * type_ list) list
+      | IT of (int -> bool)
+      | ST of (string -> bool)
+\end{verbatim}
+An abstract type is defined by a list of patterns. Primitive types contain
+the user-defined predicates. For example, the type
+\[\mathit{integer}[\mathbf{this}\%2==0]\] is represented in the
+type-checker by
+\begin{verbatim}
+    IT (fun x -> x mod 2 = 0)
+\end{verbatim}
 
-let rec nat : type_= ["zero", []; "succ", [nat]; "add", [nat; nat]]
-let rec even : type_ =
-  ["zero", []; "succ", [odd]; "add", [even; even]; "add", [odd; odd]]
-and odd : type_ =
-  ["succ", [even]; "add", [odd; even]; "add", [even; odd]]
+Type-checking is then straightforward.
+\begin{verbatim}
+    let rec check v ts = match (v, ts) with
+      | A (v, vs), AT ts ->
+          let f (t, ts) =
+            v = t && all2 check vs ts in
+          List.exists f ts
+      | I v, IT ts -> ts v
+      | S v, ST ts -> ts v
+      | _ -> false
+\end{verbatim}
+This code first checks that the term and the type are of the same kind. For
+example, it returns false if the term is non-primitive, but the type is
+primitive. The interesting branch is the first one, which is taken when
+both the term and the type are abstract. It checks whether there exists a
+pattern (in \verb|ts|) that matches the term with the head~\verb|v| and the
+sub-terms~\verb|vs|. The function~\verb|f| processes one pattern with the
+head~\verb|t| and the sub-types~\verb|ts|. The heads must match and the
+sub-terms must match, respectively, the sub-types. The function \verb|all2|
+wraps the standard function \verb|List.for_all2| so that it returns
+\verb|false| when the number of sub-terms is different from the number of
+sub-types.
+\begin{verbatim}
+    let all2 f xs ys =
+      try List.for_all2 f xs ys
+      with Invalid_argument _ -> false
+\end{verbatim}
 
-let zero : term = "zero", []
-let one : term = "succ", [zero]
-let two : term = "succ", [one]
-let three : term = "succ", [two]
-let three' : term = "add", [one; two]
+We exhibited an algorithm, hence type-checking is decidable. However, note
+that in the worst case the running time is exponential in the depth of the
+term. Consider the types
+\begin{align}
+&\mathbf{type}\,t = x(s)\mid x(t) \\
+&\mathbf{type}\,s = x(s)\mid x(t)\mid y()
+\end{align}
+and the term
+\begin{align}
+x(x(\ldots x(z())\ldots)).
+\end{align}
+The running time in this case is~$\Theta(2^n)$, where $n$~is the number of
+times the function name~$x$ appears in the term.
 
-let rec check v ts =
-  let f (v, vs) (t, ts) =
-    v = t &&
-    (try List.for_all2 check vs ts with Invalid_argument _ -> false) in
-  List.exists (f v) ts
-\end{lstlisting}
-\end{tabular}
-\end{center}
-\caption{Type checking illustration in Ocaml}
-\label{fig:Type-checker}
-\end{figure} % >>>
 % >>>
 \section{Autonomy and Debugging} \label{sec:bugs} % <<<
 
