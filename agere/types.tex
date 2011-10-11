@@ -100,7 +100,7 @@ The Common Language Framework (CLF) is a collection of components that
 facilitates the design and implementation of diverse Agent Programming
 Languages in AF. CLF includes a generic logic framework, a planning and
 plan execution framework, a common API model based on sensors, actions and
-modules, an outline Grammar and template compiler implementation based on
+modules, an outline grammar and template compiler implementation based on
 JavaCC, and a configurable debugging tool.
 
 Currently there are four Agent Programming Languages that have been built
@@ -195,13 +195,14 @@ with content~$c$ is received from sender~$s$.
 % >>>
 \section{Multi-Sorted Predicate Logic} \label{sec:multi-sorted} % <<<
 
-Agent oriented programming languages use first order logic, more
-specifically predicate logic, to represent beliefs and messages. As a
-consequence we look at how the introduction of types is managed in
-mathematical logic, and recall basic notions necessary to our
-understanding. We also introduce notational conventions used in AF-Raf.
-Moreover, although these notions are simple, their definitions in
-literature tend to have subtle but differences.
+Our starting point is the observation that most agent oriented programming
+languages use first order logic, more specifically predicate logic terms,
+to represent beliefs and messages. As a consequence we look at how the
+introduction of types is managed in mathematical logic, and recall basic
+notions necessary to our understanding. We also introduce notational
+conventions used in AF-Raf.  Moreover, although these notions are simple,
+their definitions in literature tend to have subtle but important
+differences.
 
 A \emph{term} is a variable or a function applied to other terms.
 \begin{align}
