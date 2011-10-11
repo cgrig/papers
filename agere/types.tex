@@ -1,4 +1,4 @@
-\documentclass[preprint]{sigplanconf} % <<<
+\documentclass{sigplanconf} % <<<
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{amsthm}
@@ -40,6 +40,8 @@
   {Claudia Grigore and Rem W.~Collier}
   {University College Dublin}
   {claudia.grigore@ucdconnect.ie}
+\conferenceinfo{AGERE'11}{October 24, Portland, Oregon, USA}
+\copyrightyear{2011}
 
 % >>>
 \begin{document} % <<<
@@ -484,19 +486,10 @@ sub-types.
       with Invalid_argument _ -> false
 \end{verbatim}
 
-We exhibited an algorithm, hence type-checking is decidable. However, note
-that in the worst case the running time is exponential in the depth of the
-term. Consider the types
-\begin{align}
-&\mathbf{type}\,t = x(s)\mid x(t) \\
-&\mathbf{type}\,s = x(s)\mid x(t)\mid y()
-\end{align}
-and the term
-\begin{align}
-x(x(\ldots x(z())\ldots)).
-\end{align}
-The running time in this case is~$\Theta(2^n)$, where $n$~is the number of
-times the function name~$x$ appears in the term.
+We exhibited an algorithm, hence type-checking is decidable. As it is, the
+function \verb|check| takes exponential time in the size of the term. 
+However, with memoization its complexity is~$O(mn)$, where $m$~is the
+size of the term and $n$~is the size of all type definitions.
 
 % >>>
 \section{Autonomy and Debugging} \label{sec:bugs} % <<<
