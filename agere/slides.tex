@@ -1,4 +1,5 @@
 \documentclass{beamer}
+\usepackage{fancyvrb}
 \usepackage[T1]{fontenc}
 \usepackage[english]{babel}
 \usepackage{amsmath}
@@ -6,12 +7,12 @@
 \usepackage{graphics}
 \usepackage{listings}
 \usepackage{microtype}
-\usepackage{tikz}
 
 \usefonttheme{serif}
-\usetheme{Rochester}
+\usetheme{CambridgeUS}
 \setbeamertemplate{navigation symbols}{}
-\setbeamertemplate{background}{\includegraphics[width=\paperwidth]{back.jpg}}
+\setbeamertemplate{background}{\includegraphics[width=\paperwidth]{back1.jpg}}
+\setbeamertemplate{footline}{}
 \setbeamerfont{note page}{size*={8}{10pt}}
 %\setbeameroption{show notes}
 
@@ -27,72 +28,50 @@
   School of Computer Science\\
   University College Dublin\\
   IRCSET}
-\date[AGERE!~2011]{AGERE! -- Programming Systems, Languages, and Applications based on
-Actors, Agents, and Decentralized Control, 2011}
+\date[AGERE~2011]{Actors and aGEnts REloaded, 2011}
 
 \begin{document}
 
 \begin{frame}
   \titlepage
-\note[item]{AF-Raf.}
 \end{frame}
 
-\begin{frame}[fragile]
+\begin{frame}
 \frametitle{Agent Factory and AF-Raf}
-\begin{lstlisting}
-module Set (SetType, add, has) where
-  data SetType a = SetConstructor [a]
-  add (SetConstructor s) x = SetConstructor (x:s)
-  has (SetConstructor s) x = elem x s
-  sub (SetConstructor s) t = all (has t) s
-
-  instance Eq a => Eq (SetType a) where
-    eq s t = sub s t && sub t s
-\end{lstlisting}
-\medskip
-\begin{lstlisting}
-class Eq b where
-  eq :: b -> b -> Bool
-\end{lstlisting}
-\note[item]{Nice and compact notation.}
-\note[item]{In Java code is grouped into modules; in Haskell code is grouped into modules.}
-\note[item]{In Java each class is a type; in Haskell a module usually defines one type (here, Set defines SetType), but may define more.}
-\note[item]{The element type~$a$ is variable, like with Java generics.}
-\note[item]{To construct a set, say SetConstructor followed by a list.
-  (Lists are built in.)}
-\note[item]{This representation, however, is \emph{not} visible from outside.
-  The exposed parts are listed on the first line.}
-\note[item]{Warning: Eq is in Haskell's prelude and is slightly different.}
-\note[item]{(Eq t) says that type t is in the class Eq. A type is in the
-  class Eq if there is a function eq with the proper type.}
-\note[item]{The last two lines of the module say that if some type~$a$
-  is in the class Eq, then the type (SetType a) is also in the class Eq.}
+\begin{itemize}
+\item
+  AF is a Java-based development framework for agent-oriented applications.
+  AF facilitates integration with diverse programming languages.
+\item
+  AF-Raf is a new programming language.
+\end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]
-\frametitle{Functions as Messages}
-\begin{align*}
-f :: a \to b
-\end{align*}
-means that we send pairs of messages like
-\begin{align*}
-&f(\mathrm{call}(\alpha_1,\ldots,\alpha_n), x) &&\text{where $x::a$}\\
-&f(\mathrm{return}(),y) &&\text{where $y::b$}
-\end{align*}
-\note[item]{Approach: Let's look at some pieces of notation and try to give
-  them sensible semantics in the AOP setting.}
-\note[item]{Agents communicate thru messages. We could introduce functions
-  as a more abstract mechanism build on top of messages. The call would
-  be a message; the return would be another message.}
-\note[item]{Then $f::a\to b$ would denote such exchanges of messages---a
-  query followed by a reply.}
-\note[item]{Here I assume that the whole payload is some first-order structure.
-  With a standard like FIPA, one might like to encode call/return using
-  performatives rather than a special function-term.}
-\note[item]{Here $\alpha_1,\ldots,\alpha_n$ are agent addresses. Their role
-  will become clear a little later.}
-\note[item]{Once we agree on a structure for the message, it is natural to
-  want for the payload to be typed.}
+\frametitle{AF-Raf}
+Fundamental components: a belief base, and a rule base.
+\medskip
+\begin{Verbatim}
+include stdio
+rule State(initialized()) & Name(n) {
+    println("hello from " + n);
+}
+rule Monitoring(name, addr) {
+    println("ask " + name + " for status");
+    send(agentID(name, addr), request(status()));
+}
+rule Message(other, status(alive())) {
+    println("OK, ask again.");
+    send(other, request(status()));
+}
+\end{Verbatim}
+
+\note[item]{Beliefs are terms.}
+\note[item]{Rules are represented by: a name, a query, and an action.}
+\note[item]{Rules are evaluated at each time-step.}
+\note[item]{Evaluate the query on the current belief base}
+\note[item]{Evaluate the action on every query result: substitute the
+free variables, then execute the action.}
 \end{frame}
 
 \begin{frame}[fragile]
@@ -141,33 +120,18 @@ role Num a => Calculator a
 \end{frame}
 
 \begin{frame}[fragile]
-\frametitle{Exchange of Messages\,---\,Example}
-\begin{center}
-\begin{tikzpicture}
-\tikzset{agent/.style={rectangle,draw,minimum width=5em,minimum height=4ex}}
-\tikzset{msg/.style={draw,->,>=stealth,red}}
-\node[agent] (u) at (0,4) {$\mathit{user}$};
-\node[agent] (n) at (4,0) {$\mathit{num}$};
-\node[agent] (c) at (8,4) {$\mathit{calculator}$};
-\uncover<2>{\node[anchor=north west,red] at (u.south west) {$\mathit{evaluate}(\mathit{Times}(\mathit{Plus}(\mathit{Ct}(2),\mathit{Ct}(3)), \mathit{Ct}(4)))$};}
-\uncover<3>{\node[anchor=north,red] at (u.south) {$\mathit{evaluate}((2+3)\times4)$};}
-\uncover<4-9>{\node[anchor=north] at (u.south) {$\mathit{evaluate}((2+3)\times4)$};}
-\uncover<4>{\draw[msg] (u) -- node[above]{$\mathit{evaluate}(\mathrm{call}(\mathit{num}), (2+3)\times4$)} (c);}
-\uncover<5>{\draw[msg] (c) -- node[left]{$\mathit{add}(\mathrm{call}(), \mathit{MkPair}(2,3))$}(n);}
-\uncover<6>{\draw[msg] (n) -- node[left]{$\mathit{add}(\mathrm{return}(),5)$}(c);}
-\uncover<7>{\draw[msg] (c) -- node[left]{$\mathit{multiply}(\mathrm{call}(),\mathit{MkPair}(5,4))$} (n);}
-\uncover<8>{\draw[msg] (n) -- node[left]{$\mathit{multiply}(\mathrm{return}(),20)$}(c);}
-\uncover<9>{\draw[msg] (c) -- node[above]{$\mathit{evaluate}(\mathrm{return}(), 20)$} (u);}
-\uncover<10>{\node[anchor=north,red] at (u.south) {$20$};}
-\uncover<11>{\node[anchor=north,red] at (u.south) {$\mathit{Ct}(20)$};}
-\end{tikzpicture}
-\end{center}
+\frametitle{Functions as Messages\,---\,Example}
+Message exchange:
+\begin{align*}
+&u\to c: eval(call(n), Times(Plus(Ct(3), Ct(3)), Ct(5)))\\
+&c\to n: add(call(), MkPair(3,3))\\
+&n\to c: add(return(),6)\\
+&c\to n: multiply(call()(), MkPair(6,5))\\
+&n\to c: multiply(return(), 30)\\
+&c\to u: eval(return(), 30)
+\end{align*}
+\note[item]{}
 \end{frame}
-
-\note{(1)~Might need an ID to link \texttt{return} to corresponding \texttt{call}.\\
-(2)~It's not clear that we want \textit{user} to choose \textit{num}.
-Perhaps it's better if the choice is made one when \textit{calculator}
-starts playing the role \textit{Calculator}.}
 
 \begin{frame}[fragile]
 \frametitle{Types as Agents\,---\,Intuition}
