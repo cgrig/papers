@@ -1,0 +1,755 @@
+"tc.ml" 6 85 93 "tc.ml" 6 85 96
+type(
+  type_
+)
+ident(
+  def nat "tc.ml" 6 85 85 --
+)
+"tc.ml" 6 85 107 "tc.ml" 6 85 113
+type(
+  string
+)
+"tc.ml" 6 85 115 "tc.ml" 6 85 117
+type(
+  type_ list
+)
+"tc.ml" 6 85 107 "tc.ml" 6 85 117
+type(
+  string * type_ list
+)
+"tc.ml" 6 85 119 "tc.ml" 6 85 125
+type(
+  string
+)
+"tc.ml" 6 85 128 "tc.ml" 6 85 131
+type(
+  type_
+)
+ident(
+  int_ref nat "tc.ml" 6 85 93 "tc.ml" 6 85 96
+)
+"tc.ml" 6 85 127 "tc.ml" 6 85 132
+type(
+  type_ list
+)
+"tc.ml" 6 85 119 "tc.ml" 6 85 132
+type(
+  string * type_ list
+)
+"tc.ml" 6 85 134 "tc.ml" 6 85 139
+type(
+  string
+)
+"tc.ml" 6 85 142 "tc.ml" 6 85 145
+type(
+  type_
+)
+ident(
+  int_ref nat "tc.ml" 6 85 93 "tc.ml" 6 85 96
+)
+"tc.ml" 6 85 147 "tc.ml" 6 85 150
+type(
+  type_
+)
+ident(
+  int_ref nat "tc.ml" 6 85 93 "tc.ml" 6 85 96
+)
+"tc.ml" 6 85 141 "tc.ml" 6 85 151
+type(
+  type_ list
+)
+"tc.ml" 6 85 134 "tc.ml" 6 85 151
+type(
+  string * type_ list
+)
+"tc.ml" 6 85 106 "tc.ml" 6 85 152
+type(
+  type_
+)
+type(
+  type_
+)
+"tc.ml" 7 153 161 "tc.ml" 7 153 165
+type(
+  type_
+)
+ident(
+  def even "tc.ml" 7 153 153 --
+)
+"tc.ml" 8 176 179 "tc.ml" 8 176 185
+type(
+  string
+)
+"tc.ml" 8 176 187 "tc.ml" 8 176 189
+type(
+  type_ list
+)
+"tc.ml" 8 176 179 "tc.ml" 8 176 189
+type(
+  string * type_ list
+)
+"tc.ml" 8 176 191 "tc.ml" 8 176 197
+type(
+  string
+)
+"tc.ml" 8 176 200 "tc.ml" 8 176 203
+type(
+  type_
+)
+ident(
+  int_ref odd "tc.ml" 9 246 250 "tc.ml" 9 246 253
+)
+"tc.ml" 8 176 199 "tc.ml" 8 176 204
+type(
+  type_ list
+)
+"tc.ml" 8 176 191 "tc.ml" 8 176 204
+type(
+  string * type_ list
+)
+"tc.ml" 8 176 206 "tc.ml" 8 176 211
+type(
+  string
+)
+"tc.ml" 8 176 214 "tc.ml" 8 176 218
+type(
+  type_
+)
+ident(
+  int_ref even "tc.ml" 7 153 161 "tc.ml" 7 153 165
+)
+"tc.ml" 8 176 220 "tc.ml" 8 176 224
+type(
+  type_
+)
+ident(
+  int_ref even "tc.ml" 7 153 161 "tc.ml" 7 153 165
+)
+"tc.ml" 8 176 213 "tc.ml" 8 176 225
+type(
+  type_ list
+)
+"tc.ml" 8 176 206 "tc.ml" 8 176 225
+type(
+  string * type_ list
+)
+"tc.ml" 8 176 227 "tc.ml" 8 176 232
+type(
+  string
+)
+"tc.ml" 8 176 235 "tc.ml" 8 176 238
+type(
+  type_
+)
+ident(
+  int_ref odd "tc.ml" 9 246 250 "tc.ml" 9 246 253
+)
+"tc.ml" 8 176 240 "tc.ml" 8 176 243
+type(
+  type_
+)
+ident(
+  int_ref odd "tc.ml" 9 246 250 "tc.ml" 9 246 253
+)
+"tc.ml" 8 176 234 "tc.ml" 8 176 244
+type(
+  type_ list
+)
+"tc.ml" 8 176 227 "tc.ml" 8 176 244
+type(
+  string * type_ list
+)
+"tc.ml" 8 176 178 "tc.ml" 8 176 245
+type(
+  type_
+)
+type(
+  type_
+)
+"tc.ml" 9 246 250 "tc.ml" 9 246 253
+type(
+  type_
+)
+ident(
+  def odd "tc.ml" 7 153 153 --
+)
+"tc.ml" 10 264 267 "tc.ml" 10 264 273
+type(
+  string
+)
+"tc.ml" 10 264 276 "tc.ml" 10 264 280
+type(
+  type_
+)
+ident(
+  int_ref even "tc.ml" 7 153 161 "tc.ml" 7 153 165
+)
+"tc.ml" 10 264 275 "tc.ml" 10 264 281
+type(
+  type_ list
+)
+"tc.ml" 10 264 267 "tc.ml" 10 264 281
+type(
+  string * type_ list
+)
+"tc.ml" 10 264 283 "tc.ml" 10 264 288
+type(
+  string
+)
+"tc.ml" 10 264 291 "tc.ml" 10 264 294
+type(
+  type_
+)
+ident(
+  int_ref odd "tc.ml" 9 246 250 "tc.ml" 9 246 253
+)
+"tc.ml" 10 264 296 "tc.ml" 10 264 300
+type(
+  type_
+)
+ident(
+  int_ref even "tc.ml" 7 153 161 "tc.ml" 7 153 165
+)
+"tc.ml" 10 264 290 "tc.ml" 10 264 301
+type(
+  type_ list
+)
+"tc.ml" 10 264 283 "tc.ml" 10 264 301
+type(
+  string * type_ list
+)
+"tc.ml" 10 264 303 "tc.ml" 10 264 308
+type(
+  string
+)
+"tc.ml" 10 264 311 "tc.ml" 10 264 315
+type(
+  type_
+)
+ident(
+  int_ref even "tc.ml" 7 153 161 "tc.ml" 7 153 165
+)
+"tc.ml" 10 264 317 "tc.ml" 10 264 320
+type(
+  type_
+)
+ident(
+  int_ref odd "tc.ml" 9 246 250 "tc.ml" 9 246 253
+)
+"tc.ml" 10 264 310 "tc.ml" 10 264 321
+type(
+  type_ list
+)
+"tc.ml" 10 264 303 "tc.ml" 10 264 321
+type(
+  string * type_ list
+)
+"tc.ml" 10 264 266 "tc.ml" 10 264 322
+type(
+  type_
+)
+type(
+  type_
+)
+"tc.ml" 12 324 328 "tc.ml" 12 324 332
+type(
+  term
+)
+ident(
+  def zero "tc.ml" 13 353 353 --
+)
+"tc.ml" 12 324 342 "tc.ml" 12 324 348
+type(
+  string
+)
+"tc.ml" 12 324 350 "tc.ml" 12 324 352
+type(
+  term list
+)
+"tc.ml" 12 324 342 "tc.ml" 12 324 352
+type(
+  term
+)
+type(
+  term
+)
+"tc.ml" 13 353 357 "tc.ml" 13 353 360
+type(
+  term
+)
+ident(
+  def one "tc.ml" 14 385 385 --
+)
+"tc.ml" 13 353 370 "tc.ml" 13 353 376
+type(
+  string
+)
+"tc.ml" 13 353 379 "tc.ml" 13 353 383
+type(
+  term
+)
+ident(
+  int_ref zero "tc.ml" 12 324 328 "tc.ml" 12 324 332
+)
+"tc.ml" 13 353 378 "tc.ml" 13 353 384
+type(
+  term list
+)
+"tc.ml" 13 353 370 "tc.ml" 13 353 384
+type(
+  term
+)
+type(
+  term
+)
+"tc.ml" 14 385 389 "tc.ml" 14 385 392
+type(
+  term
+)
+ident(
+  def two "tc.ml" 15 416 416 --
+)
+"tc.ml" 14 385 402 "tc.ml" 14 385 408
+type(
+  string
+)
+"tc.ml" 14 385 411 "tc.ml" 14 385 414
+type(
+  term
+)
+ident(
+  int_ref one "tc.ml" 13 353 357 "tc.ml" 13 353 360
+)
+"tc.ml" 14 385 410 "tc.ml" 14 385 415
+type(
+  term list
+)
+"tc.ml" 14 385 402 "tc.ml" 14 385 415
+type(
+  term
+)
+type(
+  term
+)
+"tc.ml" 15 416 420 "tc.ml" 15 416 425
+type(
+  term
+)
+ident(
+  def three "tc.ml" 16 449 449 --
+)
+"tc.ml" 15 416 435 "tc.ml" 15 416 441
+type(
+  string
+)
+"tc.ml" 15 416 444 "tc.ml" 15 416 447
+type(
+  term
+)
+ident(
+  int_ref two "tc.ml" 14 385 389 "tc.ml" 14 385 392
+)
+"tc.ml" 15 416 443 "tc.ml" 15 416 448
+type(
+  term list
+)
+"tc.ml" 15 416 435 "tc.ml" 15 416 448
+type(
+  term
+)
+type(
+  term
+)
+"tc.ml" 16 449 453 "tc.ml" 16 449 459
+type(
+  term
+)
+ident(
+  def three' "tc.ml" 18 488 488 --
+)
+"tc.ml" 16 449 469 "tc.ml" 16 449 474
+type(
+  string
+)
+"tc.ml" 16 449 477 "tc.ml" 16 449 480
+type(
+  term
+)
+ident(
+  int_ref one "tc.ml" 13 353 357 "tc.ml" 13 353 360
+)
+"tc.ml" 16 449 482 "tc.ml" 16 449 485
+type(
+  term
+)
+ident(
+  int_ref two "tc.ml" 14 385 389 "tc.ml" 14 385 392
+)
+"tc.ml" 16 449 476 "tc.ml" 16 449 486
+type(
+  term list
+)
+"tc.ml" 16 449 469 "tc.ml" 16 449 486
+type(
+  term
+)
+type(
+  term
+)
+"tc.ml" 18 488 496 "tc.ml" 18 488 501
+type(
+  ('b * 'a list as 'a) -> (('b * 'c list) list as 'c) -> bool
+)
+ident(
+  def check "tc.ml" 18 488 488 --
+)
+"tc.ml" 18 488 502 "tc.ml" 18 488 503
+type(
+  'a
+)
+ident(
+  def v "tc.ml" 18 488 504 "tc.ml" 22 620 642
+)
+"tc.ml" 18 488 504 "tc.ml" 18 488 506
+type(
+  'c
+)
+ident(
+  def ts "tc.ml" 19 509 511 "tc.ml" 22 620 642
+)
+"tc.ml" 19 509 515 "tc.ml" 19 509 516
+type(
+  'd * 'a list -> 'd * 'c list -> bool
+)
+"tc.ml" 19 509 518 "tc.ml" 19 509 519
+type(
+  'd
+)
+ident(
+  def v "tc.ml" 19 509 525 "tc.ml" 21 548 616
+)
+"tc.ml" 19 509 521 "tc.ml" 19 509 523
+type(
+  'a list
+)
+ident(
+  def vs "tc.ml" 19 509 525 "tc.ml" 21 548 616
+)
+"tc.ml" 19 509 517 "tc.ml" 19 509 524
+type(
+  'd * 'a list
+)
+"tc.ml" 19 509 526 "tc.ml" 19 509 527
+type(
+  'd
+)
+ident(
+  def t "tc.ml" 20 535 539 "tc.ml" 21 548 616
+)
+"tc.ml" 19 509 529 "tc.ml" 19 509 531
+type(
+  'c list
+)
+ident(
+  def ts "tc.ml" 20 535 539 "tc.ml" 21 548 616
+)
+"tc.ml" 19 509 525 "tc.ml" 19 509 532
+type(
+  'd * 'c list
+)
+"tc.ml" 20 535 539 "tc.ml" 20 535 540
+type(
+  'd
+)
+ident(
+  int_ref v "tc.ml" 19 509 518 "tc.ml" 19 509 519
+)
+"tc.ml" 20 535 541 "tc.ml" 20 535 542
+type(
+  'd -> 'd -> bool
+)
+ident(
+  ext_ref Pervasives.=
+)
+"tc.ml" 20 535 543 "tc.ml" 20 535 544
+type(
+  'd
+)
+ident(
+  int_ref t "tc.ml" 19 509 526 "tc.ml" 19 509 527
+)
+"tc.ml" 20 535 539 "tc.ml" 20 535 544
+type(
+  bool
+)
+"tc.ml" 20 535 545 "tc.ml" 20 535 547
+type(
+  bool -> bool -> bool
+)
+ident(
+  ext_ref Pervasives.&&
+)
+"tc.ml" 21 548 557 "tc.ml" 21 548 570
+type(
+  ('a -> 'c -> bool) -> 'a list -> 'c list -> bool
+)
+ident(
+  ext_ref List.for_all2
+)
+"tc.ml" 21 548 571 "tc.ml" 21 548 576
+type(
+  'a -> 'c -> bool
+)
+ident(
+  int_ref check "tc.ml" 18 488 496 "tc.ml" 18 488 501
+)
+"tc.ml" 21 548 577 "tc.ml" 21 548 579
+type(
+  'a list
+)
+ident(
+  int_ref vs "tc.ml" 19 509 521 "tc.ml" 19 509 523
+)
+"tc.ml" 21 548 580 "tc.ml" 21 548 582
+type(
+  'c list
+)
+ident(
+  int_ref ts "tc.ml" 19 509 529 "tc.ml" 19 509 531
+)
+"tc.ml" 21 548 557 "tc.ml" 21 548 582
+call(
+  stack
+)
+type(
+  bool
+)
+"tc.ml" 21 548 605 "tc.ml" 21 548 606
+type(
+  string
+)
+"tc.ml" 21 548 588 "tc.ml" 21 548 606
+type(
+  exn
+)
+"tc.ml" 21 548 610 "tc.ml" 21 548 615
+type(
+  bool
+)
+"tc.ml" 21 548 552 "tc.ml" 21 548 616
+type(
+  bool
+)
+"tc.ml" 20 535 539 "tc.ml" 21 548 616
+type(
+  bool
+)
+"tc.ml" 22 620 622 "tc.ml" 22 620 633
+type(
+  (('b * 'c list as 'e) -> bool) -> 'c -> bool
+)
+ident(
+  ext_ref List.exists
+)
+"tc.ml" 22 620 635 "tc.ml" 22 620 636
+type(
+  'a -> 'e -> bool
+)
+ident(
+  int_ref f "tc.ml" 19 509 515 "tc.ml" 19 509 516
+)
+"tc.ml" 22 620 637 "tc.ml" 22 620 638
+type(
+  'a
+)
+ident(
+  int_ref v "tc.ml" 18 488 502 "tc.ml" 18 488 503
+)
+"tc.ml" 22 620 634 "tc.ml" 22 620 639
+call(
+  stack
+)
+type(
+  'e -> bool
+)
+"tc.ml" 22 620 640 "tc.ml" 22 620 642
+type(
+  'c
+)
+ident(
+  int_ref ts "tc.ml" 18 488 504 "tc.ml" 18 488 506
+)
+"tc.ml" 22 620 622 "tc.ml" 22 620 642
+call(
+  tail
+)
+type(
+  bool
+)
+"tc.ml" 19 509 511 "tc.ml" 22 620 642
+type(
+  bool
+)
+"tc.ml" 24 644 648 "tc.ml" 24 644 649
+type(
+  ('b * 'a list as 'a) -> (('b * 'c list) list as 'c) -> unit
+)
+ident(
+  def p "tc.ml" 26 685 685 --
+)
+"tc.ml" 24 644 650 "tc.ml" 24 644 651
+type(
+  'a
+)
+ident(
+  def v "tc.ml" 24 644 652 "tc.ml" 24 644 683
+)
+"tc.ml" 24 644 652 "tc.ml" 24 644 653
+type(
+  'c
+)
+ident(
+  def t "tc.ml" 24 644 656 "tc.ml" 24 644 683
+)
+"tc.ml" 24 644 656 "tc.ml" 24 644 662
+type(
+  (bool -> unit, Format.formatter, unit) format -> bool -> unit
+)
+ident(
+  ext_ref Format.printf
+)
+"tc.ml" 24 644 663 "tc.ml" 24 644 671
+type(
+  (bool -> unit, Format.formatter, unit) format
+)
+"tc.ml" 24 644 673 "tc.ml" 24 644 678
+type(
+  'a -> 'c -> bool
+)
+ident(
+  int_ref check "tc.ml" 18 488 496 "tc.ml" 18 488 501
+)
+"tc.ml" 24 644 679 "tc.ml" 24 644 680
+type(
+  'a
+)
+ident(
+  int_ref v "tc.ml" 24 644 650 "tc.ml" 24 644 651
+)
+"tc.ml" 24 644 681 "tc.ml" 24 644 682
+type(
+  'c
+)
+ident(
+  int_ref t "tc.ml" 24 644 652 "tc.ml" 24 644 653
+)
+"tc.ml" 24 644 672 "tc.ml" 24 644 683
+call(
+  stack
+)
+type(
+  bool
+)
+"tc.ml" 24 644 656 "tc.ml" 24 644 683
+call(
+  tail
+)
+type(
+  unit
+)
+"tc.ml" 26 685 689 "tc.ml" 26 685 691
+type(
+  unit
+)
+"tc.ml" 27 694 696 "tc.ml" 27 694 697
+type(
+  term -> type_ -> unit
+)
+ident(
+  int_ref p "tc.ml" 24 644 648 "tc.ml" 24 644 649
+)
+"tc.ml" 27 694 698 "tc.ml" 27 694 701
+type(
+  term
+)
+ident(
+  int_ref one "tc.ml" 13 353 357 "tc.ml" 13 353 360
+)
+"tc.ml" 27 694 702 "tc.ml" 27 694 705
+type(
+  type_
+)
+ident(
+  int_ref nat "tc.ml" 6 85 93 "tc.ml" 6 85 96
+)
+"tc.ml" 27 694 696 "tc.ml" 27 694 705
+call(
+  stack
+)
+type(
+  unit
+)
+"tc.ml" 28 707 709 "tc.ml" 28 707 710
+type(
+  term -> type_ -> unit
+)
+ident(
+  int_ref p "tc.ml" 24 644 648 "tc.ml" 24 644 649
+)
+"tc.ml" 28 707 711 "tc.ml" 28 707 714
+type(
+  term
+)
+ident(
+  int_ref one "tc.ml" 13 353 357 "tc.ml" 13 353 360
+)
+"tc.ml" 28 707 715 "tc.ml" 28 707 719
+type(
+  type_
+)
+ident(
+  int_ref even "tc.ml" 7 153 161 "tc.ml" 7 153 165
+)
+"tc.ml" 28 707 709 "tc.ml" 28 707 719
+call(
+  stack
+)
+type(
+  unit
+)
+"tc.ml" 29 721 723 "tc.ml" 29 721 724
+type(
+  term -> type_ -> unit
+)
+ident(
+  int_ref p "tc.ml" 24 644 648 "tc.ml" 24 644 649
+)
+"tc.ml" 29 721 725 "tc.ml" 29 721 728
+type(
+  term
+)
+ident(
+  int_ref one "tc.ml" 13 353 357 "tc.ml" 13 353 360
+)
+"tc.ml" 29 721 729 "tc.ml" 29 721 732
+type(
+  type_
+)
+ident(
+  int_ref odd "tc.ml" 9 246 250 "tc.ml" 9 246 253
+)
+"tc.ml" 29 721 723 "tc.ml" 29 721 732
+call(
+  stack
+)
+type(
+  unit
+)
+"tc.ml" 28 707 709 "tc.ml" 29 721 732
+type(
+  unit
+)
+"tc.ml" 27 694 696 "tc.ml" 29 721 732
+type(
+  unit
+)
