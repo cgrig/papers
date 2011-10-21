@@ -75,104 +75,111 @@ free variables, then execute the action.}
 \end{frame}
 
 \begin{frame}[fragile]
+\frametitle{Multi-Sorted Predicate Logic}
+\begin{align*}
+\mathit{Term}\quad\tau &::= \omega \mid \phi \\
+\mathit{Variable}\quad\omega &::= \nu \\
+\mathit{Function}\quad\phi &::= \nu(\tau_1,\ldots,\tau_n) \\
+\mathit{Name}\quad\nu
+\end{align*}
+
+A term not containing variables is said to be
+\emph{ground}.
+
+\begin{block}{Sorts}
+\begin{align*}
+\sigma, \sigma_1, \sigma_2, \sigma_3, \ldots &\in S
+\end{align*}
+
+Each function~$\nu$ has a signature
+$(\sigma_1\times\cdots\times\sigma_n)\to\sigma$.  
+\end{block}
+
+\note[item]{Function~$\nu$ is always applied to $n$~terms whose sorts must be, respectively, $\sigma_1$,~$\sigma_2$, \dots,~$\sigma_n$, and the resulting term has}
+\note[item]{A multi-sorted logic has a set~$S$ of sorts.}
+\end{frame}
+
+
+\begin{frame}[fragile]
 \frametitle{Algebraic Data Types}
-\begin{block}{Type Declarations}
-\begin{lstlisting}
-data Expr a =
-    Times (Expr a) (Expr a) | Plus (Expr a) (Expr a) | Ct a
-data Pair a = MkPair a a
-\end{lstlisting}
-\end{block}
-\begin{block}{Examples}
-{ \def\.#1({\mathit{#1}(}
-  \def\ei{\mathit{Expr}\,\mathit{Int}}
-\begin{align*}
-\.Ct(2) &::\ei\\
-\.Plus(\.Ct(2),\.Ct(3)) &::\ei \\
-\.Times(\.Plus(\.Ct(2),\.Ct(3)),\.Ct(4)) &::\ei \\
-\.MkPair(\text{``foo''}, \text{``bar''}) &:: \mathit{Pair}\,\mathit{String}
-\end{align*}}
-\end{block}
-\note[item]{Algebraic data types are a very good way of typing first-order
-  structures used in messages by many agent-platforms!}
-\note[item]{Haskell values essentially \emph{are} first-order structures.}
-\end{frame}
-
-
-\begin{frame}[fragile]
-\frametitle{Roles}
-\begin{lstlisting}
-role Num a
-  add :: Pair a -> a
-  multiply :: Pair a -> a
-
-role Num a => Calculator a
-  evaluate :: Expr a -> a
-\end{lstlisting}
-\note[item]{By analogy with type-classes, we \emph{define} a role to be
-  a set of function signatures. But we restrict the types to have exactly
-  one arrow, because that's the kind of types for which we have semantics.}
-\note[item]{An agent that plays the role Num knows how to add and how to
-  multiply terms of the type~$a$.}
-\note[item]{An agent may play the role Calculator only if it is given
-  the address of another agent that plays the role Num.}
-\note[item]{A Calculator can evaluate expressions.}
-\end{frame}
-
-\begin{frame}[fragile]
-\frametitle{Functions as Messages\,---\,Example}
-Message exchange:
-\begin{align*}
-&u\to c: eval(call(n), Times(Plus(Ct(3), Ct(3)), Ct(5)))\\
-&c\to n: add(call(), MkPair(3,3))\\
-&n\to c: add(return(),6)\\
-&c\to n: multiply(call()(), MkPair(6,5))\\
-&n\to c: multiply(return(), 30)\\
-&c\to u: eval(return(), 30)
-\end{align*}
-\note[item]{}
-\end{frame}
-
-\begin{frame}[fragile]
-\frametitle{Types as Agents\,---\,Intuition}
-\begin{block}{Idea}
-We read \[f :: a \to b\] as
-``message~$f$ is sent by agent~$a$ to agent~$b$.''
-\end{block}
-\begin{block}{Like Session Types!}
-\begin{align*}
-\mu\mathbf{t}&.\mathtt{DP}\to\mathtt{K}:d\langle\mathsf{bool}\rangle \\
-  &.\mathtt{KP}\to\mathtt{K}:k\langle\mathsf{bool}\rangle\\
-  &.\mathtt{K}\to\mathtt{C}:c\langle\mathsf{bool}\rangle\\
-  &.\mathbf{t}
-\end{align*}
-\end{block}
-\note[item]{}
-\end{frame}
-
-\begin{frame}[fragile]
-\frametitle{Types as Agents\,---\,Example}
-\begin{lstlisting}
-session ComputeBasicOperation(a, b)
-  a -> b: Pair Int
-  b -> a: Int
-
-session ComputeExpression(a, b, c)
-  c -> a: Expr Int
-  repeat ComputeBasicOperation(a, b)
-  a -> c: Int
-\end{lstlisting}
-\note[item]{}
-\end{frame}
-
-\begin{frame}
-\frametitle{Conclusions}
 \begin{itemize}
-\item \alert{algebraic data types}
-\item roles
-\item sessions
+\item
+  Types = sets of ground terms.
+\item
+  A type is defined by a sequence of patterns.
 \end{itemize}
-\note[item]{I am now implementing support for ADTs in AgentFactory.}
+\begin{align}
+&\mathbf{type}\,\mathit{nat} =
+      \mathit{zero}()
+  \mid\mathit{succ}(\mathit{nat})
+  \mid\mathit{add}(\mathit{nat},\mathit{nat}) \\
+&\mathbf{type}\,e =
+      \mathit{zero}()
+  \mid\mathit{succ}(o)
+  \mid\mathit{add}(e,e)
+  \mid\mathit{add}(o,o) \\
+&\mathbf{type}\,o =
+      \mathit{succ}(e)
+  \mid\mathit{add}(o,e)
+  \mid\mathit{add}(e,o)
+\end{align}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{AF-Raf with Types}
+\begin{itemize}
+\item
+  Primitives and binary operators.
+\item
+  Using formulas to define subtypes:
+ $\mathit{integer}[\mathbf{this}\%2==0]$ 
+\item
+  Using Algebraic Data Types for defining non-primitive types.
+\item 
+  The type Any.
+\item 
+  Type aliases: $\mathbf{type}\,\delta=\delta'$
+\end{itemize}
+\note[item]{}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Type Checking}
+\begin{verbatim}
+    type term = 
+      | A of string * term list 
+      | I of int 
+      | S of string
+    type type_ =
+      | AT of (string * type_ list) list
+      | IT of (int -> bool)
+      | ST of (string -> bool)
+
+    let rec check v ts = match (v, ts) with
+      | A (v, vs), AT ts -> let f (t, ts) =
+            v = t && all2 check vs ts in List.exists f ts
+      | I v, IT ts -> ts v
+      | S v, ST ts -> ts v
+      | _ -> false
+\end{verbatim}
+\note[item]{}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Types, Debugging, and Autonomy}
+\begin{itemize}
+\item
+  The agent has two types attached: the type of it's beliefs, and the type of
+   messages that the agent can process.
+\item
+  Types are included in the agent identifiers.
+\item
+  Debugging by preventing the illegal operations and by handling the 
+  exceptional circumstances.
+\item
+  Agent's autonomy: illegal operations are caught and turned into beliefs.
+\end{itemize}
+\note[item]{}
 \end{frame}
 
 \begin{frame}
