@@ -1,0 +1,183 @@
+\documentclass{beamer}
+\usepackage{fancyvrb}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage{amsmath}
+\usepackage{concmath}
+\usepackage{graphics}
+\usepackage{listings}
+\usepackage{microtype}
+
+\usefonttheme{serif}
+\usetheme{CambridgeUS}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{background}{\includegraphics[width=\paperwidth]{back1.jpg}}
+\setbeamertemplate{footline}{}
+\setbeamerfont{note page}{size*={8}{10pt}}
+%\setbeameroption{show notes}
+
+\lstset{language=Haskell}
+\lstset{columns=flexible}
+\lstset{keywordstyle=\rmfamily\underbar}
+\lstset{morekeywords={role,session}}
+\lstset{deletekeywords={Eq,Num}}
+
+\title{AF-Raf: An Agent-Oriented Programming Language with Algebraic Data Types}
+\author{Claudia Grigore \and Rem W.~Collier}
+\institute{
+  School of Computer Science\\
+  University College Dublin\\
+  IRCSET}
+\date[AGERE~2011]{Actors and aGEnts REloaded, 2011}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}
+\frametitle{Agent Factory and AF-Raf}
+\begin{itemize}
+\item
+  AF is a Java-based development framework for agent-oriented applications.
+  AF facilitates integration with diverse programming languages.
+\item
+  AF-Raf is a new programming language.
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{AF-Raf}
+Fundamental components: a belief base, and a rule base.
+\medskip
+\begin{Verbatim}
+include stdio
+rule State(initialized()) & Name(n) {
+    println("hello from " + n);
+}
+rule Monitoring(name, addr) {
+    println("ask " + name + " for status");
+    send(agentID(name, addr), request(status()));
+}
+rule Message(other, status(alive())) {
+    println("OK, ask again.");
+    send(other, request(status()));
+}
+\end{Verbatim}
+
+\note[item]{Beliefs are terms.}
+\note[item]{Rules are represented by: a name, a query, and an action.}
+\note[item]{Rules are evaluated at each time-step.}
+\note[item]{Evaluate the query on the current belief base}
+\note[item]{Evaluate the action on every query result: substitute the
+free variables, then execute the action.}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Algebraic Data Types}
+\begin{block}{Type Declarations}
+\begin{lstlisting}
+data Expr a =
+    Times (Expr a) (Expr a) | Plus (Expr a) (Expr a) | Ct a
+data Pair a = MkPair a a
+\end{lstlisting}
+\end{block}
+\begin{block}{Examples}
+{ \def\.#1({\mathit{#1}(}
+  \def\ei{\mathit{Expr}\,\mathit{Int}}
+\begin{align*}
+\.Ct(2) &::\ei\\
+\.Plus(\.Ct(2),\.Ct(3)) &::\ei \\
+\.Times(\.Plus(\.Ct(2),\.Ct(3)),\.Ct(4)) &::\ei \\
+\.MkPair(\text{``foo''}, \text{``bar''}) &:: \mathit{Pair}\,\mathit{String}
+\end{align*}}
+\end{block}
+\note[item]{Algebraic data types are a very good way of typing first-order
+  structures used in messages by many agent-platforms!}
+\note[item]{Haskell values essentially \emph{are} first-order structures.}
+\end{frame}
+
+
+\begin{frame}[fragile]
+\frametitle{Roles}
+\begin{lstlisting}
+role Num a
+  add :: Pair a -> a
+  multiply :: Pair a -> a
+
+role Num a => Calculator a
+  evaluate :: Expr a -> a
+\end{lstlisting}
+\note[item]{By analogy with type-classes, we \emph{define} a role to be
+  a set of function signatures. But we restrict the types to have exactly
+  one arrow, because that's the kind of types for which we have semantics.}
+\note[item]{An agent that plays the role Num knows how to add and how to
+  multiply terms of the type~$a$.}
+\note[item]{An agent may play the role Calculator only if it is given
+  the address of another agent that plays the role Num.}
+\note[item]{A Calculator can evaluate expressions.}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Functions as Messages\,---\,Example}
+Message exchange:
+\begin{align*}
+&u\to c: eval(call(n), Times(Plus(Ct(3), Ct(3)), Ct(5)))\\
+&c\to n: add(call(), MkPair(3,3))\\
+&n\to c: add(return(),6)\\
+&c\to n: multiply(call()(), MkPair(6,5))\\
+&n\to c: multiply(return(), 30)\\
+&c\to u: eval(return(), 30)
+\end{align*}
+\note[item]{}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Types as Agents\,---\,Intuition}
+\begin{block}{Idea}
+We read \[f :: a \to b\] as
+``message~$f$ is sent by agent~$a$ to agent~$b$.''
+\end{block}
+\begin{block}{Like Session Types!}
+\begin{align*}
+\mu\mathbf{t}&.\mathtt{DP}\to\mathtt{K}:d\langle\mathsf{bool}\rangle \\
+  &.\mathtt{KP}\to\mathtt{K}:k\langle\mathsf{bool}\rangle\\
+  &.\mathtt{K}\to\mathtt{C}:c\langle\mathsf{bool}\rangle\\
+  &.\mathbf{t}
+\end{align*}
+\end{block}
+\note[item]{}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Types as Agents\,---\,Example}
+\begin{lstlisting}
+session ComputeBasicOperation(a, b)
+  a -> b: Pair Int
+  b -> a: Int
+
+session ComputeExpression(a, b, c)
+  c -> a: Expr Int
+  repeat ComputeBasicOperation(a, b)
+  a -> c: Int
+\end{lstlisting}
+\note[item]{}
+\end{frame}
+
+\begin{frame}
+\frametitle{Conclusions}
+\begin{itemize}
+\item \alert{algebraic data types}
+\item roles
+\item sessions
+\end{itemize}
+\note[item]{I am now implementing support for ADTs in AgentFactory.}
+\end{frame}
+
+\begin{frame}
+\centerline{Thank you!}
+\note[item]{}
+\end{frame}
+
+\end{document}
