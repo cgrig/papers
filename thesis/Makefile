@@ -1,5 +1,5 @@
 all:
-	rubber --pdf --force plan thesis
+	rubber --pdf --force thesis
 
 clean:
-	rubber --pdf --clean plan thesis
+	rubber --pdf --clean thesis
