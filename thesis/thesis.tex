@@ -1,0 +1,1042 @@
+\documentclass[a4paper,12pt,oneside]{book} %<<<
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{arev}
+\usepackage[T1]{fontenc}
+\usepackage{microtype}
+\usepackage{xcolor}
+
+\usepackage{hyperref}
+
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}
+\theoremstyle{plain}
+\newtheorem{proposition}{Proposition}
+\newcommand{\todo} [1] {[\textcolor {red}{TODO}: #1]}
+
+% PDF settings <<<
+\definecolor{darkblue}{rgb}{0,0,0.4}
+\definecolor{verylightgray}{rgb}{0.95,0.95,0.95}
+\hypersetup{colorlinks,linkcolor=darkblue,citecolor=darkblue,urlcolor=darkblue}
+%\hypersetup{colorlinks=false}
+\hypersetup{
+  pdfauthor={Claudia V. Grigore},
+  pdftitle={Supporting Agent Systems in the Programming Language}}
+% >>> 
+% >>>
+\begin{document} % <<<
+\title{Supporting Agent Systems in the Programming Language} % <<<
+\author{Claudia V. Grigore}
+\date{July 2013}
+\maketitle
+
+\pagenumbering{roman}
+\tableofcontents
+\listoffigures
+\listoftables
+% >>>
+\baselineskip=21.75pt
+\parskip=3pt plus 3pt minus 3pt
+\chapter*{Acknowledgements} % <<<
+
+% >>>
+\chapter*{Abstract} % <<<
+
+% >>>
+\chapter{Introduction}\label{ch:intro} % <<<
+\pagenumbering{arabic}
+
+Research in multi-agent systems thrived since $\sim2000$.  
+Very recently, it began to impact the practice of programming.
+
+Complex systems are often viewed as being hierarchically decomposed into layers
+of subsystems that interact with one another in an inherently decentralized
+manner. It is increasingly accepted that this natural lack of an upper layer of
+control, together with the tendency within such systems for interaction to
+occur between components that are situated within the same layer has a close
+synergy with the concept of a multi-agent
+system~\cite{Jennings00agent-orientedsoftware}. Multi-agent systems promote a
+view of distributed systems as a collection of intelligent (agent) components
+that are autonomous and which interact in a way that is highly disciplined and
+well defined. Further, through this interaction, agents are able to cooperate
+as necessary, allowing competing system objectives to be realized in a context
+sensitive fashion.
+
+While the above argument presents a strong case for the use of a multi-agent
+systems approach in the design and implementation of complex distributed
+systems, it is not enough. It must be supplemented through the provision of
+appropriate programming languages, toolkits, and software engineering
+methodologies that support and facilitate the adoption of an agent-oriented
+perspective. Further, it is paramount that the use and value of these artifacts
+be demonstrated and validated through their extensive use within a range of
+real world application domains. In response to this, the multi-agent systems
+research community has created a range of implementation environments, such as
+JADE~\cite{DBLP:books/sp/map2005/BellifemineBCP05}, Agent
+Factory~\cite{collier1999agent}, ZEUS~\cite{DBLP:conf/agents/NwanaNLC99},
+together with a nascent set of standards developed by the Foundation for
+Intelligent Physical Agents (FIPA) , and a diverse set of software engineering
+methodologies, such as GAIA~\cite{DBLP:journals/aamas/WooldridgeJK00}, Agent
+UML~\cite{bauer2001agent}, MaSE~\cite{deloach2001analysis}, and
+Prometheus~\cite{DBLP:conf/atal/PadghamW02}.
+
+One approach to implement agent systems is Agent Oriented Programming (AOP).
+This relatively new paradigm "promotes a societal view of computation, in which
+multiple agents interact with one another"~\cite{DBLP:journals/ai/Shoham93}.
+The agent is the fundamental unit of computation, analysed and controlled using
+mental terms.  The state of an agent is restricted to mental components, such
+as beliefs, commitments, capabilities. AOP tries to match the programmer
+intuition to the formal concepts in the same way the Object Oriented
+Programming (OOP) paradigm did before.
+
+AOP can be viewed as a specialisation of OOP. OOP sees the computational system
+as made up of units that are able to communicate using messages. AOP makes this
+framework more specific by restricting the state of the unit to consist only of
+mental components, and by restricting the types of valid messages to those
+specified in an underlying agent communication language.
+
+A number of AOP languages have been developed to date, such as
+Agent-0~\cite{DBLP:journals/ai/Shoham93},
+AgentSpeak(L)~\cite{DBLP:conf/maamaw/Rao96},
+2APL~\cite{DBLP:journals/aamas/Dastani08},
+3APL~\cite{DBLP:conf/promas/DastaniRDM03}, and
+AFAPL~\cite{DBLP:conf/seke/CollierOR04}. The research in this area has focused
+on clearly defining the reasoning process, linking these processes to the
+agents environment, and generally trying to improve the usability of the
+languages via better tool support. 
+
+Agent Oriented Software Engineering aims to offer methodologies and toolkits
+for structuring agent development. A new trend in AOSE methodologies is to support organisational design for building dynamic agent organisations.  
+
+This approach will be crucial for domains like grid and ubiquitous
+computing~\cite{luck2005agent}. The concept of organisation is studied in
+several disciplines including sociology, economy and psychology. AOSE tries to
+integrate theories that were developed in other disciplines, such as the Role
+Theory~\cite{biddle1986recent}, and their associated concepts, to model agent
+organisation and to structure interactions between the agents inside of the
+organisation. One example in this direction is AALAADIN, a meta-model of
+multi-agent systems~\cite{ferber1998meta}.
+
+Implementation-level support for these concepts is a research area. One
+approach is to design organisational models and frameworks such as BRAIN, Moise+, GAIA, and MaSE.
+
+MaSE methodology \cite{deloach2004mase} is an organisational approach to
+analysis and design of MAS. It also supports the implementation through the
+associated AgentTool development system. Both MaSe and AgentTool are
+independent of any particular agent architecture, programming language or
+communication framework. The Analysis phase define system goals from a set of
+requirements and then define the roles necessary to meet the goals. A role
+consists of a number of tasks, where a task corresponds to a goal. Each task
+has its own thread of control, but may communicate with each other. The Design
+phase assigns roles to agent classes, identify and constructs conversations
+(coordination protocols between two agents), define the internal agent
+architecture and the final system structure. 
+
+Gaia \cite{DBLP:journals/aamas/WooldridgeJK00} is a two phased methodology for
+analysing and designing multiagent systems. The analysis phase aims to collect
+and organise specifications. This includes identification of organisational
+goals, expected global behaviour, and decomposition in sub-organisations. Its
+output consists of a model of the environment, a preliminary model of roles, a
+preliminary model of interactions, and organisational rules. The design phase
+is split in two: the architectural design and the detailed design. The
+architectural design includes the definition of the organisational structure in
+terms of its topology and control regime, as well as the completion of the
+preliminary role and interaction models. The detailed design phase covers the
+definition of the agent model based on the role model and the definition of the
+services model, where services correspond to blocks of activity required to
+realise agent's roles.
+
+The Moise+ \cite{DBLP:conf/sbia/HubnerSB02} organisational model is the first one to
+join roles with plans. It consists of three main dimensions: structural,
+functional and deontic. Roles represent the structural, plans are the
+functional, and the relations between roles and plans represent the deontic
+dimension. Saci-Moise+, Jason-Moise+ and Moise+JavaAPI frameworks are
+implementations of the Moise+ meta-model.
+
+The BRAIN Framework \cite{DBLP:conf/coopis/CabriLZ03} supports the development
+of interactions in agent-based applications, using the concept of role. It
+consists of (1)~an interaction model, (2)~an XML-based notation to express
+roles (XRole), and (3)~an interaction infrastructure implementation
+(Rolesystem). A role is defined as a set of capabilities and has an expected
+behaviour. Capabilities are activities that an agent can perform.
+
+A different approach to support the implementation of organisational concepts would be to develop custom programming languages, in the context of Agent Oriented Programming. The majority of AOP
+languages are based on theories from mid-nineties and do not reflect the
+increased importance of organisations in multi-agent system design.
+\subsubsection{Hypotheses and Objectives}
+Agent Oriented Programming, the relatively new programming paradigm, adopts a
+social metaphor for the design and implementation of software systems.
+Specifically, software systems are viewed as communities of software entities,
+known as agents, that interact with one another in order to solve problems that
+are beyond their individual capabilities. It is widely accepted that this
+approach is well suited to problem domains in which there is no global system
+control, data is decentralised and computation is asynchronous.
+
+Agent-oriented methodologies emphasize organisational concepts, which give
+structure to large agent systems. Organisational frameworks, however, put
+an extra burden on developers, who need to master both an agent-oriented
+programming language and the framework itself. We believe that the
+organisation of agent systems should be directly supported by features of
+the programming language.
+
+Even though organisations are increasingly seen as an important concept in
+agent oriented design, little work has been done on applying organisational
+concepts to AOP languages. Integrating the concept of roles offers
+significant advantages. They are a natural metaphor for describing the overall
+system behaviour, and they increase the adaptability and flexibility of agent
+systems by offering the appropriate level of granularity. Roles define a set of
+related behaviours, encapsulating them realises a separation of concerns and
+promotes information hiding.
+
+
+The primary hypothesis of my research is that the integration of roles, based
+on sociological Role Theory, will improve the readability and usability of AOP
+languages. The objective is to develop a novel AOP language that employs roles, based on the existing Agent Factory framework.
+
+
+\subsubsection{Methodology}
+In order to achieve this objective I have adopted the following approach:
+
+\begin{itemize}
+\item attending courses, seminaries, and summer schools on various agent topics
+to broad my view and understanding of the area.
+
+\item reading and summarising papers on agents, roles, and organisations, for a
+deeper understanding of the specific problem of integrating organisational
+concepts into AOP languages.
+
+\item solving concrete problems to attain a better understanding of MAS
+toolkits and AOP languages.
+
+\item taking inspiration from other programming languages in order to device appropriate programming language features to support organisational concepts that are discussed in the literature on agent-oriented methodologies and frameworks.
+
+\end{itemize}
+
+\subsubsection{Progress to date}
+
+\begin{itemize}
+\item attended courses
+  \begin{itemize}
+  \item Principles of Programming Languages
+  \item Object Oriented Design
+  \item Social Networks and Agent-based Simulation
+  \item Research Skills
+  \item Research Seminaries
+  \end{itemize}
+\item attended the EASSS 2009 summer school in Torino
+\item explored the use of Social Network Analysis techniques in agent systems
+\item 
+  researched the current state of the art in the area of organisations in MAS:
+  theoretical models of organisations and implementations
+
+\item understanding MAS toolkits by solving problems
+\item presentation on MAS in UCD's Research Seminar Series
+\item
+  I took inspiration from other programming languages, in special from the
+  functional programming language Haskell, and proposed three language features
+  to support organisational concepts, namely: (1) algebraic data types, which
+  constrain the content of the messages, (2) roles, which constrain how
+  particular agents interact, and (3) sessions, which describe slices of the
+  global interactions in the agent systems. 
+  
+\item 
+  having specified and started to implement the new AF-Raf programming
+  language. AF-Raf supports directly the organisation of agent systems through
+  programming language features including algebraic data types, roles, and
+  sessions.
+
+\item publications to date
+  \begin{itemize}
+  \item ``Supporting Agent Systems in the Programming Language", COIN @ WI-IAT 2011
+  \item ``AF-Raf: An Agent-Oriented Programming Language with Algebraic Data Types", AGERE @ Splash 2011
+  \end{itemize}
+\end{itemize}
+
+
+
+\section{Problem Statement}
+\section{Conceptual Framework}
+\todo{What are Multi Agent Systems(MAS)? interacting intelligent agents within 
+an environment.}
+
+\todo{advantages of MAS approach}
+
+\todo{Practical applications: online trading, social simulations, wireless 
+communication}
+
+\todo{frameworks, development tools}
+
+\todo{agent oriented programming}
+\subsection{The Agent Factory Framework} \label{sec:af} 
+
+Agent Factory~\cite{collier2002agent} is an open-source Java-based
+development framework that provides support for the development and
+deployment of agent-oriented applications.
+
+Agent Factory (AF) provides a generic run-time environment for deploying
+agent-based systems that is based on the FIPA standards~\cite{poslad2000fipa}.
+Central to this environment is a configurable agent platform that supports the
+concurrent deployment of heterogeneous agent types employing a range of agent
+architectures and interpreters. AF also supports the deployment of
+platform-level resources in the form of platform services that are shared
+amongst agents, along with monitoring and inspection tools that aid the
+developer in debugging their implementations. 
+
+The Common Language Framework (CLF) is a collection of components that
+facilitates the design and implementation of diverse Agent Programming
+Languages in AF. CLF includes a generic logic framework, a planning and
+plan execution framework, a common API model based on sensors, actions and
+modules, an outline grammar and template compiler implementation based on
+JavaCC, and a configurable debugging tool.
+
+Currently there are four Agent Programming Languages that have been built
+using the CLF: 
+\begin{enumerate}
+
+\item \textit{AFAPL}, a reimplementation of the original Agent Factory
+agent programming language that is based on commitment rules;
+
+\item \textit{AF-AgentSpeak}, an implementation of the AgentSpeak language based on Jason;
+
+\item \textit{AF-TeleoReactive}, an implementation of Nilsson's teleo-reactive
+programming model; 
+
+\item and our new \textit{AF-Raf}, described in the next section.
+\end{enumerate}
+
+Agent Factory is fully integrated with Eclipse in a way that simplifies
+the task of providing support for new languages and architectures.
+
+For further details on Agent Factory the reader is directed
+to~\cite{collier2009modeling}. The Common Language Framework is described
+in~\cite{russell2011af}. Also, a discussion on the evolution of Agent Factory since it
+was created in the early 1990s can be found in~\cite{muldoon2009towards}.
+
+\subsection{Multi-Sorted Predicate Logic} \label{sec:multi-sorted} 
+
+Our starting point is the observation that most agent oriented programming
+languages use first order logic, more specifically predicate logic terms,
+to represent beliefs and messages. As a consequence we look at how the
+introduction of types is managed in mathematical logic, and recall basic
+notions necessary to our understanding. We also introduce notational
+conventions used in AF-Raf.  Moreover, although these notions are simple,
+their definitions in literature tend to have subtle but important
+differences.
+
+A \emph{term} is a variable or a function applied to other terms.
+\begin{align}
+\mathit{Term}\quad\tau &::= \omega \mid \phi \\
+\mathit{Variable}\quad\omega &::= \nu \\
+\mathit{Function}\quad\phi &::= \nu(\tau_1,\ldots,\tau_n) \\
+\mathit{Name}\quad\nu
+\end{align}
+In AF-Raf, term names are strings.  Because term names uniquely identify a
+variable or a function we will say ``the function~$\nu$'' rather than ``the
+function with name~$\nu$.'' A term not containing variables is said to be
+\emph{ground}.
+
+\begin{remark}
+Ground terms are essentially trees of strings.
+\end{remark}
+
+A multi-sorted logic has a set~$S$ of sorts.  We use the letter~$\sigma$ to
+denote sorts.
+\begin{align}
+\sigma, \sigma_1, \sigma_2, \sigma_3, \ldots &\in S
+\end{align}
+Each function~$\nu$ has a signature
+$(\sigma_1\times\cdots\times\sigma_n)\to\sigma$.  Function~$\nu$ is always
+applied to $n$~terms whose sorts must be, respectively,
+$\sigma_1$,~$\sigma_2$, \dots,~$\sigma_n$, and the resulting term has
+sort~$\sigma$. We say that $\nu$~has \emph{arity}~$n$. \emph{Constants} are
+functions with arity~$0$.
+
+Typically, in mathematical logic, the set~$S$ of sorts and the function
+signatures are required to satisfy further constraints. \textit{Bool} must
+be one of the sorts. \emph{Formulas} are terms with sort \textit{Bool}.
+The argument sorts ($\sigma_1$,~$\sigma_2$, \dots,~$\sigma_n$) either are
+all \textit{Bool}, or none is \textit{Bool}.  If the argument sorts are
+\textit{Bool}, then the result sort~$\sigma$ must also be \textit{Bool},
+and $\nu$ is said to be a \emph{boolean connective}.  If the argument sorts
+are not \textit{Bool} and the result sort~$\sigma$ is \textit{Bool}, then
+$\nu$ is said to be a \emph{predicate}.  Agent~Factory has these
+constraints and AF-Raf inherits them. In addition, AF-Raf uses an infix
+notation (described later) for boolean connectives, letter strings starting
+with uppercase for predicate names, and letter strings starting with
+lowercase for other function names and for variable names.
+
+\begin{remark}
+The definitions given here are in-between what applied computer scientists
+tend to prefer and what pure logicians tend to prefer.  Computer scientists
+work with \emph{expressions} (rather than terms and formulas) and do not
+have constraints on function signatures with respect to booleans.
+Logicians, on the other hand, do have these constraints and, moreover,
+define terms in such a way that formulas are not terms, and predicates are
+not functions. Moreover, logicians single out equality between terms as
+being a special predicate.
+\end{remark}
+
+In AF-Raf, a \emph{belief} is a boolean ground term; in AF-Raf, a
+\emph{message} is a non-boolean ground term.
+
+Algebraic data types offer an alternative way of defining sets of ground
+terms. In multi-sorted predicate logic, the sort~$\sigma$ determines a set
+of ground terms, namely those of the form $\nu(*)$, where $\nu$ has a
+signature of the form $*\to\sigma$.  For example, the sort \textit{Bool}
+determines the set of terms that are formulas.  With algebraic data types,
+a type~$\delta$ is defined by a sequence of patterns, each of the form
+$\nu(\delta_1,\ldots,\delta_n)$. For example, one could define the types
+\textit{nat}, $e$, and~$o$ as follows.
+\begin{align}
+&\mathbf{type}\,\mathit{nat} =
+      \mathit{zero}()
+  \mid\mathit{succ}(\mathit{nat})
+  \mid\mathit{add}(\mathit{nat},\mathit{nat}) \\
+&\mathbf{type}\,e =
+      \mathit{zero}()
+  \mid\mathit{succ}(o)
+  \mid\mathit{add}(e,e)
+  \mid\mathit{add}(o,o) \\
+&\mathbf{type}\,o =
+      \mathit{succ}(e)
+  \mid\mathit{add}(o,e)
+  \mid\mathit{add}(e,o)
+\end{align}
+We make the following observations.
+\begin{enumerate}
+\item
+  Function names may appear in multiple definitions. For example,
+  \textit{zero} appears in the definition of~$\mathit{nat}$ and also in the
+  definition of~$e$. In particular, the term $\mathit{zero}()$ belongs both
+  to the set of ground terms defined by the type~$\mathit{nat}$ and to the
+  one defined by the type~$e$.
+\item
+  Function names may appear multiple times in the same definition. For
+  example, \textit{add} appears twice in the definition of~$e$. (This
+  property distinguishes our types from polymorphic
+  variants~\cite{garrigue1998}.)
+\item
+  Type definitions may be recursive or mutually recursive. For example,
+  $\mathit{nat}$~appears within the definition of~$\mathit{nat}$.
+\end{enumerate}
+The set of ground terms corresponding to type~$\mathit{nat}$ is the following.
+\begin{equation}
+\begin{aligned}
+\{\,&\mathit{zero}(), \\
+    &\mathit{succ}(\mathit{zero}()),
+        \mathit{succ}(\mathit{succ}(\mathit{zero}())), \ldots \\
+    &\mathit{add}(\mathit{zero}(), \mathit{zero}()),
+        \mathit{add}(\mathit{zero}(), \mathit{succ}(\mathit{zero}())),
+        \ldots \\
+    &\mathit{succ}(\mathit{add}(\mathit{zero}(), \mathit{zero}())),
+        \ldots \\
+    &\ldots\, \}
+\end{aligned}
+\end{equation}
+Moreover, $e$~and~$o$ partition~$\mathit{nat}$.
+
+\begin{proposition}
+Algebraic data types (as defined above) are strictly more expressive than
+sorts. More precisely, (1)~all sets of ground terms that can be defined by
+sorts can also be defined by algebraic data types, and (2)~there are pairs
+of sets of ground terms that can be defined by algebraic data types but
+cannot be defined by sorts.
+\end{proposition}
+
+\begin{proof}
+For~(1), we define a type~$\delta(\sigma)$ for each sort~$\sigma$ as
+follows: For each signature $\nu:(\sigma_1,\ldots,\sigma_n)\to\sigma$ we
+add a pattern $\nu(\delta(\sigma_1),\ldots,\delta(\sigma_n))$. It is easy
+to see, by structural induction, that the sort~$\sigma$ and the
+type~$\delta(\sigma)$ define the same sets of ground terms.
+
+For~(2), note that, given a fixed set of function signatures, the sets of
+ground terms defined by distinct sorts are disjoint. In the previous
+example, however, the sets of ground terms defined by the types
+$\mathit{nat}$~and~$e$ have (at least) a common element, namely
+$\mathit{zero}()$.
+\end{proof}
+
+Finally, let us note that there are sets of ground terms for which it is
+undecidable whether a given term is an element.  (A classic result of
+computability theory is that there are undecidable sets of bit-strings, and
+sorted ground terms can encode bit-strings.) In particular, there exist
+sets of ground terms that cannot be defined using algebraic data types.
+
+\subsection{Haskell Type Classes}
+
+This section reviews Haskell type classes, because they later inspire our
+notion of `role', and Haskell modules, so that it is clear they are very
+different from type classes. We use sets and equality as examples because
+we assume all readers are familiar with these basic mathematical concepts.
+
+% modules
+%  - small example
+%  - information hiding and encapsulation
+%    (exact impl may change; but it is ONE)
+%  - separate compilation
+%  - analogy with Java classes
+
+Haskell modules are often used to implement abstract data types such as
+sets.  To illustrate the main features of modules in little space, the code
+in Figure~\ref{fig:haskell} is contrived.  The module \textit{Set} contains
+the type~$T$ and the functions \textit{add}, \textit{has}, and
+\textit{sub}. The \textbf{module} line hides \textit{sub} by not mentioning
+it. The names and types of the exported functions \textit{add} and
+\textit{has} are visible from outside the module, but their
+implementations, which are to the right of~$=$, are hidden.  Similarly, the
+type name~$T$ is visible from outside, but the value constructor~$V$ is
+not. For example, the set $\{1,2\}$ may be represented by the value
+$V[2,1,2]$, but this is not known to the users of the module \textit{Set}.
+The names and types visible from outside constitute the module's
+\emph{interface}.
+
+\begin{figure}\footnotesize % <<<
+\begin{verbatim}
+-- built-in and standard library
+class Eq b where
+  eq :: b -> b -> Bool
+instance Eq Int where ...
+elem x [] = False
+elem x (y:ys) = eq x y || elem x ys
+all p [] = True
+all p (x:xs) = p x && all p xs
+
+-- file set.hs
+module Set (T, add, has) where
+  data T a = V [a]
+  add (V s) x = V (x:s)
+  has (V s) x = elem x s
+  sub (V s) t = all (has t) s
+
+  instance Eq a => Eq (T a) where
+    eq s t = sub s t && sub t s
+\end{verbatim}
+\caption{Haskell type class \textit{Eq} and module \textit{Set}}
+\label{fig:haskell}
+\end{figure} % >>>
+
+% type classes
+%  - continue example
+%  - ad-hoc polymorphism: multiple implementations with the same interface
+%  - analogy with Java interfaces
+
+The type class \textit{Eq} contains types whose values can be compared for
+equality. To make a type belong to the class \textit{Eq} one must write an
+instance declaration that provides an implementation for a function
+named~$eq$. The \textbf{instance} declaration in module \textit{Set} says
+that the type constructor~$T$ transforms members of \textit{Eq} into
+members of \textit{Eq}. For example, $T(T\,\mathit{Int})$ is in \textit{Eq}
+because \textit{Int} is in \textit{Eq.}
+
+In general, modules are responsible with information
+hiding~\cite{DBLP:journals/cacm/Parnas72a} and encapsulation.  On the other
+hand, type classes are an elegant mechanism to provide ad-hoc polymorphism,
+also known as overloading~\cite{DBLP:conf/popl/WadlerB89}: The same name
+refers to different implementations depending on the context.  Just as
+Haskell type classes are different from Haskell modules, the roles we
+introduce later are different from existing 2APL
+modules~\cite{dblp:conf/prima/dastanims08}.
+
+\subsection{Session Types}
+
+\section{Literature Review}
+
+MD Travers, 1996, Programming with agents: xenia.media.mit.edu/~mt/thesis/mt-thesis-Contents.html
+
+% >>>
+\chapter{Research Findings}\label{ch:method} % <<< 
+\section{The AF-Raf programming Language} % <<<
+
+AF-Raf is a new agent oriented programming language I specifically
+developed to incorporate the support for organising multiagent
+systems at the language level. 
+
+The main reason for choosing to build it from scratch is simplicity.  AF-Raf
+has a very simple syntax, which makes easier the addition of new functionality
+without making it to difficult to use.
+
+One important feature of the AF-Raf programming language is its integration 
+with the AgentFactory development framework, which provides support for the 
+development and deployment of agent-based systems.
+
+The main particularity of AF-Raf, that makes it unique among all other
+agent oriented programming languages is that, even though it is built upon
+the agent oriented conceptual framework, it also draws inspiration from
+functional languages.
+
+AF-Raf has two fundamental components a \textit{belief base}
+and a \textit{rule base}. The belief base models the agent's view of the
+current state of its environment and the rule base models the agent's
+behaviour.
+
+Beliefs are terms, where a term denotes an expression that can be obtained from
+either a constant symbol, a variable or a function symbol. Rules are
+represented by a name (optional), a query and an action.  The code in
+Figure~\ref{fig:AF-Raf} illustrates an AF-Raf agent.
+
+
+\begin{figure}\footnotesize % <<<
+\begin{verbatim}
+include stdio
+
+rule State(initialized()) & Name(n) {
+      println("hello from " + n);
+}
+
+rule Monitoring(name, addr) {
+      println("ask " + name + " for status");
+          send(agentID(name, addr), request(status()));
+}
+
+rule Message(other, status(alive())) {
+      println("OK, ask again.");
+          send(other, request(status()));
+}
+
+rule Message(other, status()) {
+      println("Oh, someone wants me alive!");
+          send(other, inform(status(alive())));
+}
+\end{verbatim}
+\caption{The code of an AF-Raf agent}
+\label{fig:AF-Raf}
+\end{figure} % >>>
+
+The rules are evaluated at each time-step. The first stage of evaluating a
+rule is to evaluate the query on the current belief base. The result is a
+set of query results. If the set is not empty, the action is then evaluated
+for every query result. A particular query result says with what term to
+substitute each free variable in the action. In other words, a query result
+is a set of bindings that covers all the free variable in the action (of
+the rule). The first step of evaluating the action is to apply these
+substitutions. The next step is to execute it.
+
+An action is either a simple action or a composed action. Executing a
+simple action means executing a piece of associated Java code. Examples of
+simple actions include sending a message (\textit{send}), logging a string
+(\textit{println}), and adopting a belief (\textit{adopt}).  Composed
+actions, also referred to as plans, include sequence and while loops.
+
+Sensors are pieces of Java code that are run at each time-step. They are
+typically used to update the belief base according to the changes in the
+environment. For example, there is a standard sensor (defined in
+\texttt{stdio}) that adds a belief $\mathit{Message}(s,c)$ when a message
+with content~$c$ is received from sender~$s$. % >>>
+
+\section{Algebraic Data Types and Type Checking} % <<<
+
+\subsection{Algebraic Data Types} % <<<
+\subsubsection{Types in AF-Raf}
+
+AF-Raf contributes to the AOP languages domain by being the first agent
+oriented programming language to introduce types and type-checking. From a
+practical point of view, our effort tries to improve upon the following
+scenario.
+
+\paragraph{Bad Scenario.}
+
+Agent~$a$ sends message $\tau_{ab}$ to agent~$b$. Agent~$b$ stores a
+subterm~$\tau_b$ of~$\tau_{ab}$ into its belief base. Later, when some
+other condition is satisfied, agent~$b$ extracts a subterm~$\tau_{bc}$ of
+term~$\tau_b$ and sends it to agent~$c$. Agent~$c$ extracts a
+subterm~$\tau_c$ of term~$\tau_{bc}$ and stores it in its belief base.
+Later, when some other condition is satisfied, agent~$c$ extracts a
+subterm~$\tau$ of~$\tau_c$. Agent~$c$ expects $\tau$ to be an integer
+literal, but instead $\tau$ is a string literal. Agent~$c$ notices the
+problem, but many things happened since agent~$a$ sent an invalid message.
+
+The goal of AF-Raf's dynamic typing is to notice such errors early.
+
+For this purpose, each agent~$a$ has two attached types. The type $\delta_b(a)$
+represents the type of $a$'s beliefs and the type $\delta_m(a)$ represents the
+type of messages that $a$ can process. These types are selected when the agent
+is created.  
+
+Whenever a belief $\tau$ is added to $a$'s belief base, Agent~Factory checks
+whether that belief is in the set of terms defined by the $a$'s belief type;
+that is, the expression $\tau:\delta_b(a)$ is evaluated.  Whenever a
+message~$\tau$ is sent to agent~$a$, the expression $\tau:\delta_m(a)$ is
+evaluated, to check whether that message complies to the type of messages that
+agent~$a$ can process. In order to send a message to agent~$a$, other agent
+need the agent identifier of agent~$a$. Agent identifiers typically consist of
+a name and an IP address. To support the check for messages we add
+$\delta_m(a)$ to the agent identifier of agent~$a$.
+
+\paragraph{Algebraic Data Types, Primitive Types, and Aliases.}
+
+In AF-Raf, a \emph{belief} is a boolean ground term; in AF-Raf, a
+\emph{message} is a non-boolean ground term.
+
+Algebraic data types offer an alternative way of defining sets of ground
+terms. In multi-sorted predicate logic, the sort~$\sigma$ determines a set
+of ground terms, namely those of the form $\nu(*)$, where $\nu$ has a
+signature of the form $*\to\sigma$.  For example, the sort \textit{Bool}
+determines the set of terms that are formulas.  With algebraic data types,
+a type~$\delta$ is defined by a sequence of patterns, each of the form
+$\nu(\delta_1,\ldots,\delta_n)$. For example, one could define the types
+\textit{nat}, $e$, and~$o$ as follows.
+\[\mathbf{type}\,\mathit{nat} =
+  \mathit{zero}()
+  \mid\mathit{succ}(\mathit{nat})
+  \mid\mathit{add}(\mathit{nat},\mathit{nat})\] 
+\[\mathbf{type}\,e =
+  \mathit{zero}()
+  \mid\mathit{succ}(o)
+  \mid\mathit{add}(e,e)
+  \mid\mathit{add}(o,o)\]
+\[\mathbf{type}\,o =
+  \mathit{succ}(e)
+  \mid\mathit{add}(o,e)
+  \mid\mathit{add}(e,o)\]
+
+In Agent~Factory, string literals and integer literals are
+also terms, and AF-Raf inherits this decision. AF-Raf has
+predefined corresponding primitive types \textit{string} and
+\textit{integer}. Moreover, any Java type is suitable to be an AF-Raf
+primitive type.
+
+Binary operators such as $+$ are also inherited from Agent~Factory. From
+the point of view of type-checking, an expressions like $2+3$ is equivalent
+to $+(2,3)$. Standard conventions on precedence and associativity are
+obeyed.
+
+More interestingly, AF-Raf has built-in the type $\mathit{integer}[\tau]$,
+where $\tau$ is a formula that may use the special variable \textbf{this}.
+For example, the type \[\mathit{integer}[\mathbf{this}\%2==0]\] defines the
+set of ground terms $\{\,\ldots,-4,-2,0,2,4,\ldots\,\}$. Similarly, AF-Raf
+has built-in the type $\mathit{string}[\tau]$. For example, the type
+\[\mathit{string}[\mathbf{this}\;\mathbf{matches}\;\verb|"[a-z]+"|]\]
+defines the set of string literals that match the given regular expression.
+
+Enhanced with algebraic data types, the AF-Raf programming language has
+virtually endless possibilities to define new types. The primitive types
+are combined using discriminated union and Cartesian product in the manner
+described above.
+
+To support the interaction with untyped languages, AF-Raf also has built-in
+the type \textit{Any}, which defines the set of all ground terms.
+
+Finally, one may define type aliases.
+$\mathbf{type}\,\delta=\delta'$
+
+Such aliases are especially useful when $\delta'$ is of the form
+$\mathit{integer}[\tau]$ or $\mathit{string}[\tau]$, and $\tau$~is long.
+% >>>
+\subsection{Type Checking} % <<<
+\paragraph{Type Checking.}
+By \emph{type-checking} we mean deciding whether a given ground term~$\tau$
+belongs to a given type~$\delta$. This is the operation performed, for
+example, on the content of a message before sending it. We include here a
+reference implementation for type-checking. We use the language OCaml, for
+it is terse.
+
+First, we need data structures for representing terms and types. Terms are
+either non-primitive (abstract) or primitive (integers or strings).
+\begin{verbatim}
+    type term =
+          | A of string * term list
+          | I of int
+          | S of string
+\end{verbatim}
+A non-primitive term has the shape $A(\nu,\Theta)$, where $\nu$~is a
+function name and $\Theta$~is a list of terms. A primitive term simply maps
+to the primitive types of the language in which the type-checker is
+written.
+
+Similarly, types are either abstract or primitive.
+\begin{verbatim}
+    type type_ =
+          | AT of (string * type_ list) list
+          | IT of (int -> bool)
+          | ST of (string -> bool)
+\end{verbatim}
+An abstract type is defined by a list of patterns. Primitive types contain the
+user-defined predicates. For example, the type
+\[\mathit{integer}[\mathbf{this}\%2==0]\] is represented in the type-checker by
+\begin{verbatim} 
+   IT (fun x -> x mod 2 = 0) 
+\end{verbatim}
+
+Type-checking is then straightforward.
+\begin{verbatim}
+   let rec check v ts = match (v, ts) with
+     | A (v, vs), AT ts ->
+         let f (t, ts) =
+           v = t && all2 check vs ts in
+         List.exists f ts
+     | I v, IT ts -> ts v
+     | S v, ST ts -> ts v
+     | _ -> false
+\end{verbatim}
+This code first checks that the term and the type are of the same kind. For
+example, it returns false if the term is non-primitive, but the type is
+primitive. The interesting branch is the first one, which is taken when
+both the term and the type are abstract. It checks whether there exists a
+pattern (in \verb|ts|) that matches the term with the head~\verb|v| and the
+sub-terms~\verb|vs|. The function~\verb|f| processes one pattern with the
+head~\verb|t| and the sub-types~\verb|ts|. The heads must match and the
+sub-terms must match, respectively, the sub-types. The function \verb|all2|
+wraps the standard function \verb|List.for_all2| so that it returns
+\verb|false| when the number of sub-terms is different from the number of
+sub-types.
+\begin{verbatim}
+    let all2 f xs ys =
+      try List.for_all2 f xs ys
+      with Invalid_argument _ -> false
+\end{verbatim}
+
+We exhibited an algorithm, hence type-checking is decidable. As it is, the
+function \verb|check| takes exponential time in the size of the term. 
+However, with memoization its complexity is~$O(mn)$, where $m$~is the
+size of the term and $n$~is the size of all type definitions. % >>>
+% >>>
+
+\section{Roles and Session Types} % <<<
+
+\subsection{Specifying Roles in AF-Raf} % <<<
+
+The theory of organisations from economy studies how formal rules of
+interaction enable groups of people to achieve common goals; the theory of
+roles from sociology studies how individuals fit in multiple informal
+groups. Both theories influenced prior attempts to structure agent systems.
+Several agent-oriented methodologies and libraries incorporate the concept
+of organisation and the concept of role.  However, there is little work on
+designing language features with the specific purpose of supporting large
+agent systems~\cite{collier2005,DBLP:journals/entcs/BaldoniBT06}. We
+approached this language design problem by drawing inspiration from analogies
+between agent-oriented programming languages and functional languages. For
+concreteness, we focused on 2APL~\cite{DBLP:journals/aamas/Dastani08} and
+Haskell~\cite{web:haskell}.
+
+Haskell and 2APL are very different languages. We did not try to establish
+any sort of formal connection between them, but rather to identify fruitful
+high-level similarities. The task was akin trying to draw the Earth's
+surface on paper---much easier to do locally than globally. We proceeded,
+therefore, by finding a contact point, seeing what it tells about its
+surroundings, and then repeating.
+
+\paragraph{Functions as Messages} % <<<
+
+A function call $f\,x$ is evaluated by `sending'~$x$ to $f$'s body,
+evaluating the body, and then receiving the result. The process is
+analogous to the exchange of a pair of messages between two agents. For
+example, the role \textit{Calculator} could be specified as follows.
+\begin{verbatim}
+role Num a => Calculator a
+  eval :: Expr a -> a
+\end{verbatim}
+An agent that plays the role $\mathit{Calculator}\,\mathit{Int}$ knows
+how to compute expressions such as $(3+3)\times5$, given another agent
+that plays the role $\mathit{Num}\,\mathit{Int}$.
+\begin{verbatim}
+role Num a
+  add :: Pair a -> a
+  multiply :: Pair a -> a
+\end{verbatim}
+An agent that plays the role $\mathit{Num}\,\mathit{Int}$ knows how to
+compute basic operations on integers, such as $3+3$ and $6\times5$. The
+types \textit{Expr} and \textit{Pair} constrain the content of messages.
+\begin{verbatim}
+data Expr a = Times (Expr a) (Expr a) 
+            | Plus (Expr a) (Expr a) 
+            | Ct a
+data Pair a = MkPair a a
+\end{verbatim}
+Given a user agent~$u$, an agent~$c$ that plays
+$\mathit{Calculator}\,\mathit{Int}$, and an agent~$n$ that plays
+$\mathit{Num}\,\mathit{Int}$, the following is a possible exchange of
+messages.\\ \\
+$u\to c : 
+  \mathit{eval}(\mathit{call}(n), \mathit{Times}(
+    \mathit{Plus}(\mathit{Ct}(3),\mathit{Ct}(3)),\mathit{Ct}(5)))\\
+c\to n : \mathit{add}(\mathit{call}(), \mathit{MkPair}(3, 3))\\
+n\to c : \mathit{add}(\mathit{return}(), 6)\\
+c\to n : \mathit{multiply}(\mathit{call}(), \mathit{MkPair}(6, 5))\\
+n\to c : \mathit{multiply}(\mathit{return}(), 30)\\
+c\to u : \mathit{eval}(\mathit{return}(), 30)$\\
+
+In general, $f::a\to b$ says that the agent understands messages of the
+form $f(\mathit{call}(\alpha_1,\ldots,\alpha_n),x)$ and eventually replies
+to each of them with a message of the form $f(\mathit{return}(),y)$. Here,
+$\alpha_1$, \dots,~$\alpha_n$ are (addresses of) other agents, $x$~is a
+value of type~$a$, and $y$~is a value of type~$b$.
+
+The analogy so far is already fruitful. The content of 2APL messages is a
+(ground) term or an atomic formula. Since 2APL is built on top
+JADE~\cite{DBLP:books/sp/map2005/BellifemineBCP05}, the message content may
+also be declared as part of an ontology. However, if we would show the JADE
+ontology for arithmetic expressions we would run over the page limit.
+Contrast with the three short lines used here to define $\mathit{Expr}\,a$.
+The definition is not only short and readable, but also polymorphic in the
+type~$a$ of the constants, and rooted in the theory of algebraic data types
+(see, for example, \cite{DBLP:conf/ctcs/Hagino87}).
+
+\begin{figure}\footnotesize % <<<
+\begin{verbatim}
+agent foo plays Calculator Int(n)
+  R-rules:
+    eval(Ct(x)) <- x
+    eval(Times(x, y)) <-
+      n.multiply(MkPair(this.eval(x), this.eval(y)))
+    eval(Plus(x, y)) <-
+      n.add(MkPair(this.eval(x), this.eval(y)))
+\end{verbatim}
+\caption{Implementing a role in 2APL}\label{fig:roleimpl2APL}
+\end{figure} % >>>
+
+The analogy is not perfect. The earlier declaration for the role
+$\mathit{Calculator}\,a$ is superficially similar to the following type
+class declaration.
+\begin{verbatim}
+class Num a => Calculator a
+  eval :: Expr a -> a
+\end{verbatim}
+This declaration reads ``a type~$a$ that is a member of the class
+\textit{Num} is also a member of class \textit{Calculator} provided there
+exist a function \textit{eval} with the proper type.'' In contrast, the
+earlier role declaration reads ``an \emph{unnamed} agent plays role
+$\mathit{Calculator}\,a$ if it answers to messages
+$\mathit{eval}(\mathit{call}(n),\ldots)$ by messages
+$\mathit{eval}(\mathit{return}(),\ldots)$, where $n$~is an agent that plays
+$\mathit{Num}\,a$.'' Here $a$~is a type variable.  When implementing a role
+the agent must be named, as seen in Figure~\ref{fig:roleimpl2APL}. Because
+\textit{foo} plays $\mathit{Calculator}\,\mathit{Int}$, the agent
+interpreter creates a goal $\mathit{eval}(m,\mathit{call}(n),x)$ for all
+messages with shape $\mathit{eval}(\mathit{call}(n),x)$ that come from some
+agent~$m$.  One could handle these goals using 2APL's PG-rules.
+\begin{verbatim}
+eval(m, call(n), Ct(x)) <- true |
+  send(m, role, eval(return(), x))
+\end{verbatim}
+The first R-rule in Figure~\ref{fig:roleimpl2APL} does exactly the same,
+but is more compact. The other two R-rules, however, are much more
+cumbersome to simulate with the other kinds of rules. The main reason is
+that the notation $n.\mathit{add}(x)$ hides sending a message
+$\mathit{add}(\mathit{call}(),x)$ to agent~$n$, waiting for a reply
+$\mathit{add}(\mathit{return}(),y)$, and extracting~$y$. The (goal) query
+of an R-rule may only be an atom; the right side of an R-rule is an
+expression that is evaluated as described and whose result is sent as a
+message.  This is a rough and informal sketch of the intended semantics
+that needs to be made precise.
+
+Note that two agents \textit{foo} and \textit{bar} may be instances of the
+same 2APL module, yet only \textit{foo} plays the role
+$\mathit{Calculator}\,\mathit{Int}$. Also, note that an agent may be
+declared as playing a role without having access to its implementation. In
+fact, it may be that the basic behaviour of the agent is programmed in a
+different language than 2APL. Such flexibility helps code reuse.
+
+In summary, the vague and informal intuition that a function is like a pair
+of messages, one carrying the arguments and one carrying the result, led us
+to two interesting observations. First, algebraic data types are convenient
+for describing the content of messages. We expect to see fewer runtime
+errors once messages are typed. Second, we developed a notion of role in
+the context of the 2APL language. These roles have certain similarities
+with existing 2APL modules and with Java interfaces, but are nevertheless
+distinct concepts.
+% >>>
+
+\subsection{Specifying AF-Raf Sessions} % <<<
+
+Agents play roles and we wrote roles much like Haskell type
+classes, so it would seem that the analogue of Haskell types are 
+agents. A Haskell type class is a set of Haskell types; a role is a
+set of agents that play the role. I would like to explore where
+does the intuition ``types as agents'' lead.
+
+\begin{figure}\footnotesize % <<<
+\begin{verbatim}
+session ComputeBasicOperation(a, b)
+  a -> b: Pair Int
+  b -> a: Int
+session ComputeExpression(a, b, c)
+  c -> a: Expr Int
+  repeat ComputeBasicOperation(a, b)
+  a -> c: Int
+\end{verbatim}
+\caption{Sessions for AF-Raf}\label{fig:sessions}
+\end{figure} % >>>
+
+{\def\l#1->#2:#3<#4>{\mathtt{#1}\to\mathtt{#2}:#3\langle\mathsf{#4}\rangle}
+We read $f::a\to b$ as ``message $f$ is sent by agent~$a$ to agent~$b$.'' A
+type class lists several function signatures, so its natural analogue is a
+list of messages together with their endpoints. It turns out that such a
+list is very similar to the global types that describe multiparty sessions
+in the context of $\pi$-calculus. Here is an example of such a type from
+Honda et al.~\cite{dblp:conf/popl/hondayc08}:\\
+$\mu\mathbf{t}.$
+  $\l DP->K:d<bool>. $\\
+  $\l KP->K:k<bool>. $\\
+  $\l K->C:c<bool>.\mathbf{t}$
+
+This type means that process \texttt{K} receives two booleans, one from
+\texttt{DP} through channel~$d$ and one from \texttt{KP} through channel~$k$,
+then sends a boolean to~\texttt{C} through channel~$c$, and the whole process
+repeats. The main differences are that we have agents, rather than processes,
+and there are no named channels. We would therefore like to write code like
+that in Figure~\ref{fig:sessions}.  These sessions are a global description of
+the messages that should flow within an agent system. When we project
+$\mathit{ComputeExpression}(a,b,c)$ on agent~$a$ we obtain the role
+$\mathit{Calculator}\,\mathit{Int}$ from the previous section.}
+
+In agent-oriented methodologies it is standard to say that ``an agent plays
+a role within an organisation,'' and therefore organisations are somehow
+collections of interacting roles, just as the sessions above are in a way
+putting together interacting roles. Similarly, in multiparty session types
+there is a notion of projecting global types onto local types. The
+essential advantage of session types is that the projection can be done
+automatically. By imitating session types, we hope that it will be possible
+to at least check automatically that the projection of a certain session on
+a certain agent matches a certain role, which the agent implements.
+
+In summary, the vague and informal intuition that a Haskell type is
+sometimes like an agent led us to the proposal of specifying global
+interactions in agent-oriented programming languages in terms of sessions.
+Moreover, it seems reasonable to expect that a precise link between these
+session and the roles proposed in the previous section can be found.
+% >>>
+\subsection{Future Work} %<<< %>>>
+% >>>
+% >>>
+
+% >>>
+\chapter{Conclusions}\label{ch:conc} % <<<
+
+Starting from high-level similarities between certain aspects of an
+agent-oriented programming language (2APL) and a functional programming
+language (Haskell), we described three new features for the former:
+(1)~algebraic data types, which constrain the content of messages,
+(2)~roles, which constrain how particular agents interact, and
+(3)~sessions, which describe slices of the global interactions in the agent
+system. Together, these \emph{language features} support organisational
+concepts, which are so far discussed mostly in the literature on
+agent-oriented methodologies and frameworks.
+
+The aim is to provide programmers with a wider set of options at their disposal
+for structuring large agent systems. For example, they can use existing
+methodologies during the design phase and they can use a mixture of our
+proposed language features and existing organisational frameworks during the
+implementation phase. First-class language support has at least two
+advantages over organisational frameworks. First, implementations tend to be
+shorter and more readable. Second, implementations have stronger correctness
+guarantees because of the extra type-checking. On the other hand,
+organisational frameworks may be preferred when one needs to interact with
+legacy code.
+
+We created a new agent oriented programming language, AF-Raf, based on the 
+existing Agent Factory framework, and started to implement the innovative 
+features we have identified. AF-Raf has already types, including algebraic 
+data types to constrain the content of the messages, and type checking. At 
+the moment I am working on the implementation of roles in AF-Raf, and 
+subsequently we will move to the implementation of sessions. By the end of the 
+year we will use a number of case studies to test it, then incorporate the 
+results, and submit a paper to be published in the AAMAS conference. We will 
+have to further formalize and evaluate the AF-Raf programming language while 
+writing up the PhD thesis.
+
+% >>>
+\bibliographystyle{plain}
+\bibliography{thesis}
+\end{document}
+% >>>
+% vim:fmr=<<<,>>>:tw=75:spell:
