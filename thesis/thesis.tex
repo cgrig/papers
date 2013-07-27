@@ -574,18 +574,18 @@ systems at the language level.
 
 The main reason for choosing to build it from scratch is simplicity.  AF-Raf
 has a very simple syntax, which makes easier the addition of new functionality
-without making it to difficult to use.
+without making it too difficult to use.
 
 One important feature of the AF-Raf programming language is its integration 
 with the AgentFactory development framework, which provides support for the 
 development and deployment of agent-based systems.
 
-The main particularity of AF-Raf, that makes it unique among all other
-agent oriented programming languages is that, even though it is built upon
-the agent oriented conceptual framework, it also draws inspiration from
-functional languages.
+The main particularity of AF-Raf, that makes it unique among agent oriented
+programming languages is that, even though it is built upon the agent
+oriented conceptual framework, it also draws inspiration from functional
+languages.
 
-AF-Raf has two fundamental components a \textit{belief base}
+AF-Raf has two fundamental components, a \textit{belief base}
 and a \textit{rule base}. The belief base models the agent's view of the
 current state of its environment and the rule base models the agent's
 behaviour.
@@ -594,7 +594,6 @@ Beliefs are terms, where a term denotes an expression that can be obtained from
 either a constant symbol, a variable or a function symbol. Rules are
 represented by a name (optional), a query and an action.  The code in
 Figure~\ref{fig:AF-Raf} illustrates an AF-Raf agent.
-
 
 \begin{figure}\footnotesize % <<<
 \begin{verbatim}
@@ -606,17 +605,17 @@ rule State(initialized()) & Name(n) {
 
 rule Monitoring(name, addr) {
       println("ask " + name + " for status");
-          send(agentID(name, addr), request(status()));
+      send(agentID(name, addr), request(status()));
 }
 
 rule Message(other, status(alive())) {
       println("OK, ask again.");
-          send(other, request(status()));
+      send(other, request(status()));
 }
 
 rule Message(other, status()) {
       println("Oh, someone wants me alive!");
-          send(other, inform(status(alive())));
+      send(other, inform(status(alive())));
 }
 \end{verbatim}
 \caption{The code of an AF-Raf agent}
@@ -625,12 +624,13 @@ rule Message(other, status()) {
 
 The rules are evaluated at each time-step. The first stage of evaluating a
 rule is to evaluate the query on the current belief base. The result is a
-set of query results. If the set is not empty, the action is then evaluated
-for every query result. A particular query result says with what term to
-substitute each free variable in the action. In other words, a query result
-is a set of bindings that covers all the free variable in the action (of
-the rule). The first step of evaluating the action is to apply these
-substitutions. The next step is to execute it.
+set of query results. \rg{A result is a set of results? Empty set is
+special?} If the set is not empty, the action is then evaluated for every
+query result. A particular query result says with what term to substitute
+each free variable in the action. In other words, a query result is a set
+of bindings that covers all the free variable in the action (of the rule).
+The first step of evaluating the action is to apply these substitutions.
+The next step is to execute it.
 
 An action is either a simple action or a composed action. Executing a
 simple action means executing a piece of associated Java code. Examples of
@@ -650,12 +650,14 @@ with content~$c$ is received from sender~$s$. % >>>
 \subsubsection{Types in AF-Raf}
 
 AF-Raf contributes to the AOP languages domain by being the first agent
-oriented programming language to introduce types and type-checking. From a
-practical point of view, our effort tries to improve upon the following
-scenario.
+oriented programming language to introduce types and type-checking. \rg{I
+think this needs to be qualified: surely other languages have things like
+integers and strings, which are types.} From a practical point of view, our
+effort tries to improve upon the following scenario.
 
 \paragraph{Bad Scenario.}
 
+\rg{Needs a diagram; otherwise, hard to follow.}
 Agent~$a$ sends message $\tau_{ab}$ to agent~$b$. Agent~$b$ stores a
 subterm~$\tau_b$ of~$\tau_{ab}$ into its belief base. Later, when some
 other condition is satisfied, agent~$b$ extracts a subterm~$\tau_{bc}$ of
@@ -678,8 +680,8 @@ whether that belief is in the set of terms defined by the $a$'s belief type;
 that is, the expression $\tau:\delta_b(a)$ is evaluated.  Whenever a
 message~$\tau$ is sent to agent~$a$, the expression $\tau:\delta_m(a)$ is
 evaluated, to check whether that message complies to the type of messages that
-agent~$a$ can process. In order to send a message to agent~$a$, other agent
-need the agent identifier of agent~$a$. Agent identifiers typically consist of
+agent~$a$ can process. In order to send a message to agent~$a$, the other agent
+needs the agent identifier of agent~$a$. Agent identifiers typically consist of
 a name and an IP address. To support the check for messages we add
 $\delta_m(a)$ to the agent identifier of agent~$a$.
 
@@ -731,7 +733,7 @@ defines the set of string literals that match the given regular expression.
 
 Enhanced with algebraic data types, the AF-Raf programming language has
 virtually endless possibilities to define new types. The primitive types
-are combined using discriminated union and Cartesian product in the manner
+are combined using discriminated union and cartesian product in the manner
 described above.
 
 To support the interaction with untyped languages, AF-Raf also has built-in
@@ -780,7 +782,7 @@ user-defined predicates. For example, the type
 
 Type-checking is then straightforward.
 \begin{verbatim}
-   let rec check v ts = match (v, ts) with
+   let rec check v ts = match v, ts with
      | A (v, vs), AT ts ->
          let f (t, ts) =
            v = t && all2 check vs ts in
@@ -790,7 +792,7 @@ Type-checking is then straightforward.
      | _ -> false
 \end{verbatim}
 This code first checks that the term and the type are of the same kind. For
-example, it returns false if the term is non-primitive, but the type is
+example, it returns false if the term is non-primitive but the type is
 primitive. The interesting branch is the first one, which is taken when
 both the term and the type are abstract. It checks whether there exists a
 pattern (in \verb|ts|) that matches the term with the head~\verb|v| and the
@@ -809,16 +811,19 @@ sub-types.
 We exhibited an algorithm, hence type-checking is decidable. As it is, the
 function \verb|check| takes exponential time in the size of the term. 
 However, with memoization its complexity is~$O(mn)$, where $m$~is the
-size of the term and $n$~is the size of all type definitions. % >>>
+size of the term and $n$~is the size of all type definitions.
+\rg{Maybe expand a bit here, with some example?}
+
+% >>>
 % >>>
 
 \section{Roles and Session Types} % <<<
 
 \subsection{Specifying Roles in AF-Raf} % <<<
 
-The theory of organisations from economy studies how formal rules of
+The theory of organisations, from economy, studies how formal rules of
 interaction enable groups of people to achieve common goals; the theory of
-roles from sociology studies how individuals fit in multiple informal
+roles, from sociology, studies how individuals fit in multiple informal
 groups. Both theories influenced prior attempts to structure agent systems.
 Several agent-oriented methodologies and libraries incorporate the concept
 of organisation and the concept of role.  However, there is little work on
@@ -1053,7 +1058,7 @@ subsequently we will move to the implementation of sessions. By the end of the
 year we will use a number of case studies to test it, then incorporate the 
 results, and submit a paper to be published in the AAMAS conference. We will 
 have to further formalize and evaluate the AF-Raf programming language while 
-writing up the PhD thesis.
+writing up the PhD thesis. \rg{This is a bit too self-referential, no?}
 
 % >>>
 \bibliographystyle{plain}
