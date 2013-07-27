@@ -12,7 +12,10 @@
 \newtheorem{remark}{Remark}
 \theoremstyle{plain}
 \newtheorem{proposition}{Proposition}
-\newcommand{\todo} [1] {[\textcolor {red}{TODO}: #1]}
+\newcommand{\todo}[1]{[\textcolor{red}{TODO}: #1]}
+\newcommand{\rg}[1]{\marginpar{\tiny\raggedright\textcolor{blue}{\bf rg:} #1}}
+
+\setlength{\marginparwidth}{95pt}
 
 % PDF settings <<<
 \definecolor{darkblue}{rgb}{0,0,0.4}
@@ -74,25 +77,26 @@ research community has created a range of implementation environments, such as
 JADE~\cite{DBLP:books/sp/map2005/BellifemineBCP05}, Agent
 Factory~\cite{collier1999agent}, ZEUS~\cite{DBLP:conf/agents/NwanaNLC99},
 together with a nascent set of standards developed by the Foundation for
-Intelligent Physical Agents (FIPA) , and a diverse set of software engineering
+Intelligent Physical Agents (FIPA), and a diverse set of software engineering
 methodologies, such as GAIA~\cite{DBLP:journals/aamas/WooldridgeJK00}, Agent
 UML~\cite{bauer2001agent}, MaSE~\cite{deloach2001analysis}, and
 Prometheus~\cite{DBLP:conf/atal/PadghamW02}.
 
 One approach to implement agent systems is Agent Oriented Programming (AOP).
-This relatively new paradigm "promotes a societal view of computation, in which
-multiple agents interact with one another"~\cite{DBLP:journals/ai/Shoham93}.
+This relatively new paradigm ``promotes a societal view of computation, in which
+multiple agents interact with one another''~\cite{DBLP:journals/ai/Shoham93}.
 The agent is the fundamental unit of computation, analysed and controlled using
 mental terms.  The state of an agent is restricted to mental components, such
 as beliefs, commitments, capabilities. AOP tries to match the programmer
 intuition to the formal concepts in the same way the Object Oriented
 Programming (OOP) paradigm did before.
 
-AOP can be viewed as a specialisation of OOP. OOP sees the computational system
-as made up of units that are able to communicate using messages. AOP makes this
-framework more specific by restricting the state of the unit to consist only of
-mental components, and by restricting the types of valid messages to those
-specified in an underlying agent communication language.
+AOP can be viewed as a specialisation of OOP\null. OOP sees the
+computational system as made of units that are able to communicate using
+messages. AOP makes this framework more specific by restricting the state
+of the unit to consist only of mental components, and by restricting the
+types of valid messages to those specified in an underlying agent
+communication language.
 
 A number of AOP languages have been developed to date, such as
 Agent-0~\cite{DBLP:journals/ai/Shoham93},
@@ -123,13 +127,14 @@ MaSE methodology \cite{deloach2004mase} is an organisational approach to
 analysis and design of MAS. It also supports the implementation through the
 associated AgentTool development system. Both MaSe and AgentTool are
 independent of any particular agent architecture, programming language or
-communication framework. The Analysis phase define system goals from a set of
-requirements and then define the roles necessary to meet the goals. A role
-consists of a number of tasks, where a task corresponds to a goal. Each task
-has its own thread of control, but may communicate with each other. The Design
-phase assigns roles to agent classes, identify and constructs conversations
-(coordination protocols between two agents), define the internal agent
-architecture and the final system structure. 
+communication framework. The \emph{analysis} phase define system goals from
+a set of requirements and then define the roles necessary to meet the
+goals. A role consists of a number of tasks, where a task corresponds to a
+goal. Each task has its own thread of control, but may communicate with
+each other. The \emph{design} phase assigns roles to agent classes,
+identify and constructs conversations (coordination protocols between two
+agents), define the internal agent architecture and the final system
+structure. 
 
 Gaia \cite{DBLP:journals/aamas/WooldridgeJK00} is a two phased methodology for
 analysing and designing multiagent systems. The analysis phase aims to collect
@@ -159,11 +164,14 @@ roles (XRole), and (3)~an interaction infrastructure implementation
 (Rolesystem). A role is defined as a set of capabilities and has an expected
 behaviour. Capabilities are activities that an agent can perform.
 
-A different approach to support the implementation of organisational concepts would be to develop custom programming languages, in the context of Agent Oriented Programming. The majority of AOP
-languages are based on theories from mid-nineties and do not reflect the
-increased importance of organisations in multi-agent system design.
+A different approach to support the implementation of organisational
+concepts would be to develop custom programming languages, in the context
+of Agent Oriented Programming. The majority of AOP languages are based on
+theories from mid-nineties and do not reflect the increased importance of
+organisations in multi-agent system design.
+
 \subsubsection{Hypotheses and Objectives}
-Agent Oriented Programming, the relatively new programming paradigm, adopts a
+Agent Oriented Programming, a relatively new programming paradigm, adopts a
 social metaphor for the design and implementation of software systems.
 Specifically, software systems are viewed as communities of software entities,
 known as agents, that interact with one another in order to solve problems that
@@ -187,14 +195,18 @@ systems by offering the appropriate level of granularity. Roles define a set of
 related behaviours, encapsulating them realises a separation of concerns and
 promotes information hiding.
 
-
-The primary hypothesis of my research is that the integration of roles, based
-on sociological Role Theory, will improve the readability and usability of AOP
-languages. The objective is to develop a novel AOP language that employs roles, based on the existing Agent Factory framework.
-
+The primary hypothesis of my research is that the integration of roles,
+based on sociological Role Theory, will improve the readability and
+usability of AOP languages. The objective is to develop a novel AOP
+language that employs roles, based on the existing Agent Factory framework.
+\rg{Maybe promise only that you show how roles, a concept from sociology,
+maps to a programming language construct.}
 
 \subsubsection{Methodology}
 In order to achieve this objective I have adopted the following approach:
+\rg{When somebody reads your thesis, they want to know about the subject of
+the thesis, not about you as a person.  Whether you attended classes or not
+is irrelevant to them.}
 
 \begin{itemize}
 \item attending courses, seminaries, and summer schools on various agent topics
@@ -283,10 +295,10 @@ developer in debugging their implementations.
 
 The Common Language Framework (CLF) is a collection of components that
 facilitates the design and implementation of diverse Agent Programming
-Languages in AF. CLF includes a generic logic framework, a planning and
-plan execution framework, a common API model based on sensors, actions and
-modules, an outline grammar and template compiler implementation based on
-JavaCC, and a configurable debugging tool.
+Languages in AF\null. CLF includes a generic logic framework, a framework
+for planning and for executing plans, a common API model based on sensors,
+actions and modules, an outline grammar and template compiler
+implementation based on JavaCC, and a configurable debugging tool.
 
 Currently there are four Agent Programming Languages that have been built
 using the CLF: 
@@ -301,6 +313,8 @@ agent programming language that is based on commitment rules;
 programming model; 
 
 \item and our new \textit{AF-Raf}, described in the next section.
+\rg{I forgot in which state AF-RAF is. It can't be completed in 4 weeks,
+right?}
 \end{enumerate}
 
 Agent Factory is fully integrated with Eclipse in a way that simplifies
@@ -322,7 +336,7 @@ conventions used in AF-Raf.  Moreover, although these notions are simple,
 their definitions in literature tend to have subtle but important
 differences.
 
-A \emph{term} is a variable or a function applied to other terms.
+A \emph{term} is a variable, or a function applied to other terms.
 \begin{align}
 \mathit{Term}\quad\tau &::= \omega \mid \phi \\
 \mathit{Variable}\quad\omega &::= \nu \\
@@ -365,6 +379,8 @@ with uppercase for predicate names, and letter strings starting with
 lowercase for other function names and for variable names.
 
 \begin{remark}
+\rg{I'm not sure about this remark. I think \emph{traditional} logicians
+behave as described here.}
 The definitions given here are in-between what applied computer scientists
 tend to prefer and what pure logicians tend to prefer.  Computer scientists
 work with \emph{expressions} (rather than terms and formulas) and do not
@@ -375,6 +391,7 @@ not functions. Moreover, logicians single out equality between terms as
 being a special predicate.
 \end{remark}
 
+\rg{Maybe add some simple examples early on.}
 In AF-Raf, a \emph{belief} is a boolean ground term; in AF-Raf, a
 \emph{message} is a non-boolean ground term.
 
@@ -401,6 +418,8 @@ $\nu(\delta_1,\ldots,\delta_n)$. For example, one could define the types
   \mid\mathit{add}(o,e)
   \mid\mathit{add}(e,o)
 \end{align}
+\rg{These things are presented as if they are completely standard. They're
+not. I think they should be presented as part of the design of AF-RAF.}
 We make the following observations.
 \begin{enumerate}
 \item
@@ -461,6 +480,7 @@ undecidable whether a given term is an element.  (A classic result of
 computability theory is that there are undecidable sets of bit-strings, and
 sorted ground terms can encode bit-strings.) In particular, there exist
 sets of ground terms that cannot be defined using algebraic data types.
+\rg{These things are probably too cryptic, and should be explained more.}
 
 \subsection{Haskell Type Classes}
 
@@ -468,6 +488,7 @@ This section reviews Haskell type classes, because they later inspire our
 notion of `role', and Haskell modules, so that it is clear they are very
 different from type classes. We use sets and equality as examples because
 we assume all readers are familiar with these basic mathematical concepts.
+\rg{Well, in a thesis you can afford the space to explain even basic concepts.}
 
 % modules
 %  - small example
@@ -526,7 +547,7 @@ instance declaration that provides an implementation for a function
 named~$eq$. The \textbf{instance} declaration in module \textit{Set} says
 that the type constructor~$T$ transforms members of \textit{Eq} into
 members of \textit{Eq}. For example, $T(T\,\mathit{Int})$ is in \textit{Eq}
-because \textit{Int} is in \textit{Eq.}
+because \textit{Int} is in~\textit{Eq}.
 
 In general, modules are responsible with information
 hiding~\cite{DBLP:journals/cacm/Parnas72a} and encapsulation.  On the other
@@ -1039,4 +1060,4 @@ writing up the PhD thesis.
 \bibliography{thesis}
 \end{document}
 % >>>
-% vim:fmr=<<<,>>>:tw=75:spell:
+% vim:fmr=<<<,>>>:tw=75:spell:fo+=t:
