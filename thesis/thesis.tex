@@ -319,7 +319,9 @@ toolkits and AOP languages.
   \end{itemize}
 \end{itemize}
 
+% >>>
 
+\chapter{Preliminaries} % <<<
 
 \section{Problem Statement}
 \section{Conceptual Framework}
@@ -621,7 +623,130 @@ modules~\cite{dblp:conf/prima/dastanims08}.
 MD Travers, 1996, Programming with agents: xenia.media.mit.edu/~mt/thesis/mt-thesis-Contents.html
 
 % >>>
-\chapter{Research Findings}\label{ch:method} % <<< 
+\chapter{Usage Scenarios} % <<<
+
+Figure~\ref{fig:AF-Raf-pingpong-role} illustrates an AF-Raf role describing
+the ping pong protocol. The code in Figure~\ref{fig:AF-Raf-pingpong-roles}
+is a simple implementation of this role.
+
+\begin{figure}\footnotesize % <<<
+\begin{verbatim}
+role PingPong
+pingpong :: (role PingPong=>) a -> a
+start :: c -> a
+\end{verbatim}
+\caption{AF-Raf agents playing ping pong}
+\label{fig:AF-Raf-pingpong-role}
+\end{figure} % >>>
+
+\begin{figure}\footnotesize % <<<
+\begin{verbatim}
+include stdio.h
+
+Agent P plays PingPong{
+  data T = Ping|Pong
+  
+  operation pingpong (T: x)
+    |x == Ping = sendback(pingpong(Pong)) 
+                 & println("Pong! ") 
+    |x == Pong = sendback(pingpong(Ping)) 
+                 & println("Ping! ") 
+ }
+
+  operation start(n){
+    if n == agentID(x, y) then send(n,pingpong(Ping))
+  }  
+ 
+\end{verbatim}
+\caption{AF-Raf agents playing ping pong}
+\label{fig:AF-Raf-pingpong-roles}
+\end{figure} % >>>
+
+\begin{figure}\footnotesize % <<<
+\begin{verbatim}
+
+include stdio.h
+
+Agent P plays PingPong{
+  data T = Ping|Pong
+  data Mood = Happy|Sad|Neutral
+  
+  operation pingpong (T: x, int: i, Mood: state)
+    |x == Ping = sendback(pingpong(Pong, i, a)) 
+                 & println("Pong! ") 
+                 & emotion(state)
+    |x == Pong = sendback(pingpong(Ping, i, a)) 
+                 & println("Ping! ") 
+                 & emotion(state)
+        where a = if (i mod 10 == 0) then change_emotion(state) 
+                                     else state
+ }
+
+  operation start(n){
+    if n == agentID(x, y) then send(n,pingpong(Ping, 1, Happy))
+  }  
+  operation emotion(Mood: emotional_state){
+    | emotional_state == Happy = println(a)
+    | otherwise = println(b)
+      where a =  "Somebody wants to play!"
+            b = "I'm so tired..."               
+ }
+ operation change-emotion(Mood: emotional_state){
+   | emotional_state == Happy = Neutral
+   | emotional_state ==  Sad = Happy
+   | emotional_state == Neutral = Sad
+ }
+\end{verbatim}
+\caption{AF-Raf agents playing ping pong}
+\label{fig:AF-Raf-constraint-pingpong}
+\end{figure} % >>>
+
+The code in Figure~\ref{fig:AF-Raf-constraint-pingpong} illustrates a
+slightly more complex AF-Raf agent implementing the PingPong role. In
+addition to the basic functionality illustrated above it has some
+constraints that depend on the number of communication steps carried out by
+the agents.
+
+
+\todo{In the code illustrated in Figure~\ref{fig:AF-Raf-constraint-pingpong} I wanted
+to have an emotional\_state for each agent instead of an emotional\_state
+for their relationship, but I was not able to figure out how to do it
+without using a global variable.}
+
+The code in Figure~\ref{fig:AF-Raf-no-roles} illustrates a simple AF-Raf
+agent that models a monitor/monitoring agent, using only rules.
+
+\begin{figure}\footnotesize % <<<
+\begin{verbatim}
+include stdio
+
+rule State(initialized()) & Name(n) {
+      println("hello from " + n);
+}
+
+rule Monitoring(name, addr) {
+      println("ask " + name + " for status");
+      send(agentID(name, addr), request(status()));
+}
+
+rule Message(other, status(alive())) {
+      println("OK, ask again.");
+      send(other, request(status()));
+}
+
+rule Message(other, status()) {
+      println("Oh, someone wants me alive!");
+      send(other, inform(status(alive())));
+}
+\end{verbatim}
+\caption{The code of a simple AF-Raf agent}
+\label{fig:AF-Raf-no-roles}
+\end{figure} % >>>
+
+
+% >>>
+
+\chapter{Language Definition}\label{ch:method} % <<< 
 \section{The AF-Raf programming Language} % <<<
 
 AF-Raf is a new agent oriented programming language I specifically
@@ -1082,6 +1207,11 @@ session and the roles proposed in the previous section can be found.
 % >>>
 
 % >>>
+
+\chapter{Related Work} % <<<
+
+% >>>
+
 \chapter{Conclusions}\label{ch:conc} % <<<
 
 Starting from high-level similarities between certain aspects of an
