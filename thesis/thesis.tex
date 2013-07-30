@@ -320,7 +320,6 @@ toolkits and AOP languages.
 \end{itemize}
 
 % >>>
-
 \chapter{Preliminaries} % <<<
 
 \section{Problem Statement}
@@ -629,6 +628,8 @@ Figure~\ref{fig:AF-Raf-pingpong-role} illustrates an AF-Raf role describing
 the ping pong protocol. The code in Figure~\ref{fig:AF-Raf-pingpong-roles}
 is a simple implementation of this role.
 
+\rg{What does {\tt (role PingPong=>)} mean? Why is it in parentheses?}
+\rg{You should use pattern matching properly, not these weird guards.}
 \begin{figure}\footnotesize % <<<
 \begin{verbatim}
 role PingPong
@@ -646,7 +647,7 @@ include stdio.h
 Agent P plays PingPong{
   data T = Ping|Pong
   
-  operation pingpong (T: x)
+  operation pingpong (x : T)
     |x == Ping = sendback(pingpong(Pong)) 
                  & println("Pong! ") 
     |x == Pong = sendback(pingpong(Ping)) 
@@ -662,22 +663,23 @@ Agent P plays PingPong{
 \label{fig:AF-Raf-pingpong-roles}
 \end{figure} % >>>
 
+\rg{It's ${\it value}:{\it type}$, not ${\it type}:{\it value}$.}
 \begin{figure}\footnotesize % <<<
 \begin{verbatim}
 
 include stdio.h
 
-Agent P plays PingPong{
-  data T = Ping|Pong
-  data Mood = Happy|Sad|Neutral
+Agent P plays PingPong {
+  data T = Ping | Pong
+  data Mood = Happy | Sad | Neutral
   
-  operation pingpong (T: x, int: i, Mood: state)
-    |x == Ping = sendback(pingpong(Pong, i, a)) 
-                 & println("Pong! ") 
-                 & emotion(state)
-    |x == Pong = sendback(pingpong(Ping, i, a)) 
-                 & println("Ping! ") 
-                 & emotion(state)
+  operation pingpong (x : T, i : int, state : Mood)
+    | x == Ping = sendback(pingpong(Pong, i, a)) 
+                  & println("Pong! ") 
+                  & emotion(state)
+    | x == Pong = sendback(pingpong(Ping, i, a)) 
+                  & println("Ping! ") 
+                  & emotion(state)
         where a = if (i mod 10 == 0) then change_emotion(state) 
                                      else state
  }
@@ -745,7 +747,6 @@ rule Message(other, status()) {
 
 
 % >>>
-
 \chapter{Language Definition}\label{ch:method} % <<< 
 \section{The AF-Raf programming Language} % <<<
 
@@ -1207,11 +1208,9 @@ session and the roles proposed in the previous section can be found.
 % >>>
 
 % >>>
-
 \chapter{Related Work} % <<<
 
 % >>>
-
 \chapter{Conclusions}\label{ch:conc} % <<<
 
 Starting from high-level similarities between certain aspects of an
