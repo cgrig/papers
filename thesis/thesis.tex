@@ -646,7 +646,7 @@ include stdio.h
 Agent P plays PingPong{
   data T = Ping|Pong
   
-  operation pingpong (T: x)
+  operation pingpong (x:T)
     |x == Ping = sendback(pingpong(Pong)) 
                  & println("Pong! ") 
     |x == Pong = sendback(pingpong(Ping)) 
@@ -654,7 +654,7 @@ Agent P plays PingPong{
  }
 
   operation start(n){
-    if n == agentID(x, y) then send(n,pingpong(Ping))
+    if \n = agentID(x, y) then send(n, pingpong(Ping))
   }  
  
 \end{verbatim}
@@ -671,7 +671,7 @@ Agent P plays PingPong{
   data T = Ping|Pong
   data Mood = Happy|Sad|Neutral
   
-  operation pingpong (T: x, int: i, Mood: state)
+  operation pingpong (x:T, i:int, state:Mood)
     |x == Ping = sendback(pingpong(Pong, i, a)) 
                  & println("Pong! ") 
                  & emotion(state)
@@ -685,13 +685,13 @@ Agent P plays PingPong{
   operation start(n){
     if n == agentID(x, y) then send(n,pingpong(Ping, 1, Happy))
   }  
-  operation emotion(Mood: emotional_state){
+  operation emotion(emotional_state:Mood){
     | emotional_state == Happy = println(a)
     | otherwise = println(b)
       where a =  "Somebody wants to play!"
             b = "I'm so tired..."               
  }
- operation change-emotion(Mood: emotional_state){
+ operation change-emotion(emotional_state:Mood){
    | emotional_state == Happy = Neutral
    | emotional_state ==  Sad = Happy
    | emotional_state == Neutral = Sad
