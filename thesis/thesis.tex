@@ -327,7 +327,7 @@ TODO
 \section{Role Theory} % <<<
 
 TODO
-
+ 
 The Role Theory (RT) elaborated in Sociology and Social Psychology tries to
 explain the predictability of individual behaviour by linking it to the
 social structures. RT can be described using the theatre metaphor, where
@@ -337,6 +337,21 @@ the common idea is that each role has associated some behavioral
 expectations. Conformity or nonconformity to these expectations trigger
 rewards or punishments. These behavioral expectations can be expressed as
 rights and duties, and are guided by social norms.
+
+According to B.J. Biddle~\cite{} there are five major approaches to RT: The
+Functional Role Theory have a static understanding of roles, which are seen
+as a set of expectations from society inflexible and universally agreed
+upon; In The Interactionist Perspective interpersonal interaction is of
+major importance, roles being negotiated between individuals on a constant
+basis; The Structural Perspective focus on social structure; Organisational
+Role Theory looks at the development of roles in the context of preplanned
+and task oriented social systems; The Cognitive Role Theory emphasizes the
+relationship between expectations and behaviour.
+
+Role Theory bridges individual behaviour and social structure. Roles as a
+social constructs influence individual behaviour on different levels. They
+have associated characteristic  beliefs and attitudes, also they specify goals,
+tasks and performance standards required in specific social situations.
 
 % >>>
 \section{Organisational Theory}  % <<<
@@ -418,6 +433,33 @@ Agent P plays PingPong{
 \end{verbatim}
 \caption{AF-Raf agents playing ping pong}
 \label{fig:AF-Raf-pingpong-roles}
+\end{figure} % >>>
+
+\begin{figure}\footnotesize % <<<
+\begin{verbatim}
+include stdio.h
+
+Agent P{
+  data T = ping | pong
+
+  rule Message (other, pingpong(ping)){
+       println("Ping! ");
+       send(other, pingpong(ping));
+  }
+
+  rule Message (other, pingpong(pong)){
+       println("Pong! ");
+       send(other, pingpong(pong));
+  }
+
+  rule Start (name, addr)){
+       println("Ping! ");
+       send(agentID(name, addr), pingpong(ping));
+  }
+}
+\end{verbatim}
+\caption{desugared pingpong}
+\label{fig:desugared-pingpong}
 \end{figure} % >>>
 
 \rg{It's ${\it value}:{\it type}$, not ${\it type}:{\it value}$.}
