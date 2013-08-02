@@ -1,4 +1,4 @@
-\documentclass[a4paper,12pt,oneside]{book} %<<<
+\documentclass[a4paper,12pt,oneside,fleqn]{book} %<<<
 \usepackage{amsmath}
 \usepackage{amsthm}
 \usepackage{arev}
@@ -8,14 +8,19 @@
 
 \usepackage{hyperref}
 
-\theoremstyle{remark}
-\newtheorem{remark}{Remark}
 \theoremstyle{plain}
 \newtheorem{proposition}{Proposition}
-\newcommand{\todo}[1]{[\textcolor{red}{TODO}: #1]}
+\theoremstyle{definition}
+\newtheorem{example}{Example}
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}
+
+\newcommand{\eoe}{\hskip5mm\null\nobreak\hfill(end of example)}
 \newcommand{\rg}[1]{\marginpar{\tiny\raggedright\textcolor{blue}{\bf rg:} #1}}
+\newcommand{\todo}[1]{[\textcolor{red}{TODO}: #1]}
 
 \setlength{\marginparwidth}{95pt}
+\setlength{\mathindent}{3em}
 
 % PDF settings <<<
 \definecolor{darkblue}{rgb}{0,0,0.4}
@@ -383,23 +388,48 @@ Organisational structure: simple; hierarchical; functional; product;
 matrix.
 
 % >>>
-\section{First-Order Logic and Belief Bases} % <<<
+\section{Belief Bases} % <<<
 
-In most agent-oriented programming languages, agents maintain a set of
-beliefs, known as the \emph{belief base}.  AF-RAF, the programming language
-presented in this dissertation, uses beliefs with a simple structure,
-because the main focus is on how to support roles and organisations.  More
-specifically, each belief is essentially a ground term.  In standard
-mathematical logic, ground terms are essentially trees labeled with
-strings.  In AF-RAF, we will add some basic types (such as integers).
-Non-ground terms, those that contain variables, are used for expressing
-queries.
+In most agent-oriented programming languages, agents maintain a
+\emph{belief base}.  The operations available to the agent are
+\textit{query} and \textit{adopt}.  A query asks the belief base which
+beliefs that follow a certain pattern it holds.  The adopt operation
+changes the state of the belief base by adding and possibly removing
+beliefs.  Sometimes, the {\it adopt\/} operation comes in two flavours:
+{\it update\/} and {\it revise}.  An update corresponds to a change in the
+environment, while a revision is exclusively a mental state change.
+
+In general, beliefs are sentences in some logic.  However, the focus of
+this work is on roles and organisations, not on beliefs.  Thus, AF-Raf uses
+a very simple language for beliefs\,---\,they are essentially trees whose
+nodes are labeled by strings:
 \begin{align}
-\phi &::= 
+\tau &::= \nu(\tau,\ldots,\tau) && \text{function term} \\
+\nu  &::= {\rm string} &&\text{function symbol}
 \end{align}
+The number of arguments can be any non-negative integer.
+
+\begin{example}[beliefs]
+The following are AF-Raf beliefs:
+\begin{align}
+&{\it hasColor}({\it my}({\it car}()), {\it blue}()) \\
+&{\it iHave}({\it cat}(), {\it int}({\it 10}()))
+\end{align}
+Note that any belief must contain a function with $0$~arguments, such as
+{\it car}, {\it blue}, {\it cat}, and {\it 10\/} in this example;
+otherwise, the belief would not have a finite size.  Note also that
+function symbols can represent both values (such as~$10$) and typing
+information (such as~{\it int\/}).
+\eoe
+\end{example}
+
+Each function symbol is usually used with a fixed number of arguments.  For
+example, if {\it car\/} is used in one belief with $0$~arguments, we do not
+expect it to be used with more than $0$~arguments in another belief.  We
+say that each function symbol has an attached \emph{arity}.
 
 
-TODO: terms, formulas, knowledge bases
+TODO: query and update, briefly?
 
 % >>>
 \section{Functional Languages} % <<<
