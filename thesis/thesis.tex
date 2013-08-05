@@ -15,7 +15,9 @@
 \theoremstyle{remark}
 \newtheorem{remark}{Remark}
 
-\newcommand{\eoe}{\hskip5mm\null\nobreak\hfill(end of example)}
+\newcommand{\eox}[1]{\hskip5mm\null\nobreak\hfill#1}
+\newcommand{\eoe}{\eox{(end of example)}}
+\newcommand{\eor}{\eox{(end of remark)}}
 \newcommand{\rg}[1]{\marginpar{\tiny\raggedright\textcolor{blue}{\bf rg:} #1}}
 \newcommand{\todo}[1]{[\textcolor{red}{TODO}: #1]}
 
@@ -406,6 +408,8 @@ beliefs.  Sometimes, the {\it adopt\/} operation comes in two flavours:
 {\it update\/} and {\it revise}.  An update corresponds to a change in the
 environment, while a revision is exclusively a mental state change.
 
+\subsection{Beliefs}
+
 In general, beliefs are sentences in some logic.  However, the focus of
 this work is on roles and organisations, not on beliefs.  Thus, AF-Raf uses
 a very simple language for beliefs\,---\,they are essentially trees whose
@@ -416,8 +420,8 @@ nodes are labeled by strings:
 \end{align}
 The number of arguments can be any non-negative integer.
 
-\begin{example}[beliefs]
-The following are AF-Raf beliefs:
+\begin{example}
+The following are AF-Raf \emph{beliefs}:
 \begin{align}
 &{\it hasColor}({\it my}({\it car}()), {\it blue}()) \\
 &{\it iHave}({\it cat}(), {\it int}({\it 10}()))
@@ -425,16 +429,67 @@ The following are AF-Raf beliefs:
 Note that any belief must contain a function with $0$~arguments, such as
 {\it car}, {\it blue}, {\it cat}, and {\it 10\/} in this example;
 otherwise, the belief would not have a finite size.  Note also that
-function symbols can represent both values (such as~$10$) and typing
+function symbols can represent both values (such as~{\it 10\/}) and typing
 information (such as~{\it int\/}).
 \eoe
 \end{example}
 
-Each function symbol is usually used with a fixed number of arguments.  For
-example, if {\it car\/} is used in one belief with $0$~arguments, we do not
-expect it to be used with more than $0$~arguments in another belief.  We
-say that each function symbol has an attached \emph{arity}.
+Each function symbol is used with a fixed number of arguments.  For
+example, if the function symbol ${\it car}$ is used in one belief with
+$0$~arguments in the function term ${\it car}()$, then we expect {\it
+car\/} to never have arguments.  We say that each function symbol has an
+\emph{arity}, which is~$0$ for {\it car}.  The function terms of arity~$0$,
+such as ${\it 10}()$ and ${\it car}()$, are said to be \emph{constants}.
 
+\begin{remark}
+Of course, it is important what beliefs mean, not only how they are
+represented syntactically.  The meaning of beliefs arises from how beliefs
+are used by agents.  We will see later how beliefs trigger actions via
+rules, and how beliefs spread through messages.
+\eor
+\end{remark}
+
+\subsection{Queries}
+
+In general, a query $q$ is a sentence in some logic that determines a
+subset of beliefs.  Given a belief base and a query, it is important to be
+able to efficiently find the subset of beliefs from the belief base that
+satisfy the query.  Again, AF-Raf takes a simple approach, because its
+focus is not the belief base.  Each query is term that may contain
+variables, which are interpreted as patterns.
+\begin{align}
+\tau &::= string && \text{variable} \\
+\tau &::= \nu(\tau,\ldots,\tau) && \text{function term} \\
+\nu  &::= {\rm string} &&\text{function symbol}
+\end{align}
+The last two grammar rules are the same as for beliefs.
+Thus, any belief can be used as a query:  It stands for asking whether the
+belief base contains that particular belief.
+
+\begin{example}
+The following are AF-Raf \emph{queries}:
+\begin{align}
+&{\it hasColor}({\it my}({\it car}()), x) \label{eq:query.1} \\
+&{\it hasColor}(y, z) \label{eq:query.2}
+\end{align}
+The variables $x$,~$y$, and~$z$ are easily identifiable, because they are
+not followed by parentheses.  Suppose the belief base contains exactly one
+belief, namely
+\begin{align}
+&{\it hasColor}({\it sky}(), {\it blue}()) \label{eq:skyblue}
+\end{align}
+Belief~\eqref{eq:skyblue} does not match query~\eqref{eq:query.1} but does
+match~\eqref{eq:query.2}.  In the latter case, the match is justified by
+setting $y$ to be ${\it sky}()$, and setting $z$ to be ${\it blue}()$.
+\eoe
+\end{example}
+
+The previous example shows how a belief matching a query can be described
+by a binding of terms, such as ${\it sky}()$ and ${\it blue}()$, to
+variables, such as $y$~and~$z$.  TODO: Explain binding, formally.
+
+
+\subsection{Updates and Revisions}
 
 TODO: query and update, briefly?
 
