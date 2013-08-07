@@ -535,7 +535,62 @@ TODO
 % >>>
 \section{AgentFactory} % <<<
 
-TODO
+Agent Factory~\cite{collier2002agent} is an open-source Java-based
+development framework that provides support for the development and
+deployment of agent-oriented applications.
+
+Agent Factory (AF) provides a generic run-time environment for deploying
+agent-based systems that is based on the FIPA
+standards~\cite{poslad2000fipa}.  Central to this environment is one or
+more configurable agent platforms that support the concurrent deployment of
+heterogeneous agent types that make up an application, and which can employ
+a range of agent architectures and interpreters. In other words the agents
+can be categorised in two subgroups: the Application Agents and the System
+Agents. The Application Agents implement the application logic. The System
+Agents provide the services infrastructure needed to support the deployment
+of Application Agents. 
+
+Platform-level resources in the form of platform services are shared
+amongst agents. The default platform services are: Agent management
+services, which provides support for creating, terminating, suspending and
+resuming agents; and local message transport service, which provide an
+intra-platform communication channel. Other platform services include the
+HTTP message transport service and the directory facilitator service.
+
+AF also offers monitoring and inspection tools that aid the developer in
+debugging their implementations.
+
+The Common Language Framework (CLF) is a collection of components that
+facilitates the design and implementation of diverse Agent Programming
+Languages in AF\null. CLF includes a generic logic framework, a framework
+for planning and for executing plans, a common API model based on sensors,
+actions and modules, an outline grammar and template compiler
+implementation based on JavaCC, and a configurable debugging tool.
+
+Currently there are four Agent Programming Languages that have been built
+using the CLF:
+\begin{enumerate}
+
+\item \textit{AFAPL}, a reimplementation of the original Agent Factory
+agent programming language that is based on commitment rules;
+
+\item \textit{AF-AgentSpeak}, an implementation of the AgentSpeak language based on Jason;
+
+\item \textit{AF-TeleoReactive}, an implementation of Nilsson's teleo-reactive
+programming model;
+
+\item and our new \textit{AF-Raf}, described in the next section.
+\rg{I forgot in which state AF-RAF is. It can't be completed in 4 weeks,
+right?}
+\end{enumerate}
+
+Agent Factory is fully integrated with Eclipse in a way that simplifies
+the task of providing support for new languages and architectures.
+
+For further details on Agent Factory the reader is directed
+to~\cite{collier2009modeling}. The Common Language Framework is described
+in~\cite{russell2011af}. Also, a discussion on the evolution of Agent Factory since it
+was created in the early 1990s can be found in~\cite{muldoon2009towards}.
 
 % >>>
 % >>>
@@ -1385,51 +1440,6 @@ communication}
 
 
 \subsection{The Agent Factory Framework} \label{sec:af}
-
-Agent Factory~\cite{collier2002agent} is an open-source Java-based
-development framework that provides support for the development and
-deployment of agent-oriented applications.
-
-Agent Factory (AF) provides a generic run-time environment for deploying
-agent-based systems that is based on the FIPA standards~\cite{poslad2000fipa}.
-Central to this environment is a configurable agent platform that supports the
-concurrent deployment of heterogeneous agent types employing a range of agent
-architectures and interpreters. AF also supports the deployment of
-platform-level resources in the form of platform services that are shared
-amongst agents, along with monitoring and inspection tools that aid the
-developer in debugging their implementations.
-
-The Common Language Framework (CLF) is a collection of components that
-facilitates the design and implementation of diverse Agent Programming
-Languages in AF\null. CLF includes a generic logic framework, a framework
-for planning and for executing plans, a common API model based on sensors,
-actions and modules, an outline grammar and template compiler
-implementation based on JavaCC, and a configurable debugging tool.
-
-Currently there are four Agent Programming Languages that have been built
-using the CLF:
-\begin{enumerate}
-
-\item \textit{AFAPL}, a reimplementation of the original Agent Factory
-agent programming language that is based on commitment rules;
-
-\item \textit{AF-AgentSpeak}, an implementation of the AgentSpeak language based on Jason;
-
-\item \textit{AF-TeleoReactive}, an implementation of Nilsson's teleo-reactive
-programming model;
-
-\item and our new \textit{AF-Raf}, described in the next section.
-\rg{I forgot in which state AF-RAF is. It can't be completed in 4 weeks,
-right?}
-\end{enumerate}
-
-Agent Factory is fully integrated with Eclipse in a way that simplifies
-the task of providing support for new languages and architectures.
-
-For further details on Agent Factory the reader is directed
-to~\cite{collier2009modeling}. The Common Language Framework is described
-in~\cite{russell2011af}. Also, a discussion on the evolution of Agent Factory since it
-was created in the early 1990s can be found in~\cite{muldoon2009towards}.
 
 \subsection{Multi-Sorted Predicate Logic} \label{sec:multi-sorted}
 
