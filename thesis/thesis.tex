@@ -539,7 +539,7 @@ Agent Factory~\cite{collier2002agent} is an open-source Java-based
 development framework that provides support for the development and
 deployment of agent-oriented applications.
 
-Agent Factory (AF) provides a generic run-time environment for deploying
+Agent Factory provides a generic run-time environment for deploying
 agent-based systems that is based on the FIPA
 standards~\cite{poslad2000fipa}.  Central to this environment is one or
 more configurable agent platforms that support the concurrent deployment of
@@ -557,18 +557,34 @@ resuming agents; and local message transport service, which provide an
 intra-platform communication channel. Other platform services include the
 HTTP message transport service and the directory facilitator service.
 
-AF also offers monitoring and inspection tools that aid the developer in
-debugging their implementations.
+Agent Factory also offers monitoring and inspection tools that aid the
+developer in debugging their implementations.
 
-The Common Language Framework (CLF) is a collection of components that
-facilitates the design and implementation of diverse Agent Programming
-Languages in AF\null. CLF includes a generic logic framework, a framework
-for planning and for executing plans, a common API model based on sensors,
-actions and modules, an outline grammar and template compiler
-implementation based on JavaCC, and a configurable debugging tool.
+Another key feature of Agent Factory is the Common Language Framework,
+which represents a collection of pre-written components that facilitates
+the design and implementation of diverse Agent Programming Languages in
+Agent Factory\null. The Common Language Framework includes a generic logic
+framework, a framework for planning and for executing plans, a common API
+model based on sensors, actions and modules, an outline grammar and
+template compiler implementation based on JavaCC, and a configurable
+debugging tool.
+
+The Common Language Framework supports the building of agent interpreters
+on top of the Agent Factory core. These interpreters operate within an
+agent platform to control the execution of the agent according to an
+interpreted Agent Oriented Programming language. This way agents written in
+different languages share the same actions, sensors and modules (libraries
+or APIs). Actions, sensors and modules are written in Java, and they extend
+the agent program so that it can get information about its environment and
+act out its intentions. Actions are used to produce changes to the
+environment, while sensors generate beliefs, and change the knowledge of
+the agent. Each action has an interface that define how it may be invoked
+from within the agent program. If a set of actions and sensors are linked
+together they can be defined within a module. A module may also provide
+resources that are shared amongst several sensors and actions. 
 
 Currently there are four Agent Programming Languages that have been built
-using the CLF:
+using the Common Language Framework:
 \begin{enumerate}
 
 \item \textit{AFAPL}, a reimplementation of the original Agent Factory
