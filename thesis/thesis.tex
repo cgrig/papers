@@ -552,9 +552,37 @@ that the \emph{empty match} differs from \emph{no match}.
 \eoe
 \end{example}
 
+\todo{Conjunctive queries.}
+
 \subsection{Updates and Revisions}
 
-TODO: query and update, briefly?
+In general, belief bases have internal and external consistency
+requirements.  Internally, beliefs should not contradict each-other.
+Externally, beliefs should correspond to reality.
+
+In AF-Raf, the situation is simpler.  There is no other meaning for beliefs
+apart from how they affect the behaviour of the agent, through rules.
+Thus, it is the agent's responsibility to detect inconsistencies.  In other
+words, inconsistencies are detected by programs, not by the programming
+language.
+
+\begin{example}
+Suppose that a particular agent-oriented program makes the convention that
+${\it not}(x)$ means that `I do not hold belief~$x$'.  In this case, the
+query ${\it not}(x)\&x$ detects inconsistencies.  The action that the agent
+takes when it discovers an inconsistency could be to report an error, but
+may be any action at all.
+\end{example}
+
+Similarly, the agent (and not the programming language) is responsible with
+ensuring that its beliefs are consistent with the environment.
+
+Once semantic concerns are left to the user program, the programming
+language AF-Raf is free to adopt simple mechanisms for updating the belief
+base.  The belief base is a set of beliefs, and its operations are those of
+a set:  ${\bf adopt}(x)$ inserts belief~$x$ into the belief base, and ${\bf
+forget}(x)$ removes the belief~$x$ from the belief base.  In case $x$~is
+not a belief, ${\bf forget}(x)$ does not modify the belief base.
 
 % >>>
 \section{Functional Languages} % <<<
