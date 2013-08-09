@@ -18,6 +18,7 @@
 \newcommand{\eox}[1]{\hskip5mm\null\nobreak\hfill#1}
 \newcommand{\eoe}{\eox{(end of example)}}
 \newcommand{\eor}{\eox{(end of remark)}}
+\newcommand{\pmap}{\rightharpoonup}
 \newcommand{\rg}[1]{\marginpar{\tiny\raggedright\textcolor{blue}{\bf rg:} #1}}
 \newcommand{\todo}[1]{[\textcolor{red}{TODO}: #1]}
 
@@ -487,9 +488,10 @@ satisfy the query.  Again, AF-Raf takes a simple approach, because its
 focus is not the belief base.  Each query is term that may contain
 variables, which are interpreted as patterns.
 \begin{align}
-\tau &::= string && \text{variable} \\
 \tau &::= \nu(\tau,\ldots,\tau) && \text{function term} \\
-\nu  &::= {\rm string} &&\text{function symbol}
+\tau &::= x && \text{variable term} \\
+\nu  &::= {\rm string} &&\text{function symbol} \\
+x &::= {\rm string} && \text{variable symbol}
 \end{align}
 The last two grammar rules are the same as for beliefs.
 Thus, any belief can be used as a query:  It stands for asking whether the
@@ -515,8 +517,40 @@ setting $y$ to be ${\it sky}()$, and setting $z$ to be ${\it blue}()$.
 
 The previous example shows how a belief matching a query can be described
 by a binding of terms, such as ${\it sky}()$ and ${\it blue}()$, to
-variables, such as $y$~and~$z$.  TODO: Explain binding, formally.
+variables, such as $y$~and~$z$.  More formally, a \emph{match} is a finite
+partial map from the set of variables to the set of ground terms.  We write
+$[\tau_1/x_1,\ldots,\tau_n/x_n]$ for the match that binds $x_k$
+to~$\tau_k$, for all $1\le k\le n$.  Also, we write
+$\tau[\tau_1/x_1,\ldots,\tau_n/x_n]$ for the result of substituting in
+parallel $x_k$ with~$\tau_k$, for all $1\le k\le n$.
 
+\begin{example}
+Consider the following belief base
+\begin{align}
+&{\it knows}({\it john}(), {\it john}()) \\
+&{\it knows}({\it john}(), {\it laura}())
+\end{align}
+and the following queries
+\begin{align}
+&{\it knows}(x, y) \\
+&{\it knows}(x, x) \\
+&{\it knows}({\it laura}(), {\it john}()) \\
+&{\it knows}({\it john}(), {\it laura}())
+\end{align}
+The results of these queries are, respectively, the following sets of
+matchings:
+\begin{align}
+&\bigl\{ [{\it john}()/x, {\it john}()/y],\;
+   [{\it john}()/x,{\it laura}()/y] \bigr\} \\
+&\bigl\{ [{\it john}()/x] \bigr\} \\
+&\bigl\{\bigr\} \\
+&\bigl\{[]\bigr\}
+\end{align}
+Note that a variable may appear multiple times in a query.  In such a case,
+it implicitly requires the corresponding subterms to be equal.  Also note
+that the \emph{empty match} differs from \emph{no match}.
+\eoe
+\end{example}
 
 \subsection{Updates and Revisions}
 
