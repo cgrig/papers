@@ -674,6 +674,76 @@ was created in the early 1990s can be found in~\cite{muldoon2009towards}.
 % >>>
 \chapter{Usage Scenarios} % <<<
 
+\subsection{Defining core concepts in AF-Raf} % <<<
+
+A number of concepts stand at the foundation of the AF-Raf programming
+language. These concepts include: beliefs, rules, actions, sensors, roles
+and sessions. They are related to one another and the unique features of
+AF-Raf are built upon them. 
+
+Beliefs and rules represent the AF-Raf's core concepts. Beliefs in AF-Raf
+are regarded as logical terms and represented in the form of trees of
+strings.  Beliefs are grouped together in a belief base that can be
+accessed by, and updated by the agent. On the other hand, rules represent a
+means for accessing the belief base and also a way of triggering agent
+behaviour. A rule has two main components besides a name, which is
+optional. These components are a query, and an action. The query puts a
+question to the belief base, and if the result matches the query then some
+action is triggered.  An action represents the actual agent's behaviour,
+which can range from printing something to the console to sending a message
+to another agent, creating another agent or even updating the belief base.
+Another way to update the belief base is through sensors.
+
+Actions and sensors are pieces of Java code used to extend the AF-Raf
+programs. Actions are invoked within rules. There is a number of actions
+included in the standard library, which any agent can use, there is also the
+option to create new actions. Sensors are run automatically every time
+step. Sensors can range from the monitoring of the agent's message inbox to
+monitoring changes in the agent's environment.
+
+An operation a specific kind of rule stating that upon receiving a message
+of a particular type the agent should reply with a message of a specified
+type, which includes the type unit(), and thus returning no message. Even
+though operations can be written as rules, using syntactic sugar to
+automatise the process of message passing makes answering messages much
+easier.
+
+A role's purpose is to group together related behaviour. As stated before
+AF-Raf agents interact through message passing. AF-Raf's role concept
+reflects this by considering only those kind of behaviours (rules) that
+impact other agents through message passing, namely operations. A role is a
+set of operation types, acting in a similar way to interfaces in object
+oriented programming. When an agent plays a role it needs to give an
+implementation to all the operations defined within that role.
+
+Sessions organise the interaction between agents stating the exact order in
+which the messages should succeed. A session brings together related roles
+and maps the set of operations defined in those roles to a particular
+protocol of conversation. A session specifies the agents involved in the
+conversation, as well as the roles they play, then provides a list
+containing entries of the form: message type followed by the sender agent
+and the receiver agent.
+
+AF-Raf statically checks that the type of each call message in a session
+corresponds to an operation defined in the receiver's role, and each return
+message corresponds to an operation defined in the sender's role.
+
+AF-Raf checks dynamically that the agent playing a role actually implements
+the specified types of the operations defined in that role.  For each call
+message there's an associated call id which must appear in the return
+message. This is a way of keeping track of the message pair associated to
+an operation and enable the dynamic check that the message types correspond
+to the ones defined inside the role. If the types do not correspond an
+error is risen.
+
+Further checks are performed at runtime. Each session has a session id.
+Each message has to contain the session id so that it can be associated to
+an specific session. This enables the interpreter to monitor that the
+messages succeed in the right order.
+
+% >>>
+
+
 Figure~\ref{fig:AF-Raf-pingpong-role} illustrates an AF-Raf role describing
 the ping pong protocol. The code in Figure~\ref{fig:AF-Raf-pingpong-roles}
 is a simple implementation of this role.
@@ -1455,6 +1525,16 @@ session and the roles proposed in the previous section can be found.
 
 % >>>
 \chapter{Related Work} % <<<
+
+Alessandro Ricci on Typing,
+Guido Boella on Roles,
+Graversen on Roles in OOP,
+
+D Ancona on session types,
+Ferber on Organisations,
+
+Role oriented programming languages: Object Teams, PowerJava, EpsilonJ,
+Chameleon, Perl 6, Perl 5
 
 % >>>
 \chapter{Conclusions}\label{ch:conc} % <<<
