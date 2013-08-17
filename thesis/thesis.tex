@@ -1526,16 +1526,16 @@ session and the roles proposed in the previous section can be found.
 \chapter{Related Work} % <<<
 
 
-Following the research presented in this thesis Alessandro Ricci  and
-Andrea Santi developed a new programming language, simpAL, to support types
-and type checking~\cite{}. SimpAl draws inspiration from the Agent and Artifacts model developed by
-Andrea Omicini and from the Jason programming language, which is based on
-the Belief, Desire, Intention model. SimpAL is conceived as an extension to
-the Java object oriented programming language with a separate agent
-abstraction layer. 
+Following the research presented in this thesis, Ricci  and Santi developed
+a new programming language, simpAL, to support types and type
+checking~\cite{}. SimpAl draws inspiration from the Agent and Artifacts
+model developed by Omicini~\cite{} and from the Jason programming language,
+which is based on the Belief, Desire, Intention model. SimpAL is conceived
+as an extension to the Java object oriented programming language with a
+separate agent abstraction layer. 
 
-Even though their language is very different from AF-Raf, there are a
-number of overlapping concepts. They import a social view of computation
+Even though this language is very different from AF-Raf, there are a
+number of overlapping concepts. SimpAL imports a social view of computation
 where agents playing different roles constitute an organisation, and work
 within a shared environment. The main building blocks of this model are
 agents, the autonomous components, and artifacts, the environmental
@@ -1545,17 +1545,54 @@ acomplish the tasks. SimpAl roles are very similar to AF-Raf roles in that
 they constitute a set of tasks types, where tasks are the analogous to the
 AF-Raf operations. 
 
-The roles are organised in a slightly different way from the AF-Raf's
-session type model, which can be seen as a kind of protocol prescribing the
-agent communication. In simpAL organisation models are used to define
-organisation types. Organisation types are implemented by concrete
-organisations that bring together related roles and artifact in coherent
-units named workspaces.
+The roles are organised in a slightly different manner compared to the
+AF-Raf's session type model, which can be seen as a kind of protocol
+prescribing the agent communication. In simpAL organisation models are used
+to define organisation types, that bring together related roles and
+artifact in coherent units named workspaces. Organisation types are
+implemented by concrete organisations. SimpAL organisation types do not put
+any constraint on the order in which interactions between agents occur, as
+AF-Raf session types do, instead they simply group together related roles
+and artifacts working in a similar way to the object oriented programming
+interfaces.
 
-A number of static type checks are performed. At the role level
+A number of static type checks are performed. At the role level it is
+checked that for each task type there exists at least one plan, and for
+each plan it's checked that the type of the sent messages are only the ones
+defined in the task type. Also it's checked that the assignment of tasks
+corresponds to the task types defined in the role, and that the types of
+the messages sent to an agent correspond to that the agent can understand. 
+
+Errors about beliefs that are checked include finding, inside the plans,
+beliefs that are not declared, and beliefs that are assigned with
+expressions of the wrong type.
+
+Similar checks are performed at the environment level. The usage interface
+represents the type of artifact, and contains the observable properties and
+the operations provided by the artifact. Artifact template is the actual
+artifact implementation. On the agent side are checked errors regarding
+artifact operations and its observable state. For each action in the plan
+there must be a matching operation in the artifact's interface.  Likewise,
+for each update belief statement regarding an artifact property there must
+exist a matching observable property in the usage interface. On the
+environment side is checked that the artifact templates match the
+corresponding usage interfaces. First, checks are performed to ascertain
+that for each operation declared in the interface there exists an
+implementation in the template, also for any of the observable properties
+in the template there exists a declaration in the corresponding interface
+with a compatible type.
+
+At the organisation level it is checked that each workspace, artifact, and
+agent types declared in an organisational model is actually implemented in
+the implementation of the organisation. 
+
+Subsequent to my proposal to integrate session types with agent programming
+languages, session types were exploited further in the context of multiagent
+systems. D Ancona on session types.
+
+
 Guido Boella on Roles, Graversen on Roles in OOP,
 
-D Ancona on session types,
 Ferber on Organisations,
 
 Role oriented programming languages: Object Teams, PowerJava, EpsilonJ,
