@@ -1587,9 +1587,16 @@ agent types declared in an organisational model is actually implemented in
 the implementation of the organisation. 
 
 Subsequent to my proposal to integrate session types with agent programming
-languages, session types were exploited further in the context of multiagent
-systems. D Ancona on session types.
+languages, global session types were exploited further in the context of
+multiagent systems~\cite{}. They were used for automatic generation of
+self-monitoring agent systems implemented in Jason. The solution suggested
+was to generate a monitor agent that checks at runtime that the ongoing
+conversation is correct conform to the global session type. 
 
+In order to do this the developer needs to provide definitions of global
+session types using Prolog rules. Global types are viewed as states, hence
+the need to specify possible transitions to different states upon message
+sending. Also, they need to specify the message content types. 
 
 Guido Boella on Roles, Graversen on Roles in OOP,
 
