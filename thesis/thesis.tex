@@ -377,6 +377,11 @@ permissions. The expectations are both internal and external to the
 individual. Conformity results in rewards while nonconformity triggers
 social sanctions. Role prescriptions are subject to change through social
 pressure.
+
+Guido Boella on Roles, Graversen on Roles in OOP
+
+Role oriented programming languages: Object Teams, PowerJava, EpsilonJ,
+Chameleon, Perl 6, Perl 5
 % >>>
 \section{Organisational Theory}  % <<<
 
@@ -425,6 +430,7 @@ the advantage of promoting proficiency and the need of less transfer time
 between tasks, but also the disadvantage of dissatisfaction associated to
 boredom. 
 
+Ferber on Organisations
 
 % >>>
 \section{Belief Bases} % <<<
@@ -1063,6 +1069,200 @@ rule Message(other, status()) {
 
 % >>>
 \chapter{Language Definition}\label{ch:method} % <<<
+
+\section{AF-Raf Syntax} % <<<
+
+The purpose of the abstract grammar is to express the general structure of a
+programming language as concisely as possible. AF-Raf's abstract grammar:
+
+\begin{verbatim}
+ActionData =
+  Function function,
+  String javaClass;
+
+QualifiedId =
+  QualifiedId path,
+  String id;
+
+Rule =
+  String name,
+  IFormula condition,
+  BlockStep statement;
+  
+NamedBindings =
+  String name,
+  Bindings bindings;
+
+Contract =
+  enum(ContractType: pre, post, fail) type,
+  IFormula condition;
+
+Plan =
+  Function signature,
+  ImmutableList<Contract> contract,
+  IPlanStep body;
+\end{verbatim}
+
+AF-Raf syntax is defined using the Extended Backus-Naur Form notation.
+
+Grammar for top level structures:
+\begin{verbatim}
+script: directive* EOF;
+directive: include | java_binding | plan | rule;
+
+include: 'include' a=qualified_id
+  {includes.add(stringOfQualifiedId($a.v,"/")+".raf");};
+
+java_binding: action | sensor;
+
+plan: 'plan' a=function '{' b=contract c=statement '}'
+  { // TODO Check that there are no two plans or actions with the same name
+    agent.plans.put($a.v.functor(), Plan.make($a.v,$b.v,$c.v)); };
+
+rule: a='rule' b=formula '{' c=statement '}'
+  {agent.rules.add(Rule.make(getSourceName()+":"+$a.getLine(),$b.v,$c.v));};
+
+action: 'action' a=function '=' b=qualified_id ';'
+  {actions.add(ActionData.make($a.v,stringOfQualifiedId($b.v,".")));};
+
+sensor: 'sensor' a=qualified_id ';'
+  {sensors.add(stringOfQualifiedId($a.v,"."));};
+
+contract returns [ImmutableList<Contract> v]
+scope {ImmutableList.Builder<Contract> builder;}:
+  {$contract::builder=ImmutableList.builder();} 
+  (a=contract_type b=formula ';' {$contract::builder.add(Contract.make($a.v,$b.v));})*
+  {$v=$contract::builder.build();};
+\end{verbatim}
+
+Grammar for formulas and terms:
+\begin{verbatim}
+
+formula returns [IFormula v]:
+  a=formula_a {$v=$a.v;}
+  ('=>' b=formula_a {$v=new IMPLIES($a.v,$b.v);})?;
+
+formula_a returns [IFormula v]:
+  a=atom_formula {$v=$a.v;} 
+  (b=('&' | '|') c=atom_formula
+    { if ($b.text.equals("&")) $v=new AND(Lists.newArrayList($v,$c.v));
+      else if ($b.text.equals("|")) $v=new OR(Lists.newArrayList($v,$c.v));
+      else assert false : "internal error in parser";}
+  )*;
+
+atom_formula returns [IFormula v]:
+    (UID | term pred_op) => a=predicate {$v=$a.v;}
+  | '!' b=atom_formula {$v=new NOT($b.v);}
+  | '(' c=formula ')' {$v=$c.v;};
+
+predicate returns [IFormula v]:
+    a=term b=pred_op c=term {$v=makePredicate($a.v,$b.v,$c.v);} 
+  | d=UID '(' e=term_list? ')' {$v=new Predicate($d.text,$e.v);};
+
+term returns [ITerm v]:
+    a=term_a {$v=$a.v;}  
+    (b=add_op c=term_a {$v=makeAddition($v,$b.text,$c.v);})*;
+
+term_a returns [ITerm v]:
+    a=atom_term {$v=$a.v;} 
+    (b=mul_op c=atom_term {$v=makeMultiplication($v,$b.text,$c.v);})*;
+
+atom_term returns [ITerm v]:
+    '(' a=term ')' {$v=$a.v;}
+  | b=literal {$v=$b.v;}
+  | c=LID {$v=new Variable($c.text);}
+  | d=function {$v=$d.v;};
+ 
+function returns [Function v]: a=LID '(' b=term_list? ')'
+    {$v=new Function($a.text,$b.v==null?new ArrayList<ITerm>():$b.v);};
+
+term_list returns [List<ITerm> v]:
+  a=term {$v=Lists.newArrayList($a.v);}
+  (',' b=term {$v.add($b.v);})*;
+
+pred_op returns [String v]: (a=eq_op | a=cmp_op) {$v=$a.v;};
+eq_op returns [String v]: (a='==' | a='!=') {$v=$a.text;};
+cmp_op returns [String v]: (a='<' | a='>') {$v=$a.text;}; // TODO: | '>=' | '<=';
+add_op returns [String v]: (a='+' | a='-') {$v=$a.text;};
+mul_op returns [String v]: (a='*' | a='/' | a='%') {$v=$a.text;};
+unary_op returns [String v]: (a='!' | a='-') {$v=$a.text;}; // TODO where is '!' used in AFAPL?
+
+\end{verbatim}
+
+Grammar for statements:
+\begin{verbatim}
+
+statement returns [BlockStep v]
+scope { List<IPlanStep> list; }:
+  { $statement::list = Lists.newArrayList(); } 
+  (a=atom_statement ';' {$statement::list.add($a.v);})*
+  {$v=new BlockStep($statement::list);};
+
+atom_statement returns [IPlanStep v]:
+    ('{' a=statement '}'
+  | a=assignment
+  | a=while_statement
+  | a=foreach
+  | a=call
+  | a=update_belief
+  | a=if_statement)
+      {$v=$a.v;}
+// TODO: not in examples: query, wait, try_recover, when; perhaps add later
+;
+
+assignment returns [IPlanStep v]: a=LID '=' (b=function | b=list_comprehension)
+  {$v=new AssignmentStep(new Variable($a.text),$b.v,false);};
+
+while_statement returns [IPlanStep v]: 'while' a=formula '{' b=statement '}'
+  {$v=new WhileStep($a.v,$b.v);};
+
+foreach returns [IPlanStep v]: 'foreach' a=formula '{' b=statement '}'
+  {$v=new ForEachStep($a.v,$b.v);};
+
+update_belief returns [IPlanStep v]: (a='+' | a='-') b=predicate
+  {$v=new UpdateStep($a.text,$b.v);};
+
+call returns [IPlanStep v]: a=function
+  {$v=new CallStep($a.v);};
+
+if_statement returns [IPlanStep v]: 
+  'if' a=formula '{' b=statement '}' ('else' '{' c=statement '}')?
+  {$v=new IfStep($a.v,$b.v,$c.v);};
+
+list_comprehension returns [ITerm v]: '[' term '|' formula ']';
+
+\end{verbatim}
+
+Lexer:
+
+\begin{verbatim}
+
+qualified_id returns [QualifiedId v]:
+  (t=id {$v = QualifiedId.make($v, $t.text); } '.')* t=id { $v = QualifiedId.make($v, $t.text); };
+
+contract_type returns [Contract.ContractType v]:
+    (t='pre' | t='post' | t='fail')
+      { $v = Contract.ContractType.valueOf($t.text.toUpperCase()); };
+
+literal returns [ITerm v]:
+    t=STRING { $v = new StringTerm(unescapeStringLiteral($t.text)); } 
+  | t=INT { $v = new IntegerTerm(Integer.parseInt($t.text)); };
+
+id: LID | UID;
+
+INT: '0'..'9'+;
+STRING: '"' (~'"' | '\\"')* '"';  
+
+LID: ('a'..'z')('a'..'z'|'A'..'Z'|'0'..'9'|'$')*;
+UID: ('A'..'Z')('a'..'z'|'A'..'Z'|'0'..'9'|'$')*;
+
+WS:   (' '|'\t'|'\n'|'\r')+ {$channel=HIDDEN;};
+BLOCK_COMMENT: '/*' ( options {greedy=false;} : . )* '*/' {$channel=HIDDEN;};
+LINE_COMMENT: '//' ~('\n'|'\r')* ('\r'|'\n') {$channel=HIDDEN;};
+
+\end{verbatim}
+% >>>
+
 \section{The AF-Raf programming Language} % <<<
 
 AF-Raf is a new agent oriented programming language I specifically
@@ -1529,10 +1729,10 @@ session and the roles proposed in the previous section can be found.
 Following the research presented in this thesis, Ricci  and Santi developed
 a new programming language, simpAL, to support types and type
 checking~\cite{}. SimpAl draws inspiration from the Agent and Artifacts
-model developed by Omicini~\cite{} and from the Jason programming language,
-which is based on the Belief, Desire, Intention model. SimpAL is conceived
-as an extension to the Java object oriented programming language with a
-separate agent abstraction layer. 
+model~\cite{} and from the Jason programming language, which is based on
+the Belief, Desire, Intention model. SimpAL is conceived as an extension to
+the Java object oriented programming language with a separate agent
+abstraction layer. 
 
 Even though this language is very different from AF-Raf, there are a
 number of overlapping concepts. SimpAL imports a social view of computation
@@ -1585,25 +1785,44 @@ with a compatible type.
 At the organisation level it is checked that each workspace, artifact, and
 agent types declared in an organisational model is actually implemented in
 the implementation of the organisation. 
+\\~\\
 
 Subsequent to my proposal to integrate session types with agent programming
 languages, global session types were exploited further in the context of
-multiagent systems~\cite{}. They were used for automatic generation of
+multiagent systems~\cite{} to specify multiparty interactions and verify
+their correctness. They were used for automatic generation of
 self-monitoring agent systems implemented in Jason. The solution suggested
 was to generate a monitor agent that checks at runtime that the ongoing
-conversation is correct conform to the global session type. 
+conversation is correct conform to the global session type. In this
+context, global session types are viewed as states, on which several
+transition steps are possible. Transitions occur with each successfully sent
+message.
 
-In order to do this the developer needs to provide definitions of global
-session types using Prolog rules. Global types are viewed as states, hence
-the need to specify possible transitions to different states upon message
-sending. Also, they need to specify the message content types. 
+In order to be able to generate the agent monitor, the developer needs to
+provide Prolog rules to define global session types, to specify possible
+transitions to different states upon message sending, and to specify the
+message content types. As well, a number of changes to the code of the
+participating agents need to be done to support the integration with the
+monitor agent. 
 
-Guido Boella on Roles, Graversen on Roles in OOP,
+There's only one monitor agent that keeps track of all messages and checks
+if there exists a new state that can be reached from the current state. If
+the transition is possible the monitor agent allows the sending action by
+acknowledging it to the sending agent. If such a transition is not
+possible the protocol fails and there's no possibility of self recovery.
+The developer has to change either the agent code or the global session
+type's specification in order to fix the error. 
+\\~\\
 
-Ferber on Organisations,
+A role-based approach to reuse in agent oriented programming. Rem 2005.
+\\~\\
 
-Role oriented programming languages: Object Teams, PowerJava, EpsilonJ,
-Chameleon, Perl 6, Perl 5
+Rope: role oriented programming environment for multiagent systems. Becht
+1999
+\\~\\
+
+Roles and norms for programming agent organisations. Tinnemeier 2009
+\\~\\
 
 % >>>
 \chapter{Conclusions}\label{ch:conc} % <<<
