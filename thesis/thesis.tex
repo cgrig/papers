@@ -1374,6 +1374,17 @@ LINE_COMMENT: '//' ~('\n'|'\r')* ('\r'|'\n');
 \end{verbatim}
 % >>>
 
+\section{Operational Semantics} % <<<
+
+An AF-Raf agent program interpretation starts with the execute() method. It
+first gets all the messages from the inbox, and for each message adds a
+corresponding beliefs to the belief base. After that for each rule calls
+the handlerule() method. For each rule constructs a query to the belief
+base based on the rules condition. Then applies each successful set of
+bindings to the statement of the rule, includes the rule in the list of
+last fired rules and execute the statement.
+% >>>
+
 \section{The AF-Raf programming Language} % <<<
 
 AF-Raf is a new agent oriented programming language I specifically
