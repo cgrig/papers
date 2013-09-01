@@ -1081,7 +1081,9 @@ implementation, and (2)~a few paragraphs commenting the figure. Some
 readers look only at the figure, some read only the text: the idea is to
 give each what they prefer.}
 
+\begin{figure}\footnotesize % <<<
 \begin{verbatim}
+
 ActionData =
   Function function,
   String javaClass;
@@ -1108,172 +1110,100 @@ Plan =
   ImmutableList<Contract> contract,
   IPlanStep body;
 \end{verbatim}
+\caption{AF-Raf Abstract Grammar}
+\label{fig:Abstract-Grammar}
+\end{figure} % >>>
 
 AF-Raf syntax is defined using the Extended Backus-Naur Form notation. The
 grammar for top level structures is as follows:
 
+\begin{figure}\footnotesize % <<<
 \begin{verbatim}
 script: directive* EOF;
-\end{verbatim}
-A script is composed of a number of directives followed by the EOF symbol.
 
-\begin{verbatim}
 directive: include | java_binding | plan | rule;
-\end{verbatim}
-A directive is either an include, a java binding , a plan, or a rule.
 
-\begin{verbatim}
 include: 'include' a=qualified_id;
-\end{verbatim}
-The include directive must contain the keyword "include" followed by a
-qualified id which represents a reference to a file (the package path, file
-name and its extension).
 
-\begin{verbatim}
 java_binding: action | sensor;
-\end{verbatim}
-A java binding could be either an action or a sensor.
 
-\begin{verbatim}
 plan: 'plan' a=function '{' b=contract c=statement '}';
-\end{verbatim}
-A plan is composed of a function followed by a contract and a statement.
 
-\begin{verbatim}
 rule: a='rule' b=formula '{' c=statement '}';
-\end{verbatim}
-A rule is a formula that represents a condition followed by a statement
-to be executed.
 
-\begin{verbatim}
 action: 'action' a=function '=' b=qualified_id ';';
-\end{verbatim}
-An action is defined as a function to which is assigned a reference to a file.
 
-\begin{verbatim}
 sensor: 'sensor' a=qualified_id ';';
-\end{verbatim}
-A sensor is a reference to a file.
 
-\begin{verbatim}
 contract: (a=contract_type b=formula ';' )*;
+
 \end{verbatim}
-A contract is a contract type followed by a formula.
+\caption{AF-Raf grammar for top level structures}
+\label{fig:grammar-top-level}
+\end{figure} % >>>
 
-
-Grammar for formulas and terms:
+\begin{figure}\footnotesize % <<<
 \begin{verbatim}
-
 formula:
   a=formula_a 
   ('=>' b=formula_a)?;
-\end{verbatim}
 
-\begin{verbatim}
 formula_a:
   a=atom_formula  
   (b=('&' | '|') c=atom_formula)*;
-\end{verbatim}
-A formula$\_$a is either an atom formula, a conjunction of atom formulas or a
-disjunction of atom formulas.
 
-\begin{verbatim}
 atom_formula returns [IFormula v]:
      a=predicate 
   | '!' b=atom_formula 
   | '(' c=formula ')';
-\end{verbatim}
-An atom formula is either a predicate, a negated atom formula or a formula
-enclosed in brackets.
 
-\begin{verbatim}
 predicate:
     a=term b=pred_op c=term  
   | d=UID '(' e=term_list? ')';
-\end{verbatim}
-A predicate is either a term followed by a predicate operation and then by another
-term or a upper case starting word followed by zero or one term lists
-enclosed in brackets.
 
-\begin{verbatim}
 term:
     a=term_a   
     (b=add_op c=term_a)*;
 
-\end{verbatim}
-A term is a term$\_$a to which add$\_$op and another term$\_$ can be added zero or
-more times. 
-
-\begin{verbatim}
 term_a:
     a=atom_term  
     (b=mul_op c=atom_term)*;
-\end{verbatim}
-A term$\_$a is an atom term to which mul$\_$op and another atom
-term can be added zero or more times.
 
-\begin{verbatim}
 atom_term:
     '(' a=term ')' 
   | b=literal 
   | c=LID 
   | d=function;
-\end{verbatim}
-An atom term is either a term enclosed in brackets, a literal, a lower case
-starting word or a function.
 
+\end{verbatim}
+\caption{AF-Raf grammar for formulas and terms}
+\label{fig:Grammar-formulas-terms1}
+\end{figure} % >>>
+
+\begin{figure}\footnotesize % <<<
 \begin{verbatim}
 function : a=LID '(' b=term_list? ')';
-\end{verbatim}
-A function is a lower case starting word followed by zero or one term lists
-enclosed in brackets.
 
-\begin{verbatim}
 term_list:
   a=term 
   (',' b=term)*;
-\end{verbatim}
-A term$\_$list is a term followed by zero or more terms that are delimited
-by a comma.
 
-\begin{verbatim}
 pred_op: (a=eq_op | a=cmp_op);
-\end{verbatim}
-A pred$\_$op is either a eq$\_$op or a cmp$\_$op operation.
 
-\begin{verbatim}
 eq_op: (a='==' | a='!=');
-\end{verbatim}
-An eq$\_$op is comparing either for equality or for non equality.
-
-\begin{verbatim}
 cmp_op: (a='<' | a='>');
-\end{verbatim}
-An cmp$\_$op is comparing either for greater or for lesser.
-
-\begin{verbatim}
 add_op: (a='+' | a='-');
-\end{verbatim}
-An add$\_$op is either the addition or subtraction operation.
-
-\begin{verbatim}
 mul_op: (a='*' | a='/' | a='%');
-\end{verbatim}
-A mul$\_$op is either the multiplication, division or modulo operation.
-
-
-\begin{verbatim}
 unary_op: (a='!' | a='-');
 \end{verbatim}
-A unary$\_$op is either the logical or arithmetic negation.
+\caption{AF-Raf grammar for formulas and terms (2)}
+\label{fig:Grammar-formulas-terms2}
+\end{figure} % >>>
 
-Grammar for statements:
+\begin{figure}\footnotesize % <<<
 \begin{verbatim}
 statement:  (a=atom_statement ';')*;
-\end{verbatim}
-A statement is a composed of zero or more atom statements.
 
-\begin{verbatim}
 atom_statement:
     ('{' a=statement '}'
   | a=assignment
@@ -1283,101 +1213,165 @@ atom_statement:
   | a=update_belief
   | a=if_statement);
 
+assignment: 
+  a=LID '=' (b=function | b=list_comprehension);
+
+while_statement: 
+  'while' a=formula '{' b=statement '}';
+
+foreach: 'foreach' a=formula '{' b=statement '}';
+
+update_belief: 
+  (a='+' | a='-') b=predicate;
+
+call: a=function;
+
+if_statement: 
+  'if' a=formula '{' b=statement '}' ('else' '{' c=statement '}')?;
+
+list_comprehension: 
+  '[' term '|' formula ']';
 \end{verbatim}
+\caption{AF-Raf Grammar for statements}
+\label{fig:Grammar-statements}
+\end{figure} % >>>
+
+
+\begin{figure}\footnotesize % <<<
+\begin{verbatim}
+qualified_id:
+  (t=id '.')* t=id;
+
+contract_type:
+    (t='pre' | t='post' | t='fail');
+
+literal:
+    t=STRING 
+  | t=INT;
+
+id: LID | UID;
+
+INT: '0'..'9'+;
+STRING: '"' (~'"' | '\\"')* '"';  
+
+LID: ('a'..'z')('a'..'z'|'A'..'Z'|'0'..'9'|'$')*;
+UID: ('A'..'Z')('a'..'z'|'A'..'Z'|'0'..'9'|'$')*;
+
+WS:   (' '|'\t'|'\n'|'\r')+;
+BLOCK_COMMENT: '/*' ( options : . )* '*/';
+LINE_COMMENT: '//' ~('\n'|'\r')* ('\r'|'\n');
+
+\end{verbatim}
+\caption{AF-Raf Grammar Lexer}
+\label{fig:Grammar-lexer}
+\end{figure} % >>>
+
+A script is composed of a number of directives followed by the EOF symbol.
+A directive is either an include, a java binding , a plan, or a rule.
+
+The include directive must contain the keyword "include" followed by a
+qualified id which represents a reference to a file (the package path, file
+name and its extension).
+
+A java binding could be either an action or a sensor.
+
+A plan is composed of a function followed by a contract and a statement.
+
+A rule is a formula that represents a condition followed by a statement
+to be executed.
+
+An action is defined as a function to which is assigned a reference to a file.
+
+A sensor is a reference to a file.
+
+A contract is a contract type followed by a formula.
+
+
+Grammar for formulas and terms:
+
+
+A formula$\_$a is either an atom formula, a conjunction of atom formulas or a
+disjunction of atom formulas.
+
+An atom formula is either a predicate, a negated atom formula or a formula
+enclosed in brackets.
+
+A predicate is either a term followed by a predicate operation and then by another
+term or a upper case starting word followed by zero or one term lists
+enclosed in brackets.
+
+
+A term is a term$\_$a to which add$\_$op and another term$\_$ can be added zero or
+more times. 
+
+A term$\_$a is an atom term to which mul$\_$op and another atom
+term can be added zero or more times.
+
+An atom term is either a term enclosed in brackets, a literal, a lower case
+starting word or a function.
+
+A function is a lower case starting word followed by zero or one term lists
+enclosed in brackets.
+
+A term$\_$list is a term followed by zero or more terms that are delimited
+by a comma.
+
+A pred$\_$op is either a eq$\_$op or a cmp$\_$op operation.
+
+An eq$\_$op is comparing either for equality or for non equality.
+
+An cmp$\_$op is comparing either for greater or for lesser.
+
+An add$\_$op is either the addition or subtraction operation.
+
+A mul$\_$op is either the multiplication, division or modulo operation.
+
+
+A unary$\_$op is either the logical or arithmetic negation.
+
+Grammar for statements:
+A statement is a composed of zero or more atom statements.
+
+
 An atom statement is either a statement inside curly brackets, an
 assignment, a while statement, a foreach, a call, an update belief or an if
 statement.
 
-\begin{verbatim}
-assignment: 
-  a=LID '=' (b=function | b=list_comprehension);
-\end{verbatim}
 An assignment statement is composed of a lower letter word equal sign and
 either a function or a list comprehension.
 
-\begin{verbatim}
-while_statement: 
-  'while' a=formula '{' b=statement '}';
-\end{verbatim}
 A while$\_$statement is composed of the "while" keyword, a formula and a
 statement enclosed in curly brackets.
 
-\begin{verbatim}
-foreach: 'foreach' a=formula '{' b=statement '}';
-\end{verbatim}
 A foreach statement is composed of the "foreach" keyword, a formula,
 followed by a statement enclosed in curly brackets.
 
-\begin{verbatim}
-update_belief: 
-  (a='+' | a='-') b=predicate;
-\end{verbatim}
 The update$\_$ belief statement has the form of either a plus sign or a
 minus sign followed by a predicate.
 
-\begin{verbatim}
-call: a=function;
-\end{verbatim}
 A call statement is represented by a function.
 
-\begin{verbatim}
-if_statement: 
-  'if' a=formula '{' b=statement '}' ('else' '{' c=statement '}')?;
-\end{verbatim}
 An if$\_$statement is composed of the "if" keyword, a formula, a statement
 enclosed in curly brackets and zero or one "else" keyword along with a
 statement in curly brackets.
 
-\begin{verbatim}
-list_comprehension: 
-  '[' term '|' formula ']';
-\end{verbatim}
 A list$\_$comprehension is composed of a term, and a formula contained
 within square brackets.
 
 Lexer:
 
-\begin{verbatim}
-qualified_id:
-  (t=id '.')* t=id;
-\end{verbatim}
 A qualified$\_$id is represented zero or more pairs of ids, either LID or
 UID, and dots, followed by an id.
 
-\begin{verbatim}
-contract_type:
-    (t='pre' | t='post' | t='fail');
-\end{verbatim}
 A contract type is either the string "pre", "post", or "fail".
 
-\begin{verbatim}
-literal:
-    t=STRING 
-  | t=INT;
-\end{verbatim}
 A literal is either a string or an int.
 
-\begin{verbatim}
-id: LID | UID;
-\end{verbatim}
 An id is either a LID or a UID.
 
-\begin{verbatim}
-INT: '0'..'9'+;
-STRING: '"' (~'"' | '\\"')* '"';  
-\end{verbatim}
 
 
-\begin{verbatim}
-LID: ('a'..'z')('a'..'z'|'A'..'Z'|'0'..'9'|'$')*;
-UID: ('A'..'Z')('a'..'z'|'A'..'Z'|'0'..'9'|'$')*;
-\end{verbatim}
 
-\begin{verbatim}
-WS:   (' '|'\t'|'\n'|'\r')+;
-BLOCK_COMMENT: '/*' ( options : . )* '*/';
-LINE_COMMENT: '//' ~('\n'|'\r')* ('\r'|'\n');
-\end{verbatim}
 % >>>
 
 \section{Operational Semantics} % <<<
