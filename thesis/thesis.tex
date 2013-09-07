@@ -39,7 +39,7 @@
 \overfullrule=5pt \pretolerance=400 \tolerance=200 % temporary
 \title{Supporting Agent Systems in the Programming Language} % <<<
 \author{Claudia V. Grigore}
-\date{August 2013}
+\date{September 2013}
 \maketitle
 
 \pagenumbering{roman}
@@ -146,43 +146,48 @@ methodologies, such as GAIA~\cite{DBLP:journals/aamas/WooldridgeJK00}, Agent
 UML~\cite{bauer2001agent}, MaSE~\cite{deloach2001analysis}, and
 Prometheus~\cite{DBLP:conf/atal/PadghamW02}.
 
-One approach to implement agent systems is Agent Oriented Programming (AOP).
-This relatively new paradigm ``promotes a societal view of computation, in which
-multiple agents interact with one another''~\cite{DBLP:journals/ai/Shoham93}.
-The agent is the fundamental unit of computation, analysed and controlled using
-mental terms.  The state of an agent is restricted to mental components, such
-as beliefs, commitments, capabilities. AOP tries to match the programmer
-intuition to the formal concepts in the same way the Object Oriented
-Programming (OOP) paradigm did before.
+One approach to implement agent systems is Agent Oriented Programming.
+This relatively new paradigm ``promotes a societal view of computation, in
+which multiple agents interact with one
+another''~\cite{DBLP:journals/ai/Shoham93}.  The agent is the fundamental
+unit of computation, analysed and controlled using mental terms.  The state
+of an agent is restricted to mental components, such as beliefs,
+commitments, capabilities. Agent Oriented Programming tries to match the
+programmer intuition to the formal concepts in the same way the Object
+Oriented Programming paradigm did before.
 
-AOP can be viewed as a specialisation of OOP\null. OOP sees the
-computational system as made of units that are able to communicate using
-messages. AOP makes this framework more specific by restricting the state
-of the unit to consist only of mental components, and by restricting the
-types of valid messages to those specified in an underlying agent
-communication language.
+Agent Oriented Programming can be viewed as a specialisation of Object
+Oriented Programming\null. Object Oriented Programming sees the
+computational system as made of units, named objects, that are able to
+communicate using messages. Agent Oriented Programming makes this framework
+more specific by restricting the state of the unit to consist only of
+mental components, and by restricting the types of valid messages to those
+specified in an underlying agent communication language.
 
-A number of AOP languages have been developed to date, such as
-Agent-0~\cite{DBLP:journals/ai/Shoham93},
+A number of Agent Oriented Programming languages have been developed to
+date, such as Agent-0~\cite{DBLP:journals/ai/Shoham93},
 AgentSpeak(L)~\cite{DBLP:conf/maamaw/Rao96},
 2APL~\cite{DBLP:journals/aamas/Dastani08},
 3APL~\cite{DBLP:conf/promas/DastaniRDM03}, and
-AFAPL~\cite{DBLP:conf/seke/CollierOR04}. The research in this area has focused
-on clearly defining the reasoning process, linking these processes to the
-agents environment, and generally trying to improve the usability of the
-languages via better tool support.
+AFAPL~\cite{DBLP:conf/seke/CollierOR04}. The research in this area has
+focused on clearly defining the reasoning process, linking these processes
+to the agents environment, and generally trying to improve the usability of
+the languages via better tool support.
 
-Agent Oriented Software Engineering aims to offer methodologies and toolkits
-for structuring agent development. A new trend in AOSE methodologies is to support organisational design for building dynamic agent organisations.
+Agent Oriented Software Engineering aims to offer methodologies and
+toolkits for structuring agent development. A new trend in Agent Oriented
+Software Engineering methodologies is to support organisational design for
+building dynamic agent organisations.
 
 This approach will be crucial for domains like grid and ubiquitous
 computing~\cite{luck2005agent}. The concept of organisation is studied in
-several disciplines including sociology, economy and psychology. AOSE tries to
-integrate theories that were developed in other disciplines, such as the Role
-Theory~\cite{biddle1986recent}, and their associated concepts, to model agent
-organisation and to structure interactions between the agents inside of the
-organisation. One example in this direction is AALAADIN, a meta-model of
-multi-agent systems~\cite{ferber1998meta}.
+several disciplines including sociology, economy and social psychology.
+Agent Oriented Software Engineering tries to integrate theories that were
+developed in other disciplines, such as the Role
+Theory~\cite{biddle1986recent}, and their associated concepts, to model
+agent organisation and to structure interactions between the agents inside
+of the organisation. One example in this direction is AALAADIN, a
+meta-model of multi-agent systems~\cite{ferber1998meta}.
 
 Implementation-level support for these concepts is a research area. One
 approach is to design organisational models and frameworks such as BRAIN, Moise+, GAIA, and MaSE.
@@ -230,9 +235,9 @@ behaviour. Capabilities are activities that an agent can perform.
 
 A different approach to support the implementation of organisational
 concepts would be to develop custom programming languages, in the context
-of Agent Oriented Programming. The majority of AOP languages are based on
-theories from mid-nineties and do not reflect the increased importance of
-organisations in multi-agent system design.
+of Agent Oriented Programming. The majority of Agent Oriented Programming
+languages are based on theories from mid-nineties and do not reflect the
+increased importance of organisations in multi-agent system design.
 
 \subsubsection{Hypotheses and Objectives}
 Agent Oriented Programming, a relatively new programming paradigm, adopts a
@@ -252,80 +257,22 @@ the programming language.
 
 Even though organisations are increasingly seen as an important concept in
 agent oriented design, little work has been done on applying organisational
-concepts to AOP languages. Integrating the concept of roles offers
-significant advantages. They are a natural metaphor for describing the overall
-system behaviour, and they increase the adaptability and flexibility of agent
-systems by offering the appropriate level of granularity. Roles define a set of
-related behaviours, encapsulating them realises a separation of concerns and
-promotes information hiding.
+concepts to Agent Oriented Programming languages. Integrating the concept
+of roles offers significant advantages. They are a natural metaphor for
+describing the overall system behaviour, and they increase the adaptability
+and flexibility of agent systems by offering the appropriate level of
+granularity. Roles define a set of related behaviours, encapsulating them
+realises a separation of concerns and promotes information hiding.
 
 The primary hypothesis of my research is that the integration of roles,
 based on sociological Role Theory, will improve the readability and
-usability of AOP languages. The objective is to develop a novel AOP
-language that employs roles, based on the existing Agent Factory framework.
-\rg{Maybe promise only that you show how roles, a concept from sociology,
-maps to a programming language construct.}
-
-\subsubsection{Methodology}
-In order to achieve this objective I have adopted the following approach:
-\rg{When somebody reads your thesis, they want to know about the subject of
-the thesis, not about you as a person.  Whether you attended classes or not
-is irrelevant to them.}
-
-\begin{itemize}
-\item attending courses, seminaries, and summer schools on various agent topics
-to broad my view and understanding of the area.
-
-\item reading and summarising papers on agents, roles, and organisations, for a
-deeper understanding of the specific problem of integrating organisational
-concepts into AOP languages.
-
-\item solving concrete problems to attain a better understanding of MAS
-toolkits and AOP languages.
-
-\item taking inspiration from other programming languages in order to device appropriate programming language features to support organisational concepts that are discussed in the literature on agent-oriented methodologies and frameworks.
-
-\end{itemize}
-
-\subsubsection{Progress to date}
-
-\begin{itemize}
-\item attended courses
-  \begin{itemize}
-  \item Principles of Programming Languages
-  \item Object Oriented Design
-  \item Social Networks and Agent-based Simulation
-  \item Research Skills
-  \item Research Seminaries
-  \end{itemize}
-\item attended the EASSS 2009 summer school in Torino
-\item explored the use of Social Network Analysis techniques in agent systems
-\item
-  researched the current state of the art in the area of organisations in MAS:
-  theoretical models of organisations and implementations
-
-\item understanding MAS toolkits by solving problems
-\item presentation on MAS in UCD's Research Seminar Series
-\item
-  I took inspiration from other programming languages, in special from the
-  functional programming language Haskell, and proposed three language features
-  to support organisational concepts, namely: (1) algebraic data types, which
-  constrain the content of the messages, (2) roles, which constrain how
-  particular agents interact, and (3) sessions, which describe slices of the
-  global interactions in the agent systems.
-
-\item
-  having specified and started to implement the new AF-Raf programming
-  language. AF-Raf supports directly the organisation of agent systems through
-  programming language features including algebraic data types, roles, and
-  sessions.
-
-\item publications to date
-  \begin{itemize}
-  \item ``Supporting Agent Systems in the Programming Language", COIN @ WI-IAT 2011
-  \item ``AF-Raf: An Agent-Oriented Programming Language with Algebraic Data Types", AGERE @ Splash 2011
-  \end{itemize}
-\end{itemize}
+usability of Agent Oriented Programming languages. The objective is to
+develop a novel Agent Oriented Programming language that employs roles,
+based on the existing Agent Factory framework, in order to show how the
+concept of role maps to a programming language construct in the specific
+context of Agent Oriented Programming.  \rg{Maybe promise only that
+you show how roles, a concept from sociology, maps to a programming
+language construct.}
 
 % >>>
 \chapter{Preliminaries} % <<<
@@ -1387,7 +1334,7 @@ last fired rules and execute the statement.
 
 \section{The AF-Raf programming Language} % <<<
 
-AF-Raf is a new agent oriented programming language I specifically
+AF-Raf is a new agent oriented programming language specifically
 developed to incorporate the support for organising multiagent
 systems at the language level.
 
