@@ -280,6 +280,10 @@ language construct.}
 This chapter provides an explanation of the related concepts that
 constitute a basis for the main research presented in this thesis.
 
+\section{Agent Oriented Programming} % <<<
+
+MD Travers, 1996, Programming with agents: xenia.media.mit.edu/~mt/thesis/mt-thesis-Contents.html
+% >>>
 \section{Role Theory} % <<<
 
 The Role Theory elaborated in Sociology and Social Psychology tries to
@@ -408,285 +412,9 @@ abstractions at the programming language level is the preferred approach in
 order to reduce the effort needed for programming and maintaining agent
 systems\cite{} Programming Organisation-Aware Agents: A Research Agenda.
 % >>>
-\section{Belief Bases} % <<<
+\section{Logic} % <<<
 
-In most agent-oriented programming languages, agents maintain a
-\emph{belief base}.  The operations available to the agent are
-\textit{query} and \textit{adopt}.  A query asks the belief base which
-beliefs that follow a certain pattern it holds.  The adopt operation
-changes the state of the belief base by adding and possibly removing
-beliefs.  Sometimes, the {\it adopt\/} operation comes in two flavours:
-{\it update\/} and {\it revise}.  An update corresponds to a change in the
-environment, while a revision is exclusively a mental state change.
-
-\subsection{Beliefs}
-
-In general, beliefs are sentences in some logic.  However, the focus of
-this work is on roles and organisations, not on beliefs.  Thus, AF-Raf uses
-a very simple language for beliefs\,---\,they are essentially trees whose
-nodes are labeled by strings: \begin{align} \tau &::= \nu(\tau,\ldots,\tau)
-&& \text{function term} \\ \nu  &::= {\rm string} &&\text{function symbol}
-\end{align} The number of arguments can be any non-negative integer.
-
-\begin{example} The following are AF-Raf \emph{beliefs}: \begin{align}
-&{\it hasColor}({\it my}({\it car}()), {\it blue}()) \\ &{\it iHave}({\it
-cat}(), {\it int}({\it 10}())) \end{align} Note that any belief must
-contain a function with $0$~arguments, such as {\it car}, {\it blue}, {\it
-cat}, and {\it 10\/} in this example; otherwise, the belief would not have
-a finite size.  Note also that function symbols can represent both values
-(such as~{\it 10\/}) and typing information (such as~{\it int\/}).  \eoe
-\end{example}
-
-Each function symbol is used with a fixed number of arguments.  For
-example, if the function symbol ${\it car}$ is used in one belief with
-$0$~arguments in the function term ${\it car}()$, then we expect {\it
-car\/} to never have arguments.  We say that each function symbol has an
-\emph{arity}, which is~$0$ for {\it car}.  The function terms of arity~$0$,
-such as ${\it 10}()$ and ${\it car}()$, are said to be \emph{constants}.
-
-\begin{remark} Of course, it is important what beliefs mean, not only how
-they are represented syntactically.  The meaning of beliefs arises from how
-beliefs are used by agents.  We will see later how beliefs trigger actions
-via rules, and how beliefs spread through messages.  \eor \end{remark}
-
-\subsection{Queries}
-
-In general, a query $q$ is a sentence in some logic that determines a
-subset of beliefs.  Given a belief base and a query, it is important to be
-able to efficiently find the subset of beliefs from the belief base that
-satisfy the query.  Again, AF-Raf takes a simple approach, because its
-focus is not the belief base.  Each query is term that may contain
-variables, which are interpreted as patterns.  \begin{align} \tau &::=
-\nu(\tau,\ldots,\tau) && \text{function term} \\ \tau &::= x &&
-\text{variable term} \\ \nu  &::= {\rm string} &&\text{function symbol} \\
-x &::= {\rm string} && \text{variable symbol} \end{align} The last two
-grammar rules are the same as for beliefs.  Thus, any belief can be used as
-a query:  It stands for asking whether the belief base contains that
-particular belief.
-
-\begin{example} The following are AF-Raf \emph{queries}: \begin{align}
-&{\it hasColor}({\it my}({\it car}()), x) \label{eq:query.1} \\ &{\it
-hasColor}(y, z) \label{eq:query.2} \end{align} The variables $x$,~$y$,
-and~$z$ are easily identifiable, because they are not followed by
-parentheses.  Suppose the belief base contains exactly one belief, namely
-\begin{align} &{\it hasColor}({\it sky}(), {\it blue}()) \label{eq:skyblue}
-\end{align} Belief~\eqref{eq:skyblue} does not match
-query~\eqref{eq:query.1} but does match~\eqref{eq:query.2}.  In the latter
-case, the match is justified by setting $y$ to be ${\it sky}()$, and
-setting $z$ to be ${\it blue}()$.  \eoe \end{example}
-
-The previous example shows how a belief matching a query can be described
-by a binding of terms, such as ${\it sky}()$ and ${\it blue}()$, to
-variables, such as $y$~and~$z$.  More formally, a \emph{match} is a finite
-partial map from the set of variables to the set of ground terms.  We write
-$[\tau_1/x_1,\ldots,\tau_n/x_n]$ for the match that binds $x_k$
-to~$\tau_k$, for all $1\le k\le n$.  Also, we write
-$\tau[\tau_1/x_1,\ldots,\tau_n/x_n]$ for the result of substituting in
-parallel $x_k$ with~$\tau_k$, for all $1\le k\le n$.
-
-\begin{example} Consider the following belief base \begin{align} &{\it
-knows}({\it john}(), {\it john}()) \\ &{\it knows}({\it john}(), {\it
-laura}()) \end{align} and the following queries \begin{align} &{\it
-knows}(x, y) \\ &{\it knows}(x, x) \\ &{\it knows}({\it laura}(), {\it
-john}()) \\ &{\it knows}({\it john}(), {\it laura}()) \end{align} The
-results of these queries are, respectively, the following sets of
-matchings: \begin{align} &\bigl\{ [{\it john}()/x, {\it john}()/y],\; [{\it
-john}()/x,{\it laura}()/y] \bigr\} \\ &\bigl\{ [{\it john}()/x] \bigr\} \\
-&\bigl\{\bigr\} \\ &\bigl\{[]\bigr\} \end{align} Note that a variable may
-appear multiple times in a query.  In such a case, it implicitly requires
-the corresponding subterms to be equal.  Also note that the \emph{empty
-match} differs from \emph{no match}.  \eoe \end{example}
-
-\todo{Conjunctive queries.}
-
-\subsection{Updates and Revisions}
-
-In general, belief bases have internal and external consistency
-requirements.  Internally, beliefs should not contradict each-other.
-Externally, beliefs should correspond to reality.
-
-In AF-Raf, the situation is simpler.  There is no other meaning for beliefs
-apart from how they affect the behaviour of the agent, through rules.
-Thus, it is the agent's responsibility to detect inconsistencies.  In other
-words, inconsistencies are detected by programs, not by the programming
-language.
-
-\begin{example} Suppose that a particular agent-oriented program makes the
-convention that ${\it not}(x)$ means that `I do not hold belief~$x$'.  In
-this case, the query ${\it not}(x)\&x$ detects inconsistencies.  The action
-that the agent takes when it discovers an inconsistency could be to report
-an error, but may be any action at all.  \end{example}
-
-Similarly, the agent (and not the programming language) is responsible with
-ensuring that its beliefs are consistent with the environment.
-
-Once semantic concerns are left to the user program, the programming
-language AF-Raf is free to adopt simple mechanisms for updating the belief
-base.  The belief base is a set of beliefs, and its operations are those of
-a set:  ${\bf adopt}(x)$ inserts belief~$x$ into the belief base, and ${\bf
-forget}(x)$ removes the belief~$x$ from the belief base.  In case $x$~is
-not a belief, ${\bf forget}(x)$ does not modify the belief base.
-
-% >>>
-
-\subsection{Multi-Sorted Predicate Logic} \label{sec:multi-sorted} % <<<
-
-Our starting point is the observation that most agent oriented programming
-languages use first order logic, more specifically predicate logic terms,
-to represent beliefs and messages. As a consequence we look at how the
-introduction of types is managed in mathematical logic, and recall basic
-notions necessary to our understanding. We also introduce notational
-conventions used in AF-Raf.  Moreover, although these notions are simple,
-their definitions in literature tend to have subtle but important
-differences.
-\rg{Most of this section does not belong to preliminaries, as it is not that
-standard. I would put it somewhere between examples and reference.}
-
-A \emph{term} is a variable, or a function applied to other terms.
-\begin{align}
-\mathit{Term}\quad\tau &::= \omega \mid \phi \\
-\mathit{Variable}\quad\omega &::= \nu \\
-\mathit{Function}\quad\phi &::= \nu(\tau_1,\ldots,\tau_n) \\
-\mathit{Name}\quad\nu
-\end{align}
-In AF-Raf, term names are strings.  Because term names uniquely identify a
-variable or a function we will say ``the function~$\nu$'' rather than ``the
-function with name~$\nu$.'' A term not containing variables is said to be
-\emph{ground}.
-
-\begin{remark}
-Ground terms are essentially trees of strings.
-\end{remark}
-
-A multi-sorted logic has a set~$S$ of sorts.  We use the letter~$\sigma$ to
-denote sorts.
-\begin{align}
-\sigma, \sigma_1, \sigma_2, \sigma_3, \ldots &\in S
-\end{align}
-Each function~$\nu$ has a signature
-$(\sigma_1\times\cdots\times\sigma_n)\to\sigma$.  Function~$\nu$ is always
-applied to $n$~terms whose sorts must be, respectively,
-$\sigma_1$,~$\sigma_2$, \dots,~$\sigma_n$, and the resulting term has
-sort~$\sigma$. We say that $\nu$~has \emph{arity}~$n$. \emph{Constants} are
-functions with arity~$0$.
-
-Typically, in mathematical logic, the set~$S$ of sorts and the function
-signatures are required to satisfy further constraints. \textit{Bool} must
-be one of the sorts. \emph{Formulas} are terms with sort \textit{Bool}.
-The argument sorts ($\sigma_1$,~$\sigma_2$, \dots,~$\sigma_n$) either are
-all \textit{Bool}, or none is \textit{Bool}.  If the argument sorts are
-\textit{Bool}, then the result sort~$\sigma$ must also be \textit{Bool},
-and $\nu$ is said to be a \emph{boolean connective}.  If the argument sorts
-are not \textit{Bool} and the result sort~$\sigma$ is \textit{Bool}, then
-$\nu$ is said to be a \emph{predicate}.  Agent~Factory has these
-constraints and AF-Raf inherits them. In addition, AF-Raf uses an infix
-notation (described later) for boolean connectives, letter strings starting
-with uppercase for predicate names, and letter strings starting with
-lowercase for other function names and for variable names.
-
-\begin{remark}
-\rg{I'm not sure about this remark. I think \emph{traditional} logicians
-behave as described here.}
-The definitions given here are in-between what applied computer scientists
-tend to prefer and what pure logicians tend to prefer.  Computer scientists
-work with \emph{expressions} (rather than terms and formulas) and do not
-have constraints on function signatures with respect to booleans.
-Logicians, on the other hand, do have these constraints and, moreover,
-define terms in such a way that formulas are not terms, and predicates are
-not functions. Moreover, logicians single out equality between terms as
-being a special predicate.
-\end{remark}
-
-\rg{Maybe add some simple examples early on.}
-In AF-Raf, a \emph{belief} is a boolean ground term; in AF-Raf, a
-\emph{message} is a non-boolean ground term.
-
-Algebraic data types offer an alternative way of defining sets of ground
-terms. In multi-sorted predicate logic, the sort~$\sigma$ determines a set
-of ground terms, namely those of the form $\nu(*)$, where $\nu$ has a
-signature of the form $*\to\sigma$.  For example, the sort \textit{Bool}
-determines the set of terms that are formulas.  With algebraic data types,
-a type~$\delta$ is defined by a sequence of patterns, each of the form
-$\nu(\delta_1,\ldots,\delta_n)$. For example, one could define the types
-\textit{nat}, $e$, and~$o$ as follows.
-\begin{align}
-&\mathbf{type}\,\mathit{nat} =
-      \mathit{zero}()
-  \mid\mathit{succ}(\mathit{nat})
-  \mid\mathit{add}(\mathit{nat},\mathit{nat}) \\
-&\mathbf{type}\,e =
-      \mathit{zero}()
-  \mid\mathit{succ}(o)
-  \mid\mathit{add}(e,e)
-  \mid\mathit{add}(o,o) \\
-&\mathbf{type}\,o =
-      \mathit{succ}(e)
-  \mid\mathit{add}(o,e)
-  \mid\mathit{add}(e,o)
-\end{align}
-\rg{These things are presented as if they are completely standard. They're
-not. I think they should be presented as part of the design of AF-RAF.}
-We make the following observations.
-\begin{enumerate}
-\item
-  Function names may appear in multiple definitions. For example,
-  \textit{zero} appears in the definition of~$\mathit{nat}$ and also in the
-  definition of~$e$. In particular, the term $\mathit{zero}()$ belongs both
-  to the set of ground terms defined by the type~$\mathit{nat}$ and to the
-  one defined by the type~$e$.
-\item
-  Function names may appear multiple times in the same definition. For
-  example, \textit{add} appears twice in the definition of~$e$. (This
-  property distinguishes our types from polymorphic
-  variants~\cite{garrigue1998}.)
-\item
-  Type definitions may be recursive or mutually recursive. For example,
-  $\mathit{nat}$~appears within the definition of~$\mathit{nat}$.
-\end{enumerate}
-The set of ground terms corresponding to type~$\mathit{nat}$ is the following.
-\begin{equation}
-\begin{aligned}
-\{\,&\mathit{zero}(), \\
-    &\mathit{succ}(\mathit{zero}()),
-        \mathit{succ}(\mathit{succ}(\mathit{zero}())), \ldots \\
-    &\mathit{add}(\mathit{zero}(), \mathit{zero}()),
-        \mathit{add}(\mathit{zero}(), \mathit{succ}(\mathit{zero}())),
-        \ldots \\
-    &\mathit{succ}(\mathit{add}(\mathit{zero}(), \mathit{zero}())),
-        \ldots \\
-    &\ldots\, \}
-\end{aligned}
-\end{equation}
-Moreover, $e$~and~$o$ partition~$\mathit{nat}$.
-
-\begin{proposition}
-Algebraic data types (as defined above) are strictly more expressive than
-sorts. More precisely, (1)~all sets of ground terms that can be defined by
-sorts can also be defined by algebraic data types, and (2)~there are pairs
-of sets of ground terms that can be defined by algebraic data types but
-cannot be defined by sorts.
-\end{proposition}
-
-\begin{proof}
-For~(1), we define a type~$\delta(\sigma)$ for each sort~$\sigma$ as
-follows: For each signature $\nu:(\sigma_1,\ldots,\sigma_n)\to\sigma$ we
-add a pattern $\nu(\delta(\sigma_1),\ldots,\delta(\sigma_n))$. It is easy
-to see, by structural induction, that the sort~$\sigma$ and the
-type~$\delta(\sigma)$ define the same sets of ground terms.
-
-For~(2), note that, given a fixed set of function signatures, the sets of
-ground terms defined by distinct sorts are disjoint. In the previous
-example, however, the sets of ground terms defined by the types
-$\mathit{nat}$~and~$e$ have (at least) a common element, namely
-$\mathit{zero}()$.
-\end{proof}
-
-Finally, let us note that there are sets of ground terms for which it is
-undecidable whether a given term is an element.  (A classic result of
-computability theory is that there are undecidable sets of bit-strings, and
-sorted ground terms can encode bit-strings.) In particular, there exist
-sets of ground terms that cannot be defined using algebraic data types.
-\rg{These things are probably too cryptic, and should be explained more.}
+TODO
 
 % >>>
 \section{Functional Languages} % <<<
@@ -852,33 +580,119 @@ was created in the early 1990s can be found in~\cite{muldoon2009towards}.
 
 % >>>
 
-\section{Literature Review}
-
-MD Travers, 1996, Programming with agents: xenia.media.mit.edu/~mt/thesis/mt-thesis-Contents.html
-
 
 % >>>
 \chapter{Main AF-Raf Concepts} % <<<
 
-\subsection{Defining core concepts in AF-Raf} % <<<
+\section{The AF-Raf programming Language} % <<<
+
+AF-Raf is a new agent oriented programming language specifically
+developed to incorporate the support for organising multiagent
+systems at the language level.
+
+The main reason for choosing to build it from scratch is simplicity.  AF-Raf
+has a very simple syntax, which makes easier the addition of new functionality
+without making it too difficult to use.
+
+One important feature of the AF-Raf programming language is its integration
+with the AgentFactory development framework, which provides support for the
+development and deployment of agent-based systems.
+
+The main particularity of AF-Raf, that makes it unique among agent oriented
+programming languages is that, even though it is built upon the agent
+oriented conceptual framework, it also draws inspiration from functional
+languages.
+
+AF-Raf has two fundamental components, a \textit{belief base}
+and a \textit{rule base}. The belief base models the agent's view of the
+current state of its environment and the rule base models the agent's
+behaviour.
+
+Beliefs are terms, where a term denotes an expression that can be obtained from
+either a constant symbol, a variable or a function symbol. Rules are
+represented by a name (optional), a query and an action.  The code in
+Figure~\ref{fig:AF-Raf} illustrates an AF-Raf agent.
+
+\begin{figure}\footnotesize % <<<
+\begin{verbatim}
+include stdio
+
+rule State(initialized()) & Name(n) {
+      println("hello from " + n);
+}
+
+rule Monitoring(name, addr) {
+      println("ask " + name + " for status");
+      send(agentID(name, addr), request(status()));
+}
+
+rule Message(other, status(alive())) {
+      println("OK, ask again.");
+      send(other, request(status()));
+}
+
+rule Message(other, status()) {
+      println("Oh, someone wants me alive!");
+      send(other, inform(status(alive())));
+}
+\end{verbatim}
+\caption{The code of an AF-Raf agent}
+\label{fig:AF-Raf}
+\end{figure} % >>>
+
+The rules are evaluated at each time-step. The first stage of evaluating a
+rule is to evaluate the query on the current belief base. The result is a
+set of query results. \rg{A result is a set of results? Empty set is
+special?} If the set is not empty, the action is then evaluated for every
+query result. A particular query result says with what term to substitute
+each free variable in the action. In other words, a query result is a set
+of bindings that covers all the free variable in the action (of the rule).
+The first step of evaluating the action is to apply these substitutions.
+The next step is to execute it.
+
+An action is either a simple action or a composed action. Executing a
+simple action means executing a piece of associated Java code. Examples of
+simple actions include sending a message (\textit{send}), logging a string
+(\textit{println}), and adopting a belief (\textit{adopt}).  Composed
+actions, also referred to as plans, include sequence and while loops.
+
+Sensors are pieces of Java code that are run at each time-step. They are
+typically used to update the belief base according to the changes in the
+environment. For example, there is a standard sensor (defined in
+\texttt{stdio}) that adds a belief $\mathit{Message}(s,c)$ when a message
+with content~$c$ is received from sender~$s$. % >>>
+\section{Defining core concepts in AF-Raf} % <<<
 
 A number of concepts stand at the foundation of the AF-Raf programming
-language. These concepts include: beliefs, rules, actions, sensors, roles
-and sessions. They are related to one another and the unique features of
-AF-Raf are built upon them. 
+language. These concepts include: beliefs, rules, actions, sensors, roles,
+sessions, and types. They are related to one another and the unique
+features of AF-Raf are built upon them. 
 
 Beliefs and rules represent the AF-Raf's core concepts. Beliefs in AF-Raf
 are regarded as logical terms and represented in the form of trees of
-strings.  Beliefs are grouped together in a belief base that can be
-accessed by, and updated by the agent. On the other hand, rules represent a
-means for accessing the belief base and also a way of triggering agent
-behaviour. A rule has two main components besides a name, which is
-optional. These components are a query, and an action. The query puts a
-question to the belief base, and if the result matches the query then some
-action is triggered.  An action represents the actual agent's behaviour,
-which can range from printing something to the console to sending a message
-to another agent, creating another agent or even updating the belief base.
-Another way to update the belief base is through sensors.
+strings. Beliefs are grouped together in a belief base that can be accessed
+by, and updated by the agent. On the other hand, rules represent a means
+for accessing the belief base and also a way of triggering agent behaviour.
+Figure~\ref{fig:rule} illustrates a simple AF-Raf rule, where $status()$ and
+$request(status())$ represent AF-Raf beliefs. A rule has
+two main components besides a name, which is optional. These components are
+a query, and an action. The query puts a question to the belief base, and
+if the result matches the query then some action is triggered.  An action
+represents the actual agent's behaviour, which can range from printing
+something to the console to sending a message to another agent, creating
+another agent or even updating the belief base.  Another way to update the
+belief base is through sensors.
+
+\begin{figure}\footnotesize % <<<
+\begin{verbatim}
+rule Monitoring(name, addr) {
+      println("ask " + name + " for status");
+      send(agentID(name, addr), request(status()));
+}
+\end{verbatim}
+\caption{AF-Raf rules example}
+\label{fig:rule}
+\end{figure} % >>>
 
 Actions and sensors are pieces of Java code used to extend the AF-Raf
 programs. Actions are invoked within rules. There is a number of actions
@@ -886,13 +700,32 @@ included in the standard library, which any agent can use, there is also the
 option to create new actions. Sensors are run automatically every time
 step. Sensors can range from the monitoring of the agent's message inbox to
 monitoring changes in the agent's environment.
+Figure~\ref{fig:actions-sensors} presents some of the AF-Raf standard actions and
+sensors. Both println and send actions have been used in the rule
+Monitoring illustrated in figure~\ref{fig:rule}.
+
+
+\begin{figure}\footnotesize % <<<
+\begin{verbatim}
+action println(s) = 
+          com.agentfactory.raf.RafStandardAction$Println;
+
+action send(agentID(name, address), message) = 
+             com.agentfactory.raf.RafStandardAction$Send;
+
+sensor com.agentfactory.raf.RafStandardSensor$Message;
+\end{verbatim}
+\caption{Standard actions and sensors}
+\label{fig:actions-sensors}
+\end{figure} % >>>
+
 
 An operation a specific kind of rule stating that upon receiving a message
 of a particular type the agent should reply with a message of a specified
-type, which includes the type unit(), and thus returning no message. Even
-though operations can be written as rules, using syntactic sugar to
-automatise the process of message passing makes answering messages much
-easier.
+type. The message type can be any type including the type unit(), and in
+this case there is no actual message returned. Even though operations can
+be written as rules, using syntactic sugar to automatise the process of
+message passing makes answering messages much easier.
 
 A role's purpose is to group together related behaviour. As stated before
 AF-Raf agents interact through message passing. AF-Raf's role concept
@@ -1123,8 +956,8 @@ Plan =
 \label{fig:Abstract-Grammar}
 \end{figure} % >>>
 
-AF-Raf syntax is defined using the Extended Backus-Naur Form notation. The
-grammar for top level structures is as follows:
+AF-Raf syntax is described using the Extended Backus-Naur Form notation.
+The grammar for top level structures is as follows:
 
 \begin{figure}\footnotesize % <<<
 \begin{verbatim}
@@ -1394,84 +1227,287 @@ bindings to the statement of the rule, includes the rule in the list of
 last fired rules and execute the statement.
 % >>>
 
-\section{The AF-Raf programming Language} % <<<
 
-AF-Raf is a new agent oriented programming language specifically
-developed to incorporate the support for organising multiagent
-systems at the language level.
+\section{Belief Bases} % <<<
 
-The main reason for choosing to build it from scratch is simplicity.  AF-Raf
-has a very simple syntax, which makes easier the addition of new functionality
-without making it too difficult to use.
+In most agent-oriented programming languages, agents maintain a
+\emph{belief base}.  The operations available to the agent are
+\textit{query} and \textit{adopt}.  A query asks the belief base which
+beliefs that follow a certain pattern it holds.  The adopt operation
+changes the state of the belief base by adding and possibly removing
+beliefs.  Sometimes, the {\it adopt\/} operation comes in two flavours:
+{\it update\/} and {\it revise}.  An update corresponds to a change in the
+environment, while a revision is exclusively a mental state change.
 
-One important feature of the AF-Raf programming language is its integration
-with the AgentFactory development framework, which provides support for the
-development and deployment of agent-based systems.
+\subsection{Beliefs}
 
-The main particularity of AF-Raf, that makes it unique among agent oriented
-programming languages is that, even though it is built upon the agent
-oriented conceptual framework, it also draws inspiration from functional
-languages.
+In general, beliefs are sentences in some logic.  However, the focus of
+this work is on roles and organisations, not on beliefs.  Thus, AF-Raf uses
+a very simple language for beliefs\,---\,they are essentially trees whose
+nodes are labeled by strings: \begin{align} \tau &::= \nu(\tau,\ldots,\tau)
+&& \text{function term} \\ \nu  &::= {\rm string} &&\text{function symbol}
+\end{align} The number of arguments can be any non-negative integer.
 
-AF-Raf has two fundamental components, a \textit{belief base}
-and a \textit{rule base}. The belief base models the agent's view of the
-current state of its environment and the rule base models the agent's
-behaviour.
+\begin{example} The following are AF-Raf \emph{beliefs}: \begin{align}
+&{\it hasColor}({\it my}({\it car}()), {\it blue}()) \\ &{\it iHave}({\it
+cat}(), {\it int}({\it 10}())) \end{align} Note that any belief must
+contain a function with $0$~arguments, such as {\it car}, {\it blue}, {\it
+cat}, and {\it 10\/} in this example; otherwise, the belief would not have
+a finite size.  Note also that function symbols can represent both values
+(such as~{\it 10\/}) and typing information (such as~{\it int\/}).  \eoe
+\end{example}
 
-Beliefs are terms, where a term denotes an expression that can be obtained from
-either a constant symbol, a variable or a function symbol. Rules are
-represented by a name (optional), a query and an action.  The code in
-Figure~\ref{fig:AF-Raf} illustrates an AF-Raf agent.
+Each function symbol is used with a fixed number of arguments.  For
+example, if the function symbol ${\it car}$ is used in one belief with
+$0$~arguments in the function term ${\it car}()$, then we expect {\it
+car\/} to never have arguments.  We say that each function symbol has an
+\emph{arity}, which is~$0$ for {\it car}.  The function terms of arity~$0$,
+such as ${\it 10}()$ and ${\it car}()$, are said to be \emph{constants}.
 
-\begin{figure}\footnotesize % <<<
-\begin{verbatim}
-include stdio
+\begin{remark} Of course, it is important what beliefs mean, not only how
+they are represented syntactically.  The meaning of beliefs arises from how
+beliefs are used by agents.  We will see later how beliefs trigger actions
+via rules, and how beliefs spread through messages.  \eor \end{remark}
 
-rule State(initialized()) & Name(n) {
-      println("hello from " + n);
-}
+\subsection{Queries}
 
-rule Monitoring(name, addr) {
-      println("ask " + name + " for status");
-      send(agentID(name, addr), request(status()));
-}
+In general, a query $q$ is a sentence in some logic that determines a
+subset of beliefs.  Given a belief base and a query, it is important to be
+able to efficiently find the subset of beliefs from the belief base that
+satisfy the query.  Again, AF-Raf takes a simple approach, because its
+focus is not the belief base.  Each query is term that may contain
+variables, which are interpreted as patterns.  \begin{align} \tau &::=
+\nu(\tau,\ldots,\tau) && \text{function term} \\ \tau &::= x &&
+\text{variable term} \\ \nu  &::= {\rm string} &&\text{function symbol} \\
+x &::= {\rm string} && \text{variable symbol} \end{align} The last two
+grammar rules are the same as for beliefs.  Thus, any belief can be used as
+a query:  It stands for asking whether the belief base contains that
+particular belief.
 
-rule Message(other, status(alive())) {
-      println("OK, ask again.");
-      send(other, request(status()));
-}
+\begin{example} The following are AF-Raf \emph{queries}: \begin{align}
+&{\it hasColor}({\it my}({\it car}()), x) \label{eq:query.1} \\ &{\it
+hasColor}(y, z) \label{eq:query.2} \end{align} The variables $x$,~$y$,
+and~$z$ are easily identifiable, because they are not followed by
+parentheses.  Suppose the belief base contains exactly one belief, namely
+\begin{align} &{\it hasColor}({\it sky}(), {\it blue}()) \label{eq:skyblue}
+\end{align} Belief~\eqref{eq:skyblue} does not match
+query~\eqref{eq:query.1} but does match~\eqref{eq:query.2}.  In the latter
+case, the match is justified by setting $y$ to be ${\it sky}()$, and
+setting $z$ to be ${\it blue}()$.  \eoe \end{example}
 
-rule Message(other, status()) {
-      println("Oh, someone wants me alive!");
-      send(other, inform(status(alive())));
-}
-\end{verbatim}
-\caption{The code of an AF-Raf agent}
-\label{fig:AF-Raf}
-\end{figure} % >>>
+The previous example shows how a belief matching a query can be described
+by a binding of terms, such as ${\it sky}()$ and ${\it blue}()$, to
+variables, such as $y$~and~$z$.  More formally, a \emph{match} is a finite
+partial map from the set of variables to the set of ground terms.  We write
+$[\tau_1/x_1,\ldots,\tau_n/x_n]$ for the match that binds $x_k$
+to~$\tau_k$, for all $1\le k\le n$.  Also, we write
+$\tau[\tau_1/x_1,\ldots,\tau_n/x_n]$ for the result of substituting in
+parallel $x_k$ with~$\tau_k$, for all $1\le k\le n$.
 
-The rules are evaluated at each time-step. The first stage of evaluating a
-rule is to evaluate the query on the current belief base. The result is a
-set of query results. \rg{A result is a set of results? Empty set is
-special?} If the set is not empty, the action is then evaluated for every
-query result. A particular query result says with what term to substitute
-each free variable in the action. In other words, a query result is a set
-of bindings that covers all the free variable in the action (of the rule).
-The first step of evaluating the action is to apply these substitutions.
-The next step is to execute it.
+\begin{example} Consider the following belief base \begin{align} &{\it
+knows}({\it john}(), {\it john}()) \\ &{\it knows}({\it john}(), {\it
+laura}()) \end{align} and the following queries \begin{align} &{\it
+knows}(x, y) \\ &{\it knows}(x, x) \\ &{\it knows}({\it laura}(), {\it
+john}()) \\ &{\it knows}({\it john}(), {\it laura}()) \end{align} The
+results of these queries are, respectively, the following sets of
+matchings: \begin{align} &\bigl\{ [{\it john}()/x, {\it john}()/y],\; [{\it
+john}()/x,{\it laura}()/y] \bigr\} \\ &\bigl\{ [{\it john}()/x] \bigr\} \\
+&\bigl\{\bigr\} \\ &\bigl\{[]\bigr\} \end{align} Note that a variable may
+appear multiple times in a query.  In such a case, it implicitly requires
+the corresponding subterms to be equal.  Also note that the \emph{empty
+match} differs from \emph{no match}.  \eoe \end{example}
 
-An action is either a simple action or a composed action. Executing a
-simple action means executing a piece of associated Java code. Examples of
-simple actions include sending a message (\textit{send}), logging a string
-(\textit{println}), and adopting a belief (\textit{adopt}).  Composed
-actions, also referred to as plans, include sequence and while loops.
+\todo{Conjunctive queries.}
 
-Sensors are pieces of Java code that are run at each time-step. They are
-typically used to update the belief base according to the changes in the
-environment. For example, there is a standard sensor (defined in
-\texttt{stdio}) that adds a belief $\mathit{Message}(s,c)$ when a message
-with content~$c$ is received from sender~$s$. % >>>
+\subsection{Updates and Revisions}
 
+In general, belief bases have internal and external consistency
+requirements.  Internally, beliefs should not contradict each-other.
+Externally, beliefs should correspond to reality.
+
+In AF-Raf, the situation is simpler.  There is no other meaning for beliefs
+apart from how they affect the behaviour of the agent, through rules.
+Thus, it is the agent's responsibility to detect inconsistencies.  In other
+words, inconsistencies are detected by programs, not by the programming
+language.
+
+\begin{example} Suppose that a particular agent-oriented program makes the
+convention that ${\it not}(x)$ means that `I do not hold belief~$x$'.  In
+this case, the query ${\it not}(x)\&x$ detects inconsistencies.  The action
+that the agent takes when it discovers an inconsistency could be to report
+an error, but may be any action at all.  \end{example}
+
+Similarly, the agent (and not the programming language) is responsible with
+ensuring that its beliefs are consistent with the environment.
+
+Once semantic concerns are left to the user program, the programming
+language AF-Raf is free to adopt simple mechanisms for updating the belief
+base.  The belief base is a set of beliefs, and its operations are those of
+a set:  ${\bf adopt}(x)$ inserts belief~$x$ into the belief base, and ${\bf
+forget}(x)$ removes the belief~$x$ from the belief base.  In case $x$~is
+not a belief, ${\bf forget}(x)$ does not modify the belief base.
+
+% >>>
+\section{Multi-Sorted Predicate Logic} \label{sec:multi-sorted} % <<<
+
+Our starting point is the observation that most agent oriented programming
+languages use first order logic, more specifically predicate logic terms,
+to represent beliefs and messages. As a consequence we look at how the
+introduction of types is managed in mathematical logic, and recall basic
+notions necessary to our understanding. We also introduce notational
+conventions used in AF-Raf.  Moreover, although these notions are simple,
+their definitions in literature tend to have subtle but important
+differences.
+\rg{Most of this section does not belong to preliminaries, as it is not that
+standard. I would put it somewhere between examples and reference.}
+
+A \emph{term} is a variable, or a function applied to other terms.
+\begin{align}
+\mathit{Term}\quad\tau &::= \omega \mid \phi \\
+\mathit{Variable}\quad\omega &::= \nu \\
+\mathit{Function}\quad\phi &::= \nu(\tau_1,\ldots,\tau_n) \\
+\mathit{Name}\quad\nu
+\end{align}
+In AF-Raf, term names are strings.  Because term names uniquely identify a
+variable or a function we will say ``the function~$\nu$'' rather than ``the
+function with name~$\nu$.'' A term not containing variables is said to be
+\emph{ground}.
+
+\begin{remark}
+Ground terms are essentially trees of strings.
+\end{remark}
+
+A multi-sorted logic has a set~$S$ of sorts.  We use the letter~$\sigma$ to
+denote sorts.
+\begin{align}
+\sigma, \sigma_1, \sigma_2, \sigma_3, \ldots &\in S
+\end{align}
+Each function~$\nu$ has a signature
+$(\sigma_1\times\cdots\times\sigma_n)\to\sigma$.  Function~$\nu$ is always
+applied to $n$~terms whose sorts must be, respectively,
+$\sigma_1$,~$\sigma_2$, \dots,~$\sigma_n$, and the resulting term has
+sort~$\sigma$. We say that $\nu$~has \emph{arity}~$n$. \emph{Constants} are
+functions with arity~$0$.
+
+Typically, in mathematical logic, the set~$S$ of sorts and the function
+signatures are required to satisfy further constraints. \textit{Bool} must
+be one of the sorts. \emph{Formulas} are terms with sort \textit{Bool}.
+The argument sorts ($\sigma_1$,~$\sigma_2$, \dots,~$\sigma_n$) either are
+all \textit{Bool}, or none is \textit{Bool}.  If the argument sorts are
+\textit{Bool}, then the result sort~$\sigma$ must also be \textit{Bool},
+and $\nu$ is said to be a \emph{boolean connective}.  If the argument sorts
+are not \textit{Bool} and the result sort~$\sigma$ is \textit{Bool}, then
+$\nu$ is said to be a \emph{predicate}.  Agent~Factory has these
+constraints and AF-Raf inherits them. In addition, AF-Raf uses an infix
+notation (described later) for boolean connectives, letter strings starting
+with uppercase for predicate names, and letter strings starting with
+lowercase for other function names and for variable names.
+
+\begin{remark}
+\rg{I'm not sure about this remark. I think \emph{traditional} logicians
+behave as described here.}
+The definitions given here are in-between what applied computer scientists
+tend to prefer and what pure logicians tend to prefer.  Computer scientists
+work with \emph{expressions} (rather than terms and formulas) and do not
+have constraints on function signatures with respect to booleans.
+Logicians, on the other hand, do have these constraints and, moreover,
+define terms in such a way that formulas are not terms, and predicates are
+not functions. Moreover, logicians single out equality between terms as
+being a special predicate.
+\end{remark}
+
+\rg{Maybe add some simple examples early on.}
+In AF-Raf, a \emph{belief} is a boolean ground term; in AF-Raf, a
+\emph{message} is a non-boolean ground term.
+
+Algebraic data types offer an alternative way of defining sets of ground
+terms. In multi-sorted predicate logic, the sort~$\sigma$ determines a set
+of ground terms, namely those of the form $\nu(*)$, where $\nu$ has a
+signature of the form $*\to\sigma$.  For example, the sort \textit{Bool}
+determines the set of terms that are formulas.  With algebraic data types,
+a type~$\delta$ is defined by a sequence of patterns, each of the form
+$\nu(\delta_1,\ldots,\delta_n)$. For example, one could define the types
+\textit{nat}, $e$, and~$o$ as follows.
+\begin{align}
+&\mathbf{type}\,\mathit{nat} =
+      \mathit{zero}()
+  \mid\mathit{succ}(\mathit{nat})
+  \mid\mathit{add}(\mathit{nat},\mathit{nat}) \\
+&\mathbf{type}\,e =
+      \mathit{zero}()
+  \mid\mathit{succ}(o)
+  \mid\mathit{add}(e,e)
+  \mid\mathit{add}(o,o) \\
+&\mathbf{type}\,o =
+      \mathit{succ}(e)
+  \mid\mathit{add}(o,e)
+  \mid\mathit{add}(e,o)
+\end{align}
+\rg{These things are presented as if they are completely standard. They're
+not. I think they should be presented as part of the design of AF-RAF.}
+We make the following observations.
+\begin{enumerate}
+\item
+  Function names may appear in multiple definitions. For example,
+  \textit{zero} appears in the definition of~$\mathit{nat}$ and also in the
+  definition of~$e$. In particular, the term $\mathit{zero}()$ belongs both
+  to the set of ground terms defined by the type~$\mathit{nat}$ and to the
+  one defined by the type~$e$.
+\item
+  Function names may appear multiple times in the same definition. For
+  example, \textit{add} appears twice in the definition of~$e$. (This
+  property distinguishes our types from polymorphic
+  variants~\cite{garrigue1998}.)
+\item
+  Type definitions may be recursive or mutually recursive. For example,
+  $\mathit{nat}$~appears within the definition of~$\mathit{nat}$.
+\end{enumerate}
+The set of ground terms corresponding to type~$\mathit{nat}$ is the following.
+\begin{equation}
+\begin{aligned}
+\{\,&\mathit{zero}(), \\
+    &\mathit{succ}(\mathit{zero}()),
+        \mathit{succ}(\mathit{succ}(\mathit{zero}())), \ldots \\
+    &\mathit{add}(\mathit{zero}(), \mathit{zero}()),
+        \mathit{add}(\mathit{zero}(), \mathit{succ}(\mathit{zero}())),
+        \ldots \\
+    &\mathit{succ}(\mathit{add}(\mathit{zero}(), \mathit{zero}())),
+        \ldots \\
+    &\ldots\, \}
+\end{aligned}
+\end{equation}
+Moreover, $e$~and~$o$ partition~$\mathit{nat}$.
+
+\begin{proposition}
+Algebraic data types (as defined above) are strictly more expressive than
+sorts. More precisely, (1)~all sets of ground terms that can be defined by
+sorts can also be defined by algebraic data types, and (2)~there are pairs
+of sets of ground terms that can be defined by algebraic data types but
+cannot be defined by sorts.
+\end{proposition}
+
+\begin{proof}
+For~(1), we define a type~$\delta(\sigma)$ for each sort~$\sigma$ as
+follows: For each signature $\nu:(\sigma_1,\ldots,\sigma_n)\to\sigma$ we
+add a pattern $\nu(\delta(\sigma_1),\ldots,\delta(\sigma_n))$. It is easy
+to see, by structural induction, that the sort~$\sigma$ and the
+type~$\delta(\sigma)$ define the same sets of ground terms.
+
+For~(2), note that, given a fixed set of function signatures, the sets of
+ground terms defined by distinct sorts are disjoint. In the previous
+example, however, the sets of ground terms defined by the types
+$\mathit{nat}$~and~$e$ have (at least) a common element, namely
+$\mathit{zero}()$.
+\end{proof}
+
+Finally, let us note that there are sets of ground terms for which it is
+undecidable whether a given term is an element.  (A classic result of
+computability theory is that there are undecidable sets of bit-strings, and
+sorted ground terms can encode bit-strings.) In particular, there exist
+sets of ground terms that cannot be defined using algebraic data types.
+\rg{These things are probably too cryptic, and should be explained more.}
+
+% >>>
 \section{Algebraic Data Types and Type Checking} % <<<
 
 \subsection{Algebraic Data Types} % <<<
@@ -1849,10 +1885,9 @@ interactions in agent-oriented programming languages in terms of sessions.
 Moreover, it seems reasonable to expect that a precise link between these
 session and the roles proposed in the previous section can be found.
 % >>>
-\subsection{Future Work} %<<< %>>>
-% >>>
 % >>>
 
+% >>>
 % >>>
 
 \chapter{Case Study: Contract Net Protocol} % <<<
