@@ -984,7 +984,8 @@ PlanDeclaration =
 \end{verbatim}
 \caption{AF-Raf Abstract Grammar}
 \label{fig:Abstract-Grammar}
-\end{figure} % >>>
+\end{figure} 
+% >>>
 
 An \textit{AgentDeclaration} contains a design of type String, a list of
 arguments of type AgentRole, a list of roles of type Type, and a list of
@@ -1158,28 +1159,20 @@ LINE_COMMENT: '//' ~('\n'|'\r')* ('\r'|'\n');
 \label{fig:Grammar-lexer}
 \end{figure} % >>>
 
-A script is composed of a number of directives followed by the EOF symbol.
-A directive is either an include, a java binding , a plan, or a rule.
-
-The include directive must contain the keyword "include" followed by a
-qualified id which represents a reference to a file (the package path, file
-name and its extension).
-
-A java binding could be either an action or a sensor.
-
-A plan is composed of a function followed by a contract and a statement.
-
-A rule is a formula that represents a condition followed by a statement
-to be executed.
-
-An action is defined as a function to which is assigned a reference to a file.
-
-A sensor is a reference to a file.
-
-A contract is a contract type followed by a formula.
+A \textit{script} is composed of a number of directives followed by the EOF
+symbol.  A directive is either an include, a java binding , a plan, or a
+rule. The \textit{include} directive must contain the keyword "include"
+followed by a qualified id which represents a reference to a file (the
+package path, file name and its extension). A \textit{java binding} could
+be either an action or a sensor. A \textit{plan} is composed of a function
+followed by a contract and a statement. A \textit{rule} is a formula that
+represents a condition followed by a statement to be executed. An
+\textit{action} is defined as a function to which is assigned a reference
+to a file. A \textit{sensor} is a reference to a file.  A \textit{contract}
+is a contract type followed by a formula.
 
 
-Grammar for formulas and terms:
+The grammar for formulas and terms:
 
 
 A formula$\_$a is either an atom formula, a conjunction of atom formulas or a
@@ -1268,13 +1261,26 @@ An id is either a LID or a UID.
 
 \section{Operational Semantics} % <<<
 
-An AF-Raf agent program interpretation starts with the execute() method. It
-first gets all the messages from the inbox, and for each message adds a
-corresponding beliefs to the belief base. After that for each rule calls
-the handlerule() method. For each rule constructs a query to the belief
-base based on the rules condition. Then applies each successful set of
-bindings to the statement of the rule, includes the rule in the list of
-last fired rules and execute the statement.
+The semantics of programming languages is often specified as transitions
+from a state to another with each step of individual computation. The
+specification take the form of a set of inference rules that define valid
+transitions.
+
+An AF-Raf agent program interpretation starts with the execute() method.
+First operation is to copy any messages received into the inbox for the
+agent to process further. Only messages received since the last invocation
+of this method are copied into the inbox. Next step is to get information
+from all the sensors. After that a list is created to hold last fired
+rules. Then each rule is handled in the following way. A query is
+constructed based on the rule's condition and run on the belief base. The
+result will be a list of sets of bindings. In the case the list is not
+empty, for each set of bindings a PlanStep is constructed by applying the
+bindings to the statement of the rule. If all the variables have a binding
+the rule is included in the list of last fired rules and the PlanStep is
+executed. A PlanStep is any of the following statements: an assignment, a block,
+a call, a foreach, an if, an update, or a while.
+
+TODO: inference rules
 % >>>
 
 
