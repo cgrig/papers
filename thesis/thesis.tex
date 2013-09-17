@@ -2104,16 +2104,17 @@ guarantees because of the extra type-checking. On the other hand,
 organisational frameworks may be preferred when one needs to interact with
 legacy code.
 
-We created a new agent oriented programming language, AF-Raf, based on the
-existing Agent Factory framework, and started to implement the innovative
-features we have identified. AF-Raf has already types, including algebraic
-data types to constrain the content of the messages, and type checking. At
-the moment I am working on the implementation of roles in AF-Raf, and
-subsequently we will move to the implementation of sessions. By the end of the
-year we will use a number of case studies to test it, then incorporate the
-results, and submit a paper to be published in the AAMAS conference. We will
-have to further formalize and evaluate the AF-Raf programming language while
-writing up the PhD thesis. \rg{This is a bit too self-referential, no?}
+The new agent oriented programming language, AF-Raf, based on the existing
+Agent Factory framework, implements the innovative features that have been
+identified. AF-Raf has types, including algebraic data types, which are
+used to constrain the content of the messages. It has type checking, a
+feature very useful in identifying programming errors early on. It has
+roles, which organise agent behaviour, promoting encapsulation and reuse.
+It also have sessions, which further organise agent interaction at a higher
+level, namely at the role level. A case study is used to illustrate the
+results.  The AF-Raf programming language is properly formalised, with its
+grammar specified in EBNF format and its operational semantics is defined
+using inference rules. 
 
 % >>>
 \bibliographystyle{plain}
