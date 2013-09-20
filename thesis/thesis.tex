@@ -425,6 +425,36 @@ order to reduce the effort needed for programming and maintaining agent
 systems\cite{} Programming Organisation-Aware Agents: A Research Agenda.
 % >>>
 \section{Examples} % <<<
+Jason and 2APL are two representative agent programming languages.
+
+Jason is an interpreter written in Java for an extended version of
+AgentSpeak programming language.
+
+2APL is a BDI-based programming language that integrates both the
+declarative and the imperatives style of programming. There are two sets of
+programming constructs implementing multiagent concepts and individual
+agent concepts. The multiagent level constructs include functionality like 
+creating individual agents, external environments, assigning unique names
+to agents, and specify access relations. The individual agent concepts
+include beliefs, goals, actions, plans, events and three types of practical
+reasoning rules. The beliefs and goals are implemented in a declarative way
+to support the reasoning and updating mechanisms. Plans, external
+environments, events, flow of control are implemented in an imperative way.
+
+Environments are implemented as Java objects. Information about changes in
+the environment can be accessed by the agents in two different ways,
+actively through sensors or passively through events. Another distinction
+is made between goals and events. Even though both of them trigger agent
+action, goals correspond to a desirable state, while the events correspond
+to environmental changes.
+
+2APL agents have available different types of actions like updating
+beliefs, testing beliefs and goals, managing dynamics of goals,
+external actions and communication actions.
+
+There are also three types of rules: generate plans to achieve goals,
+process internal events and received messages, and to handle and repair
+failed plans.
 % >>>
 \section{Comparison} % <<<
 % >>>
