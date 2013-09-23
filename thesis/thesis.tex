@@ -427,8 +427,22 @@ systems\cite{} Programming Organisation-Aware Agents: A Research Agenda.
 \section{Examples} % <<<
 Jason and 2APL are two representative agent programming languages.
 
-Jason is an interpreter written in Java for an extended version of
-AgentSpeak programming language.
+Jason is an interpreter written in Java for an extended version of the
+AgentSpeak programming language. AgentSpeak is logic based and supports BDI
+agent architecture. The core concepts of an AgentSpeak agent are the belief
+base, plan library, goals and events. The goals can be either achievement
+goals or test goals. The triggering events can be either addition or
+deletion of beliefs and goals. The plan has a head, a context and a body.
+The head is represented by the triggering event, the context consists of a
+conjunction of beliefs which determine if a plan is applicable, and the
+body which is a sequence of basic actions or (sub)goals. Intentions
+represent partially instantiated plans, that were selected for execution. 
+
+The AgentSpeak interpreter relies on three selection functions. First, the event
+selection selects a single event from the set of events. Second, the option
+function selects a plan from the set of applicable plans. Third, the
+intentions selection function selects an intention from the set of
+intentions. 
 
 2APL is a BDI-based programming language that integrates both the
 declarative and the imperatives style of programming. There are two sets of
