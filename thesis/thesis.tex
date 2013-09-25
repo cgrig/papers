@@ -470,10 +470,25 @@ There are also three types of rules: generate plans to achieve goals,
 process internal events and received messages, and to handle and repair
 failed plans.
 
-GOAL is a rule-based programming language, its focus is on agent
-reasoning. GOAL agents consists of four components: a belief base, a goal base,
-action rules, and action specifications. The beliefs and goals constitute
-agent's mental state. \cite{} GOAL Agents Instantiate Intention Logic
+GOAL is a rule-based programming language, its focus is on agent reasoning.
+GOAL agents consist of four components: a belief base, a goal base, action
+rules, and action specifications. An actual GOAL agent program is a set of
+modules each consisting of various sections including knowledge, beliefs,
+goals, action specifications, and a program section containing action
+rules. Each of the sections is represented in a knowledge representation
+language such as Prolog.
+
+The init module defines the agent's initial mental state. It includes the
+knowledge, the initial beliefs, the goals, and the action specifications.
+The main module specifies a strategy for selecting actions using action
+rules which, in turn, rely on the agent's mental state. The event module
+provide rules for processing information received from the environment.
+Actions are specified using preconditions and postconditions. 
+
+GOAL agents use a blind commitment strategy, meaning that an agent commits
+to achieving a goal and only drops it after it was achieved. GOAL
+distinguishes different types of goals are coexist primitive, achievement
+or achieved goals.  \cite{} GOAL Agents Instantiate Intention Logic
 % >>>
 
 \section{Comparison} % <<<
