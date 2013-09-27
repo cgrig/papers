@@ -489,30 +489,29 @@ GOAL agents use a blind commitment strategy, meaning that an agent commits
 to achieving a goal and only drops it after it was achieved. GOAL
 distinguishes different types of goals are coexist primitive, achievement
 or achieved goals.  \cite{} GOAL Agents Instantiate Intention Logic
-% >>>
-
-\section{Comparison} % <<<
-
-All of the three languages presented above Jason, 2APL, and GOAL have a
-belief base to model agent knowledge, goals that model the agent desires,
-some sort of plans or strategies for achieving agent's goals, actions that
-result in changes, mechanisms for triggering actions based on the mental
-state of the agent, sensing mechanisms to get information about the changes
-in the environment. However none of them incorporate any social concept to
-organise agent interaction. 
 
 % >>>
 
 \section{Discussion} % <<<
-% >>> 
 
+All of the languages presented above: Jason, 2APL, and GOAL have a number
+of constructs to model the agent level concepts, a belief base to model
+agent knowledge, goals that model the agent desires, some sort of plans or
+strategies for achieving agent's goals, actions that result in changes,
+mechanisms for triggering actions based on the mental state of the agent,
+sensing mechanisms to get information about the changes in the environment.
+However, even though Jason and 2APL have specific proposal in this
+direction, none of them incorporate any social concept to organise agent
+interaction. The social level of multiagent systems is exactly the area
+where this research work brings its contribution.
 % >>>
 
+% >>> 
 \chapter{Main AF-Raf Concepts} % <<<
 
 \section{Preliminaries} % <<<
 
-This chapter provides an explanation of the related concepts that
+This section provides an explanation of the related concepts that
 constitute a basis for the main research presented in this thesis.
 
 \subsection{Functional Languages} % <<<
@@ -1003,9 +1002,290 @@ rule Message(other, status()) {
 \end{figure} % >>>
 
 
+
+\section{Belief Bases} % <<<
+
+In most agent-oriented programming languages, agents maintain a
+\emph{belief base}.  The operations available to the agent are
+\textit{query} and \textit{adopt}.  A query asks the belief base which
+beliefs that follow a certain pattern it holds.  The adopt operation
+changes the state of the belief base by adding and possibly removing
+beliefs.  Sometimes, the {\it adopt\/} operation comes in two flavours:
+{\it update\/} and {\it revise}.  An update corresponds to a change in the
+environment, while a revision is exclusively a mental state change.
+
+\subsection{Beliefs}
+
+In general, beliefs are sentences in some logic.  However, the focus of
+this work is on roles and organisations, not on beliefs.  Thus, AF-Raf uses
+a very simple language for beliefs\,---\,they are essentially trees whose
+nodes are labeled by strings: \begin{align} \tau &::= \nu(\tau,\ldots,\tau)
+&& \text{function term} \\ \nu  &::= {\rm string} &&\text{function symbol}
+\end{align} The number of arguments can be any non-negative integer.
+
+\begin{example} The following are AF-Raf \emph{beliefs}: \begin{align}
+&{\it hasColor}({\it my}({\it car}()), {\it blue}()) \\ &{\it iHave}({\it
+cat}(), {\it int}({\it 10}())) \end{align} Note that any belief must
+contain a function with $0$~arguments, such as {\it car}, {\it blue}, {\it
+cat}, and {\it 10\/} in this example; otherwise, the belief would not have
+a finite size.  Note also that function symbols can represent both values
+(such as~{\it 10\/}) and typing information (such as~{\it int\/}).  \eoe
+\end{example}
+
+Each function symbol is used with a fixed number of arguments.  For
+example, if the function symbol ${\it car}$ is used in one belief with
+$0$~arguments in the function term ${\it car}()$, then we expect {\it
+car\/} to never have arguments.  We say that each function symbol has an
+\emph{arity}, which is~$0$ for {\it car}.  The function terms of arity~$0$,
+such as ${\it 10}()$ and ${\it car}()$, are said to be \emph{constants}.
+
+\begin{remark} Of course, it is important what beliefs mean, not only how
+they are represented syntactically.  The meaning of beliefs arises from how
+beliefs are used by agents.  We will see later how beliefs trigger actions
+via rules, and how beliefs spread through messages.  \eor \end{remark}
+
+\subsection{Queries}
+
+In general, a query $q$ is a sentence in some logic that determines a
+subset of beliefs.  Given a belief base and a query, it is important to be
+able to efficiently find the subset of beliefs from the belief base that
+satisfy the query.  Again, AF-Raf takes a simple approach, because its
+focus is not the belief base.  Each query is term that may contain
+variables, which are interpreted as patterns.  \begin{align} \tau &::=
+\nu(\tau,\ldots,\tau) && \text{function term} \\ \tau &::= x &&
+\text{variable term} \\ \nu  &::= {\rm string} &&\text{function symbol} \\
+x &::= {\rm string} && \text{variable symbol} \end{align} The last two
+grammar rules are the same as for beliefs.  Thus, any belief can be used as
+a query:  It stands for asking whether the belief base contains that
+particular belief.
+
+\begin{example} The following are AF-Raf \emph{queries}: \begin{align}
+&{\it hasColor}({\it my}({\it car}()), x) \label{eq:query.1} \\ &{\it
+hasColor}(y, z) \label{eq:query.2} \end{align} The variables $x$,~$y$,
+and~$z$ are easily identifiable, because they are not followed by
+parentheses.  Suppose the belief base contains exactly one belief, namely
+\begin{align} &{\it hasColor}({\it sky}(), {\it blue}()) \label{eq:skyblue}
+\end{align} Belief~\eqref{eq:skyblue} does not match
+query~\eqref{eq:query.1} but does match~\eqref{eq:query.2}.  In the latter
+case, the match is justified by setting $y$ to be ${\it sky}()$, and
+setting $z$ to be ${\it blue}()$.  \eoe \end{example}
+
+The previous example shows how a belief matching a query can be described
+by a binding of terms, such as ${\it sky}()$ and ${\it blue}()$, to
+variables, such as $y$~and~$z$.  More formally, a \emph{match} is a finite
+partial map from the set of variables to the set of ground terms.  We write
+$[\tau_1/x_1,\ldots,\tau_n/x_n]$ for the match that binds $x_k$
+to~$\tau_k$, for all $1\le k\le n$.  Also, we write
+$\tau[\tau_1/x_1,\ldots,\tau_n/x_n]$ for the result of substituting in
+parallel $x_k$ with~$\tau_k$, for all $1\le k\le n$.
+
+\begin{example} Consider the following belief base \begin{align} &{\it
+knows}({\it john}(), {\it john}()) \\ &{\it knows}({\it john}(), {\it
+laura}()) \end{align} and the following queries \begin{align} &{\it
+knows}(x, y) \\ &{\it knows}(x, x) \\ &{\it knows}({\it laura}(), {\it
+john}()) \\ &{\it knows}({\it john}(), {\it laura}()) \end{align} The
+results of these queries are, respectively, the following sets of
+matchings: \begin{align} &\bigl\{ [{\it john}()/x, {\it john}()/y],\; [{\it
+john}()/x,{\it laura}()/y] \bigr\} \\ &\bigl\{ [{\it john}()/x] \bigr\} \\
+&\bigl\{\bigr\} \\ &\bigl\{[]\bigr\} \end{align} Note that a variable may
+appear multiple times in a query.  In such a case, it implicitly requires
+the corresponding subterms to be equal.  Also note that the \emph{empty
+match} differs from \emph{no match}.  \eoe \end{example}
+
+\todo{Conjunctive queries.}
+
+\subsection{Updates and Revisions}
+
+In general, belief bases have internal and external consistency
+requirements.  Internally, beliefs should not contradict each-other.
+Externally, beliefs should correspond to reality.
+
+In AF-Raf, the situation is simpler.  There is no other meaning for beliefs
+apart from how they affect the behaviour of the agent, through rules.
+Thus, it is the agent's responsibility to detect inconsistencies.  In other
+words, inconsistencies are detected by programs, not by the programming
+language.
+
+\begin{example} Suppose that a particular agent-oriented program makes the
+convention that ${\it not}(x)$ means that `I do not hold belief~$x$'.  In
+this case, the query ${\it not}(x)\&x$ detects inconsistencies.  The action
+that the agent takes when it discovers an inconsistency could be to report
+an error, but may be any action at all.  \end{example}
+
+Similarly, the agent (and not the programming language) is responsible with
+ensuring that its beliefs are consistent with the environment.
+
+Once semantic concerns are left to the user program, the programming
+language AF-Raf is free to adopt simple mechanisms for updating the belief
+base.  The belief base is a set of beliefs, and its operations are those of
+a set:  ${\bf adopt}(x)$ inserts belief~$x$ into the belief base, and ${\bf
+forget}(x)$ removes the belief~$x$ from the belief base.  In case $x$~is
+not a belief, ${\bf forget}(x)$ does not modify the belief base.
+
 % >>>
 
+\section{Multi-Sorted Predicate Logic} \label{sec:multi-sorted} % <<<
 
+Our starting point is the observation that most agent oriented programming
+languages use first order logic, more specifically predicate logic terms,
+to represent beliefs and messages. As a consequence we look at how the
+introduction of types is managed in mathematical logic, and recall basic
+notions necessary to our understanding. We also introduce notational
+conventions used in AF-Raf.  Moreover, although these notions are simple,
+their definitions in literature tend to have subtle but important
+differences.
+\rg{Most of this section does not belong to preliminaries, as it is not that
+standard. I would put it somewhere between examples and reference.}
+
+A \emph{term} is a variable, or a function applied to other terms.
+\begin{align}
+\mathit{Term}\quad\tau &::= \omega \mid \phi \\
+\mathit{Variable}\quad\omega &::= \nu \\
+\mathit{Function}\quad\phi &::= \nu(\tau_1,\ldots,\tau_n) \\
+\mathit{Name}\quad\nu
+\end{align}
+In AF-Raf, term names are strings.  Because term names uniquely identify a
+variable or a function we will say ``the function~$\nu$'' rather than ``the
+function with name~$\nu$.'' A term not containing variables is said to be
+\emph{ground}.
+
+\begin{remark}
+Ground terms are essentially trees of strings.
+\end{remark}
+
+A multi-sorted logic has a set~$S$ of sorts.  We use the letter~$\sigma$ to
+denote sorts.
+\begin{align}
+\sigma, \sigma_1, \sigma_2, \sigma_3, \ldots &\in S
+\end{align}
+Each function~$\nu$ has a signature
+$(\sigma_1\times\cdots\times\sigma_n)\to\sigma$.  Function~$\nu$ is always
+applied to $n$~terms whose sorts must be, respectively,
+$\sigma_1$,~$\sigma_2$, \dots,~$\sigma_n$, and the resulting term has
+sort~$\sigma$. We say that $\nu$~has \emph{arity}~$n$. \emph{Constants} are
+functions with arity~$0$.
+
+Typically, in mathematical logic, the set~$S$ of sorts and the function
+signatures are required to satisfy further constraints. \textit{Bool} must
+be one of the sorts. \emph{Formulas} are terms with sort \textit{Bool}.
+The argument sorts ($\sigma_1$,~$\sigma_2$, \dots,~$\sigma_n$) either are
+all \textit{Bool}, or none is \textit{Bool}.  If the argument sorts are
+\textit{Bool}, then the result sort~$\sigma$ must also be \textit{Bool},
+and $\nu$ is said to be a \emph{boolean connective}.  If the argument sorts
+are not \textit{Bool} and the result sort~$\sigma$ is \textit{Bool}, then
+$\nu$ is said to be a \emph{predicate}.  Agent~Factory has these
+constraints and AF-Raf inherits them. In addition, AF-Raf uses an infix
+notation (described later) for boolean connectives, letter strings starting
+with uppercase for predicate names, and letter strings starting with
+lowercase for other function names and for variable names.
+
+\begin{remark}
+\rg{I'm not sure about this remark. I think \emph{traditional} logicians
+behave as described here.}
+The definitions given here are in-between what applied computer scientists
+tend to prefer and what pure logicians tend to prefer.  Computer scientists
+work with \emph{expressions} (rather than terms and formulas) and do not
+have constraints on function signatures with respect to booleans.
+Logicians, on the other hand, do have these constraints and, moreover,
+define terms in such a way that formulas are not terms, and predicates are
+not functions. Moreover, logicians single out equality between terms as
+being a special predicate.
+\end{remark}
+
+\rg{Maybe add some simple examples early on.}
+In AF-Raf, a \emph{belief} is a boolean ground term; in AF-Raf, a
+\emph{message} is a non-boolean ground term.
+
+Algebraic data types offer an alternative way of defining sets of ground
+terms. In multi-sorted predicate logic, the sort~$\sigma$ determines a set
+of ground terms, namely those of the form $\nu(*)$, where $\nu$ has a
+signature of the form $*\to\sigma$.  For example, the sort \textit{Bool}
+determines the set of terms that are formulas.  With algebraic data types,
+a type~$\delta$ is defined by a sequence of patterns, each of the form
+$\nu(\delta_1,\ldots,\delta_n)$. For example, one could define the types
+\textit{nat}, $e$, and~$o$ as follows.
+\begin{align}
+&\mathbf{type}\,\mathit{nat} =
+      \mathit{zero}()
+  \mid\mathit{succ}(\mathit{nat})
+  \mid\mathit{add}(\mathit{nat},\mathit{nat}) \\
+&\mathbf{type}\,e =
+      \mathit{zero}()
+  \mid\mathit{succ}(o)
+  \mid\mathit{add}(e,e)
+  \mid\mathit{add}(o,o) \\
+&\mathbf{type}\,o =
+      \mathit{succ}(e)
+  \mid\mathit{add}(o,e)
+  \mid\mathit{add}(e,o)
+\end{align}
+\rg{These things are presented as if they are completely standard. They're
+not. I think they should be presented as part of the design of AF-RAF.}
+We make the following observations.
+\begin{enumerate}
+\item
+  Function names may appear in multiple definitions. For example,
+  \textit{zero} appears in the definition of~$\mathit{nat}$ and also in the
+  definition of~$e$. In particular, the term $\mathit{zero}()$ belongs both
+  to the set of ground terms defined by the type~$\mathit{nat}$ and to the
+  one defined by the type~$e$.
+\item
+  Function names may appear multiple times in the same definition. For
+  example, \textit{add} appears twice in the definition of~$e$. (This
+  property distinguishes our types from polymorphic
+  variants~\cite{garrigue1998}.)
+\item
+  Type definitions may be recursive or mutually recursive. For example,
+  $\mathit{nat}$~appears within the definition of~$\mathit{nat}$.
+\end{enumerate}
+The set of ground terms corresponding to type~$\mathit{nat}$ is the following.
+\begin{equation}
+\begin{aligned}
+\{\,&\mathit{zero}(), \\
+    &\mathit{succ}(\mathit{zero}()),
+        \mathit{succ}(\mathit{succ}(\mathit{zero}())), \ldots \\
+    &\mathit{add}(\mathit{zero}(), \mathit{zero}()),
+        \mathit{add}(\mathit{zero}(), \mathit{succ}(\mathit{zero}())),
+        \ldots \\
+    &\mathit{succ}(\mathit{add}(\mathit{zero}(), \mathit{zero}())),
+        \ldots \\
+    &\ldots\, \}
+\end{aligned}
+\end{equation}
+Moreover, $e$~and~$o$ partition~$\mathit{nat}$.
+
+\begin{proposition}
+Algebraic data types (as defined above) are strictly more expressive than
+sorts. More precisely, (1)~all sets of ground terms that can be defined by
+sorts can also be defined by algebraic data types, and (2)~there are pairs
+of sets of ground terms that can be defined by algebraic data types but
+cannot be defined by sorts.
+\end{proposition}
+
+\begin{proof}
+For~(1), we define a type~$\delta(\sigma)$ for each sort~$\sigma$ as
+follows: For each signature $\nu:(\sigma_1,\ldots,\sigma_n)\to\sigma$ we
+add a pattern $\nu(\delta(\sigma_1),\ldots,\delta(\sigma_n))$. It is easy
+to see, by structural induction, that the sort~$\sigma$ and the
+type~$\delta(\sigma)$ define the same sets of ground terms.
+
+For~(2), note that, given a fixed set of function signatures, the sets of
+ground terms defined by distinct sorts are disjoint. In the previous
+example, however, the sets of ground terms defined by the types
+$\mathit{nat}$~and~$e$ have (at least) a common element, namely
+$\mathit{zero}()$.
+\end{proof}
+
+Finally, let us note that there are sets of ground terms for which it is
+undecidable whether a given term is an element.  (A classic result of
+computability theory is that there are undecidable sets of bit-strings, and
+sorted ground terms can encode bit-strings.) In particular, there exist
+sets of ground terms that cannot be defined using algebraic data types.
+\rg{These things are probably too cryptic, and should be explained more.}
+
+% >>>
+
+% >>>
 \chapter{Language Definition}\label{ch:method} % <<<
 
 \section{AF-Raf Syntax} % <<<
@@ -1376,286 +1656,6 @@ TODO: inference rules
 % >>>
 
 
-\section{Belief Bases} % <<<
-
-In most agent-oriented programming languages, agents maintain a
-\emph{belief base}.  The operations available to the agent are
-\textit{query} and \textit{adopt}.  A query asks the belief base which
-beliefs that follow a certain pattern it holds.  The adopt operation
-changes the state of the belief base by adding and possibly removing
-beliefs.  Sometimes, the {\it adopt\/} operation comes in two flavours:
-{\it update\/} and {\it revise}.  An update corresponds to a change in the
-environment, while a revision is exclusively a mental state change.
-
-\subsection{Beliefs}
-
-In general, beliefs are sentences in some logic.  However, the focus of
-this work is on roles and organisations, not on beliefs.  Thus, AF-Raf uses
-a very simple language for beliefs\,---\,they are essentially trees whose
-nodes are labeled by strings: \begin{align} \tau &::= \nu(\tau,\ldots,\tau)
-&& \text{function term} \\ \nu  &::= {\rm string} &&\text{function symbol}
-\end{align} The number of arguments can be any non-negative integer.
-
-\begin{example} The following are AF-Raf \emph{beliefs}: \begin{align}
-&{\it hasColor}({\it my}({\it car}()), {\it blue}()) \\ &{\it iHave}({\it
-cat}(), {\it int}({\it 10}())) \end{align} Note that any belief must
-contain a function with $0$~arguments, such as {\it car}, {\it blue}, {\it
-cat}, and {\it 10\/} in this example; otherwise, the belief would not have
-a finite size.  Note also that function symbols can represent both values
-(such as~{\it 10\/}) and typing information (such as~{\it int\/}).  \eoe
-\end{example}
-
-Each function symbol is used with a fixed number of arguments.  For
-example, if the function symbol ${\it car}$ is used in one belief with
-$0$~arguments in the function term ${\it car}()$, then we expect {\it
-car\/} to never have arguments.  We say that each function symbol has an
-\emph{arity}, which is~$0$ for {\it car}.  The function terms of arity~$0$,
-such as ${\it 10}()$ and ${\it car}()$, are said to be \emph{constants}.
-
-\begin{remark} Of course, it is important what beliefs mean, not only how
-they are represented syntactically.  The meaning of beliefs arises from how
-beliefs are used by agents.  We will see later how beliefs trigger actions
-via rules, and how beliefs spread through messages.  \eor \end{remark}
-
-\subsection{Queries}
-
-In general, a query $q$ is a sentence in some logic that determines a
-subset of beliefs.  Given a belief base and a query, it is important to be
-able to efficiently find the subset of beliefs from the belief base that
-satisfy the query.  Again, AF-Raf takes a simple approach, because its
-focus is not the belief base.  Each query is term that may contain
-variables, which are interpreted as patterns.  \begin{align} \tau &::=
-\nu(\tau,\ldots,\tau) && \text{function term} \\ \tau &::= x &&
-\text{variable term} \\ \nu  &::= {\rm string} &&\text{function symbol} \\
-x &::= {\rm string} && \text{variable symbol} \end{align} The last two
-grammar rules are the same as for beliefs.  Thus, any belief can be used as
-a query:  It stands for asking whether the belief base contains that
-particular belief.
-
-\begin{example} The following are AF-Raf \emph{queries}: \begin{align}
-&{\it hasColor}({\it my}({\it car}()), x) \label{eq:query.1} \\ &{\it
-hasColor}(y, z) \label{eq:query.2} \end{align} The variables $x$,~$y$,
-and~$z$ are easily identifiable, because they are not followed by
-parentheses.  Suppose the belief base contains exactly one belief, namely
-\begin{align} &{\it hasColor}({\it sky}(), {\it blue}()) \label{eq:skyblue}
-\end{align} Belief~\eqref{eq:skyblue} does not match
-query~\eqref{eq:query.1} but does match~\eqref{eq:query.2}.  In the latter
-case, the match is justified by setting $y$ to be ${\it sky}()$, and
-setting $z$ to be ${\it blue}()$.  \eoe \end{example}
-
-The previous example shows how a belief matching a query can be described
-by a binding of terms, such as ${\it sky}()$ and ${\it blue}()$, to
-variables, such as $y$~and~$z$.  More formally, a \emph{match} is a finite
-partial map from the set of variables to the set of ground terms.  We write
-$[\tau_1/x_1,\ldots,\tau_n/x_n]$ for the match that binds $x_k$
-to~$\tau_k$, for all $1\le k\le n$.  Also, we write
-$\tau[\tau_1/x_1,\ldots,\tau_n/x_n]$ for the result of substituting in
-parallel $x_k$ with~$\tau_k$, for all $1\le k\le n$.
-
-\begin{example} Consider the following belief base \begin{align} &{\it
-knows}({\it john}(), {\it john}()) \\ &{\it knows}({\it john}(), {\it
-laura}()) \end{align} and the following queries \begin{align} &{\it
-knows}(x, y) \\ &{\it knows}(x, x) \\ &{\it knows}({\it laura}(), {\it
-john}()) \\ &{\it knows}({\it john}(), {\it laura}()) \end{align} The
-results of these queries are, respectively, the following sets of
-matchings: \begin{align} &\bigl\{ [{\it john}()/x, {\it john}()/y],\; [{\it
-john}()/x,{\it laura}()/y] \bigr\} \\ &\bigl\{ [{\it john}()/x] \bigr\} \\
-&\bigl\{\bigr\} \\ &\bigl\{[]\bigr\} \end{align} Note that a variable may
-appear multiple times in a query.  In such a case, it implicitly requires
-the corresponding subterms to be equal.  Also note that the \emph{empty
-match} differs from \emph{no match}.  \eoe \end{example}
-
-\todo{Conjunctive queries.}
-
-\subsection{Updates and Revisions}
-
-In general, belief bases have internal and external consistency
-requirements.  Internally, beliefs should not contradict each-other.
-Externally, beliefs should correspond to reality.
-
-In AF-Raf, the situation is simpler.  There is no other meaning for beliefs
-apart from how they affect the behaviour of the agent, through rules.
-Thus, it is the agent's responsibility to detect inconsistencies.  In other
-words, inconsistencies are detected by programs, not by the programming
-language.
-
-\begin{example} Suppose that a particular agent-oriented program makes the
-convention that ${\it not}(x)$ means that `I do not hold belief~$x$'.  In
-this case, the query ${\it not}(x)\&x$ detects inconsistencies.  The action
-that the agent takes when it discovers an inconsistency could be to report
-an error, but may be any action at all.  \end{example}
-
-Similarly, the agent (and not the programming language) is responsible with
-ensuring that its beliefs are consistent with the environment.
-
-Once semantic concerns are left to the user program, the programming
-language AF-Raf is free to adopt simple mechanisms for updating the belief
-base.  The belief base is a set of beliefs, and its operations are those of
-a set:  ${\bf adopt}(x)$ inserts belief~$x$ into the belief base, and ${\bf
-forget}(x)$ removes the belief~$x$ from the belief base.  In case $x$~is
-not a belief, ${\bf forget}(x)$ does not modify the belief base.
-
-% >>>
-\section{Multi-Sorted Predicate Logic} \label{sec:multi-sorted} % <<<
-
-Our starting point is the observation that most agent oriented programming
-languages use first order logic, more specifically predicate logic terms,
-to represent beliefs and messages. As a consequence we look at how the
-introduction of types is managed in mathematical logic, and recall basic
-notions necessary to our understanding. We also introduce notational
-conventions used in AF-Raf.  Moreover, although these notions are simple,
-their definitions in literature tend to have subtle but important
-differences.
-\rg{Most of this section does not belong to preliminaries, as it is not that
-standard. I would put it somewhere between examples and reference.}
-
-A \emph{term} is a variable, or a function applied to other terms.
-\begin{align}
-\mathit{Term}\quad\tau &::= \omega \mid \phi \\
-\mathit{Variable}\quad\omega &::= \nu \\
-\mathit{Function}\quad\phi &::= \nu(\tau_1,\ldots,\tau_n) \\
-\mathit{Name}\quad\nu
-\end{align}
-In AF-Raf, term names are strings.  Because term names uniquely identify a
-variable or a function we will say ``the function~$\nu$'' rather than ``the
-function with name~$\nu$.'' A term not containing variables is said to be
-\emph{ground}.
-
-\begin{remark}
-Ground terms are essentially trees of strings.
-\end{remark}
-
-A multi-sorted logic has a set~$S$ of sorts.  We use the letter~$\sigma$ to
-denote sorts.
-\begin{align}
-\sigma, \sigma_1, \sigma_2, \sigma_3, \ldots &\in S
-\end{align}
-Each function~$\nu$ has a signature
-$(\sigma_1\times\cdots\times\sigma_n)\to\sigma$.  Function~$\nu$ is always
-applied to $n$~terms whose sorts must be, respectively,
-$\sigma_1$,~$\sigma_2$, \dots,~$\sigma_n$, and the resulting term has
-sort~$\sigma$. We say that $\nu$~has \emph{arity}~$n$. \emph{Constants} are
-functions with arity~$0$.
-
-Typically, in mathematical logic, the set~$S$ of sorts and the function
-signatures are required to satisfy further constraints. \textit{Bool} must
-be one of the sorts. \emph{Formulas} are terms with sort \textit{Bool}.
-The argument sorts ($\sigma_1$,~$\sigma_2$, \dots,~$\sigma_n$) either are
-all \textit{Bool}, or none is \textit{Bool}.  If the argument sorts are
-\textit{Bool}, then the result sort~$\sigma$ must also be \textit{Bool},
-and $\nu$ is said to be a \emph{boolean connective}.  If the argument sorts
-are not \textit{Bool} and the result sort~$\sigma$ is \textit{Bool}, then
-$\nu$ is said to be a \emph{predicate}.  Agent~Factory has these
-constraints and AF-Raf inherits them. In addition, AF-Raf uses an infix
-notation (described later) for boolean connectives, letter strings starting
-with uppercase for predicate names, and letter strings starting with
-lowercase for other function names and for variable names.
-
-\begin{remark}
-\rg{I'm not sure about this remark. I think \emph{traditional} logicians
-behave as described here.}
-The definitions given here are in-between what applied computer scientists
-tend to prefer and what pure logicians tend to prefer.  Computer scientists
-work with \emph{expressions} (rather than terms and formulas) and do not
-have constraints on function signatures with respect to booleans.
-Logicians, on the other hand, do have these constraints and, moreover,
-define terms in such a way that formulas are not terms, and predicates are
-not functions. Moreover, logicians single out equality between terms as
-being a special predicate.
-\end{remark}
-
-\rg{Maybe add some simple examples early on.}
-In AF-Raf, a \emph{belief} is a boolean ground term; in AF-Raf, a
-\emph{message} is a non-boolean ground term.
-
-Algebraic data types offer an alternative way of defining sets of ground
-terms. In multi-sorted predicate logic, the sort~$\sigma$ determines a set
-of ground terms, namely those of the form $\nu(*)$, where $\nu$ has a
-signature of the form $*\to\sigma$.  For example, the sort \textit{Bool}
-determines the set of terms that are formulas.  With algebraic data types,
-a type~$\delta$ is defined by a sequence of patterns, each of the form
-$\nu(\delta_1,\ldots,\delta_n)$. For example, one could define the types
-\textit{nat}, $e$, and~$o$ as follows.
-\begin{align}
-&\mathbf{type}\,\mathit{nat} =
-      \mathit{zero}()
-  \mid\mathit{succ}(\mathit{nat})
-  \mid\mathit{add}(\mathit{nat},\mathit{nat}) \\
-&\mathbf{type}\,e =
-      \mathit{zero}()
-  \mid\mathit{succ}(o)
-  \mid\mathit{add}(e,e)
-  \mid\mathit{add}(o,o) \\
-&\mathbf{type}\,o =
-      \mathit{succ}(e)
-  \mid\mathit{add}(o,e)
-  \mid\mathit{add}(e,o)
-\end{align}
-\rg{These things are presented as if they are completely standard. They're
-not. I think they should be presented as part of the design of AF-RAF.}
-We make the following observations.
-\begin{enumerate}
-\item
-  Function names may appear in multiple definitions. For example,
-  \textit{zero} appears in the definition of~$\mathit{nat}$ and also in the
-  definition of~$e$. In particular, the term $\mathit{zero}()$ belongs both
-  to the set of ground terms defined by the type~$\mathit{nat}$ and to the
-  one defined by the type~$e$.
-\item
-  Function names may appear multiple times in the same definition. For
-  example, \textit{add} appears twice in the definition of~$e$. (This
-  property distinguishes our types from polymorphic
-  variants~\cite{garrigue1998}.)
-\item
-  Type definitions may be recursive or mutually recursive. For example,
-  $\mathit{nat}$~appears within the definition of~$\mathit{nat}$.
-\end{enumerate}
-The set of ground terms corresponding to type~$\mathit{nat}$ is the following.
-\begin{equation}
-\begin{aligned}
-\{\,&\mathit{zero}(), \\
-    &\mathit{succ}(\mathit{zero}()),
-        \mathit{succ}(\mathit{succ}(\mathit{zero}())), \ldots \\
-    &\mathit{add}(\mathit{zero}(), \mathit{zero}()),
-        \mathit{add}(\mathit{zero}(), \mathit{succ}(\mathit{zero}())),
-        \ldots \\
-    &\mathit{succ}(\mathit{add}(\mathit{zero}(), \mathit{zero}())),
-        \ldots \\
-    &\ldots\, \}
-\end{aligned}
-\end{equation}
-Moreover, $e$~and~$o$ partition~$\mathit{nat}$.
-
-\begin{proposition}
-Algebraic data types (as defined above) are strictly more expressive than
-sorts. More precisely, (1)~all sets of ground terms that can be defined by
-sorts can also be defined by algebraic data types, and (2)~there are pairs
-of sets of ground terms that can be defined by algebraic data types but
-cannot be defined by sorts.
-\end{proposition}
-
-\begin{proof}
-For~(1), we define a type~$\delta(\sigma)$ for each sort~$\sigma$ as
-follows: For each signature $\nu:(\sigma_1,\ldots,\sigma_n)\to\sigma$ we
-add a pattern $\nu(\delta(\sigma_1),\ldots,\delta(\sigma_n))$. It is easy
-to see, by structural induction, that the sort~$\sigma$ and the
-type~$\delta(\sigma)$ define the same sets of ground terms.
-
-For~(2), note that, given a fixed set of function signatures, the sets of
-ground terms defined by distinct sorts are disjoint. In the previous
-example, however, the sets of ground terms defined by the types
-$\mathit{nat}$~and~$e$ have (at least) a common element, namely
-$\mathit{zero}()$.
-\end{proof}
-
-Finally, let us note that there are sets of ground terms for which it is
-undecidable whether a given term is an element.  (A classic result of
-computability theory is that there are undecidable sets of bit-strings, and
-sorted ground terms can encode bit-strings.) In particular, there exist
-sets of ground terms that cannot be defined using algebraic data types.
-\rg{These things are probably too cryptic, and should be explained more.}
-
-% >>>
 \section{Algebraic Data Types and Type Checking} % <<<
 
 \subsection{Algebraic Data Types} % <<<
