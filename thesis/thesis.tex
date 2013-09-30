@@ -52,6 +52,7 @@
 \chapter*{Acknowledgements} % <<<
 
 % >>>
+
 \chapter*{Abstract} % <<<
 
 This thesis defines a novel agent-oriented programming language, called
@@ -71,6 +72,7 @@ elegance of AF-RAF's design.
 
 
 % >>>
+
 \chapter*{Plan --- to be commented} % <<<
 
 \begin{enumerate}
@@ -110,6 +112,7 @@ elegance of AF-RAF's design.
 \end{enumerate}
 
 % >>>
+
 \chapter{Introduction}\label{ch:intro} % <<<
 \pagenumbering{arabic}
 
@@ -278,19 +281,35 @@ language construct.}
 
 \chapter{Agent Oriented Programming} % <<<
 \section{Overview} % <<<
-MD Travers, 1996, Programming with agents: xenia.media.mit.edu/~mt/thesis/mt-thesis-Contents.html
 
-Agent Oriented Programming is based on the anthropomorphic metaphor, namely
-it attributes human characteristics and behaviour to a software program.
-This idea grew within Artificial Intelligence research which focused on
-developing computational models for human thinking. Distributed Artificial
-Intelligence adds communication and interaction to the studied processes.
-Within Distributed Artificial Intelligence appeared the actor models as a
-way of performing concurrent computation based on message passing. Based on
-this appeared the idea of open systems, which are in continuous interaction with an
-external environment. Next step was to build a society of interacting
-autonomous agents.
+Using an anthropomorphic metaphor to design computer programs is not a new
+idea. By anthropomorphic metaphor meaning the attribution of human
+characteristics and behaviour to a software program.  This idea grew within
+Artificial Intelligence research which focused on developing computational
+models for human thinking. Later, Distributed Artificial Intelligence adds
+communication and interaction to the studied processes.  Within Distributed
+Artificial Intelligence appeared the actor models as a way of performing
+concurrent computation based on message passing. Based on this emerged the
+idea of open systems, which are in continuous interaction with an external
+environment. Next step was to build a society of interacting autonomous
+agents.
 
+The Agent Oriented Programming paradigm was introduced in 1993 by Yoav
+Shoham along with the first Agent Oriented Programming language, Agent0.
+This relatively new programming paradigm adopts a social metaphor for the
+design and implementation of software systems. Specifically, software
+systems are seen as communities of software entities, known as agents, that
+interact with one another in order to solve problems that are beyond their
+individual capabilities \cite{}Agent Oriented Programming Shoham. An agent
+is an entity whose state is viewed as consisting of mental components such
+as beliefs, capabilities, choices and commitments. In this context the role
+of an agent program is to control the evolution of the agent's mental
+state.
+
+TODO: Talk about the history of Agent Oriented Programming starting with
+Yoav Shoham's Agent0. Give examples of programming languages discussing
+their strengths and weaknesses. Talk about metaphors and paradigms (like
+BDI).
 % >>>
 \section{Role Theory} % <<<
 
@@ -347,16 +366,16 @@ hard the transfer of results from one area to another.
 
 Relatively recently the idea of role oriented programming appeared mainly
 related to object oriented programming. Object teams, PowerJava, EpsilonJ,
-and Chameleon are examples of such object oriented programming languages that
-have explicit support for roles. A role taxonomy was developed~\cite{}
+and Chameleon are examples of such object oriented programming languages
+that have explicit support for roles. A role taxonomy was developed~\cite{}
 Graversen to help role researchers to understand, communicate and spawn of
 new ideas, in the context of object oriented programming.
 
 In the multiagent systems domain, there have been a number of successful
 endeavours to incorporate the concept of role. Examples include PowerJava,
-an extension of Java, and ROPE, a language independent framework. Sill,
-to the moment there is no agent oriented programming language to have
-explicit support for roles.
+an extension of Java, and ROPE, a language independent framework. Sill, to
+the moment there is no agent oriented programming language to have explicit
+support for roles.
 
 Rope: role oriented programming environment for multiagent systems. Becht
 1999
@@ -490,8 +509,10 @@ to achieving a goal and only drops it after it was achieved. GOAL
 distinguishes different types of goals are coexist primitive, achievement
 or achieved goals.  \cite{} GOAL Agents Instantiate Intention Logic
 
-% >>>
+TODO: Draw a table with all the programming languages presented and their main
+features.
 
+% >>>
 \section{Discussion} % <<<
 
 All of the languages presented above: Jason, 2APL, and GOAL have a number
@@ -504,9 +525,14 @@ However, even though Jason and 2APL have specific proposal in this
 direction, none of them incorporate any social concept to organise agent
 interaction. The social level of multiagent systems is exactly the area
 where this research work brings its contribution.
+
+TODO: Discuss the similarities between AF-Raf and the languages that were
+presented and build the motivation for incorporating social concepts for
+organising agent interaction.
 % >>>
 
 % >>> 
+
 \chapter{Main AF-Raf Concepts} % <<<
 
 \section{Preliminaries} % <<<
@@ -791,13 +817,13 @@ rule Monitoring(name, addr) {
 
 Actions and sensors are pieces of Java code used to extend the AF-Raf
 programs. Actions are invoked within rules. There is a number of actions
-included in the standard library, which any agent can use, there is also the
-option to create new actions. Sensors are run automatically every time
+included in the standard library, which any agent can use, there is also
+the option to create new actions. Sensors are run automatically every time
 step. Sensors can range from the monitoring of the agent's message inbox to
 monitoring changes in the agent's environment.
-Figure~\ref{fig:actions-sensors} presents some of the AF-Raf standard actions and
-sensors. Both println and send actions have been used in the rule
-Monitoring illustrated in figure~\ref{fig:rule}.
+Figure~\ref{fig:actions-sensors} presents some of the AF-Raf standard
+actions and sensors. Both println and send actions have been used in the
+rule Monitoring illustrated in figure~\ref{fig:rule}.
 
 
 \begin{figure}\footnotesize % <<<
@@ -855,9 +881,8 @@ Each message has to contain the session id so that it can be associated to
 an specific session. This enables the interpreter to monitor that the
 messages succeed in the right order.
 
-% >>>
 
-
+\subsection{Examples} % <<<
 Figure~\ref{fig:AF-Raf-pingpong-role} illustrates an AF-Raf role describing
 the ping pong protocol. The code in Figure~\ref{fig:AF-Raf-pingpong-roles}
 is a simple implementation of this role.
@@ -1000,9 +1025,9 @@ rule Message(other, status()) {
 \caption{The code of a simple AF-Raf agent}
 \label{fig:AF-Raf-no-roles}
 \end{figure} % >>>
+% >>>
 
-
-
+% >>>
 \section{Belief Bases} % <<<
 
 In most agent-oriented programming languages, agents maintain a
@@ -1123,7 +1148,6 @@ forget}(x)$ removes the belief~$x$ from the belief base.  In case $x$~is
 not a belief, ${\bf forget}(x)$ does not modify the belief base.
 
 % >>>
-
 \section{Multi-Sorted Predicate Logic} \label{sec:multi-sorted} % <<<
 
 Our starting point is the observation that most agent oriented programming
@@ -1284,8 +1308,8 @@ sets of ground terms that cannot be defined using algebraic data types.
 \rg{These things are probably too cryptic, and should be explained more.}
 
 % >>>
+%>>>
 
-% >>>
 \chapter{Language Definition}\label{ch:method} % <<<
 
 \section{AF-Raf Syntax} % <<<
@@ -1553,9 +1577,9 @@ disjunction of atom formulas.
 An atom formula is either a predicate, a negated atom formula or a formula
 enclosed in brackets.
 
-A predicate is either a term followed by a predicate operation and then by another
-term or a upper case starting word followed by zero or one term lists
-enclosed in brackets.
+A predicate is either a term followed by a predicate operation and then by
+another term or an upper case starting word followed by zero or one term
+lists enclosed in brackets.
 
 
 A term is a term$\_$a to which add$\_$op and another term$\_$ can be added zero or
@@ -1630,7 +1654,6 @@ An id is either a LID or a UID.
 
 
 % >>>
-
 \section{Operational Semantics} % <<<
 
 The semantics of programming languages is often specified as transitions
@@ -1654,8 +1677,6 @@ a call, a foreach, an if, an update, or a while.
 
 TODO: inference rules
 % >>>
-
-
 \section{Algebraic Data Types and Type Checking} % <<<
 
 \subsection{Algebraic Data Types} % <<<
@@ -1828,7 +1849,6 @@ size of the term and $n$~is the size of all type definitions.
 
 % >>>
 % >>>
-
 \section{Roles and Session Types} % <<<
 
 \subsection{Specifying Roles in AF-Raf} % <<<
@@ -2173,6 +2193,7 @@ Roles and norms for programming agent organisations. Tinnemeier 2009
 \\~\\
 
 % >>>
+
 \chapter{Conclusions}\label{ch:conc} % <<<
 
 Starting from high-level similarities between certain aspects of an
