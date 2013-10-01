@@ -39,7 +39,7 @@
 \overfullrule=5pt \pretolerance=400 \tolerance=200 % temporary
 \title{Supporting Agent Systems in the Programming Language} % <<<
 \author{Claudia V. Grigore}
-\date{September 2013}
+\date{October 2013}
 \maketitle
 
 \pagenumbering{roman}
@@ -289,10 +289,10 @@ Artificial Intelligence research which focused on developing computational
 models for human thinking. Later, Distributed Artificial Intelligence adds
 communication and interaction to the studied processes.  Within Distributed
 Artificial Intelligence appeared the actor models as a way of performing
-concurrent computation based on message passing. Based on this emerged the
-idea of open systems, which are in continuous interaction with an external
-environment. Next step was to build a society of interacting autonomous
-agents.
+concurrent computation based on message passing. Based on this, emerged the
+idea of open systems, which are systems in continuous interaction with an
+external environment. Next step was to build a society of interacting
+autonomous agents.
 
 The Agent Oriented Programming paradigm was introduced in 1993 by Yoav
 Shoham along with the first Agent Oriented Programming language, Agent0.
@@ -302,9 +302,16 @@ systems are seen as communities of software entities, known as agents, that
 interact with one another in order to solve problems that are beyond their
 individual capabilities \cite{}Agent Oriented Programming Shoham. An agent
 is an entity whose state is viewed as consisting of mental components such
-as beliefs, capabilities, choices and commitments. In this context the role
+as beliefs, capabilities, choices and commitments. In this context, the role
 of an agent program is to control the evolution of the agent's mental
 state.
+
+Agent0 was a prototype programming language, and it included only
+constructs related to the agent level of a multiagent system. Shoham only
+mentioned that a society of agents would need further organisation in order
+to work properly. He suggested that the roles and norms could be
+appropriate options to consider, but there was no concrete implementation
+for any social level constructs.
 
 TODO: Talk about the history of Agent Oriented Programming starting with
 Yoav Shoham's Agent0. Give examples of programming languages discussing
@@ -511,6 +518,29 @@ or achieved goals.  \cite{} GOAL Agents Instantiate Intention Logic
 
 TODO: Draw a table with all the programming languages presented and their main
 features.
+\\
+
+\vbox{\tabskip=0pt \offinterlineskip
+\def\tablerule{\noalign{\hrule}}
+\halign to250pt {
+\hfil#&\vrule#\tabskip=1em plus2em&
+\hfil#& \vrule#& \hfil#\hfil& \vrule#&
+\hfil#& \vrule#\tabskip=0pt\cr\tablerule
+&&\omit\hidewidth \textit{Features}\hidewidth&&
+\omit\hidewidth \bf{Jason}\hidewidth&&
+%\omit\hidewidth \bf{2APL}\hidewidth&&
+%\omit\hidewidth \bf{GOAL}\hidewidth&&
+\omit\hidewidth \bf{AF-Raf}\hidewidth&\cr\tablerule
+&&belief base&&+&&+&\cr\tablerule
+&&goals&&+&&+&\cr\tablerule
+&&plans&&+&&+&\cr\tablerule
+&&actions&&+&&+&\cr\tablerule
+&&triggers&&+&&+&\cr\tablerule
+&&rules&&+&&+&\cr\tablerule
+&&sensing&&+&&+&\cr\tablerule
+&&roles&&-&&+&\cr\tablerule
+&&organisation&&-&&+&\cr\tablerule \noalign{\smallskip}
+\hfil\cr}}
 
 % >>>
 \section{Discussion} % <<<
