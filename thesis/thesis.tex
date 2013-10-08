@@ -284,9 +284,9 @@ language construct.}
 
 Using an anthropomorphic metaphor to design computer programs is not a new
 idea. By anthropomorphic metaphor meaning the attribution of human
-characteristics and behaviour to a software program.  This idea grew within
+characteristics and behaviour to a software program. This idea grew within
 Artificial Intelligence research which focused on developing computational
-models for human thinking. Later, Distributed Artificial Intelligence adds
+models for human thinking. Later, Distributed Artificial Intelligence added
 communication and interaction to the studied processes.  Within Distributed
 Artificial Intelligence appeared the actor models as a way of performing
 concurrent computation based on message passing. Based on this, emerged the
@@ -294,7 +294,7 @@ idea of open systems, which are systems in continuous interaction with an
 external environment. Next step was to build a society of interacting
 autonomous agents.
 
-The Agent Oriented Programming paradigm was introduced in 1993 by Yoav
+The Agent Oriented Programming paradigm was introduced in early '90 by Yoav
 Shoham along with the first Agent Oriented Programming language, Agent0.
 This relatively new programming paradigm adopts a social metaphor for the
 design and implementation of software systems. Specifically, software
@@ -313,6 +313,15 @@ complete, needs each of the following components:
    \item An interpreted programming language in which to define and program the agents. 
    \item A method for converting neutral applications into agents.
 \end{enumerate}
+
+The core components of the mental state are beliefs, commitments and
+capabilities. Shoham argues that more complex mental notions such as
+desires, intentions, goals or plans can be included, but those three are
+the most important ones.
+
+The generic agent interpreter's basic loop contains two steps: (1). read
+the current messages and update the mental state; (2). execute commitments
+(possibly resulting in further belief changes).
 
 Agent0 is a prototype programming language, and it includes only
 constructs related to the agent level of a multiagent system. Shoham only
