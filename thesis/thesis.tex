@@ -886,12 +886,13 @@ sensor com.agentfactory.raf.RafStandardSensor$Message;
 \end{figure} % >>>
 
 
-An operation a specific kind of rule stating that upon receiving a message
-of a particular type the agent should reply with a message of a specified
-type. The message type can be any type including the type unit(), and in
-this case there is no actual message returned. Even though operations can
-be written as rules, using syntactic sugar to automatise the process of
-message passing makes answering messages much easier.
+An operation can be defined as a specific kind of rule stating that upon
+receiving a message of a particular type the agent should reply with a
+message of a specified type. The message type can be any type including the
+type unit(), and in this case there is no actual message returned. Even
+though operations can be written as rules, using syntactic sugar to
+automatise the process of message passing makes answering messages much
+easier.
 
 A role's purpose is to group together related behaviour. As stated before
 AF-Raf agents interact through message passing. AF-Raf's role concept
@@ -928,12 +929,144 @@ messages succeed in the right order.
 
 
 \subsection{Examples} % <<<
+
+\begin{figure}\footnotesize % <<<
+\begin{verbatim}
+type pair<x> = pair(x, x)
+
+type expression<value> =
+  | val(value)
+  | add(expression<value>, expression<value>)
+  | sub(expression<value>, expression<value>)
+  | mul(expression<value>, expression<value>)
+  | div(expression<value>, expression<value>)
+        
+role Calculator<value> {
+  eval : expression<value> -> value;
+}
+
+role BinaryCalc<value> {
+  add : pair<value> -> value;
+  sub : pair<value> -> value;
+  mul : pair<value> -> value;
+  div : pair<value> -> value;
+}
+
+session EvaluateExpression<value>(A : any, 
+                                  B : Calculator<value>,
+                                  C : BinaryCalc<value>) {
+  expression<value> : A -> B;
+  repeat EvaluateExpression(B, B, C); // actually, 0 or 2 times
+  pair<value> : B -> C;
+  value : C -> B;
+  value : B -> A;
+}
+\end{verbatim}
+\caption{Calculator: types, roles and session}
+\label{fig:Calculator}
+\end{figure} % >>>
+
+\begin{figure}\footnotesize % <<<
+\begin{verbatim}
+include stdio
+include CalcTypes
+
+action intadd(x, y) = raftest.IntegerAddAction;
+action intsub(x, y) = raftest.IntegerSubAction;
+action intmul(x, y) = raftest.IntegerMulAction;
+action intdiv(x, y) = raftest.IntegerDivAction;
+
+agent BinaryCalcInt : BinaryCalc<integer> {
+  // operation add(pair(x, y)) = { return intadd(x, y); }
+  rule Message(other, op(call(add(), cid, sid), pair(x, y))) {
+    -Message(other, op(call(add(), cid, sid), pair(x, y)));
+            z := intadd(x, y);
+    send(other, z);
+  }
+        
+        // TODO: the other operations
+}
+
+agent ExprCalc(binaryCalc : BinaryCalc<value>) : Calculator<value> {
+  // operation eval(add(x, y)) { return binaryCalc.add(self.eval(x), 
+                                 self. eval(y)); }
+  rule Message(other, op(call(eval(), cid, sid), add(x, y))) & Iam(self) {
+    -Message(other, op(call(eval(), cid, sid), add(x, y)));
+                xcid := newcall;
+    +Continue(other, cid, xcid, add1(y));
+    send(self, op(call(eval(), xcid, sid)), x);
+  }
+        
+  rule Message(self, op(return(eval(), xcid, sid), ctx)) 
+                & Iam(self) 
+                & Continue(other, cid, xcid, add1(y)) 
+  {
+    -Continue(other, cid, xcid, add1(y));
+    -Message(self, op(return(eval(), xcid, sid), ctx));
+    ycid := newcall;
+    +Continue(other, cid, ycid, add2(ctx));
+    send(self, op(call(eval(), ycid, sid), y));
+  }
+        
+  rule Message(self, op(return(eval(), cid, sid), cty))
+                & Iam(self)
+                & Continue(other, cid, ycid, add2(ctx))
+  {
+    -Message(self, op(return(eval(), cid, sid), cty));
+    -Continue(other, cid, ycid, add2(ctx));
+    zcid := newcall;
+    +Continue(other, cid, zcid, add3());
+    send(binaryCalc, op(call(add(), zcid, sid), operands(ctx, cty)));
+  }
+        
+  rule Message(binaryCalc, op(return(add(), zcid, sid), z))
+                & Continue(other, cid, zcid, add3())
+  {
+    -Message(binaryCalc, op(return(add(), zcid, sid), z));
+    -Continue(other, cid, zcid, add3());
+     send(other, op(return(eval(), cid, sid), z));
+  }
+}
+
+\end{verbatim}
+\caption{Calculator AF-Raf agents}
+\label{fig:AF-Raf-calculator}
+\end{figure} % >>>
+
+
+\begin{figure}\footnotesize % <<<
+\begin{verbatim}
+include stdio
+
+agent PingPong {
+  rule Monitoring(name) {
+    -Monitoring(name);
+    println("ask " + name + " for status");
+    send(agentId(name, "local:helloworld.ucd.ie"), request(status()));
+  }
+       
+  rule Message(other, inform(status(alive()))) {
+    -Message(other, inform(status(alive())));
+    println("OK, ask again.");
+    send(other, request(status())); 
+  }
+            
+  rule Message(other, request(status())) /*& Friend(other)*/ {
+    -Message(other, request(status()));
+    println("Oh, " + other + " wants me alive!");
+    send(other, inform(status(alive())));
+  }
+}
+\end{verbatim}
+\caption{PingPong AF-Raf agent}
+\label{fig:AF-Raf-pingpong-d}
+\end{figure} % >>>
+
+
 Figure~\ref{fig:AF-Raf-pingpong-role} illustrates an AF-Raf role describing
 the ping pong protocol. The code in Figure~\ref{fig:AF-Raf-pingpong-roles}
 is a simple implementation of this role.
 
-\rg{What does {\tt (role PingPong=>)} mean? Why is it in parentheses?}
-\rg{You should use pattern matching properly, not these weird guards.}
 \begin{figure}\footnotesize % <<<
 \begin{verbatim}
 role PingPong
@@ -944,95 +1077,8 @@ start :: c -> a
 \label{fig:AF-Raf-pingpong-role}
 \end{figure} % >>>
 
-\begin{figure}\footnotesize % <<<
-\begin{verbatim}
-include stdio.h
-
-Agent P plays PingPong{
-  data T = Ping|Pong
-
-  operation pingpong (x : T)
-    |x == Ping = sendback(pingpong(Pong))
-                 & println("Pong! ")
-    |x == Pong = sendback(pingpong(Ping))
-                 & println("Ping! ")
- }
-
-  operation start(n){
-    if n == agentID(x, y) then send(n,pingpong(Ping))
-  }
-
-\end{verbatim}
-\caption{AF-Raf agents playing ping pong}
-\label{fig:AF-Raf-pingpong-roles}
-\end{figure} % >>>
-
-\begin{figure}\footnotesize % <<<
-\begin{verbatim}
-include stdio.h
-
-Agent P{
-  data T = ping | pong
-
-  rule Message (other, pingpong(ping)){
-       println("Ping! ");
-       send(other, pingpong(ping));
-  }
-
-  rule Message (other, pingpong(pong)){
-       println("Pong! ");
-       send(other, pingpong(pong));
-  }
-
-  rule Start (name, addr)){
-       println("Ping! ");
-       send(agentID(name, addr), pingpong(ping));
-  }
-}
-\end{verbatim}
-\caption{desugared pingpong}
-\label{fig:desugared-pingpong}
-\end{figure} % >>>
 
 \rg{It's ${\it value}:{\it type}$, not ${\it type}:{\it value}$.}
-\begin{figure}\footnotesize % <<<
-\begin{verbatim}
-
-include stdio.h
-
-Agent P plays PingPong {
-  data T = Ping | Pong
-  data Mood = Happy | Sad | Neutral
-
-  operation pingpong (x : T, i : int, state : Mood)
-    | x == Ping = sendback(pingpong(Pong, i, a))
-                  & println("Pong! ")
-                  & emotion(state)
-    | x == Pong = sendback(pingpong(Ping, i, a))
-                  & println("Ping! ")
-                  & emotion(state)
-        where a = if (i mod 10 == 0) then change_emotion(state)
-                                     else state
- }
-
-  operation start(n){
-    if n == agentID(x, y) then send(n,pingpong(Ping, 1, Happy))
-  }
-  operation emotion(Mood: emotional_state){
-    | emotional_state == Happy = println(a)
-    | otherwise = println(b)
-      where a =  "Somebody wants to play!"
-            b = "I'm so tired..."
- }
- operation change-emotion(Mood: emotional_state){
-   | emotional_state == Happy = Neutral
-   | emotional_state ==  Sad = Happy
-   | emotional_state == Neutral = Sad
- }
-\end{verbatim}
-\caption{AF-Raf agents playing ping pong}
-\label{fig:AF-Raf-constraint-pingpong}
-\end{figure} % >>>
 
 The code in Figure~\ref{fig:AF-Raf-constraint-pingpong} illustrates a
 slightly more complex AF-Raf agent implementing the PingPong role. In
