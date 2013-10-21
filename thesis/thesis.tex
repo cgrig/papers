@@ -323,12 +323,35 @@ The generic agent interpreter's basic loop contains two steps: (1). read
 the current messages and update the mental state; (2). execute commitments
 (possibly resulting in further belief changes).
 
-Agent0 is a prototype programming language, and it includes only
-constructs related to the agent level of a multiagent system. Shoham only
+Agent0 is a prototype programming language, and it includes only constructs
+related to the agent level of a multiagent system. Moreover, Shoham only
 mentioned that a society of agents would need further organisation in order
 to work properly. He suggested that the roles and norms could be
 appropriate options to consider, but there was no concrete implementation
 for any social level constructs.
+
+A rich profusion of agent oriented programming languages followed Agent0
+focusing on the mental notions and implying a societal view of computation.
+Many of them are heavily influenced by the Belief, Desire, Intention agent
+architecture as well as by the reactive planning, which represents a group
+of techniques for action selection by autonomous agents.  Notable agent
+oriented programming languages, from a historical point of view, are
+AgentSpeak, MetateM, 3APL, Jason, Jadex, and GOAL.
+
+TODO: AOSE
+
+A diversity of language constructs are employed to model the abstract
+concepts used in Agent Oriented Software Engineering. These abstract
+concepts include beliefs, goals, intentions, plans, groups, norms,
+interactions, roles, artifacts, percepts, actions, and describe the
+individual level, the social level and the environmental level of a
+multiagent systems. Not all abstract concepts have a one to one
+correspondence with the programming language constructs, and not all of the
+language constructs are first-class constructs. The
+individual(agent) level had most of the attention so far, with environment
+coming after, and social level lagging behind. Only recently the social
+level of multiagent systems has started to receive our attention at the
+language level.
 
 TODO: Talk about the history of Agent Oriented Programming starting with
 Yoav Shoham's Agent0. Give examples of programming languages discussing
@@ -481,9 +504,9 @@ conjunction of beliefs which determine if a plan is applicable, and the
 body which is a sequence of basic actions or (sub)goals. Intentions
 represent partially instantiated plans, that were selected for execution. 
 
-The AgentSpeak interpreter relies on three selection functions. First, the event
-selection selects a single event from the set of events. Second, the option
-function selects a plan from the set of applicable plans. Third, the
+The AgentSpeak interpreter relies on three selection functions. First, the
+event selection selects a single event from the set of events. Second, the
+option function selects a plan from the set of applicable plans. Third, the
 intentions selection function selects an intention from the set of
 intentions. 
 
@@ -506,8 +529,8 @@ action, goals correspond to a desirable state, while the events correspond
 to environmental changes.
 
 2APL agents have available different types of actions like updating
-beliefs, testing beliefs and goals, managing dynamics of goals,
-external actions and communication actions.
+beliefs, testing beliefs and goals, managing dynamics of goals, external
+actions and communication actions.
 
 There are also three types of rules: generate plans to achieve goals,
 process internal events and received messages, and to handle and repair
