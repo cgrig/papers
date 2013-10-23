@@ -552,7 +552,7 @@ Actions are specified using preconditions and postconditions.
 
 GOAL agents use a blind commitment strategy, meaning that an agent commits
 to achieving a goal and only drops it after it was achieved. GOAL
-distinguishes different types of goals are coexist primitive, achievement
+distinguishes different types of goals: primitive, achievement
 or achieved goals.  \cite{} GOAL Agents Instantiate Intention Logic
 \\
 
@@ -2342,9 +2342,18 @@ However, there is no infrastructure to support the location and enactment
 of roles at run-time, and also there is no mechanism to model the
 interaction between roles. \\~\\ 
 
-A more formal proposal to include roles as a first order construct in a agent
-oriented programming language was outline for the 3APL programming language.
-\\~\\
+The 3APL programming language\cite{} Enacting and Deacting Roles in Agent
+Programming has a formal proposal to include roles as first order
+constructs. An agent role is seen as a set of behaviour rules, expected
+objectives, and information resources. An agent can assume multiple roles
+at a time, but only one of them can actually be active, from here the
+distinction between role enactment and role activation. A subset of
+consistent role, which do not contradict each other, are grouped together
+in agent types. At the end role have not been introduced in 3APL, and the
+decision was carried further to 2APL\cite{}, its successor, where modules
+are used as a substitute for roles. We argued that modules and roles have
+different functionalities within a programming language, and both are
+useful construct that cannot be reduced one to another.\\~\\
 
 
 Roles and norms for programming agent organisations. Tinnemeier 2009
