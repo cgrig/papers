@@ -39,7 +39,7 @@
 \overfullrule=5pt \pretolerance=400 \tolerance=200 % temporary
 \title{Supporting Agent Systems in the Programming Language} % <<<
 \author{Claudia V. Grigore}
-\date{October 2013}
+\date{November 2013}
 \maketitle
 
 \pagenumbering{roman}
@@ -195,47 +195,6 @@ meta-model of multi-agent systems~\cite{ferber1998meta}.
 Implementation-level support for these concepts is a research area. One
 approach is to design organisational models and frameworks such as BRAIN, Moise+, GAIA, and MaSE.
 
-MaSE methodology \cite{deloach2004mase} is an organisational approach to
-analysis and design of MAS. It also supports the implementation through the
-associated AgentTool development system. Both MaSe and AgentTool are
-independent of any particular agent architecture, programming language or
-communication framework. The \emph{analysis} phase define system goals from
-a set of requirements and then define the roles necessary to meet the
-goals. A role consists of a number of tasks, where a task corresponds to a
-goal. Each task has its own thread of control, but may communicate with
-each other. The \emph{design} phase assigns roles to agent classes,
-identify and constructs conversations (coordination protocols between two
-agents), define the internal agent architecture and the final system
-structure.
-
-Gaia \cite{DBLP:journals/aamas/WooldridgeJK00} is a two phased methodology for
-analysing and designing multiagent systems. The analysis phase aims to collect
-and organise specifications. This includes identification of organisational
-goals, expected global behaviour, and decomposition in sub-organisations. Its
-output consists of a model of the environment, a preliminary model of roles, a
-preliminary model of interactions, and organisational rules. The design phase
-is split in two: the architectural design and the detailed design. The
-architectural design includes the definition of the organisational structure in
-terms of its topology and control regime, as well as the completion of the
-preliminary role and interaction models. The detailed design phase covers the
-definition of the agent model based on the role model and the definition of the
-services model, where services correspond to blocks of activity required to
-realise agent's roles.
-
-The Moise+ \cite{DBLP:conf/sbia/HubnerSB02} organisational model is the first one to
-join roles with plans. It consists of three main dimensions: structural,
-functional and deontic. Roles represent the structural, plans are the
-functional, and the relations between roles and plans represent the deontic
-dimension. Saci-Moise+, Jason-Moise+ and Moise+JavaAPI frameworks are
-implementations of the Moise+ meta-model.
-
-The BRAIN Framework \cite{DBLP:conf/coopis/CabriLZ03} supports the development
-of interactions in agent-based applications, using the concept of role. It
-consists of (1)~an interaction model, (2)~an XML-based notation to express
-roles (XRole), and (3)~an interaction infrastructure implementation
-(Rolesystem). A role is defined as a set of capabilities and has an expected
-behaviour. Capabilities are activities that an agent can perform.
-
 A different approach to support the implementation of organisational
 concepts would be to develop custom programming languages, in the context
 of Agent Oriented Programming. The majority of Agent Oriented Programming
@@ -287,12 +246,12 @@ idea. By anthropomorphic metaphor meaning the attribution of human
 characteristics and behaviour to a software program. This idea grew within
 Artificial Intelligence research which focused on developing computational
 models for human thinking. Later, Distributed Artificial Intelligence added
-communication and interaction to the studied processes.  Within Distributed
-Artificial Intelligence appeared the actor models as a way of performing
-concurrent computation based on message passing. Based on this, emerged the
-idea of open systems, which are systems in continuous interaction with an
-external environment. Next step was to build a society of interacting
-autonomous agents.
+communication and interaction to the processes studied by Artificial
+Intelligence.  Within Distributed Artificial Intelligence appeared the
+actor model as a way of performing concurrent computation based on message
+passing. From the actor model emerged the idea of open systems, which are
+systems in continuous interaction with an external environment. Next step
+was to build a society of interacting autonomous agents.
 
 The Agent Oriented Programming paradigm was introduced in early '90 by Yoav
 Shoham along with the first Agent Oriented Programming language, Agent0.
@@ -314,35 +273,38 @@ complete, needs each of the following components:
    \item A method for converting neutral applications into agents.
 \end{enumerate}
 
-The core components of the mental state are beliefs, commitments and
-capabilities. Shoham argues that more complex mental notions such as
-desires, intentions, goals or plans can be included, but those three are
-the most important ones.
+The core components of the mental state selected by Shoham to be
+implemented in the Agent0 programming language are beliefs, commitments and
+capabilities. This three concepts were identified as the minimum necessary
+to illustrate a software agent. Shoham argues that more complex mental
+notions such as desires, intentions, goals or plans can be included, but
+those three are the most important ones.
 
 The generic agent interpreter's basic loop contains two steps: (1). read
 the current messages and update the mental state; (2). execute commitments
 (possibly resulting in further belief changes).
 
-Agent0 is a prototype programming language, and it includes only constructs
-related to the agent level of a multiagent system. Moreover, Shoham only
-mentioned that a society of agents would need further organisation in order
-to work properly. He suggested that the roles and norms could be
-appropriate options to consider, but there was no concrete implementation
-for any social level constructs.
+Agent0 is a prototype programming language used to illustrate the Agent
+Oriented Programming paradigm. It includes only constructs related to the
+agent level of a multiagent system. In his proposal, Shoham mentioned that
+a society of agents would need further organisation in order to work
+properly. He suggested that the roles and norms could be appropriate
+options to consider, but there was no concrete implementation for any of
+the social level constructs.
 
 A rich profusion of agent oriented programming languages followed Agent0,
-focusing on the mental notions and implying a societal view of computation.
-Many of them are heavily influenced by the Belief, Desire, Intention agent
-architecture as well as by the reactive planning theory. The Belief,
-Desire, Intention agent architecture, based on the human practical
+focusing, as well, on the mental notions and implying a societal view of
+computation.  Many of them are heavily influenced by the Belief, Desire,
+Intention agent architecture and by the reactive planning theory.  The
+Belief, Desire, Intention agent architecture, based on the human practical
 reasoning theory developed by Bratman in the mid-1980s, provides a
 mechanism to separate the plans selection from the current plans execution.
-The reactive planning represents a group
-of techniques for action selection by autonomous agents.  Notable agent
-oriented programming languages, from a historical point of view, are
-AgentSpeak, based on speech acts, MetateM, based on temporal logic, 3APL,
-based on practical reasoning rules, Jason, which extends AgentSpeak with
-communication, and GOAL, based on declarative goals.
+The reactive planning represents a group of techniques for action selection
+by autonomous agents.  Notable agent oriented programming languages, from a
+historical point of view, are AgentSpeak, based on speech acts, MetateM,
+based on temporal logic, 3APL, based on practical reasoning rules, Jason,
+which extends AgentSpeak with communication, and GOAL, based on declarative
+goals.
 
 A diversity of language constructs are employed to model the abstract
 concepts manipulated in the Agent Oriented Programming paradigm. These
@@ -351,7 +313,7 @@ interactions, roles, artifacts, percepts, actions, and describe the
 individual level, the social level and the environmental level of a
 multiagent systems. Not all abstract concepts have a one to one
 correspondence with the programming language constructs, and not all of the
-language constructs are first-class constructs. The individual(agent) level
+language constructs are first-class constructs. The individual (agent) level
 had most of the attention so far, with environment coming after, and social
 level lagging behind. Only recently the social level of multiagent systems
 has started to receive our attention.
@@ -531,9 +493,9 @@ to environmental changes.
 beliefs, testing beliefs and goals, managing dynamics of goals, external
 actions and communication actions.
 
-There are also three types of rules: generate plans to achieve goals,
-process internal events and received messages, and to handle and repair
-failed plans.
+There are also three types of rules: rules that generate plans to achieve
+goals, rules that process internal events and received messages, and rules
+to handle and repair failed plans.
 
 GOAL is a rule-based programming language, its focus is on agent reasoning.
 GOAL agents consist of four components: a belief base, a goal base, action
@@ -547,13 +509,15 @@ The init module defines the agent's initial mental state. It includes the
 knowledge, the initial beliefs, the goals, and the action specifications.
 The main module specifies a strategy for selecting actions using action
 rules which, in turn, rely on the agent's mental state. The event module
-provide rules for processing information received from the environment.
+provides rules for processing information received from the environment.
 Actions are specified using preconditions and postconditions. 
 
 GOAL agents use a blind commitment strategy, meaning that an agent commits
 to achieving a goal and only drops it after it was achieved. GOAL
 distinguishes different types of goals: primitive, achievement
 or achieved goals.  \cite{} GOAL Agents Instantiate Intention Logic
+
+Table x synthesises the main features of 2APL, Jason, GOAL and AF-Raf: 
 \\
 
 \vbox{\tabskip=0pt \offinterlineskip
