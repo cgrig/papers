@@ -595,6 +595,18 @@ or based on implicit type inferences.
 
 \subsubsection{Modules}
 
+The modular approach to programming implies separating the programs into
+independent modules that perform logically distinct functions. Modules are
+integrated into programs through interfaces. An interface define the
+elements required and provided by the module.
+
+ In Haskell modules are used to controlling name-spaces and creating
+ abstract data types. A Haskell program consists of a collection of
+ modules, where the main module loads up the other modules. Loading a
+ module can be seen as a big declaration. A module contains functions,
+ types and type classes that are related and serve a common purpose.
+
+
 \subsubsection{Haskell Type Classes}
 
 This section reviews Haskell type classes, because they later inspire our
@@ -675,7 +687,16 @@ modules~\cite{dblp:conf/prima/dastanims08}.
 % >>>
 \subsection{Multiparty Session Types} % <<<
 
-TODO
+Session types represent a type foundation for structured communication
+centered programming, that facilitate communication safety, progress and
+fidelity \cite{} Multiparty Asynchronous Session Types The research in
+session types initiated in process calculi and programming languages with
+binary session, and it was extended to multiparty asynchronous session
+types. A session is a series of interactions which serve as a unit of
+communication. The structure of a session is abstracted as a type. Such a
+global type is like a shared agreement among communication peers, and
+represents the basis for efficient type checking through its projection
+onto individual peers. 
 
 % >>>
 \subsection{AgentFactory} % <<<
