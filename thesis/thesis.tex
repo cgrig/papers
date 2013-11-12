@@ -782,10 +782,6 @@ AF-Raf is a new agent oriented programming language specifically
 developed to incorporate the support for organising multiagent
 systems at the language level.
 
-The main reason for choosing to build it from scratch is simplicity.  AF-Raf
-has a very simple syntax, which makes easier the addition of new functionality
-without making it too difficult to use.
-
 One important feature of the AF-Raf programming language is its integration
 with the AgentFactory development framework, which provides support for the
 development and deployment of agent-based systems.
@@ -1009,8 +1005,6 @@ agent BinaryCalcInt : BinaryCalc<integer> {
             z := intadd(x, y);
     send(other, z);
   }
-        
-        // TODO: the other operations
 }
 
 agent ExprCalc(binaryCalc : BinaryCalc<value>) : Calculator<value> {
