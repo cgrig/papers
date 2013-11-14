@@ -952,6 +952,19 @@ messages succeed in the right order.
 
 \subsection{Examples} % <<<
 
+This section introduce a number of example programs that were contrived to
+illustrate AF-Raf's functionality.
+
+Let's start with the Calculator example. This is a good example to
+illustrate the power of operations, as well as being a good opportunity to
+understand how roles are implemented, because the roles involved are simple
+and clear. 
+
+Figure~\ref{fig:calc-roles} presents the types, roles and sessions Figure~\ref{fig:calc-rules} presents the implementation of agents Binary
+Calculator and Expression Calculator using only rules.
+Figure~\ref{fig:calc-op} presents a much simpler and shorter implementation
+using operations.
+
 \begin{figure}\footnotesize % <<<
 \begin{verbatim}
 type pair<x> = pair(x, x)
@@ -985,7 +998,7 @@ session EvaluateExpression<value>(A : any,
 }
 \end{verbatim}
 \caption{Calculator: types, roles and session}
-\label{fig:Calculator}
+\label{fig:calc-roles}
 \end{figure} % >>>
 
 \begin{figure}\footnotesize % <<<
@@ -1050,9 +1063,35 @@ agent ExprCalc(binaryCalc : BinaryCalc<value>) : Calculator<value> {
 
 \end{verbatim}
 \caption{Calculator AF-Raf agents}
-\label{fig:AF-Raf-calculator}
+\label{fig:calc-rules}
 \end{figure} % >>>
 
+\begin{figure}\footnotesize % <<<
+\begin{verbatim}
+include stdio
+include CalcTypes
+
+action intadd(x, y) = raftest.IntegerAddAction;
+action intsub(x, y) = raftest.IntegerSubAction;
+action intmul(x, y) = raftest.IntegerMulAction;
+action intdiv(x, y) = raftest.IntegerDivAction;
+
+agent BinaryCalcInt : BinaryCalc<integer> {
+         operation add(pair(x, y)) = { return intadd(x, y); }
+         operation sub(pair(x, y)) = {return intsub(x, y); }
+         operation mul(pair(x, y)) = {return intmul(x, y); }
+         operation div(pair(x, y)) = {return intdiv(x, y); }
+}
+
+agent ExprCalc(binaryCalc : BinaryCalc<value>) : Calculator<value> {
+     operation eval(add(x, y)) { return binaryCalc.add(self.eval(x), self.eval(y)); }
+}
+\end{verbatim}
+\caption{Calculator with operations}
+\label{fig:calc-op}
+\end{figure} % >>>
+
+The next example is an implementation of the Ping Pong protocol. 
 
 \begin{figure}\footnotesize % <<<
 \begin{verbatim}
@@ -1106,36 +1145,6 @@ addition to the basic functionality illustrated above it has some
 constraints that depend on the number of communication steps carried out by
 the agents.
 
-
-The code in Figure~\ref{fig:AF-Raf-no-roles} illustrates a simple AF-Raf
-agent that models a monitor/monitoring agent, using only rules.
-
-\begin{figure}\footnotesize % <<<
-\begin{verbatim}
-include stdio
-
-rule State(initialized()) & Name(n) {
-      println("hello from " + n);
-}
-
-rule Monitoring(name, addr) {
-      println("ask " + name + " for status");
-      send(agentID(name, addr), request(status()));
-}
-
-rule Message(other, status(alive())) {
-      println("OK, ask again.");
-      send(other, request(status()));
-}
-
-rule Message(other, status()) {
-      println("Oh, someone wants me alive!");
-      send(other, inform(status(alive())));
-}
-\end{verbatim}
-\caption{The code of a simple AF-Raf agent}
-\label{fig:AF-Raf-no-roles}
-\end{figure} % >>>
 % >>>
 
 % >>>
