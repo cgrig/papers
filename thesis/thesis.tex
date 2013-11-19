@@ -955,12 +955,28 @@ messages succeed in the right order.
 This section introduce a number of example programs that were contrived to
 illustrate AF-Raf's functionality.
 
-Let's start with the Calculator example. This is a good example to
-illustrate the power of operations, as well as being a good opportunity to
-understand how roles are implemented, because the roles involved are simple
-and clear. 
+The Calculator example demonstrates the power of operations, as well as
+being a good opportunity to understand how roles are implemented, because
+the roles involved are simple and clear. Figure~\ref{fig:calc-roles}
+presents the interrelated types, roles and sessions. First the types pair
+and expression are defined. The type pair <x> is defined such that a value
+of pair of type x is constructed by pairing two values of type x. The type
+expression <value> is defined using discriminated union meaning that a
+value of expression <value> can be either one of the following: a value of
+type <value>, an addition of two expression <value>, a subtraction of two
+expression <value>, a multiplication of two expression <value>, or a
+division of two expression <value>. There are two roles defined the
+Calculator and the BinaryCalc. The Calculator is responsible with
+evaluating expressions to a value of type <value>, while the BinaryCalc is
+responsible with executing binary operations on values of type <value>. The
+session EvaluateExpression <value> articulates the interaction between
+three types of agents that work together in order to evaluate
+expressions of type <value>. These agent types are: any, Calculator
+<value>, and BinaryCalc <value>. The interaction pattern is described in a
+recursive manner. The interaction is initiated by an agent of any type that
+asks the Calculator agent to evaluate a expression <value>.
 
-Figure~\ref{fig:calc-roles} presents the types, roles and sessions Figure~\ref{fig:calc-rules} presents the implementation of agents Binary
+Figure~\ref{fig:calc-rules} presents the implementation of agents Binary
 Calculator and Expression Calculator using only rules.
 Figure~\ref{fig:calc-op} presents a much simpler and shorter implementation
 using operations.
