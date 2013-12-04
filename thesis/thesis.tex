@@ -952,43 +952,44 @@ messages succeed in the right order.
 
 \subsection{Examples} % <<<
 
-This section introduce a number of example programs that were contrived to
+This section introduces a number of example programs that were contrived to
 illustrate AF-Raf's functionality.
 
-The Calculator example demonstrates the power of operations, as well as
-being a good opportunity to understand how roles are implemented, because
-the roles involved are simple and clear. Figure~\ref{fig:calc-roles}
-presents the interrelated types, roles and sessions associated with the
-Calculator example. First the types \textit{pair} and \textit{expression}
-are defined. The type \textit{pair} <x> is defined such that a value of
-\textit{pair} of type x is constructed by pairing two values of type x. The
-type \textit{expression} <value> is defined using discriminated union
-meaning that a value of \textit{expression} <value> can be either one of
-the following: a value of type <value>, an addition of two
-\textit{expression} <value>, a subtraction of two \textit{expression}
-<value>, a multiplication of two \textit{expression} <value>, or a division
-of two \textit{expression} <value>. There are two roles defined: the
-\textit{Calculator} and the \textit{BinaryCalc}. The \textit{Calculator} is
-responsible with evaluating expressions to a value of type <value>, while
-the \textit{BinaryCalc} is responsible with executing binary operations on
-values of type <value>. The session \textit{EvaluateExpression} <value>
-articulates the interaction between three types of agents that work
-together in order to evaluate expressions of type <value>. These agent
-types are: any, \textit{Calculator} <value>, and \textit{BinaryCalc}
-<value>. The interaction pattern is described in a recursive manner. The
-interaction is initiated by an agent of any type that asks the
-\textit{Calculator} agent to evaluate an \textit{expression} <value>. The
-\textit{EvaluateExpression} session is run recursively by the
-\textit{Calculator} agent until a pair of <value> can be passed over to the
-\textit{BinaryCalc} or an expression is evaluated to a value.
+The Calculator example demonstrates the power of AF-Raf operations, as well
+as being a good opportunity to understand how roles are implemented.
+Figure~\ref{fig:calc-roles} presents the interrelated types, roles and
+sessions associated with the Calculator example. First the types
+\textit{pair} and \textit{expression} are defined. The type \textit{pair}
+<x> is defined such that a value of \textit{pair} of type x is constructed
+by pairing two values of type x. The type \textit{expression} <value> is
+defined using discriminated union meaning that a value of
+\textit{expression} <value> can be either one of the following: a value of
+type <value>, an addition of two \textit{expression} <value>, a subtraction
+of two \textit{expression} <value>, a multiplication of two
+\textit{expression} <value>, or a division of two \textit{expression}
+<value>. There are two roles defined: the \textit{Calculator} and the
+\textit{BinaryCalc}. The \textit{Calculator} is responsible with evaluating
+expressions to a value of type <value>, while the \textit{BinaryCalc} is
+responsible with executing binary operations on values of type <value>. The
+session \textit{EvaluateExpression} <value> articulates the interaction
+between three types of agents that work together in order to evaluate
+expressions of type <value>. These agent types are: any type,
+\textit{Calculator} <value>, and \textit{BinaryCalc} <value>. The
+interaction pattern is described in a recursive manner. The interaction is
+initiated by an agent of any type that asks the \textit{Calculator} agent
+to evaluate an \textit{expression} <value>. The \textit{EvaluateExpression}
+session is run recursively by the \textit{Calculator} agent until a pair of
+<value> can be passed over to the \textit{BinaryCalc} or an expression is
+evaluated to a value.
 
-Figure~\ref{fig:bcalc-rules} presents an implementation of the agent binary
-calculator, BinaryCalc. Figure~\ref{fig:calc-rules} is a partial
-implementation of the expression calculator agent, Calculator, more exactly
-implements the evaluation of the addition expressions. Both of these
-implementations are using only rules.  Figure~\ref{fig:calc-op} presents a
-much simpler and shorter implementation of agents BinaryCalc and
-Calculator, using operations.
+Figure~\ref{fig:bcalc-rules} presents the implementation of a binary
+calculator agent, an instance of the BinaryCalc role.
+Figure~\ref{fig:calc-rules} is a partial implementation of the expression
+calculator agent, an instance of the Calculator role, more exactly it
+presents the implementation of addition expression evaluation. Both binary
+calculator and calculator implementations are using only rules.
+Figure~\ref{fig:calc-op} presents a much simpler and shorter implementation
+of agents BinaryCalc and Calculator, using operations.
 
 \begin{figure}\footnotesize % <<<
 \begin{verbatim}
@@ -1037,7 +1038,6 @@ action intmul(x, y) = raftest.IntegerMulAction;
 action intdiv(x, y) = raftest.IntegerDivAction;
 
 agent BinaryCalcInt : BinaryCalc<integer> {
-  // operation add(pair(x, y)) = { return intadd(x, y); }
   rule Message(other, op(call(add(), cid, sid), pair(x, y))) {
     -Message(other, op(call(add(), cid, sid), pair(x, y)));
             z := intadd(x, y);
@@ -1075,8 +1075,6 @@ action intmul(x, y) = raftest.IntegerMulAction;
 action intdiv(x, y) = raftest.IntegerDivAction;
 
 agent ExprCalc(binaryCalc : BinaryCalc<value>) : Calculator<value> {
-  // operation eval(add(x, y)) { return binaryCalc.add(self.eval(x), 
-                                 self. eval(y)); }
   rule Message(other, op(call(eval(), cid, sid), add(x, y))) & Iam(self) {
     -Message(other, op(call(eval(), cid, sid), add(x, y)));
                 xcid := newcall;
@@ -1113,10 +1111,13 @@ agent ExprCalc(binaryCalc : BinaryCalc<value>) : Calculator<value> {
     -Continue(other, cid, zcid, add3());
      send(other, op(return(eval(), cid, sid), z));
   }
+
+...  
+
 }
 
 \end{verbatim}
-\caption{Calculator agent implementation}
+\caption{Calculator: addition expression evaluation}
 \label{fig:calc-rules}
 \end{figure} % >>>
 
@@ -1131,17 +1132,28 @@ action intmul(x, y) = raftest.IntegerMulAction;
 action intdiv(x, y) = raftest.IntegerDivAction;
 
 agent BinaryCalcInt : BinaryCalc<integer> {
-         operation add(pair(x, y)) = { return intadd(x, y); }
-         operation sub(pair(x, y)) = {return intsub(x, y); }
-         operation mul(pair(x, y)) = {return intmul(x, y); }
-         operation div(pair(x, y)) = {return intdiv(x, y); }
+  operation add(pair(x, y)) = { return intadd(x, y); }
+  operation sub(pair(x, y)) = {return intsub(x, y); }
+  operation mul(pair(x, y)) = {return intmul(x, y); }
+  operation div(pair(x, y)) = {return intdiv(x, y); }
 }
 
 agent ExprCalc(binaryCalc : BinaryCalc<value>) : Calculator<value> {
-     operation eval(add(x, y)) { return binaryCalc.add(self.eval(x), self.eval(y)); }
+  operation eval(add(x, y)) {
+    return binaryCalc.add(self.eval(x), self.eval(y)); 
+  }
+  operation eval(sub(x, y)) { 
+    return binaryCalc.sub(self.eval(x), self.eval(y)); 
+  }
+  operation eval(mul(x, y)) { 
+    return binaryCalc.mul(self.eval(x), self.eval(y)); 
+  }
+  operation eval(div(x, y)) { 
+    return binaryCalc.div(self.eval(x), self.eval(y)); 
+  }
 }
 \end{verbatim}
-\caption{Calculator with operations}
+\caption{BinaryCalc and Calculator implementation with operations}
 \label{fig:calc-op}
 \end{figure} % >>>
 
