@@ -1157,13 +1157,14 @@ agent ExprCalc(binaryCalc : BinaryCalc<value>) : Calculator<value> {
 \label{fig:calc-op}
 \end{figure} % >>>
 
-The next example is an implementation of the Ping Pong protocol. 
+Next is the Monitoring example, which follows the ping-pong protocol of
+interaction. 
 
 \begin{figure}\footnotesize % <<<
 \begin{verbatim}
 include stdio
 
-agent PingPong {
+agent Monitor {
   rule Monitoring(name) {
     -Monitoring(name);
     println("ask " + name + " for status");
@@ -1183,23 +1184,21 @@ agent PingPong {
   }
 }
 \end{verbatim}
-\caption{PingPong AF-Raf agent}
-\label{fig:AF-Raf-pingpong-d}
+\caption{Monitoring AF-Raf agent}
+\label{fig:Monitoring}
 \end{figure} % >>>
 
 
-Figure~\ref{fig:AF-Raf-pingpong-role} illustrates an AF-Raf role describing
-the ping pong protocol. The code in Figure~\ref{fig:AF-Raf-pingpong-roles}
+Figure~\ref{fig:monitoring} illustrates the Monitoring role. The code in Figure~\ref{fig:AF-Raf-pingpong-roles}
 is a simple implementation of this role.
 
 \begin{figure}\footnotesize % <<<
 \begin{verbatim}
-role PingPong
-pingpong :: (role PingPong=>) a -> a
-start :: c -> a
+role Monitoring
+monitor ::  a -> a
 \end{verbatim}
 \caption{AF-Raf agents playing ping pong}
-\label{fig:AF-Raf-pingpong-role}
+\label{fig:Monitoring-role}
 \end{figure} % >>>
 
 
