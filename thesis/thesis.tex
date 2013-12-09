@@ -988,6 +988,14 @@ Figure~\ref{fig:calc-rules} is a partial implementation of the expression
 calculator agent, an instance of the Calculator role, more exactly it
 presents the implementation of addition expression evaluation. Both binary
 calculator and calculator implementations are using only rules.
+
+Let's look first at the binary calculator. There are four actions defined,
+for each basic binary operation: intadd(x, y), intsub(x, y), intmul(x, y),
+intdiv(x, y). Also, each binary operation has associated a rule saying that upon
+receiving a message asking to perform that operation on a pair of integers,
+the agent should first delete the message, compute the result, and send the
+result back to the requester.
+
 Figure~\ref{fig:calc-op} presents a much simpler and shorter implementation
 of agents BinaryCalc and Calculator, using operations.
 
@@ -1571,7 +1579,7 @@ PlanDeclaration =
 % >>>
 
 Each {\it AgentDeclaration\/} introduces a new agent design, by specifying
-a design name, a list of arguments, a list of roles, and a list or rules.
+a design name, a list of arguments, a list of roles, and a list of rules.
 Each argument ({\it AgentRole\/} in the abstract syntax) consists of a name
 and a role. Suppose the design arguments are declared to be
 $n_1\;r_1$,~$n_2\;r_2$, $\ldots$ Then, in order to instantiate the design,
