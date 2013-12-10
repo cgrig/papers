@@ -989,12 +989,20 @@ calculator agent, an instance of the Calculator role, more exactly it
 presents the implementation of addition expression evaluation. Both binary
 calculator and calculator implementations are using only rules.
 
-Let's look first at the binary calculator. There are four actions defined,
+Let's look first at the binary calculator~\ref{fig:bcalc-rules}. There are four actions defined,
 for each basic binary operation: intadd(x, y), intsub(x, y), intmul(x, y),
-intdiv(x, y). Also, each binary operation has associated a rule saying that upon
-receiving a message asking to perform that operation on a pair of integers,
-the agent should first delete the message, compute the result, and send the
-result back to the requester.
+intdiv(x, y). Also, each binary operation has associated a rule saying that
+upon receiving a message asking to perform that operation on a pair of
+integers, the agent should first delete the message, compute the result,
+and send the result back to the requester. Each message contains the
+sender's details, the details regarding the operation to be executed, and
+the pair of integers on which the operation is performed. The operation
+details contain the status of the operation, the call id, and the session
+id. The status of the operation could be either call or return, and in this
+particular case the message contains a call.
+
+The calculator agent implementation in figure~\ref{fig:calc-rules} is not
+complete, only one of the four cases of evaluation is illustrated. 
 
 Figure~\ref{fig:calc-op} presents a much simpler and shorter implementation
 of agents BinaryCalc and Calculator, using operations.
