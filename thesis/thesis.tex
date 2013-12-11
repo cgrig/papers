@@ -1002,10 +1002,29 @@ id. The status of the operation could be either call or return, and in this
 particular case the message contains a call.
 
 The calculator agent implementation in figure~\ref{fig:calc-rules} is not
-complete, only one of the four cases of evaluation is illustrated. 
+complete, only one of the four cases of evaluation is illustrated, namely
+the addition. The addition is implemented using four rules. The first rule
+states that upon receiving a message to evaluate an expression matching
+add(x, y), the calculator should recursively evaluate expression x, and save
+the other information from the message to be able to continue from there when
+the result from evaluating expression x is ready. The second rule states
+that upon receiving a message with the result of the evaluation of
+expression x, the calculator should evaluate expression y, and continue
+from there. The third rule states that upon receiving a message with the
+result of evaluation of expression y, the calculator should send a message
+to the binary calculator agent to perform the binary operation on the
+argument send, in this case a pair of integers, and then continue from
+there. The forth rule states that upon receiving the result from the
+binary calculator, the calculator agent should send back to the first agent
+the result received from the binary calculator as the result for the
+evaluation of expression add(x, y).
 
 Figure~\ref{fig:calc-op} presents a much simpler and shorter implementation
-of agents BinaryCalc and Calculator, using operations.
+of agents BinaryCalc and Calculator, using operations. In the Binary
+calculator implementation each rule used to model a basic binary operations
+is replaced by a shorter and more concise operation. In the calculator
+implementation one single operation replaces four rules, so the effect is
+much more visible.
 
 \begin{figure}\footnotesize % <<<
 \begin{verbatim}
