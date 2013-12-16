@@ -39,7 +39,7 @@
 \overfullrule=5pt \pretolerance=400 \tolerance=200 % temporary
 \title{Supporting Agent Systems in the Programming Language} % <<<
 \author{Claudia V. Grigore}
-\date{November 2013}
+\date{December 2013}
 \maketitle
 
 \pagenumbering{roman}
@@ -989,22 +989,23 @@ calculator agent, an instance of the Calculator role, more exactly it
 presents the implementation of addition expression evaluation. Both binary
 calculator and calculator implementations are using only rules.
 
-Let's look first at the binary calculator~\ref{fig:bcalc-rules}. There are four actions defined,
-for each basic binary operation: intadd(x, y), intsub(x, y), intmul(x, y),
-intdiv(x, y). Also, each binary operation has associated a rule saying that
-upon receiving a message asking to perform that operation on a pair of
-integers, the agent should first delete the message, compute the result,
-and send the result back to the requester. Each message contains the
-sender's details, the details regarding the operation to be executed, and
-the pair of integers on which the operation is performed. The operation
-details contain the status of the operation, the call id, and the session
-id. The status of the operation could be either call or return, and in this
-particular case the message contains a call.
+Let's look first at the binary calculator~\ref{fig:bcalc-rules}. There are
+four actions defined, for each basic binary operation: intadd(x, y),
+intsub(x, y), intmul(x, y), intdiv(x, y). Also, each binary operation has
+associated a rule saying that upon receiving a message asking to perform
+that operation on a pair of integers, the agent should first delete the
+message, compute the result, and send the result back to the requester.
+Each message contains the sender's details, the details regarding the
+operation to be executed, and the pair of integers on which the operation
+is performed. The operation details contain the status of the operation,
+the call id, and the session id. The status of the operation could be
+either call or return, and in this particular case the message contains a
+call.
 
 The calculator agent implementation in figure~\ref{fig:calc-rules} is not
 complete, only one of the four cases of evaluation is illustrated, namely
 the addition. The addition is implemented using four rules. The first rule
-states that upon receiving a message to evaluate an expression matching
+states that upon receiving a message to evaluate an expression that matches
 add(x, y), the calculator should recursively evaluate expression x, and save
 the other information from the message to be able to continue from there when
 the result from evaluating expression x is ready. The second rule states
@@ -1192,58 +1193,6 @@ agent ExprCalc(binaryCalc : BinaryCalc<value>) : Calculator<value> {
 \label{fig:calc-op}
 \end{figure} % >>>
 
-Next is the Monitoring example, which follows the ping-pong protocol of
-interaction. 
-
-\begin{figure}\footnotesize % <<<
-\begin{verbatim}
-include stdio
-
-agent Monitor {
-  rule Monitoring(name) {
-    -Monitoring(name);
-    println("ask " + name + " for status");
-    send(agentId(name, "local:helloworld.ucd.ie"), request(status()));
-  }
-       
-  rule Message(other, inform(status(alive()))) {
-    -Message(other, inform(status(alive())));
-    println("OK, ask again.");
-    send(other, request(status())); 
-  }
-            
-  rule Message(other, request(status())) /*& Friend(other)*/ {
-    -Message(other, request(status()));
-    println("Oh, " + other + " wants me alive!");
-    send(other, inform(status(alive())));
-  }
-}
-\end{verbatim}
-\caption{Monitoring AF-Raf agent}
-\label{fig:Monitoring}
-\end{figure} % >>>
-
-
-Figure~\ref{fig:monitoring} illustrates the Monitoring role. The code in Figure~\ref{fig:AF-Raf-pingpong-roles}
-is a simple implementation of this role.
-
-\begin{figure}\footnotesize % <<<
-\begin{verbatim}
-role Monitoring
-monitor ::  a -> a
-\end{verbatim}
-\caption{AF-Raf agents playing ping pong}
-\label{fig:Monitoring-role}
-\end{figure} % >>>
-
-
-\rg{It's ${\it value}:{\it type}$, not ${\it type}:{\it value}$.}
-
-The code in Figure~\ref{fig:AF-Raf-constraint-pingpong} illustrates a
-slightly more complex AF-Raf agent implementing the PingPong role. In
-addition to the basic functionality illustrated above it has some
-constraints that depend on the number of communication steps carried out by
-the agents.
 
 % >>>
 
