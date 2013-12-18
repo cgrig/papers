@@ -22,6 +22,8 @@
 \newcommand{\rg}[1]{\marginpar{\tiny\raggedright\textcolor{blue}{\bf rg:} #1}}
 \newcommand{\todo}[1]{[\textcolor{red}{TODO}: #1]}
 
+\renewcommand{\chapterautorefname}{Chapter}
+
 \setlength{\marginparwidth}{95pt}
 \setlength{\mathindent}{3em}
 
@@ -69,11 +71,39 @@ development is done in the context of the AgentFactory framework.  Unlike
 most agent-oriented programming languages, AF-RAF is mostly a functional
 language, with few imperative constructs.  Numerous examples illustrate the
 elegance of AF-RAF's design.
+\rg{Perhaps you could emphasize something else than the language AF-Raf: the
+fusion of ideas from sociology and from type theory, used to give
+scalability to an agent-oriented programming language.}
 
 
 % >>>
 
-\chapter*{Plan --- to be commented} % <<<
+\chapter*{Overview} % <<<
+
+The introduction (\autoref{ch:intro}) places agent-oriented programming
+withing computer science and software engineering. It is meant to provide a
+gentle entry point for the reader who might be a software engineer or a
+researcher in another area of computer science.
+
+The relevant parts of the research literature on agents is surveyed next
+(\autoref{ch:aop}). Since this dissertation is about an agent-oriented
+programming language, other agent-oriented programming languages are
+clearly relevant, as are agent-oriented methodologies. The concept of
+agent, on which these languages and methodologies are based, is inspired by
+sociological theories. These theories are surveyed as well, because thy
+inform the design of AF-Raf.
+
+The next two chapters present the language AF-Raf. The first of these
+(\autoref{ch:concepts}) emphasizes conceptual understanding, makes use of
+plenty of examples, and could serve as a first introduction to the language
+for a programmer. The second of these (\autoref{ch:langdef}) presents
+AF-Raf in a systematic way, and could serve as a reference formal
+definition of the language.
+\rg{Should say that relevant background on type theory goes here?}
+
+Next comes a bigger case study (\autoref{ch:casestudy}) and a more thorough
+discussion of related work (\autoref{ch:related}).
+
 
 \begin{enumerate}
 \item introduction
@@ -238,7 +268,7 @@ language construct.}
 
 % >>>
 
-\chapter{Agent Oriented Programming} % <<<
+\chapter{Agent Oriented Programming}\label{ch:aop} % <<<
 \section{Overview} % <<<
 
 Using an anthropomorphic metaphor to design computer programs is not a new
@@ -563,7 +593,7 @@ organising agent interaction.
 
 % >>> 
 
-\chapter{Main AF-Raf Concepts} % <<<
+\chapter{Main AF-Raf Concepts}\label{ch:concepts} % <<<
 
 \section{Preliminaries} % <<<
 
@@ -1479,8 +1509,13 @@ sets of ground terms that cannot be defined using algebraic data types.
 % >>>
 %>>>
 
-\chapter{Language Definition}\label{ch:method} % <<<
+\chapter{Language Definition}\label{ch:langdef} % <<<
 
+\section{Overview}\label{sec:langdef.overview} % <<<
+
+This chapter presents the AF-Raf language in detail.
+
+% >>>
 \section{AF-Raf Syntax} % <<<
 
 The purpose of the abstract grammar is to express the general structure of a
@@ -2275,7 +2310,7 @@ session and the roles proposed in the previous section can be found.
 % >>>
 % >>>
 
-\chapter{Case Study: The Contract Net Interaction Protocol} % <<<
+\chapter{Case Study: The Contract Net Interaction Protocol}\label{ch:casestudy} % <<<
 
 The FIPA Contract Net Interaction Protocol\cite{} describes a pattern of
 interaction very similar to the Contract Net Interaction Protocol\cite{}
@@ -2292,7 +2327,7 @@ perform the task. The chosen agents have to inform about the execution of
 the task indicating either the success, the failure or by giving a result.
 % >>>
 
-\chapter{Related Work} % <<<
+\chapter{Related Work}\label{ch:related} % <<<
 
 
 Following the research presented in this thesis, Ricci  and Santi developed
