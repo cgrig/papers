@@ -1597,30 +1597,33 @@ contracts of type Contract, and a body of type IPlanStep.
 examples here and there?}
 
 The syntax of AF-Raf is described using the Extended Backus-Naur Form notation.
-The grammar for top level structures is as follows:
-\rg{If you keep the actual grammar here, you must strip it of all
-non-essential parts, if you want any chance of it being readable. For
-example, no `a=' and `b='.}
+\autoref{fig:grammar-top-level} defines the grammar for the top-level
+elements of an AF-Raf script.
 
-\begin{figure}\footnotesize % <<<
+
+\begin{figure}[h]\footnotesize % <<<
 \begin{verbatim}
 script: directive* EOF;
-
-directive: include | java_binding | plan | rule;
-
-include: 'include' a=qualified_id;
-
+directive: include | declaration;
+declaration: java_binding | agent | role | session | type_declaration;
+include: 'include' qualified_id;
 java_binding: action | sensor;
+agent: 'agent' uid ('(' agent_role_list? ')')? (':' type_list)? '{' rule_list '}';
+rule: 'rule' formula sequence_statement;
+role: 'role' id ('<' type_list '>')? '{' (operation_type ';')* '}';
+session: 'session' id ('<' type_list '>')? '(' agent_role_list ')' '{' (session_step ';')* '}';
+session_step: simple_session_step | nested_session_step;
+simple_session_step: type ':' id '->' id;
+nested_session_step: ('maybe' | 'repeat')? id '(' id_list ')';
+action: 'action' function '=' qualified_id ';';
+sensor: 'sensor' qualified_id ';';
+type_declaration: 'type' a=lid ('<' lid_list '>')? '=' '|'? type_branch ('|' type_branch)*
+  {System.err.println("TODO: load type_decl " + $a.text);};
 
-plan: 'plan' a=function '{' b=contract c=statement '}';
-
-rule: a='rule' b=formula '{' c=statement '}';
-
-action: 'action' a=function '=' b=qualified_id ';';
-
-sensor: 'sensor' a=qualified_id ';';
-
-contract: (a=contract_type b=formula ';' )*;
+// type_branch should be similar to atom_formula, but different leaves
+type_branch returns [TypeBranch v]:
+    a=type { $v=$a.v; }
+  | b=lid '(' c=type_branch_list ')' { $v=ValueConstructor.make($b.text,$c.v); };
 
 \end{verbatim}
 \caption{AF-Raf grammar for top level structures}
@@ -1727,9 +1730,6 @@ list_comprehension:
 qualified_id:
   (t=id '.')* t=id;
 
-contract_type:
-    (t='pre' | t='post' | t='fail');
-
 literal:
     t=STRING 
   | t=INT;
@@ -1752,13 +1752,13 @@ LINE_COMMENT: '//' ~('\n'|'\r')* ('\r'|'\n');
 \end{figure} % >>>
 
 A \textit{script} is composed of a number of directives followed by the EOF
-symbol.  A directive is either an include, a java binding , a plan, or a
+symbol.  In turn, a directive is either an include, a java binding, or a
 rule. The \textit{include} directive must contain the keyword "include"
 followed by a qualified id which represents a reference to a file (the
 package path, file name and its extension). A \textit{java binding} could
 be either an action or a sensor. A \textit{plan} is composed of a function
 followed by a contract and a statement. A \textit{rule} is a formula that
-represents a condition followed by a statement to be executed. An
+represents a condition followed by a statement to be executed.  An
 \textit{action} is defined as a function to which is assigned a reference
 to a file. A \textit{sensor} is a reference to a file.  A \textit{contract}
 is a contract type followed by a formula.
@@ -1841,8 +1841,8 @@ within square brackets.
 
 Lexer:
 
-A qualified$\_$id is represented zero or more pairs of ids, either LID or
-UID, and dots, followed by an id.
+A qualified$\_$id is represented by one or more ids, either LID or
+UID, delimited by dots.
 
 A contract type is either the string "pre", "post", or "fail".
 
