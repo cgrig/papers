@@ -1574,15 +1574,6 @@ Rule =
 NamedBindings =
   String name,
   Bindings bindings;
-
-Contract =
-  enum(ContractType: pre, post, fail) type,
-  IFormula condition;
-
-PlanDeclaration =
-  Function signature,
-  ImmutableList<Contract> contract,
-  IPlanStep body;
 \end{verbatim}
 \caption{AF-Raf Abstract Grammar}
 \label{fig:Abstract-Grammar}
