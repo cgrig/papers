@@ -4,25 +4,24 @@
 \usepackage{arev}
 \usepackage[T1]{fontenc}
 \usepackage{microtype}
+\usepackage{thmtools}
 \usepackage{xcolor}
 
 \usepackage{hyperref}
 
-\theoremstyle{plain}
-\newtheorem{proposition}{Proposition}
-\theoremstyle{definition}
-\newtheorem{example}{Example}
-\theoremstyle{remark}
-\newtheorem{remark}{Remark}
-
-\newcommand{\eox}[1]{\hskip5mm\null\nobreak\hfill#1}
-\newcommand{\eoe}{\eox{(end of example)}}
-\newcommand{\eor}{\eox{(end of remark)}}
 \newcommand{\pmap}{\rightharpoonup}
 \newcommand{\rg}[1]{\marginpar{\tiny\raggedright\textcolor{blue}{\bf rg:} #1}}
 \newcommand{\todo}[1]{[\textcolor{red}{TODO}: #1]}
 
 \renewcommand{\chapterautorefname}{Chapter}
+
+\renewcommand{\qed}{% amsthm doesn't know to go on next line if needed
+  \ifmmode\mathqed%
+  \else\unskip\nobreak\hfil\penalty50%
+    \hskip2em\hbox{}\nobreak\hfill\hbox{\qedsymbol}}
+\declaretheorem[qed={(end of example)},style=definition]{example}
+\declaretheorem{proposition}
+\declaretheorem[qed={(end of remark)},style=remark]{remark}
 
 \setlength{\marginparwidth}{95pt}
 \setlength{\mathindent}{3em}
@@ -81,7 +80,7 @@ scalability to an agent-oriented programming language.}
 \chapter*{Overview} % <<<
 
 The introduction (\autoref{ch:intro}) places agent-oriented programming
-withing computer science and software engineering. It is meant to provide a
+within computer science and software engineering. It is meant to provide a
 gentle entry point for the reader who might be a software engineer or a
 researcher in another area of computer science.
 
@@ -90,8 +89,8 @@ The relevant parts of the research literature on agents is surveyed next
 programming language, other agent-oriented programming languages are
 clearly relevant, as are agent-oriented methodologies. The concept of
 agent, on which these languages and methodologies are based, is inspired by
-sociological theories. These theories are surveyed as well, because thy
-inform the design of AF-Raf.
+sociological theories. These theories are surveyed, because they inform the
+design of AF-Raf.
 
 The next two chapters present the language AF-Raf. The first of these
 (\autoref{ch:concepts}) emphasizes conceptual understanding, makes use of
@@ -296,10 +295,10 @@ of an agent program is to control the evolution of the agent's mental
 state.
 
 According to Shoham, an agent oriented programming system, in order to be
-complete, needs each of the following components: 
+complete, needs each of the following components:
 \begin{enumerate}
-   \item A formal language with a clear syntax for describing the mental state. 
-   \item An interpreted programming language in which to define and program the agents. 
+   \item A formal language with a clear syntax for describing the mental state.
+   \item An interpreted programming language in which to define and program the agents.
    \item A method for converting neutral applications into agents.
 \end{enumerate}
 
@@ -425,11 +424,11 @@ Roles survey. Ekinci
 Organisational Theory is a discipline of social sciences for more than 100
 years. Organisational Theory studies organisational design, organisational
 structures, the relationship of organisations with their environment, and
-the behaviour of individuals in organisational settings. 
+the behaviour of individuals in organisational settings.
 
 An organisation could be regarded as a coordinated collective action
 towards a common goal. Organisations are governed by rules and placed
-within an environment. 
+within an environment.
 
 The study of formal organisations accompanied the industrial
 revolution, following the need to organise labour. There are a number of
@@ -463,7 +462,7 @@ Regarding the specialisation, a high degree of specialisation means that
 each individual need to perform fewer smaller and simpler tasks, which have
 the advantage of promoting proficiency and the need of less transfer time
 between tasks, but also the disadvantage of dissatisfaction associated to
-boredom. 
+boredom.
 
 The organisational rules (constraints, conventions), structures (role
 structure) and patterns (interaction)\cite{} (Organisational
@@ -493,18 +492,18 @@ deletion of beliefs and goals. The plan has a head, a context and a body.
 The head is represented by the triggering event, the context consists of a
 conjunction of beliefs which determine if a plan is applicable, and the
 body which is a sequence of basic actions or (sub)goals. Intentions
-represent partially instantiated plans, that were selected for execution. 
+represent partially instantiated plans, that were selected for execution.
 
 The AgentSpeak interpreter relies on three selection functions. First, the
 event selection selects a single event from the set of events. Second, the
 option function selects a plan from the set of applicable plans. Third, the
 intentions selection function selects an intention from the set of
-intentions. 
+intentions.
 
 2APL is a BDI-based programming language that integrates both the
 declarative and the imperatives style of programming. There are two sets of
 programming constructs implementing multiagent concepts and individual
-agent concepts. The multiagent level constructs include functionality like 
+agent concepts. The multiagent level constructs include functionality like
 creating individual agents, external environments, assigning unique names
 to agents, and specify access relations. The individual agent concepts
 include beliefs, goals, actions, plans, events and three types of practical
@@ -540,14 +539,14 @@ knowledge, the initial beliefs, the goals, and the action specifications.
 The main module specifies a strategy for selecting actions using action
 rules which, in turn, rely on the agent's mental state. The event module
 provides rules for processing information received from the environment.
-Actions are specified using preconditions and postconditions. 
+Actions are specified using preconditions and postconditions.
 
 GOAL agents use a blind commitment strategy, meaning that an agent commits
 to achieving a goal and only drops it after it was achieved. GOAL
 distinguishes different types of goals: primitive, achievement
 or achieved goals.  \cite{} GOAL Agents Instantiate Intention Logic
 
-Table x synthesises the main features of 2APL, Jason, GOAL and AF-Raf: 
+Table x synthesises the main features of 2APL, Jason, GOAL and AF-Raf:
 \\
 
 \vbox{\tabskip=0pt \offinterlineskip
@@ -591,7 +590,7 @@ presented and build the motivation for incorporating social concepts for
 organising agent interaction.
 % >>>
 
-% >>> 
+% >>>
 
 \chapter{Main AF-Raf Concepts}\label{ch:concepts} % <<<
 
@@ -724,7 +723,7 @@ types. A session is a series of interactions which serve as a unit of
 communication. The structure of a session is abstracted as a type. Such a
 global type is like a shared agreement among communication peers, and
 represents the basis for efficient type checking through its projection
-onto individual peers. 
+onto individual peers.
 
 % >>>
 \subsection{AgentFactory} % <<<
@@ -742,7 +741,7 @@ a range of agent architectures and interpreters. In other words the agents
 can be categorised in two subgroups: the Application Agents and the System
 Agents. The Application Agents implement the application logic. The System
 Agents provide the services infrastructure needed to support the deployment
-of Application Agents. 
+of Application Agents.
 
 Platform-level resources in the form of platform services are shared
 amongst agents. The default platform services are: Agent management
@@ -775,7 +774,7 @@ environment, while sensors generate beliefs, and change the knowledge of
 the agent. Each action has an interface that define how it may be invoked
 from within the agent program. If a set of actions and sensors are linked
 together they can be defined within a module. A module may also provide
-resources that are shared amongst several sensors and actions. 
+resources that are shared amongst several sensors and actions.
 
 Currently there are four Agent Programming Languages that have been built
 using the Common Language Framework:
@@ -822,13 +821,17 @@ nodes are labeled by strings: \begin{align} \tau &::= \nu(\tau,\ldots,\tau)
 && \text{function term} \\ \nu  &::= {\rm string} &&\text{function symbol}
 \end{align} The number of arguments can be any non-negative integer.
 
-\begin{example} The following are AF-Raf \emph{beliefs}: \begin{align}
-&{\it hasColor}({\it my}({\it car}()), {\it blue}()) \\ &{\it iHave}({\it
-cat}(), {\it int}({\it 10}())) \end{align} Note that any belief must
-contain a function with $0$~arguments, such as {\it car}, {\it blue}, {\it
-cat}, and {\it 10\/} in this example; otherwise, the belief would not have
-a finite size.  Note also that function symbols can represent both values
-(such as~{\it 10\/}) and typing information (such as~{\it int\/}).  \eoe
+\begin{example}
+The following are AF-Raf \emph{beliefs}:
+\begin{align}
+&{\it hasColor}({\it my}({\it car}()), {\it blue}()) \\
+&{\it iHave}({\it cat}(), {\it int}({\it 10}()))
+\end{align}
+Note that any belief must contain a function with $0$~arguments, such as
+{\it car}, {\it blue}, {\it cat}, and {\it 10\/} in this example;
+otherwise, the belief would not have a finite size.  Note also that
+function symbols can represent both values (such as~{\it 10\/}) and typing
+information (such as~{\it int\/}).
 \end{example}
 
 Each function symbol is used with a fixed number of arguments.  For
@@ -838,10 +841,12 @@ car\/} to never have arguments.  We say that each function symbol has an
 \emph{arity}, which is~$0$ for {\it car}.  The function terms of arity~$0$,
 such as ${\it 10}()$ and ${\it car}()$, are said to be \emph{constants}.
 
-\begin{remark} Of course, it is important what beliefs mean, not only how
-they are represented syntactically.  The meaning of beliefs arises from how
-beliefs are used by agents.  We will see later how beliefs trigger actions
-via rules, and how beliefs spread through messages.  \eor \end{remark}
+\begin{remark}
+Of course, it is important what beliefs mean, not only how they are
+represented syntactically.  The meaning of beliefs arises from how beliefs
+are used by agents.  We will see later how beliefs trigger actions via
+rules, and how beliefs spread through messages.
+\end{remark}
 
 \subsubsection{Queries}
 
@@ -867,7 +872,8 @@ parentheses.  Suppose the belief base contains exactly one belief, namely
 \end{align} Belief~\eqref{eq:skyblue} does not match
 query~\eqref{eq:query.1} but does match~\eqref{eq:query.2}.  In the latter
 case, the match is justified by setting $y$ to be ${\it sky}()$, and
-setting $z$ to be ${\it blue}()$.  \eoe \end{example}
+setting $z$ to be ${\it blue}()$.
+\end{example}
 
 The previous example shows how a belief matching a query can be described
 by a binding of terms, such as ${\it sky}()$ and ${\it blue}()$, to
@@ -889,7 +895,8 @@ john}()/x,{\it laura}()/y] \bigr\} \\ &\bigl\{ [{\it john}()/x] \bigr\} \\
 &\bigl\{\bigr\} \\ &\bigl\{[]\bigr\} \end{align} Note that a variable may
 appear multiple times in a query.  In such a case, it implicitly requires
 the corresponding subterms to be equal.  Also note that the \emph{empty
-match} differs from \emph{no match}.  \eoe \end{example}
+match} differs from \emph{no match}.
+\end{example}
 
 \todo{Conjunctive queries.}
 
@@ -1162,7 +1169,7 @@ with content~$c$ is received from sender~$s$. % >>>
 A number of concepts stand at the foundation of the AF-Raf programming
 language. These concepts include: beliefs, rules, actions, sensors, roles,
 sessions, and types. They are related to one another and the unique
-features of AF-Raf are built upon them. 
+features of AF-Raf are built upon them.
 
 Beliefs and rules represent the AF-Raf's core concepts. Beliefs in AF-Raf
 are regarded as logical terms and represented in the form of trees of
@@ -1203,10 +1210,10 @@ rule Monitoring illustrated in figure~\ref{fig:rule}.
 
 \begin{figure}\footnotesize % <<<
 \begin{verbatim}
-action println(s) = 
+action println(s) =
           com.agentfactory.raf.RafStandardAction$Println;
 
-action send(agentID(name, address), message) = 
+action send(agentID(name, address), message) =
              com.agentfactory.raf.RafStandardAction$Send;
 
 sensor com.agentfactory.raf.RafStandardSensor$Message;
@@ -1345,7 +1352,7 @@ type expression<value> =
   | sub(expression<value>, expression<value>)
   | mul(expression<value>, expression<value>)
   | div(expression<value>, expression<value>)
-        
+
 role Calculator<value> {
   eval : expression<value> -> value;
 }
@@ -1357,7 +1364,7 @@ role BinaryCalc<value> {
   div : pair<value> -> value;
 }
 
-session EvaluateExpression<value>(A : any, 
+session EvaluateExpression<value>(A : any,
                                   B : Calculator<value>,
                                   C : BinaryCalc<value>) {
   expression<value> : A -> B;
@@ -1425,10 +1432,10 @@ agent ExprCalc(binaryCalc : BinaryCalc<value>) : Calculator<value> {
     +Continue(other, cid, xcid, add1(y));
     send(self, op(call(eval(), xcid, sid)), x);
   }
-        
-  rule Message(self, op(return(eval(), xcid, sid), ctx)) 
-                & Iam(self) 
-                & Continue(other, cid, xcid, add1(y)) 
+
+  rule Message(self, op(return(eval(), xcid, sid), ctx))
+                & Iam(self)
+                & Continue(other, cid, xcid, add1(y))
   {
     -Continue(other, cid, xcid, add1(y));
     -Message(self, op(return(eval(), xcid, sid), ctx));
@@ -1436,7 +1443,7 @@ agent ExprCalc(binaryCalc : BinaryCalc<value>) : Calculator<value> {
     +Continue(other, cid, ycid, add2(ctx));
     send(self, op(call(eval(), ycid, sid), y));
   }
-        
+
   rule Message(self, op(return(eval(), cid, sid), cty))
                 & Iam(self)
                 & Continue(other, cid, ycid, add2(ctx))
@@ -1447,7 +1454,7 @@ agent ExprCalc(binaryCalc : BinaryCalc<value>) : Calculator<value> {
     +Continue(other, cid, zcid, add3());
     send(binaryCalc, op(call(add(), zcid, sid), operands(ctx, cty)));
   }
-        
+
   rule Message(binaryCalc, op(return(add(), zcid, sid), z))
                 & Continue(other, cid, zcid, add3())
   {
@@ -1456,7 +1463,7 @@ agent ExprCalc(binaryCalc : BinaryCalc<value>) : Calculator<value> {
      send(other, op(return(eval(), cid, sid), z));
   }
 
-...  
+...
 
 }
 
@@ -1484,16 +1491,16 @@ agent BinaryCalcInt : BinaryCalc<integer> {
 
 agent ExprCalc(binaryCalc : BinaryCalc<value>) : Calculator<value> {
   operation eval(add(x, y)) {
-    return binaryCalc.add(self.eval(x), self.eval(y)); 
+    return binaryCalc.add(self.eval(x), self.eval(y));
   }
-  operation eval(sub(x, y)) { 
-    return binaryCalc.sub(self.eval(x), self.eval(y)); 
+  operation eval(sub(x, y)) {
+    return binaryCalc.sub(self.eval(x), self.eval(y));
   }
-  operation eval(mul(x, y)) { 
-    return binaryCalc.mul(self.eval(x), self.eval(y)); 
+  operation eval(mul(x, y)) {
+    return binaryCalc.mul(self.eval(x), self.eval(y));
   }
-  operation eval(div(x, y)) { 
-    return binaryCalc.div(self.eval(x), self.eval(y)); 
+  operation eval(div(x, y)) {
+    return binaryCalc.div(self.eval(x), self.eval(y));
   }
 }
 \end{verbatim}
@@ -1511,23 +1518,33 @@ agent ExprCalc(binaryCalc : BinaryCalc<value>) : Calculator<value> {
 
 \section{Overview}\label{sec:langdef.overview} % <<<
 
-This chapter presents the AF-Raf language in detail.
+This chapter presents the AF-Raf language in detail, covering its syntax,
+typing, and semantics.
 
 % >>>
 \section{AF-Raf Syntax} % <<<
 
-The purpose of the abstract grammar is to express the general structure of a
-programming language as concisely as possible. AF-Raf's abstract grammar is
-presented in~\autoref{fig:Abstract-Grammar}. It describes the abstract
-syntax trees generated by the parser and used by the type checker and the
-interpreter.
+AF-Raf, like most languages, has an abstract grammar and a concrete
+grammar. The abstract grammar describes the structure that programs must
+have, without much regard to how they are written down. The concrete
+grammar takes into account that the program must be represented as a
+unidimensional string of characters. For example, the abstract grammar
+would not say how should items in a list be delimited. Thus, the abstract
+grammar is essentially a concrete grammar from which the non-essential
+features have been elided.
 
-\rg{You should put most code in figures or, at least, in smaller fonts. The
-typical way these things are presented is (1)~one figure with the whole
-grammar in small fonts, possibly simplified compared to the real
-implementation, and (2)~a few paragraphs commenting the figure. Some
-readers look only at the figure, some read only the text: the idea is to
-give each what they prefer.}
+This section describes the abstract grammar and briefly gives the concrete
+grammar.
+
+The abstract grammar of AF-Raf~(\autoref{fig:Abstract-Grammar}) is taken
+directly from the reference implementation of AF-Raf. The notation
+\begin{align}
+\texttt{AgentRole = String name, Type role;}
+\end{align}
+means that the AF-Raf parser may instantiate a class named {\it AgentRole},
+which has two fields, {\it name\/} and {\it role}.  The abstract grammar is
+a concise description of several Java classes, each having constructors,
+getter methods, and so on.
 
 \begin{figure}\footnotesize % <<<
 \begin{verbatim}
@@ -1540,19 +1557,19 @@ AgentDeclaration =
 AgentRole =
   String name,
   Type role;
-  
+
 Type =
   String name,
   ImmutableList<Type> actuals;
-  
-TypeDeclaration = 
+
+TypeDeclaration =
   String name,
   ImmutableList<String> formals,
   ImmutableList<TypeBranch> branches;
-  
+
 TypeBranch :> Type, ValueConstructor;
 
-ValueConstructor = 
+ValueConstructor =
   String name,
   ImmutableList<TypeBranch> arguments;
 
@@ -1568,14 +1585,14 @@ Rule =
   String name,
   IFormula condition,
   BlockStep statement;
-  
+
 NamedBindings =
   String name,
   Bindings bindings;
 \end{verbatim}
 \caption{AF-Raf Abstract Grammar}
 \label{fig:Abstract-Grammar}
-\end{figure} 
+\end{figure}
 % >>>
 
 Each {\it AgentDeclaration\/} introduces a new agent design, by specifying
@@ -1584,16 +1601,53 @@ Each argument ({\it AgentRole\/} in the abstract syntax) consists of a name
 and a role. Suppose the design arguments are declared to be
 $n_1\;r_1$,~$n_2\;r_2$, $\ldots$ Then, in order to instantiate the design,
 one will need to provide the addresses of agents that play the roles
-$r_1$,~$r_2$, \dots, and the rules of the design may refer to these
+$r_1$,~$r_2$, \dots; the rules of the design may refer to these
 addresses using the names $n_1$,~$n_2$, $\ldots$ (To a first approximation,
 the design name is analogous to Java class names, and the arguments are
-analogous to the arguments of a Java constructor.)
+analogous to the formal arguments of a Java constructor.)
+
+\begin{example}
+The following declares a design named {\it ExprCalc}.
+\begin{verbatim}
+  agent ExprCalc(binaryCalc : BinaryCalc<value>)
+    : Calculator<value> { /* ... */ }
+\end{verbatim}
+The rules, which are omitted above, may use the identifier {\it
+binaryCalc\/} in places where the address of an agent is expected.
+Instances of the design {\it ExprCalc\/} are agents that play the role $\it
+Calculator\langle value\rangle$, given that the address {\it binaryCalc\/}
+belongs to an agent that plays the role $\it BinaryCalc\langle
+value\rangle$. The {\it value\/} type could be integers, reals, or
+something else.
+
+In this example the name of the design is {\it ExprCalc\/}; the list of
+arguments contains one argument, {\it binaryCalc\/} and its role; the list
+of roles contains one role, $\it Calculator\langle value\rangle$; finally,
+the list of rules is omitted.
+\end{example}
+
+There are two kinds of types in AF-Raf: types of values and types of
+agents.  For brevity, we may refer to them as types and roles. Thus, `type'
+is used often as a shorthand for `type of value'. From the point of view of
+the syntax, AF-Raf types and roles are sometimes similar and sometimes
+different. In general, in a programming language, one needs a way to
+declare types, and a way to refer to types. In AF-Raf, the syntax for
+referring to a type is the same as the syntax for referring to a role.
 
 References to agent types (roles) and to value types are represented in the
 abstract grammar by {\it Type}, because of their similarity. Both roles and
 types have names, and both may be parametrized by types. Thus, a reference
 to a role/type consists of the name of the role/type together with the
 types of the parameters.
+
+\begin{example}
+In the previous example, $\it BinaryCalc\langle value\rangle$ and $\it
+ExprCalc\langle value\rangle$ refer to roles, which are types for agents.
+The syntax for referring to types of values is very similar: for example,
+$\it List\langle int\rangle$ and {\it int}. (The type {\it int\/} is
+built-in.) Type variables, like {\it value} above, always refer to types of
+values, never to types of agents.
+\end{example}
 
 On the other hand, declarations of roles are quite different from
 declarations of types.
@@ -1607,7 +1661,10 @@ providing a pattern that the terms should match. The pattern looks exactly
 like a term (which is a tree of strings), except that leaves may refer back
 to types. These references to a type may be to a type defined above, to a
 type defined below, to the type defined now, or to the generic type
-variables of the type being defined.
+variables of the type being defined. In other words, type declarations may
+be mutually recursive.
+
+\todo{Continue here.}
 
 \textit{ActionDeclaration} consists of a function of type Function, and a
 javaClass of type String. A \textit{QualifiedID} is made of a path of type
@@ -1629,26 +1686,26 @@ elements of an AF-Raf script.
 \begin{verbatim}
 script: directive* EOF;
 directive: include | declaration;
-declaration: java_binding | agent | role | session 
+declaration: java_binding | agent | role | session
            | type_declaration;
 include: 'include' qualified_id;
 java_binding: action | sensor;
-agent: 'agent' uid ('(' agent_role_list? ')')? 
+agent: 'agent' uid ('(' agent_role_list? ')')?
        (':' type_list)? '{' rule_list '}';
 rule: 'rule' formula sequence_statement;
 role: 'role' id ('<' type_list '>')? '
       {' (operation_type ';')* '}';
-session: 'session' id ('<' type_list '>')? 
+session: 'session' id ('<' type_list '>')?
          '(' agent_role_list ')' '{' (session_step ';')* '}';
-session_step: simple_session_step 
+session_step: simple_session_step
             | nested_session_step;
 simple_session_step: type ':' id '->' id;
 nested_session_step: ('maybe' | 'repeat')? id '(' id_list ')';
 action: 'action' function '=' qualified_id ';';
 sensor: 'sensor' qualified_id ';';
-type_declaration: 'type' lid ('<' lid_list '>')? '=' 
+type_declaration: 'type' lid ('<' lid_list '>')? '='
                   '|'? type_branch ('|'type_branch)*;
-type_branch: type | b=lid '(' type_branch_list ')';
+type_branch: type | lid '(' type_branch_list ')';
 \end{verbatim}
 \caption{AF-Raf grammar for top level structures}
 \label{fig:grammar-top-level}
@@ -1657,34 +1714,34 @@ type_branch: type | b=lid '(' type_branch_list ')';
 \begin{figure}\footnotesize % <<<
 \begin{verbatim}
 formula:
-  a=formula_a 
+  a=formula_a
   ('=>' b=formula_a)?;
 
 formula_a:
-  a=atom_formula  
+  a=atom_formula
   (b=('&' | '|') c=atom_formula)*;
 
 atom_formula returns [IFormula v]:
-     a=predicate 
-  | '!' b=atom_formula 
+     a=predicate
+  | '!' b=atom_formula
   | '(' c=formula ')';
 
 predicate:
-    a=term b=pred_op c=term  
+    a=term b=pred_op c=term
   | d=UID '(' e=term_list? ')';
 
 term:
-    a=term_a   
+    a=term_a
     (b=add_op c=term_a)*;
 
 term_a:
-    a=atom_term  
+    a=atom_term
     (b=mul_op c=atom_term)*;
 
 atom_term:
-    '(' a=term ')' 
-  | b=literal 
-  | c=LID 
+    '(' a=term ')'
+  | b=literal
+  | c=LID
   | d=function;
 
 \end{verbatim}
@@ -1697,7 +1754,7 @@ atom_term:
 function : a=LID '(' b=term_list? ')';
 
 term_list:
-  a=term 
+  a=term
   (',' b=term)*;
 
 pred_op: (a=eq_op | a=cmp_op);
@@ -1725,23 +1782,23 @@ atom_statement:
   | a=update_belief
   | a=if_statement);
 
-assignment: 
+assignment:
   a=LID '=' (b=function | b=list_comprehension);
 
-while_statement: 
+while_statement:
   'while' a=formula '{' b=statement '}';
 
 foreach: 'foreach' a=formula '{' b=statement '}';
 
-update_belief: 
+update_belief:
   (a='+' | a='-') b=predicate;
 
 call: a=function;
 
-if_statement: 
+if_statement:
   'if' a=formula '{' b=statement '}' ('else' '{' c=statement '}')?;
 
-list_comprehension: 
+list_comprehension:
   '[' term '|' formula ']';
 \end{verbatim}
 \caption{AF-Raf Grammar for statements}
@@ -1755,13 +1812,13 @@ qualified_id:
   (t=id '.')* t=id;
 
 literal:
-    t=STRING 
+    t=STRING
   | t=INT;
 
 id: LID | UID;
 
 INT: '0'..'9'+;
-STRING: '"' (~'"' | '\\"')* '"';  
+STRING: '"' (~'"' | '\\"')* '"';
 
 LID: ('a'..'z')('a'..'z'|'A'..'Z'|'0'..'9'|'$')*;
 UID: ('A'..'Z')('a'..'z'|'A'..'Z'|'0'..'9'|'$')*;
@@ -1803,7 +1860,7 @@ lists enclosed in brackets.
 
 
 A term is a term$\_$a to which add$\_$op and another term$\_$ can be added zero or
-more times. 
+more times.
 \rg{Here just say that terms use operators bla-bla, and that term\_a,
 term\_b and so on are just a standard trick to encode operator precedence
 in LL grammars. You can give a table with the operator precedences, and
@@ -1873,9 +1930,6 @@ A contract type is either the string "pre", "post", or "fail".
 A literal is either a string or an int.
 
 An id is either a LID or a UID.
-
-
-
 
 % >>>
 \section{Operational Semantics} % <<<
@@ -2018,6 +2072,9 @@ $\mathbf{type}\,\delta=\delta'$
 
 Such aliases are especially useful when $\delta'$ is of the form
 $\mathit{integer}[\tau]$ or $\mathit{string}[\tau]$, and $\tau$~is long.
+
+\todo{Example with something like {\tt type t=int*t list}.}
+
 % >>>
 \subsection{Type Checking} % <<<
 \paragraph{Type Checking.}
@@ -2325,7 +2382,7 @@ checking~\cite{}. SimpAl draws inspiration from the Agent and Artifacts
 model~\cite{} and from the Jason programming language, which is based on
 the Belief, Desire, Intention model. SimpAL is conceived as an extension to
 the Java object oriented programming language with a separate agent
-abstraction layer. 
+abstraction layer.
 
 Even though this language is very different from AF-Raf, there are a
 number of overlapping concepts. SimpAL imports a social view of computation
@@ -2336,7 +2393,7 @@ components that provide functionality or services. The agent has a belief
 base, some tasks to perform and a set of plans to utilise in order to
 acomplish the tasks. SimpAl roles are very similar to AF-Raf roles in that
 they constitute a set of tasks types, where tasks are the analogous to the
-AF-Raf operations. 
+AF-Raf operations.
 
 The roles are organised in a slightly different manner compared to the
 AF-Raf's session type model, which can be seen as a kind of protocol
@@ -2354,7 +2411,7 @@ checked that for each task type there exists at least one plan, and for
 each plan it's checked that the type of the sent messages are only the ones
 defined in the task type. Also it's checked that the assignment of tasks
 corresponds to the task types defined in the role, and that the types of
-the messages sent to an agent correspond to that the agent can understand. 
+the messages sent to an agent correspond to that the agent can understand.
 
 Errors about beliefs that are checked include finding, inside the plans,
 beliefs that are not declared, and beliefs that are assigned with
@@ -2377,7 +2434,7 @@ with a compatible type.
 
 At the organisation level it is checked that each workspace, artifact, and
 agent types declared in an organisational model is actually implemented in
-the implementation of the organisation. 
+the implementation of the organisation.
 \\~\\
 
 Subsequent to my proposal to integrate session types with agent programming
@@ -2396,7 +2453,7 @@ provide Prolog rules to define global session types, to specify possible
 transitions to different states upon message sending, and to specify the
 message content types. As well, a number of changes to the code of the
 participating agents need to be done to support the integration with the
-monitor agent. 
+monitor agent.
 
 There's only one monitor agent that keeps track of all messages and checks
 if there exists a new state that can be reached from the current state. If
@@ -2404,7 +2461,7 @@ the transition is possible the monitor agent allows the sending action by
 acknowledging it to the sending agent. If such a transition is not
 possible the protocol fails and there's no possibility of self recovery.
 The developer has to change either the agent code or the global session
-type's specification in order to fix the error. 
+type's specification in order to fix the error.
 \\~\\
 
 A role-based approach to reuse in agent oriented programming. Rem 2005.
@@ -2423,7 +2480,7 @@ is outlined.
 
 However, there is no infrastructure to support the location and enactment
 of roles at run-time, and also there is no mechanism to model the
-interaction between roles. \\~\\ 
+interaction between roles. \\~\\
 
 The 3APL programming language\cite{} Enacting and Deacting Roles in Agent
 Programming has a formal proposal to include roles as first order
@@ -2477,7 +2534,7 @@ It also have sessions, which further organise agent interaction at a higher
 level, namely at the role level. A case study is used to illustrate the
 results.  The AF-Raf programming language is properly formalised, with its
 grammar specified in EBNF format and its operational semantics is defined
-using inference rules. 
+using inference rules.
 
 % >>>
 \bibliographystyle{plain}
