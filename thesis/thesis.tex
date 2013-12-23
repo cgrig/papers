@@ -1932,46 +1932,6 @@ A literal is either a string or an int.
 An id is either a LID or a UID.
 
 % >>>
-\section{Operational Semantics} % <<<
-
-The semantics of programming languages is often specified as transitions
-from a state to another with each step of individual computation. The
-specification takes the form of a set of inference rules that define valid
-transitions.
-\rg{Technically, these are `small-step operational semantics'.
-Perhaps say that, intuitively, giving the operational semantics of a
-language amounts to providing a simple (perhaps inefficient) interpreter
-for it.}
-
-At each time step, an AF-Raf agent
-\begin{enumerate}
-\item transforms messages from its inbox into beliefs that it received
-those messages,
-\item asks each sensor for new beliefs, and
-\item executes those rules that are activated by the current belief base.
-\end{enumerate}
-
-\rg{This paragraph should be re-written. For example, the first thing you
-say is that the some method is called `execute'. First, the reader has no
-idea that you are talking about the implementation of the interpreter.
-Second, how methods are named in the interpreter is rather unimportant,
-certainly not important enough to be the first thing you mention.}
-An AF-Raf agent program interpretation starts with the execute() method.
-First operation is to copy any messages received into the inbox for the
-agent to process further. Only messages received since the last invocation
-of this method are copied into the inbox. Next step is to get information
-from all the sensors. After that a list is created to hold last fired
-rules. Then each rule is handled in the following way. A query is
-constructed based on the rule's condition and run on the belief base. The
-result will be a list of sets of bindings. In the case the list is not
-empty, for each set of bindings a PlanStep is constructed by applying the
-bindings to the statement of the rule. If all the variables have a binding
-the rule is included in the list of last fired rules and the PlanStep is
-executed. A PlanStep is any of the following statements: an assignment, a block,
-a call, a foreach, an if, an update, or a while.
-
-TODO: inference rules
-% >>>
 \section{Algebraic Data Types and Type Checking} % <<<
 
 \subsection{Algebraic Data Types} % <<<
@@ -2353,6 +2313,46 @@ session and the roles proposed in the previous section can be found.
 % >>>
 % >>>
 
+% >>>
+\section{Operational Semantics} % <<<
+
+The semantics of programming languages is often specified as transitions
+from a state to another with each step of individual computation. The
+specification takes the form of a set of inference rules that define valid
+transitions.
+\rg{Technically, these are `small-step operational semantics'.
+Perhaps say that, intuitively, giving the operational semantics of a
+language amounts to providing a simple (perhaps inefficient) interpreter
+for it.}
+
+At each time step, an AF-Raf agent
+\begin{enumerate}
+\item transforms messages from its inbox into beliefs that it received
+those messages,
+\item asks each sensor for new beliefs, and
+\item executes those rules that are activated by the current belief base.
+\end{enumerate}
+
+\rg{This paragraph should be re-written. For example, the first thing you
+say is that the some method is called `execute'. First, the reader has no
+idea that you are talking about the implementation of the interpreter.
+Second, how methods are named in the interpreter is rather unimportant,
+certainly not important enough to be the first thing you mention.}
+An AF-Raf agent program interpretation starts with the execute() method.
+First operation is to copy any messages received into the inbox for the
+agent to process further. Only messages received since the last invocation
+of this method are copied into the inbox. Next step is to get information
+from all the sensors. After that a list is created to hold last fired
+rules. Then each rule is handled in the following way. A query is
+constructed based on the rule's condition and run on the belief base. The
+result will be a list of sets of bindings. In the case the list is not
+empty, for each set of bindings a PlanStep is constructed by applying the
+bindings to the statement of the rule. If all the variables have a binding
+the rule is included in the list of last fired rules and the PlanStep is
+executed. A PlanStep is any of the following statements: an assignment, a block,
+a call, a foreach, an if, an update, or a while.
+
+TODO: inference rules
 % >>>
 % >>>
 
