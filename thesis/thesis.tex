@@ -2360,19 +2360,65 @@ TODO: inference rules
 
 \chapter{Case Study: The Contract Net Interaction Protocol}\label{ch:casestudy} % <<<
 
-The FIPA Contract Net Interaction Protocol\cite{} describes a pattern of
-interaction very similar to the Contract Net Interaction Protocol\cite{}
-developed by Smith and Davis in 1980, to which it adds rejection and
-confirmation communicative acts. One agent, the initiator, takes the
-manager role, the other agents are the participants. The manager has a task
-that wants to be performed by the participants in the most effective way
-possible. The effectiveness is considered with regard to some specified
-properties like the price, the time to completion, or the fair distribution
-of tasks. The participants have to respond before a given deadline with
-either a refuse or a proposal. Negotiation continues with the participants
-that proposed, from which one, several or no agent is chosen to actually
-perform the task. The chosen agents have to inform about the execution of
-the task indicating either the success, the failure or by giving a result.
+The FIPA Contract Net Interaction Protocol\cite{web:fipa} describes a
+pattern of interaction very similar to the Contract Net Interaction
+Protocol\cite{DBLP:journals/tc/Smith80a} developed by Smith and Davis in 1980, to which it adds
+rejection and confirmation communicative acts. One agent, the initiator,
+takes the manager role, the other agents are the participants. The manager
+has a task that wants to be performed by the participants in the most
+effective way possible. The effectiveness is considered with regard to some
+specified properties like the price, the time to completion, or the fair
+distribution of tasks. The participants have to respond before a given
+deadline with either a refuse or a proposal. Negotiation continues with the
+participants that proposed, from which one, several or no agent is chosen
+to actually perform the task. The chosen agents have to inform about the
+execution of the task indicating either the success, the failure or by
+giving a result.
+
+This case study discusses the Af-Raf implementation of a slightly modified
+FIPA Contract Net Interaction Protocol. Figure~\ref{fig:contract-roles}
+
+\begin{figure}\footnotesize % <<<
+\begin{verbatim}
+
+// assumes primitive types:
+//   integer = 0() | 1() | ...
+//   agentid = agentId(...)
+
+type conditions = conditions(integer); // say, price
+
+type request = request(task(), conditions, deadline());
+type bid = bid(conditions);
+type decision = win() | lose();
+type result = failure() | success(integer);
+  // success could have, say, price after adding VAT and other surprises
+
+role Buyer {
+  ask : request -> bid;
+  commit : decision -> solution;
+}
+
+role Seller {
+  sell : request -> result;
+}
+
+session BidRound(owner, s : Seller, b1 : Buyer, b2 : Buyer) {
+  request : owner -> s;
+  request : s -> b1;
+  request : s -> b2;
+  oneof
+    { bid : b1 -> s; win() : s -> b1; result : b1 -> s; }
+    { maybe bid : b1 -> s; lose() : s -> b1; };
+  oneof
+    { bid : b2 -> s; win() : s -> b2; result : b2 -> s; }
+    { maybe bid : b2 -> s; lose() : s -> b2; };
+  result : s -> owner
+}
+\end{verbatim}
+\caption{Contract Net types, roles and sessions}
+\label{fig:contract-roles}
+\end{figure} % >>>
+
 % >>>
 
 \chapter{Related Work}\label{ch:related} % <<<
