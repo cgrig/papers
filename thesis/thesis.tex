@@ -1594,7 +1594,7 @@ ValueConstructor =
 
 ActionDeclaration =
   Function function,
-  String javaClass;
+  QualifiedId javaClass;
 
 QualifiedId =
   QualifiedId path,
@@ -1714,7 +1714,49 @@ unit}, which are pre-defined as follows.
 \end{verbatim}
 \end{example}
 
+To interact with the environment, Af-Raf uses sensors and actions.
+Sensors do not appear explicitly in the abstract syntax, because they
+are very simple: Each sensor is a {\it QualifiedId}, which is the name of a
+Java class.
+
+\begin{example}
+To activate a sensor, one simply has to give the name of the Java class
+that implements is.
+\begin{verbatim}
+sensor com.agentfactory.raf.RafStandardSensor$Message;
+\end{verbatim}
+Several such declarations appear in the {\tt stdio.raf} file, which users
+may include.
+\end{example}
+
+The declaration of an action is only marginally more involved.  Each
+{\it ActionDeclaration\/} consists of a function and the name of a Java
+class. Whenever the function is used as a statement inside a rule, the
+corresponding Java class will be used to actually carry out the action.
+
+\begin{example}
+The {\tt stdio.raf} includes the following action declaration, to help
+debugging.
+\begin{verbatim}
+  action println(s) =
+    com.agentfactory.raf.RafStandardAction$Println;
+\end{verbatim}
+If {\tt stdio.raf} is included, then the statement {\tt println("test")}
+would print the string ``test'' to the console.
+\end{example}
+
+Each {\it Rule\/} has a query\slash condition and body, which is usually a
+composed statement; optionally, just for aiding debugging, it may also have
+a name. The formula is obtained by connecting several predicates with
+boolean operators; that is, there are no explicit quantifiers. Both
+interfaces {\it IFormula\/} and {\it IPlanStep\/} are reused from the
+AgentFactory infrastructure.
+
+\begin{example}
 \todo{Continue here.}
+\end{example}
+
+
 
 \textit{ActionDeclaration} consists of a function of type Function, and a
 javaClass of type String. A \textit{QualifiedID} is made of a path of type
