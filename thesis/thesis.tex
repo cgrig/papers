@@ -1539,14 +1539,21 @@ This section describes the abstract grammar and briefly gives the concrete
 grammar.
 
 The abstract grammar of AF-Raf~(\autoref{fig:Abstract-Grammar}) is taken
-directly from the reference implementation of AF-Raf. The notation
+directly from the reference implementation of AF-Raf.  In general, there
+are two equivalent ways to understand abstract grammars. First, an abstract
+grammar is a concise way to specify a set of trees, each of which
+represents a program. Second, an abstract grammar is simply a set of data
+types. The relation between the two ways to view abstract grammars is
+simple -- the trees are instances of the data types. Since the reference
+implementation of AF-Raf is in Java, the abstract grammar is a set of Java
+classes. \autoref{fig:Abstract-Grammar} uses a notation less verbose than
+Java code. For example,
 \begin{align}
 \texttt{AgentRole = String name, Type role;}
 \end{align}
-means that the AF-Raf parser may instantiate a class named {\it AgentRole},
-which has two fields, {\it name\/} and {\it role}.  The abstract grammar is
-a concise description of several Java classes, each having constructors,
-getter methods, and so on.
+means that the class {\it AgentRole\/} has two fields, {\it name\/} and
+{\it role}; of course, it also has a constructor, getter methods, and other
+paraphernalia required by Java.
 
 \begin{figure}\footnotesize % <<<
 \begin{verbatim}
@@ -1555,6 +1562,16 @@ AgentDeclaration =
   ImmutableList<AgentRole> arguments,
   ImmutableList<Type> roles,
   ImmutableList<Rule> rules;
+
+RoleDeclaration =
+  String role,
+  ImmutableList<String> formals,
+  ImmutableList<Operation> operations;
+
+Operation =
+  String name,
+  Type input,
+  Type output;
 
 AgentRole =
   String name,
@@ -1586,11 +1603,7 @@ QualifiedId =
 Rule =
   String name,
   IFormula condition,
-  BlockStep statement;
-
-NamedBindings =
-  String name,
-  Bindings bindings;
+  IPlanStep statement;
 \end{verbatim}
 \caption{AF-Raf Abstract Grammar}
 \label{fig:Abstract-Grammar}
@@ -1644,17 +1657,14 @@ types of the parameters.
 
 \begin{example}
 In the previous example, $\it BinaryCalc\langle value\rangle$ and $\it
-ExprCalc\langle value\rangle$ refer to roles, which are types for agents.
-The syntax for referring to types of values is very similar: for example,
-$\it List\langle int\rangle$ and {\it int}. (The type {\it int\/} is
-built-in.) Type variables, like {\it value} above, always refer to types of
-values, never to types of agents.
+ExprCalc\langle value\rangle$ refer to roles.  The syntax for referring to
+types is very similar: for example, $\it List\langle int\rangle$ and {\it
+int}. (The type {\it int\/} is built-in.) Type variables, like {\it value}
+above, always refer to types, never to roles.
 \end{example}
 
 On the other hand, declarations of roles are quite different from
-declarations of types.
-
-\todo{Declarations of roles.}
+declarations of types. The latter are simpler.
 
 A {\it TypeDeclaration\/} consists of the name of the (possibly generic)
 type being defined, the generic type variables (if any), and at least one
@@ -1665,6 +1675,44 @@ to types. These references to a type may be to a type defined above, to a
 type defined below, to the type defined now, or to the generic type
 variables of the type being defined. In other words, type declarations may
 be mutually recursive.
+
+\begin{example}
+Given the declaration
+\begin{align}
+&{\bf type}\ {\it expr}\langle v\rangle
+  = {\it v}
+  \mid {\it add}({\it expr}\langle v\rangle, {\it expr}\langle v\rangle)
+\end{align}
+the type ${\it expr}\langle{\it int}\rangle$ contains values $0$, $1$, $2$,
+${\it add}(1,{\it add}(2,0))$, and so on. Note that the type ${\it
+expr}\langle{\it expr}\langle{\it int}\rangle\rangle$ contains exactly the
+same values as ${\it expr}\langle{\it int}\rangle$: one could refer to the
+same set of values using different (type) names.
+\end{example}
+
+Each {\it RoleDecaration\/} introduces a new role, by specifying its name,
+a list of arguments, and a list of operations. The arguments are type
+variables, which play a similar role as they do in type declarations. The
+arguments may be used inside operations in places where a reference to a
+type is expected. Each {\it Operation\/} has a name, an input type, and an
+output type.
+
+\begin{example}
+An array is a data structure that maps integers to some arbitrary data
+type. It can be expressed as an AF-Raf role, as follows.
+\begin{verbatim}
+  role Array<value> {
+    get : int -> value;
+    set : pair<int, value> -> unit;
+  }
+\end{verbatim}
+The code above assumes the existence of two types, {\it pair\/} and {\it
+unit}, which are pre-defined as follows.
+\begin{verbatim}
+  type pair<a,b> = pair(a,b);
+  type unit = unit();
+\end{verbatim}
+\end{example}
 
 \todo{Continue here.}
 
