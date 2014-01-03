@@ -1546,7 +1546,7 @@ are two equivalent ways to understand abstract grammars. First, an abstract
 grammar is a concise way to specify a set of trees, each of which
 represents a program. Second, an abstract grammar is simply a set of data
 types. The relation between the two ways to view abstract grammars is
-simple -- the trees are instances of the data types. Since the reference
+simple --- the trees are instances of the data types. Since the reference
 implementation of AF-Raf is in Java, the abstract grammar is a set of Java
 classes. \autoref{fig:Abstract-Grammar} uses a notation less verbose than
 Java code. For example,
@@ -1615,13 +1615,13 @@ Rule =
 Each {\it AgentDeclaration\/} introduces a new agent design, by specifying
 a design name, a list of arguments, a list of roles, and a list of rules.
 Each argument ({\it AgentRole\/} in the abstract syntax) consists of a name
-and a role. Suppose the design arguments are declared to be
-$n_1\;r_1$,~$n_2\;r_2$, $\ldots$ Then, in order to instantiate the design,
-one will need to provide the addresses of agents that play the roles
-$r_1$,~$r_2$, \dots; the rules of the design may refer to these
-addresses using the names $n_1$,~$n_2$, $\ldots$ (To a first approximation,
-the design name is analogous to Java class names, and the arguments are
-analogous to the formal arguments of a Java constructor.)
+and a role. Suppose the design arguments have names $n_1$,~$n_2$, $\ldots$
+with corresponding roles $r_1$,~$r_2$,~$\ldots$ Then, in order to
+instantiate the design, one will need to provide the addresses of agents
+that play the roles $r_1$,~$r_2$,~\dots; the rules of the design may refer
+to these addresses using the names $n_1$,~$n_2$,~$\ldots$ (To a first
+approximation, the design name is analogous to a Java class name, and the
+arguments are analogous to the formal arguments of a Java constructor.)
 
 \begin{example}
 The following declares a design named {\it ExprCalc}.
@@ -1651,11 +1651,11 @@ different. In general, in a programming language, one needs a way to
 declare types, and a way to refer to types. In AF-Raf, the syntax for
 referring to a type is the same as the syntax for referring to a role.
 
-References to agent types (roles) and to value types are represented in the
-abstract grammar by {\it Type}, because of their similarity. Both roles and
-types have names, and both may be parametrized by types. Thus, a reference
-to a role/type consists of the name of the role/type together with the
-types of the parameters.
+References to roles and references to types are represented in the abstract
+grammar by one class, {\it Type}, because of their similarity. Both roles
+and types have names, and both may be parametrized by types. Thus, a
+reference to a role/type consists of the name of the role/type together
+with the types of the~parameters.
 
 \begin{example}
 In the previous example, $\it BinaryCalc\langle value\rangle$ and $\it
@@ -1737,7 +1737,7 @@ class. Whenever the function is used as a statement inside a rule, the
 corresponding Java class will be used to actually carry out the action.
 
 \begin{example}
-The {\tt stdio.raf} includes the following action declaration, to help
+The file {\tt stdio.raf} includes the following action declaration, to help
 debugging.
 \begin{verbatim}
   action println(s) =
@@ -1747,11 +1747,11 @@ If {\tt stdio.raf} is included, then the statement {\tt println("test")}
 would print the string ``test'' to the console.
 \end{example}
 
-Each {\it Rule\/} has a query\slash condition and body, which is usually a
-composed statement; optionally, just for aiding debugging, it may also have
+Each {\it Rule\/} has a query\slash condition and a body, which is usually a
+composed statement; optionally, just to aid debugging, it may also have
 a name. The formula is obtained by connecting several predicates with
 boolean operators; that is, there are no explicit quantifiers. Both
-interfaces {\it IFormula\/} and {\it IPlanStep\/} are reused from the
+{\it IFormula\/} and {\it IPlanStep\/} are interfaces reused from the
 AgentFactory infrastructure.
 
 \begin{example}
