@@ -1603,7 +1603,6 @@ QualifiedId =
   String id;
 
 Rule =
-  String name,
   IFormula condition,
   IPlanStep statement;
 \end{verbatim}
@@ -1744,44 +1743,62 @@ debugging.
     com.agentfactory.raf.RafStandardAction$Println;
 \end{verbatim}
 If {\tt stdio.raf} is included, then the statement {\tt println("test")}
-would print the string ``test'' to the console.
+would print the string `test' to the console.
 \end{example}
 
-Each {\it Rule\/} has a query\slash condition and a body, which is usually a
-composed statement; optionally, just to aid debugging, it may also have
-a name. The formula is obtained by connecting several predicates with
-boolean operators; that is, there are no explicit quantifiers. Both
-{\it IFormula\/} and {\it IPlanStep\/} are interfaces reused from the
-AgentFactory infrastructure.
+Each {\it Rule\/} has a query\slash condition and a body, which is usually
+a composed statement. The formula is obtained by connecting several
+predicates with boolean operators; that is, there are no explicit
+quantifiers. Both {\it IFormula\/} and {\it IPlanStep\/} are interfaces
+reused from the AgentFactory infrastructure. AF-Raf adds a few new classes
+that implement {\it IPlanStep\/}; in other words, AF-Raf has some new
+types of statements. These are presented later (\autoref{sec:opsem}).
 
 \begin{example}
-\todo{Continue here.}
+In AF-Raf, it is typical to have one agent named that is instantiated at
+the start of the execution. Its rules are tasked with instantiating other
+agents. An example of such a rule follows.
+\begin{verbatim}
+  rule Start("pingpong") {
+        -Start("pingpong");
+        println("Main: Starting pingpong scenario.");
+        new PingPong "Alice" {Monitoring("Bob")};
+        new PingPong "Bob" {Friend("Alice")};
+  }
+\end{verbatim}
+The query checks whether the belief base contains the fact ${\it
+Start}(\text{\tt``pingpong''})$. If so, this fact is removed from the
+belief base, a message is printed to the console, and two agents are
+instantiated. One agent is named Alice, the other is named Bob. Both have
+the design {\it PingPong}. The initial belief of Alice is ${\it
+Monitoring}(\text{\tt ``Bob''})$; the initial belief of Bob is ${\it
+Friend}(\text{\tt``Alice''})$.
 \end{example}
 
+\todo{Abstract grammar for sessions.}
 
+Let us now move from the abstract grammar to the concrete grammar.  The
+concrete grammar has three main parts: the top-level structures
+(\autoref{fig:grammar-top-level}), expressions
+(\autoref{fig:grammar-expr}), and statements
+(\autoref{fig:grammar-statements}). The grammar is almost identical to the
+one used in the reference implementation. The upside is that it is
+extensively tested and likely to be correct. The downside is that the
+grammar productions are constrained such that the grammar is (almost)
+$LL(k)$, which could make the grammar more complicated than needed in
+theory. (The parser generator used is~ANTLRv3.)
 
-\textit{ActionDeclaration} consists of a function of type Function, and a
-javaClass of type String. A \textit{QualifiedID} is made of a path of type
-QualifiedID and an id of type String. A \textit{Rule} contains a name of
-type String, a condition of type IFormula, and a statement of type
-BlockStep. A \textit{NamedBindings} has a name of type String and a
-bindings of type Bindings. A \textit{Contract} is TODO. A
-\textit{PlanDeclaration} is made of a signature of type Function, a list of
-contracts of type Contract, and a body of type IPlanStep.
-\rg{This description should be a little more high-level. Perhaps include
-examples here and there?}
-
-The syntax of AF-Raf is described using the Extended Backus-Naur Form notation.
-\autoref{fig:grammar-top-level} defines the grammar for the top-level
-elements of an AF-Raf script.
-
+An AF-Raf program consists of a set of scripts, each stored in a file with
+the extension {\tt raf}.  A {\it script\/} is composed of a number of
+include directives and a number of declarations. (`EOF' stands for `end of
+file'. The order of declarations is semantically irrelevant.)
 
 \begin{figure}[h]\footnotesize % <<<
 \begin{verbatim}
 script: directive* EOF;
 directive: include | declaration;
-declaration: java_binding | agent | role | session
-           | type_declaration;
+declaration:
+  java_binding | agent | role | session | type_declaration;
 include: 'include' qualified_id;
 java_binding: action | sensor;
 agent: 'agent' uid ('(' agent_role_list? ')')?
@@ -1805,99 +1822,94 @@ type_branch: type | lid '(' type_branch_list ')';
 \label{fig:grammar-top-level}
 \end{figure} % >>>
 
+There are five kinds of declarations: for agent designs, for roles, for
+types, for sessions, and for Java bindings. These where discussed above, in
+the presentation of the abstract grammar. On the other hand, include
+directives were not discussed above, because they do not produce any nodes
+in the parse tree, and hence do not appear in the abstract grammar.  The
+{\it include} directive specifies the name of a file that should be
+textually included. Recursive includes are ignored.
+
+There is an interesting interaction between how agent designs are found,
+and how include directives are handled. Suppose that a design named {\tt A}
+is needed, perhaps because name~{\tt A} appears in a statement. The AF-Raf
+runtime then looks for a file named {\tt A.raf} in all the directories
+mentioned in the environment variable {\tt RAFPATH}. Files named in include
+directives are searched based on the same environment variable, {\tt
+RAFPATH}. As a result, the following scenario is possible. The agent design
+{\tt A} is in file {\tt A.raf}; the agent design {\tt B} is in file {\tt
+B.raf}. Design~{\tt A} contains a statement that instantiates design~{\tt
+B}; therefore, it includes file {\tt B.raf}. Similarly, design~{\tt B}
+contains a statement that instantiates design~{\tt A}; therefore, it
+includes file {\tt A.raf}. This creates a cycle of include directives.
+But, because of the rule that recursive includes are ignored, the setup is
+valid and works as expected.
+
+AF-Raf formulas --- its boolean expressions --- use four boolean operators:
+\verb+=>+~(implies), \verb+&+~(and), \verb+|+~(or), \verb+!+~(not).  On the
+lowest level of precedence there is the \verb+=>+~operator.  On the next
+level of precedence there are the \verb+&+~and~\verb+|+ operators. On the
+next level of precedence there is the \verb+!+~operator.  The binary
+operators (\verb+=>+,~\verb+&+,~\verb+|+) are right associative.
+
 \begin{figure}\footnotesize % <<<
 \begin{verbatim}
-formula:
-  a=formula_a
-  ('=>' b=formula_a)?;
-
-formula_a:
-  a=atom_formula
-  (b=('&' | '|') c=atom_formula)*;
-
-atom_formula returns [IFormula v]:
-     a=predicate
-  | '!' b=atom_formula
-  | '(' c=formula ')';
-
-predicate:
-    a=term b=pred_op c=term
-  | d=UID '(' e=term_list? ')';
-
-term:
-    a=term_a
-    (b=add_op c=term_a)*;
-
-term_a:
-    a=atom_term
-    (b=mul_op c=atom_term)*;
-
-atom_term:
-    '(' a=term ')'
-  | b=literal
-  | c=LID
-  | d=function;
-
+formula: formula_a ('=>' formula_a )?;
+formula_a: atom_formula (('&' | '|') atom_formula)*;
+atom_formula: predicate | '!' atom_formula | '(' formula ')';
+predicate: term pred_op term | UID '(' term_list ')' ;
+term: term_a (add_op term_a )*;
+term_a: atom_term (mul_op atom_term )*;
+atom_term: '(' term ')' | literal | lid | function ;
+function: lid '(' term_list ')';
+pred_op: (eq_op | cmp_op) ;
+eq_op: ('==' | '!=');
+cmp_op: ('<' | '>'); 
+add_op: ('+' | '-');
+mul_op: ('*' | '/' | '%');
+unary_op: ('!' | '-'); 
 \end{verbatim}
 \caption{AF-Raf grammar for formulas and terms}
-\label{fig:Grammar-formulas-terms1}
+\label{fig:grammar-expr}
 \end{figure} % >>>
+
+\begin{example}
+The associativity of \verb+&+~and~\verb+|+ is important only if they are
+mixed without parentheses.  The formula \verb+A()&B()|C()+ is equivalent to
+\verb+A()&(B()|C())+.  The formula \verb+A()|B()&C()+ is equivalent to
+\verb+A()|(B()&C())+.
+\end{example}
 
 \begin{figure}\footnotesize % <<<
 \begin{verbatim}
-function : a=LID '(' b=term_list? ')';
-
-term_list:
-  a=term
-  (',' b=term)*;
-
-pred_op: (a=eq_op | a=cmp_op);
-
-eq_op: (a='==' | a='!=');
-cmp_op: (a='<' | a='>');
-add_op: (a='+' | a='-');
-mul_op: (a='*' | a='/' | a='%');
-unary_op: (a='!' | a='-');
-\end{verbatim}
-\caption{AF-Raf grammar for formulas and terms (2)}
-\label{fig:Grammar-formulas-terms2}
-\end{figure} % >>>
-
-\begin{figure}\footnotesize % <<<
-\begin{verbatim}
-statement:  (a=atom_statement ';')*;
-
+statement: sequence_statement | atom_statement;
+sequence_statement:
+  '{' (statement  (';' statement )* ';'?)? '}' ;
 atom_statement:
-    ('{' a=statement '}'
-  | a=assignment
-  | a=while_statement
-  | a=foreach
-  | a=call
-  | a=update_belief
-  | a=if_statement);
-
-assignment:
-  a=LID '=' (b=function | b=list_comprehension);
-
-while_statement:
-  'while' a=formula '{' b=statement '}';
-
-foreach: 'foreach' a=formula '{' b=statement '}';
-
-update_belief:
-  (a='+' | a='-') b=predicate;
-
-call: a=function;
-
+    assignment
+  | if_statement
+  | foreach
+  | new_statement
+  | term_statement
+  | update_belief
+  | while_statement;
+assignment: lid ':=' statement;
 if_statement:
-  'if' a=formula '{' b=statement '}' ('else' '{' c=statement '}')?;
-
-list_comprehension:
-  '[' term '|' formula ']';
+  'if' formula '{' statement '}' ('else' '{' statement '}')?;
+foreach: 'foreach' formula '{' statement '}';
+new_statement: ( new_id | new_agent );
+new_id: 'new' ( 'call' | 'session' );
+new_agent:
+  'new' uid ('(' term_list ')')? STRING? ('{' formula_list '}')?;
+term_statement: term;
+update_belief: ('+' | '-') predicate;
+while_statement: 'while' formula '{' statement '}';
 \end{verbatim}
 \caption{AF-Raf Grammar for statements}
-\label{fig:Grammar-statements}
+\label{fig:grammar-statements}
 \end{figure} % >>>
+
+\todo{Continue here, by commenting \autoref{fig:grammar-statements}.}
 
 
 \begin{figure}\footnotesize % <<<
@@ -1925,18 +1937,6 @@ LINE_COMMENT: '//' ~('\n'|'\r')* ('\r'|'\n');
 \caption{AF-Raf Grammar Lexer}
 \label{fig:Grammar-lexer}
 \end{figure} % >>>
-
-A \textit{script} is composed of a number of directives followed by the EOF
-symbol.  In turn, a directive is either an include, a java binding, or a
-rule. The \textit{include} directive must contain the keyword "include"
-followed by a qualified id which represents a reference to a file (the
-package path, file name and its extension). A \textit{java binding} could
-be either an action or a sensor. A \textit{plan} is composed of a function
-followed by a contract and a statement. A \textit{rule} is a formula that
-represents a condition followed by a statement to be executed.  An
-\textit{action} is defined as a function to which is assigned a reference
-to a file. A \textit{sensor} is a reference to a file.  A \textit{contract}
-is a contract type followed by a formula.
 
 
 The grammar for formulas and terms:
@@ -2408,7 +2408,7 @@ session and the roles proposed in the previous section can be found.
 % >>>
 
 % >>>
-\section{Operational Semantics} % <<<
+\section{Operational Semantics}\label{sec:opsem} % <<<
 
 The semantics of programming languages is often specified as transitions
 from a state to another with each step of individual computation. The
