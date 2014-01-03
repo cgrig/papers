@@ -2519,7 +2519,7 @@ session BidRound(owner, s : Seller, b1 : Buyer, b2 : Buyer) {
 Following the research presented in this thesis, Ricci  and Santi developed
 a new programming language, simpAL, to support types and type
 checking~\cite{DBLP:conf/promas/RicciS12}. SimpAl draws inspiration from the Agent and Artifacts
-model~\cite{} and from the Jason programming language, which is based on
+model~\cite{DBLP:conf/atal/RicciVO07} and from the Jason programming language, which is based on
 the Belief, Desire, Intention model. SimpAL is conceived as an extension to
 the Java object oriented programming language with a separate agent
 abstraction layer.
@@ -2604,36 +2604,35 @@ The developer has to change either the agent code or the global session
 type's specification in order to fix the error.
 \\~\\
 
-A role-based approach to reuse in agent oriented programming. Rem 2005.
-
 A proposed extension to the ALPHA programming language that employs roles
-as a run-time construct dates back to 2005\cite{}. An ALPHA agent is able
-to play multiple roles and be aware of them at run-time. The role
-construct, also called a role template, consists of a variable named role
-identifier, a set of commitment rules, that defines the behaviour, and a
-set of trigger conditions, that cause the activation of the role. Each
-instance of a role template has to have a unique role identifier. A
-mechanism for inheritance of roles is provided in the form of a possibility
-to  extend the agent behaviour by adding more commitment rules and trigger
-conditions.  Also, a mechanism for composition and aggregation of roles
-is outlined.
+as a run-time construct dates back to 2005\cite{Collier_arole-based}. An
+ALPHA agent is able to play multiple roles and be aware of them at
+run-time. The role construct, also called a role template, consists of a
+variable named role identifier, a set of commitment rules, that defines the
+behaviour, and a set of trigger conditions, that cause the activation of
+the role. Each instance of a role template has to have a unique role
+identifier. A mechanism for inheritance of roles is provided in the form of
+a possibility to  extend the agent behaviour by adding more commitment
+rules and trigger conditions.  Also, a mechanism for composition and
+aggregation of roles is outlined.
 
 However, there is no infrastructure to support the location and enactment
 of roles at run-time, and also there is no mechanism to model the
 interaction between roles. \\~\\
 
-The 3APL programming language\cite{} Enacting and Deacting Roles in Agent
-Programming has a formal proposal to include roles as first order
-constructs. An agent role is seen as a set of behaviour rules, expected
-objectives, and information resources. An agent can assume multiple roles
-at a time, but only one of them can actually be active, from here the
-distinction between role enactment and role activation. A subset of
-consistent role, which do not contradict each other, are grouped together
-in agent types. At the end role have not been introduced in 3APL, and the
-decision was carried further to 2APL\cite{}, its successor, where modules
-are used as a substitute for roles. We argued that modules and roles have
-different functionalities within a programming language, and both are
-useful construct that cannot be reduced one to another.\\~\\
+The 3APL programming language\cite{DBLP:conf/aose/DastaniRHDM04} Enacting
+and Deacting Roles in Agent Programming has a formal proposal to include
+roles as first order constructs. An agent role is seen as a set of
+behaviour rules, expected objectives, and information resources. An agent
+can assume multiple roles at a time, but only one of them can actually be
+active, from here the distinction between role enactment and role
+activation. A subset of consistent role, which do not contradict each
+other, are grouped together in agent types. At the end role have not been
+introduced in 3APL, and the decision was carried further to 2APL\cite{},
+its successor, where modules are used as a substitute for roles. We argued
+that modules and roles have different functionalities within a programming
+language, and both are useful construct that cannot be reduced one to
+another.\\~\\
 
 
 Roles and norms for programming agent organisations. Tinnemeier 2009
