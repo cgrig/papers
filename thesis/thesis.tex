@@ -325,17 +325,19 @@ A rich profusion of agent oriented programming languages followed Agent0,
 focusing, as well, on the mental notions and implying a societal view of
 computation.  Many of them are heavily influenced by the Belief, Desire,
 Intention agent architecture and by the reactive planning theory.  The
-Belief, Desire, Intention agent architecture~\cite{}, based on the human
-practical reasoning theory developed by Bratman in the mid-1980s, provides
-a mechanism to separate the plans selection from the current plans
-execution.  The reactive planning~\cite{} represents a group of techniques
+Belief, Desire, Intention agent architecture~\cite{DBLP:conf/icmas/RaoG95},
+based on the human practical reasoning theory developed by Bratman in the
+mid-1980s, provides a mechanism to separate the plans selection from the
+current plans execution.  The reactive
+planning~\cite{DBLP:conf/aaai/GeorgeffL87} represents a group of techniques
 for action selection by autonomous agents.  Notable agent oriented
 programming languages, from a historical point of view, are
-AgentSpeak~\cite{},
-based on speech acts, MetateM~\cite{}, based on temporal logic,
-3APL~\cite{}, based on
-practical reasoning rules, Jason~\cite{}, which extends AgentSpeak with
-communication, and GOAL~\cite{}, based on declarative goals.
+AgentSpeak~\cite{DBLP:conf/maamaw/Rao96}, based on speech acts,
+MetateM~\cite{}, based on temporal logic,
+3APL~\cite{DBLP:conf/promas/DastaniRDM03}, based on practical reasoning
+rules, Jason~\cite{DBLP:books/sp/map2005/BordiniHV05}, which extends
+AgentSpeak with communication, and GOAL~\cite{}, based on declarative
+goals.
 
 A diversity of language constructs are employed to model the abstract
 concepts manipulated in the Agent Oriented Programming paradigm. These
@@ -2516,13 +2518,13 @@ session BidRound(owner, s : Seller, b1 : Buyer, b2 : Buyer) {
 \chapter{Related Work}\label{ch:related} % <<<
 
 
-Following the research presented in this thesis, Ricci  and Santi developed
-a new programming language, simpAL, to support types and type
-checking~\cite{DBLP:conf/promas/RicciS12}. SimpAl draws inspiration from the Agent and Artifacts
-model~\cite{DBLP:conf/atal/RicciVO07} and from the Jason programming language, which is based on
-the Belief, Desire, Intention model. SimpAL is conceived as an extension to
-the Java object oriented programming language with a separate agent
-abstraction layer.
+Ricci  and Santi developed a novel programming language, called simpAL, that
+supports types and type checking~\cite{DBLP:conf/promas/RicciS12}. SimpAl
+draws inspiration from the Agent and Artifacts
+model~\cite{DBLP:conf/atal/RicciVO07} and from the Jason programming
+language, which is based on the Belief, Desire, Intention model. SimpAL is
+conceived as an extension to the Java object oriented programming language
+with a separate agent abstraction layer.
 
 Even though this language is very different from AF-Raf, there are a
 number of overlapping concepts. SimpAL imports a social view of computation
@@ -2579,14 +2581,14 @@ the implementation of the organisation.
 
 Subsequent to my proposal to integrate session types with agent programming
 languages, global session types were exploited further in the context of
-multiagent systems~\cite{} to specify multiparty interactions and verify
-their correctness. They were used for automatic generation of
-self-monitoring agent systems implemented in Jason. The solution suggested
-was to generate a monitor agent that checks at runtime that the ongoing
-conversation is correct conform to the global session type. In this
-context, global session types are viewed as states, on which several
-transition steps are possible. Transitions occur with each successfully sent
-message.
+multiagent systems~\cite{DBLP:conf/dalt/AnconaDM12} to specify multiparty
+interactions and verify their correctness. They were used for automatic
+generation of self-monitoring agent systems implemented in Jason. The
+solution suggested was to generate a monitor agent that checks at runtime
+that the ongoing conversation is correct conform to the global session
+type. In this context, global session types are viewed as states, on which
+several transition steps are possible. Transitions occur with each
+successfully sent message.
 
 In order to be able to generate the agent monitor, the developer needs to
 provide Prolog rules to define global session types, to specify possible
@@ -2620,19 +2622,18 @@ However, there is no infrastructure to support the location and enactment
 of roles at run-time, and also there is no mechanism to model the
 interaction between roles. \\~\\
 
-The 3APL programming language\cite{DBLP:conf/aose/DastaniRHDM04} Enacting
-and Deacting Roles in Agent Programming has a formal proposal to include
-roles as first order constructs. An agent role is seen as a set of
-behaviour rules, expected objectives, and information resources. An agent
-can assume multiple roles at a time, but only one of them can actually be
-active, from here the distinction between role enactment and role
-activation. A subset of consistent role, which do not contradict each
-other, are grouped together in agent types. At the end role have not been
-introduced in 3APL, and the decision was carried further to 2APL\cite{},
-its successor, where modules are used as a substitute for roles. We argued
-that modules and roles have different functionalities within a programming
-language, and both are useful construct that cannot be reduced one to
-another.\\~\\
+The 3APL programming language\cite{DBLP:conf/aose/DastaniRHDM04} has a
+formal proposal to include roles as first order constructs. An agent role
+is seen as a set of behaviour rules, expected objectives, and information
+resources. An agent can assume multiple roles at a time, but only one of
+them can actually be active, from here the distinction between role
+enactment and role activation. A subset of consistent role, which do not
+contradict each other, are grouped together in agent types. At the end role
+have not been introduced in 3APL, and the decision was carried further to
+2APL\cite{DBLP:journals/aamas/Dastani08}, 3APL's successor, where modules
+are used as a substitute for roles. We argued that modules and roles have
+different functionalities within a programming language, and both are
+useful construct that cannot be reduced one to another.\\~\\
 
 
 Roles and norms for programming agent organisations. Tinnemeier 2009
