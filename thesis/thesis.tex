@@ -40,7 +40,7 @@
 \overfullrule=5pt \pretolerance=400 \tolerance=200 % temporary
 \title{Supporting Agent Systems in the Programming Language} % <<<
 \author{Claudia V. Grigore}
-\date{December 2013}
+\date{January 2014}
 \maketitle
 
 \pagenumbering{roman}
@@ -231,13 +231,14 @@ languages are based on theories from mid-nineties and do not reflect the
 increased importance of organisations in multi-agent system design.
 
 \subsubsection{Hypotheses and Objectives}
-Agent Oriented Programming, a relatively new programming paradigm, adopts a
-social metaphor for the design and implementation of software systems.
-Specifically, software systems are viewed as communities of software entities,
-known as agents, that interact with one another in order to solve problems that
-are beyond their individual capabilities. It is widely accepted that this
-approach is well suited to problem domains in which there is no global system
-control, data is decentralised and computation is asynchronous.
+Agent Oriented Programming is a relatively new programming paradigm that
+adopts a social metaphor for the design and implementation of software
+systems.  Specifically, software systems are viewed as communities of
+software entities, known as agents, that interact with one another in order
+to solve problems that are beyond their individual capabilities. It is
+widely accepted that this approach is well suited to problem domains in
+which there is no global system control, data is decentralised and
+computation is asynchronous.
 
 Agent-oriented methodologies emphasize organisational concepts, which give
 structure to large agent systems. Organisational frameworks, however, put
@@ -261,9 +262,10 @@ usability of Agent Oriented Programming languages. The objective is to
 develop a novel Agent Oriented Programming language that employs roles,
 based on the existing Agent Factory framework, in order to show how the
 concept of role maps to a programming language construct in the specific
-context of Agent Oriented Programming.  \rg{Maybe promise only that
-you show how roles, a concept from sociology, maps to a programming
-language construct.}
+context of Agent Oriented Programming.  
+
+% \rg{Maybe promise only that you show how roles, a concept from sociology,
+%     maps to a programming language construct.}
 
 % >>>
 
@@ -333,11 +335,11 @@ planning~\cite{DBLP:conf/aaai/GeorgeffL87} represents a group of techniques
 for action selection by autonomous agents.  Notable agent oriented
 programming languages, from a historical point of view, are
 AgentSpeak~\cite{DBLP:conf/maamaw/Rao96}, based on speech acts,
-MetateM~\cite{}, based on temporal logic,
+MetateM~\cite{DBLP:conf/promas/Fisher05}, based on temporal logic,
 3APL~\cite{DBLP:conf/promas/DastaniRDM03}, based on practical reasoning
 rules, Jason~\cite{DBLP:books/sp/map2005/BordiniHV05}, which extends
-AgentSpeak with communication, and GOAL~\cite{}, based on declarative
-goals.
+AgentSpeak with communication, and
+GOAL~\cite{DBLP:journals/corr/cs-AI-0207008}, based on declarative goals.
 
 A diversity of language constructs are employed to model the abstract
 concepts manipulated in the Agent Oriented Programming paradigm. These
@@ -722,14 +724,13 @@ modules~\cite{dblp:conf/prima/dastanims08}.
 
 Session types represent a type foundation for structured communication
 centered programming, that facilitate communication safety, progress and
-fidelity \cite{} Multiparty Asynchronous Session Types The research in
-session types initiated in process calculi and programming languages with
-binary session, and it was extended to multiparty asynchronous session
-types. A session is a series of interactions which serve as a unit of
-communication. The structure of a session is abstracted as a type. Such a
-global type is like a shared agreement among communication peers, and
-represents the basis for efficient type checking through its projection
-onto individual peers.
+fidelity \cite{dblp:conf/popl/hondayc08}. The research in session types
+initiated in process calculi and programming languages with binary session,
+and it was extended to multiparty asynchronous session types. A session is
+a series of interactions which serve as a unit of communication. The
+structure of a session is abstracted as a type. Such a global type is like
+a shared agreement among communication peers, and represents the basis for
+efficient type checking through its projection onto individual peers.
 
 % >>>
 \subsection{AgentFactory} % <<<
@@ -2454,42 +2455,54 @@ TODO: inference rules
 
 \chapter{Case Study: The Contract Net Interaction Protocol}\label{ch:casestudy} % <<<
 
+This chapter tries to answer the following research question: \textit{Is the
+readability and usability of an agent oriented programming language
+improved by the addition of the role and session programming constructs as
+well as by the algebraic data types and the type checking functionality?} In
+order to answer this twofold research question the implementation of a FIPA
+interaction protocol is analysed in a case study.
+
+\section{The FIPA Contract Net Interaction Protocol} % <<<
 The FIPA Contract Net Interaction Protocol\cite{web:fipa} describes a
 pattern of interaction very similar to the Contract Net Interaction
-Protocol\cite{DBLP:journals/tc/Smith80a} developed by Smith and Davis in 1980, to which it adds
-rejection and confirmation communicative acts. One agent, the initiator,
-takes the manager role, the other agents are the participants. The manager
-has a task that wants to be performed by the participants in the most
-effective way possible. The effectiveness is considered with regard to some
-specified properties like the price, the time to completion, or the fair
-distribution of tasks. The participants have to respond before a given
-deadline with either a refuse or a proposal. Negotiation continues with the
-participants that proposed, from which one, several or no agent is chosen
-to actually perform the task. The chosen agents have to inform about the
-execution of the task indicating either the success, the failure or by
-giving a result.
-
-This case study discusses the Af-Raf implementation of a slightly modified
-FIPA Contract Net Interaction Protocol. Figure~\ref{fig:contract-roles}
+Protocol\cite{DBLP:journals/tc/Smith80a} developed by Smith and Davis in
+1980, to which it adds rejection and confirmation communicative acts. One
+agent, the initiator, takes the manager role, the other agents are the
+participants. The manager has a task that wants to be performed by the
+participants in the most effective way possible. The effectiveness is
+considered with regard to some specified properties like the price, the
+time to completion, or the fair distribution of tasks. The participants
+have to respond before a given deadline with either a refuse or a proposal.
+Negotiation continues with the participants that proposed, from which one,
+several or no agent is chosen to actually perform the task. The chosen
+agents have to inform about the execution of the task indicating either the
+success, the failure or by giving a result.
+% >>>
+\section{Af-Raf Implementation} % <<<
+The Af-Raf implementation of the FIPA Contract Net Interaction Protocol.
+Figure~\ref{fig:contract-roles}
 
 \begin{figure}\footnotesize % <<<
 \begin{verbatim}
-
 // assumes primitive types:
 //   integer = 0() | 1() | ...
 //   agentid = agentId(...)
 
 type conditions = conditions(integer); // say, price
 
-type request = request(task(), conditions, deadline());
+type task = addVAT(integer)
+          | increase(integer, integer)
+          | reduce(integer, integer);
+
+type request = request(task, conditions, deadline(integer));
 type bid = bid(conditions);
 type decision = win() | lose();
 type result = failure() | success(integer);
-  // success could have, say, price after adding VAT and other surprises
+// success could have, say, price after adding VAT
 
 role Buyer {
   ask : request -> bid;
-  commit : decision -> solution;
+  commit : decision -> result;
 }
 
 role Seller {
@@ -2513,6 +2526,52 @@ session BidRound(owner, s : Seller, b1 : Buyer, b2 : Buyer) {
 \label{fig:contract-roles}
 \end{figure} % >>>
 
+\begin{figure}\footnotesize % <<<
+\begin{verbatim}
+include stdio
+include ContractNet
+
+              
+action vat(x) = raftest.xx;
+action dec(x, y) = raftest.xx;
+action inc(x, y) = raftest.xx;
+action mul(x, y) = raftest.xx;
+
+agent ContractNetBuyer : Buyer {
+  operation ask(request(task, conditions(y), deadline(z)))
+  when Multiplier(m) {
+    +LastTask(sid, task);
+    return bid(mul(m, y));
+  }
+  
+  operation commit(win()) 
+    when LastTask(sid, decrease(x, y)) { return dec(x, y); }
+    when LastTask(sid, increase(x, y)) { return inc(x, y); }
+    when LastTask(sid, addVAT(x)) { return vat(x); }
+    
+}
+\end{verbatim}
+\caption{Contract Net Buyer agent}
+\label{fig:contract-buyer}
+\end{figure} % >>>
+
+\begin{figure}\footnotesize % <<<
+\begin{verbatim}
+include stdio
+include ContractNet
+
+agent ContractNetSeller(b1 : BuyerRole, b2 : BuyerRole): Seller {
+  operation sell(r) {
+    return if b1.ask(r) < b2.ask(r) then b1.commit(win()) 
+                                    else b2.commit(win())
+  }
+}
+\end{verbatim}
+\caption{Contract Net Seller agent}
+\label{fig:contract-seller}
+\end{figure} % >>>
+
+% >>>
 % >>>
 
 \chapter{Related Work}\label{ch:related} % <<<
