@@ -239,10 +239,10 @@ Agent Oriented Programming is a relatively new programming paradigm that
 adopts a social metaphor for the design and implementation of software
 systems.  Specifically, software systems are viewed as communities of
 software entities, known as agents, that interact with one another in order
-to solve problems that are beyond their individual capabilities. It is
-widely accepted that this approach is well suited to problem domains in
-which there is no global system control, data is decentralised and
-computation is asynchronous.
+to solve problems that are beyond their individual
+capabilities~\cite{DBLP:journals/ai/Shoham93}. It is widely accepted that
+this approach is well suited to problem domains in which there is no global
+system control, data is decentralised and computation is asynchronous.
 
 Agent-oriented methodologies emphasize organisational concepts, which give
 structure to large agent systems. Organisational frameworks, however, put
@@ -333,12 +333,12 @@ computation.  Many of them are heavily influenced by the Belief, Desire,
 Intention agent architecture and by the reactive planning theory.  The
 Belief, Desire, Intention agent architecture~\cite{DBLP:conf/icmas/RaoG95},
 based on the human practical reasoning theory developed by Bratman in the
-mid-1980s, provides a mechanism to separate the plans selection from the
-current plans execution.  The reactive
+mid-1980s~\cite{Bratman:1999}, provides a mechanism to separate the plans
+selection from the current plans execution.  The reactive
 planning~\cite{DBLP:conf/aaai/GeorgeffL87} represents a group of techniques
-for action selection by autonomous agents.  Notable agent oriented
-programming languages, from a historical point of view, are
-AgentSpeak~\cite{DBLP:conf/maamaw/Rao96}, based on speech acts,
+used in the process of selecting their actions by autonomous agents.
+Notable agent oriented programming languages, from a historical point of
+view, are AgentSpeak~\cite{DBLP:conf/maamaw/Rao96}, based on speech acts,
 MetateM~\cite{DBLP:conf/promas/Fisher05}, based on temporal logic,
 3APL~\cite{DBLP:conf/promas/DastaniRDM03}, based on practical reasoning
 rules, Jason~\cite{DBLP:books/sp/map2005/BordiniHV05}, which extends
@@ -355,7 +355,7 @@ correspondence with the programming language constructs, and not all of the
 language constructs are first-class constructs. The individual (agent) level
 had most of the attention so far, with environment coming after, and social
 level lagging behind. Only recently the social level of multiagent systems
-has started to receive our attention.
+has started to receive more attention.
 
 % >>>
 \section{Role Theory} % <<<
@@ -449,7 +449,7 @@ revolution, following the need to organise labour. There are a number of
 organisational theories that can be categorised in three groups or stages
 depending on their main focus: classical theories focus on the product,
 neoclassic theories focus on the employee, and contemporary theories focus
-on the environment.~\cite{}J. Doherty
+on the environment~\cite{DohertySD01}.
 
 Each of the Organisational Theories can be described in terms of the four
 components of a division of labour: the hierarchy of authority, the span of
@@ -482,48 +482,72 @@ The organisational rules (constraints, conventions), structures (role
 structure) and patterns
 (interaction) have been identified
 as the most significant organisational components to the multiagent system
-development\cite{DBLP:conf/aose/ZambonelliJW00}.
+development~\cite{DBLP:conf/aose/ZambonelliJW00}.
 
-In the multiagent systems area there are a number of organisational
-frameworks developed to facilitate the definition of a social or
-organisational level on top of the agent level. Examples include Moise,
-Gaia, MASE, ALAADDIN. However, there is no full support at the language
-level for the organisation of agents. It was previously acknowledged that
-in programming agent organisations developing new organisational
-abstractions at the programming language level is the preferred approach in
-order to reduce the effort needed for programming and maintaining agent
-systems\cite{DBLP:conf/esaw/RiemsdijkHJ09}.
+Within the multiagent systems development settings, a number of
+organisational frameworks have been developed to facilitate the definition
+of a social or organisational level on top of the agent level. Examples
+include Moise+~\cite{DBLP:conf/atal/HubnerSB02},
+Gaia~\cite{DBLP:journals/aamas/WooldridgeJK00},
+MASE~\cite{deloach2001analysis}, AALAADDIN~\cite{ferber1998meta}.  However,
+there is no full support at the language level for the organisation of
+agents. It was previously acknowledged that, in programming agent
+organisations, developing new organisational abstractions at the
+programming language level is the preferred approach in order to reduce the
+effort needed for programming and maintaining agent
+systems~\cite{DBLP:conf/esaw/RiemsdijkHJ09}.
 % >>>
-\section{Examples} % <<<
-Jason, 2APL, and GOAL are three representative agent programming languages.
 
+\section{Agent Oriented Programming Languages} % <<<
+Role Theory and Organisational Theory have not been exploited yet at the
+programming language level. Jason~\cite{DBLP:books/sp/map2005/BordiniHV05},
+2APL~\cite{DBLP:journals/aamas/Dastani08}, and
+GOAL~\cite{DBLP:journals/corr/cs-AI-0207008} are three representative agent
+programming languages, being among the most widely used. What are the similarities between them, and what does
+Af-Raf bring new?
+
+\subsection{Jason} % <<<
 Jason is an interpreter written in Java for an extended version of the
-AgentSpeak programming language. AgentSpeak is logic based and supports BDI
-agent architecture. The core concepts of an AgentSpeak agent are the belief
-base, plan library, goals and events. The goals can be either achievement
-goals or test goals. The triggering events can be either addition or
-deletion of beliefs and goals. The plan has a head, a context and a body.
-The head is represented by the triggering event, the context consists of a
-conjunction of beliefs which determine if a plan is applicable, and the
-body which is a sequence of basic actions or (sub)goals. Intentions
-represent partially instantiated plans, that were selected for execution.
+AgentSpeak programming language. AgentSpeak is logic based and supports
+Belief Desire Intention agent architecture. Moreover, the AgentSpeak agent
+is a reactive planning system. 
 
-The AgentSpeak interpreter relies on three selection functions. First, the
-event selection selects a single event from the set of events. Second, the
-option function selects a plan from the set of applicable plans. Third, the
-intentions selection function selects an intention from the set of
-intentions.
+The core concepts defining an AgentSpeak agent are the belief base, the
+plan library, the goals and the triggering events. The belief base consists
+of a set of ground atomic formulae. There are two types of goals in
+AgentSpeak: achievement goals and test goals, both of them written as
+atomic formulae prefixed with either "!" or "?". The first one describes a
+state of the world to be achieved, while the other specifies a check for
+conformity with the agent's belief base. The triggering events can be
+either addition or deletion of beliefs and goals. The plan consists of a
+head, a context and a body. The head is represented by the triggering
+event, the context comprises a conjunction of beliefs which determine if a
+plan is applicable, and the body, which is a sequence of basic actions or
+(sub)goals. In order to be executed plans have to be designated as
+intentions. Actually, intentions represent partially instantiated plans,
+that were selected for execution.
 
-2APL is a BDI-based programming language that integrates both the
-declarative and the imperatives style of programming. There are two sets of
-programming constructs implementing multiagent concepts and individual
-agent concepts. The multiagent level constructs include functionality like
-creating individual agents, external environments, assigning unique names
-to agents, and specify access relations. The individual agent concepts
-include beliefs, goals, actions, plans, events and three types of practical
-reasoning rules. The beliefs and goals are implemented in a declarative way
-to support the reasoning and updating mechanisms. Plans, external
-environments, events, flow of control are implemented in an imperative way.
+Additionally, the AgentSpeak interpreter relies on three selection
+functions. First, the event selection selects a single event from the set
+of events. Second, the option function selects a plan from the set of
+applicable plans. Third, the intentions selection function selects an
+intention from the set of intentions.
+
+% >>>
+
+\subsection{2APL} % <<<
+2APL is also a Belief Desire Intention architecture-based programming
+language. 2APL integrates both the declarative and the imperatives style of
+programming. Also, 2APL incorporates two sets of programming constructs:
+the ones that implement multiagent concepts and the ones that implement
+individual agent concepts. The multiagent level constructs include
+functionality like creating individual agents, external environments,
+assigning unique names to agents, and specifying access relations. The
+individual agent concepts include beliefs, goals, actions, plans, events
+and three types of practical reasoning rules. The beliefs and goals are
+implemented in a declarative way to support the reasoning and updating
+mechanisms. Plans, external environments, events, flow of control are
+implemented in an imperative way.
 
 Environments are implemented as Java objects. Information about changes in
 the environment can be accessed by the agents in two different ways,
@@ -532,21 +556,23 @@ is made between goals and events. Even though both of them trigger agent
 action, goals correspond to a desirable state, while the events correspond
 to environmental changes.
 
-2APL agents have available different types of actions like updating
+Different types of actions are available to 2APL agents, such as: updating
 beliefs, testing beliefs and goals, managing dynamics of goals, external
 actions and communication actions.
 
-There are also three types of rules: rules that generate plans to achieve
-goals, rules that process internal events and received messages, and rules
-to handle and repair failed plans.
+The three types of reasoning rules mentioned earlier are: rules that
+generate plans to achieve goals, rules that process internal events and
+received messages, and rules to handle and repair failed plans.
+% >>>
 
+\subsection{GOAL} % <<<
 GOAL is a rule-based programming language, its focus is on agent reasoning.
 GOAL agents consist of four components: a belief base, a goal base, action
 rules, and action specifications. An actual GOAL agent program is a set of
 modules each consisting of various sections including knowledge, beliefs,
 goals, action specifications, and a program section containing action
 rules. Each of the sections is represented in a knowledge representation
-language such as Prolog.
+language such as Prolog~\cite{DBLP:books/daglib/0076175}.
 
 The init module defines the agent's initial mental state. It includes the
 knowledge, the initial beliefs, the goals, and the action specifications.
@@ -557,8 +583,22 @@ Actions are specified using preconditions and postconditions.
 
 GOAL agents use a blind commitment strategy, meaning that an agent commits
 to achieving a goal and only drops it after it was achieved. GOAL
-distinguishes different types of goals: primitive, achievement
-or achieved goals.  \cite{} GOAL Agents Instantiate Intention Logic
+distinguishes different types of goals: primitive, achievement or achieved
+goals~\cite{DBLP:conf/jelia/indriksH08}.
+
+% >>>
+\subsection{Discussion} % <<<
+
+All of the languages presented above, Jason, 2APL, and GOAL, have a number
+of constructs to model the agent level concepts: a belief base to model
+agent knowledge, goals that model the agent desires, some sort of plans or
+strategies for achieving agent's goals, actions that result in changes,
+mechanisms for triggering actions based on the mental state of the agent,
+sensing mechanisms to get information about the changes in the environment.
+However, even though Jason and 2APL have specific proposal in this
+direction, none of them incorporate any social concept to organise agent
+interaction. The social level of multiagent systems is where Af-Raf, and
+this research work brings its contribution.
 
 Table x synthesises the main features of 2APL, Jason, GOAL and AF-Raf:
 \\
@@ -586,22 +626,6 @@ Table x synthesises the main features of 2APL, Jason, GOAL and AF-Raf:
 \hfil\cr}}
 
 % >>>
-\section{Discussion} % <<<
-
-All of the languages presented above: Jason, 2APL, and GOAL have a number
-of constructs to model the agent level concepts, a belief base to model
-agent knowledge, goals that model the agent desires, some sort of plans or
-strategies for achieving agent's goals, actions that result in changes,
-mechanisms for triggering actions based on the mental state of the agent,
-sensing mechanisms to get information about the changes in the environment.
-However, even though Jason and 2APL have specific proposal in this
-direction, none of them incorporate any social concept to organise agent
-interaction. The social level of multiagent systems is exactly the area
-where this research work brings its contribution.
-
-TODO: Discuss the similarities between AF-Raf and the languages that were
-presented and build the motivation for incorporating social concepts for
-organising agent interaction.
 % >>>
 
 % >>>
