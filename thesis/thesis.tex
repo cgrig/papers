@@ -1802,7 +1802,7 @@ the extension {\tt raf}.  A {\it script\/} is composed of a number of
 include directives and a number of declarations. (`EOF' stands for `end of
 file'. The order of declarations is semantically irrelevant.)
 
-\begin{figure}[h]\footnotesize % <<<
+\begin{figure}\footnotesize % <<<
 \begin{verbatim}
 script: directive* EOF;
 directive: include | declaration;
@@ -1810,7 +1810,7 @@ declaration:
   java_binding | agent | role | session | type_declaration;
 include: 'include' qualified_id;
 java_binding: action | sensor;
-agent: 'agent' uid ('(' agent_role_list? ')')?
+agent: 'agent' UID ('(' agent_role_list? ')')?
        (':' type_list)? '{' rule_list '}';
 rule: 'rule' formula sequence_statement;
 role: 'role' id ('<' type_list '>')? '
@@ -1823,9 +1823,9 @@ simple_session_step: type ':' id '->' id;
 nested_session_step: ('maybe' | 'repeat')? id '(' id_list ')';
 action: 'action' function '=' qualified_id ';';
 sensor: 'sensor' qualified_id ';';
-type_declaration: 'type' lid ('<' lid_list '>')? '='
+type_declaration: 'type' LID ('<' lid_list '>')? '='
                   '|'? type_branch ('|'type_branch)*;
-type_branch: type | lid '(' type_branch_list ')';
+type_branch: type | LID '(' type_branch_list ')';
 \end{verbatim}
 \caption{AF-Raf grammar for top level structures}
 \label{fig:grammar-top-level}
@@ -1869,8 +1869,8 @@ atom_formula: predicate | '!' atom_formula | '(' formula ')';
 predicate: term pred_op term | UID '(' term_list ')' ;
 term: term_a (add_op term_a )*;
 term_a: atom_term (mul_op atom_term )*;
-atom_term: '(' term ')' | literal | lid | function ;
-function: lid '(' term_list ')';
+atom_term: '(' term ')' | literal | LID | function ;
+function: LID '(' term_list ')';
 pred_op: (eq_op | cmp_op) ;
 eq_op: ('==' | '!=');
 cmp_op: ('<' | '>'); 
@@ -1889,6 +1889,18 @@ mixed without parentheses.  The formula \verb+A()&B()|C()+ is equivalent to
 \verb+A()|(B()&C())+.
 \end{example}
 
+The grammar for terms allows several common operators on numbers and
+strings: \verb-+-, \verb+-+, \verb+/+, and so on. Most terms in AF-Raf
+programs are built using functions. The names of such functions are
+arbitrary identifiers, starting with a lowercase letter. Such terms could
+be thought of as being trees whose nodes are labelled by strings, the
+function names. In particular, functions applied to zero arguments are very
+similar to a string literal in a language like Java.
+
+AF-Raf has a small but powerful set of statements
+(\autoref{fig:grammar-statements}): assignments, {\bf new} statements,
+action invocations, and updates of~beliefs.
+
 \begin{figure}\footnotesize % <<<
 \begin{verbatim}
 statement: sequence_statement | atom_statement;
@@ -1896,143 +1908,97 @@ sequence_statement:
   '{' (statement  (';' statement )* ';'?)? '}' ;
 atom_statement:
     assignment
-  | if_statement
-  | foreach
   | new_statement
   | term_statement
-  | update_belief
-  | while_statement;
-assignment: lid ':=' statement;
-if_statement:
-  'if' formula '{' statement '}' ('else' '{' statement '}')?;
-foreach: 'foreach' formula '{' statement '}';
+  | update_belief;
+assignment: LID ':=' statement;
 new_statement: ( new_id | new_agent );
 new_id: 'new' ( 'call' | 'session' );
 new_agent:
-  'new' uid ('(' term_list ')')? STRING? ('{' formula_list '}')?;
+  'new' UID ('(' term_list ')')? STRING? ('{' formula_list '}')?;
 term_statement: term;
 update_belief: ('+' | '-') predicate;
-while_statement: 'while' formula '{' statement '}';
 \end{verbatim}
 \caption{AF-Raf Grammar for statements}
 \label{fig:grammar-statements}
 \end{figure} % >>>
 
-\todo{Continue here, by commenting \autoref{fig:grammar-statements}.}
+The left-hand side of assignments should be a variable. The variable needs
+not be declared separately.  The right-hand side can be any statement.  In
+this respect, AF-Raf statements are similar to expressions --- they
+evaluate to a value. More precisely, they evaluate to a term. The
+convention that everything evaluates to a value is commonplace in
+functional languages but a little peculiar in imperative ones.
+Nevertheless, this simple convention allows some useful idioms.
 
+\begin{example}
+Because assignments are themselves statements, and because the right-hand
+side of an assignment should be a statement, it is legal to chain
+assignments.
+\begin{verbatim}
+  x := y := do_something(z);
+\end{verbatim}
+Action invocations have exactly the same syntax as terms. Above, ${\it
+do\_something}(z)$ could be either a literal term or an action invocation,
+depending on whether there exists an action named ${\it do\_something}$.
+\end{example}
+
+The {\bf new} statements come in two syntactic flavours. In one case the
+{\bf new} statements are used to obtain fresh names (also called
+identifiers). These names have special meaning, which is presented later
+(\autoref{sec:opsem}). Syntactically, in this case, the keyword {\bf new}
+must be followed by the category of the name that should be generated. In
+the other case, {\bf new} statements are used to instantiate agents. In
+this case, the {\bf new} keyword must be followed by the name of the design
+to be instantiated. Optionally, the user \emph{may} specify a list of agent
+adresses, a name for the new agent, and a set of initial beliefs.
+
+As mentioned earlier, action invocations have the same syntax as terms.
+Statements that update beliefs also have a very similar syntax: a term
+preceded by either \verb-+-~or~\verb+-+, depending on whether the belief
+should be added or removed.
+
+\begin{example}
+The core of AF-Raf performs no hidden actions. For example, received
+messages must be explicitly removed from the belief base.
+\begin{verbatim}
+  rule Message(other, someData(x, y)) {
+      -Message(other, someData(x, y));
+      /* ... rest ... */
+  }
+\end{verbatim}
+There exist, however, several constructs defined as syntactic sugar, that
+reduce the verbosity of AF-Raf programs.
+\end{example}
+
+The lexical conventions of AF-Raf are rather typical for a Java-like
+language (\autoref{fig:Grammar-lexer}). The one interesting feature is that
+AF-Raf distinguishes identifiers starting with a lowercase letter
+(\verb+LID+) from identifiers starting with an uppercase letter
+(\verb+UID+). Again, such a convention is unusual in imperative languages,
+but commonplace in functional languages. In AF-Raf, predicates have names
+starting with an uppercase letter, while functions have names starting with
+a lowercase letter. From the language implementer's perspective, this
+convention helps disambiguate the grammar. From the user's perspective,
+this convention acts as a helpful mnemonic.
 
 \begin{figure}\footnotesize % <<<
 \begin{verbatim}
-qualified_id:
-  (t=id '.')* t=id;
-
-literal:
-    t=STRING
-  | t=INT;
-
+qualified_id: (id '.')* id;
+literal: STRING | INT;
 id: LID | UID;
 
 INT: '0'..'9'+;
 STRING: '"' (~'"' | '\\"')* '"';
-
 LID: ('a'..'z')('a'..'z'|'A'..'Z'|'0'..'9'|'$')*;
 UID: ('A'..'Z')('a'..'z'|'A'..'Z'|'0'..'9'|'$')*;
-
 WS:   (' '|'\t'|'\n'|'\r')+;
 BLOCK_COMMENT: '/*' ( options : . )* '*/';
 LINE_COMMENT: '//' ~('\n'|'\r')* ('\r'|'\n');
-
 \end{verbatim}
 \caption{AF-Raf Grammar Lexer}
 \label{fig:Grammar-lexer}
 \end{figure} % >>>
-
-
-The grammar for formulas and terms:
-
-
-A formula$\_$a is either an atom formula, a conjunction of atom formulas or a
-disjunction of atom formulas.
-
-An atom formula is either a predicate, a negated atom formula or a formula
-enclosed in brackets.
-
-A predicate is either a term followed by a predicate operation and then by
-another term or an upper case starting word followed by zero or one term
-lists enclosed in brackets.
-
-
-A term is a term$\_$a to which add$\_$op and another term$\_$ can be added zero or
-more times.
-\rg{Here just say that terms use operators bla-bla, and that term\_a,
-term\_b and so on are just a standard trick to encode operator precedence
-in LL grammars. You can give a table with the operator precedences, and
-perhaps add a citation for LL grammar.}
-
-A term$\_$a is an atom term to which mul$\_$op and another atom
-term can be added zero or more times.
-
-An atom term is either a term enclosed in brackets, a literal, a lower case
-starting word or a function.
-
-A function is a lower case starting word followed by zero or one term lists
-enclosed in brackets.
-
-A term$\_$list is a term followed by zero or more terms that are delimited
-by a comma.
-
-A pred$\_$op is either a eq$\_$op or a cmp$\_$op operation.
-
-An eq$\_$op is comparing either for equality or for non equality.
-
-An cmp$\_$op is comparing either for greater or for lesser.
-
-An add$\_$op is either the addition or subtraction operation.
-
-A mul$\_$op is either the multiplication, division or modulo operation.
-
-
-A unary$\_$op is either the logical or arithmetic negation.
-
-Grammar for statements:
-A statement is a composed of zero or more atom statements.
-
-
-An atom statement is either a statement inside curly brackets, an
-assignment, a while statement, a foreach, a call, an update belief or an if
-statement.
-
-An assignment statement is composed of a lower letter word equal sign and
-either a function or a list comprehension.
-
-A while$\_$statement is composed of the "while" keyword, a formula and a
-statement enclosed in curly brackets.
-
-A foreach statement is composed of the "foreach" keyword, a formula,
-followed by a statement enclosed in curly brackets.
-
-The update$\_$ belief statement has the form of either a plus sign or a
-minus sign followed by a predicate.
-
-A call statement is represented by a function.
-
-An if$\_$statement is composed of the "if" keyword, a formula, a statement
-enclosed in curly brackets and zero or one "else" keyword along with a
-statement in curly brackets.
-
-A list$\_$comprehension is composed of a term, and a formula contained
-within square brackets.
-
-Lexer:
-
-A qualified$\_$id is represented by one or more ids, either LID or
-UID, delimited by dots.
-
-A contract type is either the string "pre", "post", or "fail".
-
-A literal is either a string or an int.
-
-An id is either a LID or a UID.
 
 % >>>
 \section{Algebraic Data Types and Type Checking} % <<<
