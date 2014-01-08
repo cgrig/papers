@@ -504,7 +504,7 @@ programming language level. Jason~\cite{DBLP:books/sp/map2005/BordiniHV05},
 2APL~\cite{DBLP:journals/aamas/Dastani08}, and
 GOAL~\cite{DBLP:journals/corr/cs-AI-0207008} are three representative agent
 programming languages, being among the most widely used. What are the similarities between them, and what does
-AF-Raf bring new?
+Af-Raf bring new?
 
 \subsection{Jason} % <<<
 Jason is an interpreter written in Java for an extended version of the
@@ -725,6 +725,12 @@ with content~$c$ is received from sender~$s$.
 %Sensors can range from the monitoring of the agent's message inbox to
 %monitoring changes in the agent's environment.  
 
+% modules
+%  - small example
+%  - information hiding and encapsulation
+%    (exact impl may change; but it is ONE)
+%  - separate compilation
+%  - analogy with Java classes
 
 \begin{figure}\footnotesize % <<<
 \begin{verbatim}
@@ -2544,11 +2550,34 @@ LINE_COMMENT: '//' ~('\n'|'\r')* ('\r'|'\n');
 \end{figure} % >>>
 
 % >>>
-\section{Roles and Session Types} % <<<
+\section{Type System} % <<<
 
+\todo{Reuse material from \autoref{old-stuff}.}
 
 % >>>
 \section{Operational Semantics}\label{sec:opsem} % <<<
+
+There are many alternative ways for describing the semantics of a
+programming language. Operational semantics and, more specifically,
+small-step operational semantics are one of the more pragmatic methods.
+
+One way to view operational semantics is as a concise way to describe an
+interpreter for the language being defined. This interpreter has a standard
+structure. It consists of a several procedures, each responsible with
+interpreting one type of node in the abstract syntax tree. These procedures
+are often mutually recursive, and they pass around a \emph{context}. The
+typical information one would find in a context is a set of bindings from
+program variables to program values. In this view, the difference between
+big-step operational semantics and small-step operational semantics is as
+follows. In big-step operational semantics, these procedure have no
+side-effects: they all compute a \emph{value} out of a context and an
+\emph{expression}. On the other hand, in small-step operational semantics
+there is a global \emph{state} of the program --- held in an interpreter
+data structure --- which changes while the program is being interpreted.
+The effects of the interpreter's procedure exist and are important.
+
+\todo{Continue here. Describe the above more formally, then move on to
+AF-Raf.}
 
 The semantics of programming languages is often specified as transitions
 from a state to another with each step of individual computation. The
