@@ -2025,6 +2025,340 @@ LINE_COMMENT: '//' ~('\n'|'\r')* ('\r'|'\n');
 \end{figure} % >>>
 
 % >>>
+\section{Type System} % <<<
+
+% >>>
+\section{Operational Semantics}\label{sec:opsem} % <<<
+
+The semantics of programming languages is often specified as transitions
+from a state to another with each step of individual computation. The
+specification takes the form of a set of inference rules that define valid
+transitions.
+\rg{Technically, these are `small-step operational semantics'.
+Perhaps say that, intuitively, giving the operational semantics of a
+language amounts to providing a simple (perhaps inefficient) interpreter
+for it.}
+
+At each time step, an AF-Raf agent
+\begin{enumerate}
+\item transforms messages from its inbox into beliefs that it received
+those messages,
+\item asks each sensor for new beliefs, and
+\item executes those rules that are activated by the current belief base.
+\end{enumerate}
+
+\rg{This paragraph should be re-written. For example, the first thing you
+say is that the some method is called `execute'. First, the reader has no
+idea that you are talking about the implementation of the interpreter.
+Second, how methods are named in the interpreter is rather unimportant,
+certainly not important enough to be the first thing you mention.}
+An AF-Raf agent program interpretation starts with the execute() method.
+First operation is to copy any messages received into the inbox for the
+agent to process further. Only messages received since the last invocation
+of this method are copied into the inbox. Next step is to get information
+from all the sensors. After that a list is created to hold last fired
+rules. Then each rule is handled in the following way. A query is
+constructed based on the rule's condition and run on the belief base. The
+result will be a list of sets of bindings. In the case the list is not
+empty, for each set of bindings a PlanStep is constructed by applying the
+bindings to the statement of the rule. If all the variables have a binding
+the rule is included in the list of last fired rules and the PlanStep is
+executed. A PlanStep is any of the following statements: an assignment, a block,
+a call, a foreach, an if, an update, or a while.
+
+TODO: inference rules
+% >>>
+% >>>
+
+\chapter{Case Study: The Contract Net Interaction Protocol}\label{ch:casestudy} % <<<
+
+This chapter tries to answer the following research question: \textit{Is
+the readability and usability of an agent oriented programming language
+improved by the addition of the role and session programming constructs as
+well as by the algebraic data types and the type checking functionality?}
+In order to answer this twofold research question the Af-Raf implementation
+of a FIPA interaction protocol is analysed in a case study.
+
+\section{The FIPA Contract Net Interaction Protocol} % <<<
+The FIPA Contract Net Interaction Protocol\cite{web:fipa} describes a
+pattern of interaction very similar to the Contract Net Interaction
+Protocol\cite{DBLP:journals/tc/Smith80a} developed by Smith and Davis in
+1980, to which it adds rejection and confirmation communicative acts. One
+agent, the initiator, takes the manager role, the other agents are the
+participants. The manager has a task that wants to be performed by the
+participants in the most effective way possible. The effectiveness is
+considered with regard to some specified properties like the price, the
+time to completion, or the fair distribution of tasks. The participants
+have to respond before a given deadline with either a refuse or a proposal.
+Negotiation continues with the participants that proposed, from which one,
+several or no agent is chosen to actually perform the task. The chosen
+agents have to inform about the execution of the task indicating either the
+success, the failure or by giving a result.
+% >>>
+\section{Af-Raf Implementation} % <<<
+The Af-Raf implementation of the FIPA Contract Net Interaction Protocol.
+Figure~\ref{fig:contract-roles}
+
+\begin{figure}\footnotesize % <<<
+\begin{verbatim}
+// assumes primitive types:
+//   integer = 0() | 1() | ...
+//   agentid = agentId(...)
+
+type conditions = conditions(integer); // say, price
+
+type task = addVAT(integer)
+          | increase(integer, integer)
+          | reduce(integer, integer);
+
+type request = request(task, conditions, deadline(integer));
+type bid = bid(conditions);
+type decision = win() | lose();
+type result = failure() | success(integer);
+// success could have, say, price after adding VAT
+
+role Buyer {
+  ask : request -> bid;
+  commit : decision -> result;
+}
+
+role Seller {
+  sell : request -> result;
+}
+
+session BidRound(owner, s : Seller, b1 : Buyer, b2 : Buyer) {
+  request : owner -> s;
+  request : s -> b1;
+  request : s -> b2;
+  oneof
+    { bid : b1 -> s; win() : s -> b1; result : b1 -> s; }
+    { maybe bid : b1 -> s; lose() : s -> b1; };
+  oneof
+    { bid : b2 -> s; win() : s -> b2; result : b2 -> s; }
+    { maybe bid : b2 -> s; lose() : s -> b2; };
+  result : s -> owner
+}
+\end{verbatim}
+\caption{Contract Net types, roles and sessions}
+\label{fig:contract-roles}
+\end{figure} % >>>
+
+\begin{figure}\footnotesize % <<<
+\begin{verbatim}
+include stdio
+include ContractNet
+
+              
+action vat(x) = raftest.xx;
+action dec(x, y) = raftest.xx;
+action inc(x, y) = raftest.xx;
+action mul(x, y) = raftest.xx;
+
+agent ContractNetBuyer : Buyer {
+  operation ask(request(task, conditions(y), deadline(z)))
+  when Multiplier(m) {
+    +LastTask(sid, task);
+    return bid(mul(m, y));
+  }
+  
+  operation commit(win()) 
+    when LastTask(sid, decrease(x, y)) { return dec(x, y); }
+    when LastTask(sid, increase(x, y)) { return inc(x, y); }
+    when LastTask(sid, addVAT(x)) { return vat(x); }
+    
+}
+\end{verbatim}
+\caption{Contract Net Buyer agent}
+\label{fig:contract-buyer}
+\end{figure} % >>>
+
+\begin{figure}\footnotesize % <<<
+\begin{verbatim}
+include stdio
+include ContractNet
+
+agent ContractNetSeller(b1 : BuyerRole, b2 : BuyerRole): Seller {
+  operation sell(r) {
+    return if b1.ask(r) < b2.ask(r) then b1.commit(win()) 
+                                    else b2.commit(win())
+  }
+}
+\end{verbatim}
+\caption{Contract Net Seller agent}
+\label{fig:contract-seller}
+\end{figure} % >>>
+
+% >>>
+% >>>
+
+\chapter{Related Work}\label{ch:related} % <<<
+
+
+Ricci  and Santi developed a novel programming language, called simpAL, that
+supports types and type checking~\cite{DBLP:conf/promas/RicciS12}. SimpAl
+draws inspiration from the Agent and Artifacts
+model~\cite{DBLP:conf/atal/RicciVO07} and from the Jason programming
+language, which is based on the Belief, Desire, Intention model. SimpAL is
+conceived as an extension to the Java object oriented programming language
+with a separate agent abstraction layer.
+
+Even though this language is very different from AF-Raf, there are a
+number of overlapping concepts. SimpAL imports a social view of computation
+where agents playing different roles constitute an organisation, and work
+within a shared environment. The main building blocks of this model are
+agents, the autonomous components, and artifacts, the environmental
+components that provide functionality or services. The agent has a belief
+base, some tasks to perform and a set of plans to utilise in order to
+acomplish the tasks. SimpAl roles are very similar to AF-Raf roles in that
+they constitute a set of tasks types, where tasks are the analogous to the
+AF-Raf operations.
+
+The roles are organised in a slightly different manner compared to the
+AF-Raf's session type model, which can be seen as a kind of protocol
+prescribing the agent communication. In simpAL organisation models are used
+to define organisation types, that bring together related roles and
+artifact in coherent units named workspaces. Organisation types are
+implemented by concrete organisations. SimpAL organisation types do not put
+any constraint on the order in which interactions between agents occur, as
+AF-Raf session types do, instead they simply group together related roles
+and artifacts working in a similar way to the object oriented programming
+interfaces.
+
+A number of static type checks are performed. At the role level it is
+checked that for each task type there exists at least one plan, and for
+each plan it's checked that the type of the sent messages are only the ones
+defined in the task type. Also it's checked that the assignment of tasks
+corresponds to the task types defined in the role, and that the types of
+the messages sent to an agent correspond to that the agent can understand.
+
+Errors about beliefs that are checked include finding, inside the plans,
+beliefs that are not declared, and beliefs that are assigned with
+expressions of the wrong type.
+
+Similar checks are performed at the environment level. The usage interface
+represents the type of artifact, and contains the observable properties and
+the operations provided by the artifact. Artifact template is the actual
+artifact implementation. On the agent side are checked errors regarding
+artifact operations and its observable state. For each action in the plan
+there must be a matching operation in the artifact's interface.  Likewise,
+for each update belief statement regarding an artifact property there must
+exist a matching observable property in the usage interface. On the
+environment side is checked that the artifact templates match the
+corresponding usage interfaces. First, checks are performed to ascertain
+that for each operation declared in the interface there exists an
+implementation in the template, also for any of the observable properties
+in the template there exists a declaration in the corresponding interface
+with a compatible type.
+
+At the organisation level it is checked that each workspace, artifact, and
+agent types declared in an organisational model is actually implemented in
+the implementation of the organisation.
+\\~\\
+
+Subsequent to my proposal to integrate session types with agent programming
+languages, global session types were exploited further in the context of
+multiagent systems~\cite{DBLP:conf/dalt/AnconaDM12} to specify multiparty
+interactions and verify their correctness. They were used for automatic
+generation of self-monitoring agent systems implemented in Jason. The
+solution suggested was to generate a monitor agent that checks at runtime
+that the ongoing conversation is correct conform to the global session
+type. In this context, global session types are viewed as states, on which
+several transition steps are possible. Transitions occur with each
+successfully sent message.
+
+In order to be able to generate the agent monitor, the developer needs to
+provide Prolog rules to define global session types, to specify possible
+transitions to different states upon message sending, and to specify the
+message content types. As well, a number of changes to the code of the
+participating agents need to be done to support the integration with the
+monitor agent.
+
+There's only one monitor agent that keeps track of all messages and checks
+if there exists a new state that can be reached from the current state. If
+the transition is possible the monitor agent allows the sending action by
+acknowledging it to the sending agent. If such a transition is not
+possible the protocol fails and there's no possibility of self recovery.
+The developer has to change either the agent code or the global session
+type's specification in order to fix the error.
+\\~\\
+
+A proposed extension to the ALPHA programming language that employs roles
+as a run-time construct dates back to 2005\cite{Collier_arole-based}. An
+ALPHA agent is able to play multiple roles and be aware of them at
+run-time. The role construct, also called a role template, consists of a
+variable named role identifier, a set of commitment rules, that defines the
+behaviour, and a set of trigger conditions, that cause the activation of
+the role. Each instance of a role template has to have a unique role
+identifier. A mechanism for inheritance of roles is provided in the form of
+a possibility to  extend the agent behaviour by adding more commitment
+rules and trigger conditions.  Also, a mechanism for composition and
+aggregation of roles is outlined.
+
+However, there is no infrastructure to support the location and enactment
+of roles at run-time, and also there is no mechanism to model the
+interaction between roles. \\~\\
+
+The 3APL programming language\cite{DBLP:conf/aose/DastaniRHDM04} has a
+formal proposal to include roles as first order constructs. An agent role
+is seen as a set of behaviour rules, expected objectives, and information
+resources. An agent can assume multiple roles at a time, but only one of
+them can actually be active, from here the distinction between role
+enactment and role activation. A subset of consistent role, which do not
+contradict each other, are grouped together in agent types. At the end role
+have not been introduced in 3APL, and the decision was carried further to
+2APL\cite{DBLP:journals/aamas/Dastani08}, 3APL's successor, where modules
+are used as a substitute for roles. We argued that modules and roles have
+different functionalities within a programming language, and both are
+useful construct that cannot be reduced one to another.\\~\\
+
+
+Roles and norms for programming agent organisations. Tinnemeier 2009
+\\~\\
+
+% >>>
+
+\chapter{Conclusions}\label{ch:conc} % <<<
+
+Starting from high-level similarities between certain aspects of an
+agent-oriented programming language (2APL) and a functional programming
+language (Haskell), we described three new features for the former:
+(1)~algebraic data types, which constrain the content of messages,
+(2)~roles, which constrain how particular agents interact, and
+(3)~sessions, which describe slices of the global interactions in the agent
+system. Together, these \emph{language features} support organisational
+concepts, which are so far discussed mostly in the literature on
+agent-oriented methodologies and frameworks.
+
+The aim is to provide programmers with a wider set of options at their disposal
+for structuring large agent systems. For example, they can use existing
+methodologies during the design phase and they can use a mixture of our
+proposed language features and existing organisational frameworks during the
+implementation phase. First-class language support has at least two
+advantages over organisational frameworks. First, implementations tend to be
+shorter and more readable. Second, implementations have stronger correctness
+guarantees because of the extra type-checking. On the other hand,
+organisational frameworks may be preferred when one needs to interact with
+legacy code.
+
+The new agent oriented programming language, AF-Raf, based on the existing
+Agent Factory framework, implements the innovative features that have been
+identified. AF-Raf has types, including algebraic data types, which are
+used to constrain the content of the messages. It has type checking, a
+feature very useful in identifying programming errors early on. It has
+roles, which organise agent behaviour, promoting encapsulation and reuse.
+It also have sessions, which further organise agent interaction at a higher
+level, namely at the role level. A case study is used to illustrate the
+results.  The AF-Raf programming language is properly formalised, with its
+grammar specified in EBNF format and its operational semantics is defined
+using inference rules.
+
+% >>>
+\bibliographystyle{plain}
+\bibliography{thesis}
+\appendix
+
+\newpage
+\chapter{OLD STUFF}
 \section{Algebraic Data Types and Type Checking} % <<<
 
 \subsection{Algebraic Data Types} % <<<
@@ -2407,334 +2741,6 @@ session and the roles proposed in the previous section can be found.
 % >>>
 
 % >>>
-\section{Operational Semantics}\label{sec:opsem} % <<<
-
-The semantics of programming languages is often specified as transitions
-from a state to another with each step of individual computation. The
-specification takes the form of a set of inference rules that define valid
-transitions.
-\rg{Technically, these are `small-step operational semantics'.
-Perhaps say that, intuitively, giving the operational semantics of a
-language amounts to providing a simple (perhaps inefficient) interpreter
-for it.}
-
-At each time step, an AF-Raf agent
-\begin{enumerate}
-\item transforms messages from its inbox into beliefs that it received
-those messages,
-\item asks each sensor for new beliefs, and
-\item executes those rules that are activated by the current belief base.
-\end{enumerate}
-
-\rg{This paragraph should be re-written. For example, the first thing you
-say is that the some method is called `execute'. First, the reader has no
-idea that you are talking about the implementation of the interpreter.
-Second, how methods are named in the interpreter is rather unimportant,
-certainly not important enough to be the first thing you mention.}
-An AF-Raf agent program interpretation starts with the execute() method.
-First operation is to copy any messages received into the inbox for the
-agent to process further. Only messages received since the last invocation
-of this method are copied into the inbox. Next step is to get information
-from all the sensors. After that a list is created to hold last fired
-rules. Then each rule is handled in the following way. A query is
-constructed based on the rule's condition and run on the belief base. The
-result will be a list of sets of bindings. In the case the list is not
-empty, for each set of bindings a PlanStep is constructed by applying the
-bindings to the statement of the rule. If all the variables have a binding
-the rule is included in the list of last fired rules and the PlanStep is
-executed. A PlanStep is any of the following statements: an assignment, a block,
-a call, a foreach, an if, an update, or a while.
-
-TODO: inference rules
-% >>>
-% >>>
-
-\chapter{Case Study: The Contract Net Interaction Protocol}\label{ch:casestudy} % <<<
-
-This chapter tries to answer the following research question: \textit{Is
-the readability and usability of an agent oriented programming language
-improved by the addition of the role and session programming constructs as
-well as by the algebraic data types and the type checking functionality?}
-In order to answer this twofold research question the Af-Raf implementation
-of a FIPA interaction protocol is analysed in a case study.
-
-\section{The FIPA Contract Net Interaction Protocol} % <<<
-The FIPA Contract Net Interaction Protocol\cite{web:fipa} describes a
-pattern of interaction very similar to the Contract Net Interaction
-Protocol\cite{DBLP:journals/tc/Smith80a} developed by Smith and Davis in
-1980, to which it adds rejection and confirmation communicative acts. One
-agent, the initiator, takes the manager role, the other agents are the
-participants. The manager has a task that wants to be performed by the
-participants in the most effective way possible. The effectiveness is
-considered with regard to some specified properties like the price, the
-time to completion, or the fair distribution of tasks. The participants
-have to respond before a given deadline with either a refuse or a proposal.
-Negotiation continues with the participants that proposed, from which one,
-several or no agent is chosen to actually perform the task. The chosen
-agents have to inform about the execution of the task indicating either the
-success, the failure or by giving a result.
-% >>>
-\section{Af-Raf Implementation} % <<<
-The Af-Raf implementation of the FIPA Contract Net Interaction Protocol.
-Figure~\ref{fig:contract-roles}
-
-\begin{figure}\footnotesize % <<<
-\begin{verbatim}
-// assumes primitive types:
-//   integer = 0() | 1() | ...
-//   agentid = agentId(...)
-
-type conditions = conditions(integer); // say, price
-
-type task = addVAT(integer)
-          | increase(integer, integer)
-          | reduce(integer, integer);
-
-type request = request(task, conditions, deadline(integer));
-type bid = bid(conditions);
-type decision = win() | lose();
-type result = failure() | success(integer);
-// success could have, say, price after adding VAT
-
-role Buyer {
-  ask : request -> bid;
-  commit : decision -> result;
-}
-
-role Seller {
-  sell : request -> result;
-}
-
-session BidRound(owner, s : Seller, b1 : Buyer, b2 : Buyer) {
-  request : owner -> s;
-  request : s -> b1;
-  request : s -> b2;
-  oneof
-    { bid : b1 -> s; win() : s -> b1; result : b1 -> s; }
-    { maybe bid : b1 -> s; lose() : s -> b1; };
-  oneof
-    { bid : b2 -> s; win() : s -> b2; result : b2 -> s; }
-    { maybe bid : b2 -> s; lose() : s -> b2; };
-  result : s -> owner
-}
-\end{verbatim}
-\caption{Contract Net types, roles and sessions}
-\label{fig:contract-roles}
-\end{figure} % >>>
-
-\begin{figure}\footnotesize % <<<
-\begin{verbatim}
-include stdio
-include ContractNet
-
-              
-action vat(x) = raftest.xx;
-action dec(x, y) = raftest.xx;
-action inc(x, y) = raftest.xx;
-action mul(x, y) = raftest.xx;
-
-agent ContractNetBuyer : Buyer {
-  operation ask(request(task, conditions(y), deadline(z)))
-  when Multiplier(m) {
-    +LastTask(sid, task);
-    return bid(mul(m, y));
-  }
-  
-  operation commit(win()) 
-    when LastTask(sid, decrease(x, y)) { return dec(x, y); }
-    when LastTask(sid, increase(x, y)) { return inc(x, y); }
-    when LastTask(sid, addVAT(x)) { return vat(x); }
-    
-}
-\end{verbatim}
-\caption{Contract Net Buyer agent}
-\label{fig:contract-buyer}
-\end{figure} % >>>
-
-\begin{figure}\footnotesize % <<<
-\begin{verbatim}
-include stdio
-include ContractNet
-
-agent ContractNetSeller(b1 : BuyerRole, b2 : BuyerRole): Seller {
-  operation sell(r) {
-    return if b1.ask(r) < b2.ask(r) then b1.commit(win()) 
-                                    else b2.commit(win())
-  }
-}
-\end{verbatim}
-\caption{Contract Net Seller agent}
-\label{fig:contract-seller}
-\end{figure} % >>>
-
-% >>>
-% >>>
-
-\chapter{Related Work}\label{ch:related} % <<<
-
-
-Ricci  and Santi developed a novel programming language, called simpAL, that
-supports types and type checking~\cite{DBLP:conf/promas/RicciS12}. SimpAl
-draws inspiration from the Agent and Artifacts
-model~\cite{DBLP:conf/atal/RicciVO07} and from the Jason programming
-language, which is based on the Belief, Desire, Intention model. SimpAL is
-conceived as an extension to the Java object oriented programming language
-with a separate agent abstraction layer.
-
-Even though this language is very different from AF-Raf, there are a
-number of overlapping concepts. SimpAL imports a social view of computation
-where agents playing different roles constitute an organisation, and work
-within a shared environment. The main building blocks of this model are
-agents, the autonomous components, and artifacts, the environmental
-components that provide functionality or services. The agent has a belief
-base, some tasks to perform and a set of plans to utilise in order to
-acomplish the tasks. SimpAl roles are very similar to AF-Raf roles in that
-they constitute a set of tasks types, where tasks are the analogous to the
-AF-Raf operations.
-
-The roles are organised in a slightly different manner compared to the
-AF-Raf's session type model, which can be seen as a kind of protocol
-prescribing the agent communication. In simpAL organisation models are used
-to define organisation types, that bring together related roles and
-artifact in coherent units named workspaces. Organisation types are
-implemented by concrete organisations. SimpAL organisation types do not put
-any constraint on the order in which interactions between agents occur, as
-AF-Raf session types do, instead they simply group together related roles
-and artifacts working in a similar way to the object oriented programming
-interfaces.
-
-A number of static type checks are performed. At the role level it is
-checked that for each task type there exists at least one plan, and for
-each plan it's checked that the type of the sent messages are only the ones
-defined in the task type. Also it's checked that the assignment of tasks
-corresponds to the task types defined in the role, and that the types of
-the messages sent to an agent correspond to that the agent can understand.
-
-Errors about beliefs that are checked include finding, inside the plans,
-beliefs that are not declared, and beliefs that are assigned with
-expressions of the wrong type.
-
-Similar checks are performed at the environment level. The usage interface
-represents the type of artifact, and contains the observable properties and
-the operations provided by the artifact. Artifact template is the actual
-artifact implementation. On the agent side are checked errors regarding
-artifact operations and its observable state. For each action in the plan
-there must be a matching operation in the artifact's interface.  Likewise,
-for each update belief statement regarding an artifact property there must
-exist a matching observable property in the usage interface. On the
-environment side is checked that the artifact templates match the
-corresponding usage interfaces. First, checks are performed to ascertain
-that for each operation declared in the interface there exists an
-implementation in the template, also for any of the observable properties
-in the template there exists a declaration in the corresponding interface
-with a compatible type.
-
-At the organisation level it is checked that each workspace, artifact, and
-agent types declared in an organisational model is actually implemented in
-the implementation of the organisation.
-\\~\\
-
-Subsequent to my proposal to integrate session types with agent programming
-languages, global session types were exploited further in the context of
-multiagent systems~\cite{DBLP:conf/dalt/AnconaDM12} to specify multiparty
-interactions and verify their correctness. They were used for automatic
-generation of self-monitoring agent systems implemented in Jason. The
-solution suggested was to generate a monitor agent that checks at runtime
-that the ongoing conversation is correct conform to the global session
-type. In this context, global session types are viewed as states, on which
-several transition steps are possible. Transitions occur with each
-successfully sent message.
-
-In order to be able to generate the agent monitor, the developer needs to
-provide Prolog rules to define global session types, to specify possible
-transitions to different states upon message sending, and to specify the
-message content types. As well, a number of changes to the code of the
-participating agents need to be done to support the integration with the
-monitor agent.
-
-There's only one monitor agent that keeps track of all messages and checks
-if there exists a new state that can be reached from the current state. If
-the transition is possible the monitor agent allows the sending action by
-acknowledging it to the sending agent. If such a transition is not
-possible the protocol fails and there's no possibility of self recovery.
-The developer has to change either the agent code or the global session
-type's specification in order to fix the error.
-\\~\\
-
-A proposed extension to the ALPHA programming language that employs roles
-as a run-time construct dates back to 2005\cite{Collier_arole-based}. An
-ALPHA agent is able to play multiple roles and be aware of them at
-run-time. The role construct, also called a role template, consists of a
-variable named role identifier, a set of commitment rules, that defines the
-behaviour, and a set of trigger conditions, that cause the activation of
-the role. Each instance of a role template has to have a unique role
-identifier. A mechanism for inheritance of roles is provided in the form of
-a possibility to  extend the agent behaviour by adding more commitment
-rules and trigger conditions.  Also, a mechanism for composition and
-aggregation of roles is outlined.
-
-However, there is no infrastructure to support the location and enactment
-of roles at run-time, and also there is no mechanism to model the
-interaction between roles. \\~\\
-
-The 3APL programming language\cite{DBLP:conf/aose/DastaniRHDM04} has a
-formal proposal to include roles as first order constructs. An agent role
-is seen as a set of behaviour rules, expected objectives, and information
-resources. An agent can assume multiple roles at a time, but only one of
-them can actually be active, from here the distinction between role
-enactment and role activation. A subset of consistent role, which do not
-contradict each other, are grouped together in agent types. At the end role
-have not been introduced in 3APL, and the decision was carried further to
-2APL\cite{DBLP:journals/aamas/Dastani08}, 3APL's successor, where modules
-are used as a substitute for roles. We argued that modules and roles have
-different functionalities within a programming language, and both are
-useful construct that cannot be reduced one to another.\\~\\
-
-
-Roles and norms for programming agent organisations. Tinnemeier 2009
-\\~\\
-
-% >>>
-
-\chapter{Conclusions}\label{ch:conc} % <<<
-
-Starting from high-level similarities between certain aspects of an
-agent-oriented programming language (2APL) and a functional programming
-language (Haskell), we described three new features for the former:
-(1)~algebraic data types, which constrain the content of messages,
-(2)~roles, which constrain how particular agents interact, and
-(3)~sessions, which describe slices of the global interactions in the agent
-system. Together, these \emph{language features} support organisational
-concepts, which are so far discussed mostly in the literature on
-agent-oriented methodologies and frameworks.
-
-The aim is to provide programmers with a wider set of options at their disposal
-for structuring large agent systems. For example, they can use existing
-methodologies during the design phase and they can use a mixture of our
-proposed language features and existing organisational frameworks during the
-implementation phase. First-class language support has at least two
-advantages over organisational frameworks. First, implementations tend to be
-shorter and more readable. Second, implementations have stronger correctness
-guarantees because of the extra type-checking. On the other hand,
-organisational frameworks may be preferred when one needs to interact with
-legacy code.
-
-The new agent oriented programming language, AF-Raf, based on the existing
-Agent Factory framework, implements the innovative features that have been
-identified. AF-Raf has types, including algebraic data types, which are
-used to constrain the content of the messages. It has type checking, a
-feature very useful in identifying programming errors early on. It has
-roles, which organise agent behaviour, promoting encapsulation and reuse.
-It also have sessions, which further organise agent interaction at a higher
-level, namely at the role level. A case study is used to illustrate the
-results.  The AF-Raf programming language is properly formalised, with its
-grammar specified in EBNF format and its operational semantics is defined
-using inference rules.
-
-% >>>
-\bibliographystyle{plain}
-\bibliography{thesis}
-\appendix
 
 \end{document}
 % >>>
