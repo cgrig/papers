@@ -504,7 +504,7 @@ programming language level. Jason~\cite{DBLP:books/sp/map2005/BordiniHV05},
 2APL~\cite{DBLP:journals/aamas/Dastani08}, and
 GOAL~\cite{DBLP:journals/corr/cs-AI-0207008} are three representative agent
 programming languages, being among the most widely used. What are the similarities between them, and what does
-Af-Raf bring new?
+AF-Raf bring new?
 
 \subsection{Jason} % <<<
 Jason is an interpreter written in Java for an extended version of the
@@ -587,6 +587,11 @@ distinguishes different types of goals: primitive, achievement or achieved
 goals~\cite{DBLP:conf/jelia/indriksH08}.
 
 % >>>
+
+\subsection{simpAL} % <<<
+
+% >>>
+
 \subsection{Discussion} % <<<
 
 All of the languages presented above, Jason, 2APL, and GOAL, have a number
@@ -631,143 +636,181 @@ Table x synthesises the main features of 2APL, Jason, GOAL and AF-Raf:
 % >>>
 
 \chapter{Main AF-Raf Concepts}\label{ch:concepts} % <<<
+\section{An overview of the AF-Raf programming Language} % <<<
 
-\section{Preliminaries} % <<<
+AF-Raf is a new agent oriented programming language specifically developed
+to incorporate the support for organising multiagent systems at the
+language level. AF-Raf programming language is integrated with the
+Agent Factory development framework, which provides support for the
+development and deployment of agent-based systems.
 
-This section provides an explanation of the related concepts that
-constitute a basis for the main research presented in this thesis.
-
-\subsection{Functional Languages} % <<<
-
-\subsubsection{Algebraic Data Types}
-
-In functional programming an algebraic data type is a kind of compound type
-formed by combining other types. In this context an algebra of data types
-denotes a set of types along with a collection of operations on that set of
-types. Those operations are: the Cartesian product, also known as
-multiplication or conjunction, and the discriminated union, also known as
-sum or disjunction. The operations are used to create new types.
-
-
-\subsubsection{Type-checking}
-
-Type-checking is a program analysis that verifies the type safety of a
-program. In the strict sense it verifies that the analysed program
-will not have any type errors when executed. In the weak sense only
-provides some amount of type safety. Type checking can be static or
-dynamic. The static type checking can be based on explicit type decoration
-or based on implicit type inferences.
-
-\subsubsection{Modules}
-
-The modular approach to programming implies separating the programs into
-independent modules that perform logically distinct functions. Modules are
-integrated into programs through interfaces. An interface define the
-elements required and provided by the module.
-
- In Haskell, modules are used to control name-spaces and to create
- abstract data types. A Haskell program can be seen as a collection of
- modules, where the main module loads up the other modules. Loading a
- module can be regarded as a big declaration. A module contains functions,
- types and type classes that are related and serve a common purpose.
-
-
-\subsubsection{Haskell Type Classes}
-
-This section reviews Haskell type classes, because they later inspire our
-notion of `role', and Haskell modules, so that it is clear they are very
-different from type classes. We use sets and equality as examples because
-we assume all readers are familiar with these basic mathematical concepts.
-\rg{Well, in a thesis you can afford the space to explain even basic concepts.}
-
-% modules
-%  - small example
-%  - information hiding and encapsulation
-%    (exact impl may change; but it is ONE)
-%  - separate compilation
-%  - analogy with Java classes
-
-Haskell modules are often used to implement abstract data types such as
-sets.  To illustrate the main features of modules in little space, the code
-in Figure~\ref{fig:haskell} is contrived.  The module \textit{Set} contains
-the type~$T$ and the functions \textit{add}, \textit{has}, and
-\textit{sub}. The \textbf{module} line hides \textit{sub} by not mentioning
-it. The names and types of the exported functions \textit{add} and
-\textit{has} are visible from outside the module, but their
-implementations, which are to the right of~$=$, are hidden.  Similarly, the
-type name~$T$ is visible from outside, but the value constructor~$V$ is
-not. For example, the set $\{1,2\}$ may be represented by the value
-$V[2,1,2]$, but this is not known to the users of the module \textit{Set}.
-The names and types visible from outside constitute the module's
-\emph{interface}.
+The main particularity of AF-Raf, that makes it unique among agent oriented
+programming languages is that, even though it is built upon the agent
+oriented conceptual framework, it also draws inspiration from functional
+languages. Figure~\ref{fig:AF-Raf} illustrates an AF-Raf agent.
 
 \begin{figure}\footnotesize % <<<
 \begin{verbatim}
--- built-in and standard library
-class Eq b where
-  eq :: b -> b -> Bool
-instance Eq Int where ...
-elem x [] = False
-elem x (y:ys) = eq x y || elem x ys
-all p [] = True
-all p (x:xs) = p x && all p xs
+include stdio
 
--- file set.hs
-module Set (T, add, has) where
-  data T a = V [a]
-  add (V s) x = V (x:s)
-  has (V s) x = elem x s
-  sub (V s) t = all (has t) s
+rule State(initialized()) & Name(n) {
+      println("hello from " + n);
+}
 
-  instance Eq a => Eq (T a) where
-    eq s t = sub s t && sub t s
+rule Monitoring(name, addr) {
+      println("ask " + name + " for status");
+      send(agentID(name, addr), request(status()));
+}
+
+rule Message(other, status(alive())) {
+      println("OK, ask again.");
+      send(other, request(status()));
+}
+
+rule Message(other, status()) {
+      println("Oh, someone wants me alive!");
+      send(other, inform(status(alive())));
+}
 \end{verbatim}
-\caption{Haskell type class \textit{Eq} and module \textit{Set}}
-\label{fig:haskell}
+\caption{The code of an AF-Raf agent}
+\label{fig:AF-Raf}
 \end{figure} % >>>
 
-% type classes
-%  - continue example
-%  - ad-hoc polymorphism: multiple implementations with the same interface
-%  - analogy with Java interfaces
+The AF-Raf core concepts include: beliefs, rules, actions, sensors, roles,
+sessions, and types. They are related to one another and the unique
+features of AF-Raf are built upon them. Among these concepts the ones of
+roles, sessions and types constitute new approaches, and they will be
+described in more depth in the next sections. 
 
-The type class \textit{Eq} contains types whose values can be compared for
-equality. To make a type belong to the class \textit{Eq} one must write an
-instance declaration that provides an implementation for a function
-named~$eq$. The \textbf{instance} declaration in module \textit{Set} says
-that the type constructor~$T$ transforms members of \textit{Eq} into
-members of \textit{Eq}. For example, $T(T\,\mathit{Int})$ is in \textit{Eq}
-because \textit{Int} is in~\textit{Eq}.
+The first two fundamental components of AF-Raf are the \textit{belief base}
+and the \textit{rule base}. The belief base models the agent's view of the
+current state of its environment and the rule base models the agent's
+behaviour.
 
-In general, modules are responsible with information
-hiding~\cite{DBLP:journals/cacm/Parnas72a} and encapsulation.  On the other
-hand, type classes are an elegant mechanism to provide ad-hoc polymorphism,
-also known as overloading~\cite{DBLP:conf/popl/WadlerB89}: The same name
-refers to different implementations depending on the context.  Just as
-Haskell type classes are different from Haskell modules, the roles we
-introduce later are different from existing 2APL
-modules~\cite{dblp:conf/prima/dastanims08}.
+Beliefs in AF-Raf are regarded as logical terms and represented in the form
+of trees of strings. Beliefs are grouped together in a belief base that can
+be accessed by, and updated by the agent. On the other hand, rules
+represent a means for accessing the belief base and also a way of
+triggering agent behaviour. Figure~\ref{fig:rule} illustrates a simple
+AF-Raf rule, where $status()$ and $request(status())$ represent AF-Raf
+beliefs. 
+
+A rule has two main components besides a name, which is optional. These
+components are a query, and an action. The query is like a condition that
+has to be met and can be seen as a question sent to the belief base, if the
+belief base is meeting the condition then some action is triggered. The
+rules are evaluated at each time-step. The first stage of evaluating a rule
+is to evaluate the query on the current belief base. The result is a set of
+query results. If the set is not empty, the action is then evaluated for
+every query result. A particular query result says with what term to
+substitute each free variable in the action. In other words, a query result
+is a set of bindings that covers all the free variable in the action (of
+the rule). The first step of evaluating the action is to apply these
+substitutions. The next step is to execute it.
+
+Executing an action means executing a piece of associated Java code.
+%Examples of actions include sending a message (\textit{send}), logging a
+%string (\textit{println}), and adopting a belief (\textit{adopt}).  
+An action represents the actual agent's behaviour, which can
+range from printing something to the console to sending a message to
+another agent, creating another agent or even updating the belief base.
+Another way to update the belief base is through sensors.
+
+Sensors are pieces of Java code that are run at each time-step. They are
+typically used to update the belief base according to the changes in the
+environment. For example, there is a standard sensor (defined in
+\texttt{stdio}) that adds a belief $\mathit{Message}(s,c)$ when a message
+with content~$c$ is received from sender~$s$. 
+
+%Sensors can range from the monitoring of the agent's message inbox to
+%monitoring changes in the agent's environment.  
 
 
-% >>>
-\subsection{Multiparty Session Types} % <<<
+\begin{figure}\footnotesize % <<<
+\begin{verbatim}
+rule Monitoring(name, addr) {
+      println("ask " + name + " for status");
+      send(agentID(name, addr), request(status()));
+}
+\end{verbatim}
+\caption{AF-Raf rules example}
+\label{fig:rule}
+\end{figure} % >>>
 
-Session types represent a type foundation for structured communication
-centered programming, that facilitate communication safety, progress and
-fidelity \cite{dblp:conf/popl/hondayc08}. The research in session types
-initiated in process calculi and programming languages with binary session,
-and it was extended to multiparty asynchronous session types. A session is
-a series of interactions which serve as a unit of communication. The
-structure of a session is abstracted as a type. Such a global type is like
-a shared agreement among communication peers, and represents the basis for
-efficient type checking through its projection onto individual peers.
+Actions and sensors are pieces of Java code used to extend the AF-Raf
+programs. Actions are invoked within rules. There is a number of actions
+included in the standard library, which any agent can use, there is also
+the option to create new actions. Sensors are run automatically every time
+step. Figure~\ref{fig:actions-sensors} presents some of the AF-Raf standard
+actions and sensors. Both println and send actions have been used in the
+rule Monitoring illustrated in figure~\ref{fig:rule}.
 
-% >>>
-\subsection{AgentFactory} % <<<
+ 
+\begin{figure}\footnotesize % <<<
+\begin{verbatim}
+action println(s) =
+          com.agentfactory.raf.RafStandardAction$Println;
 
-Agent Factory~\cite{collier2002agent} is an open-source Java-based
-development framework that provides support for the development and
-deployment of agent-oriented applications.
+action send(agentID(name, address), message) =
+             com.agentfactory.raf.RafStandardAction$Send;
+
+sensor com.agentfactory.raf.RafStandardSensor$Message;
+\end{verbatim}
+\caption{Standard actions and sensors}
+\label{fig:actions-sensors}
+\end{figure} % >>>
+
+
+An operation can be defined as a specific kind of rule stating that upon
+receiving a message of a particular type the agent should reply with a
+message of a specified type. The message type can be any type including the
+type unit(), and in this case there is no actual message returned. Even
+though operations can be written as rules, using syntactic sugar to
+automatise the process of message passing makes answering messages much
+easier.
+
+A role's purpose is to group together related behaviour. As stated before
+AF-Raf agents interact through message passing. AF-Raf's role concept
+reflects this by considering only those kind of behaviours (rules) that
+impact other agents through message passing, namely operations. A role is a
+set of operation types, acting in a similar way to interfaces in object
+oriented programming. When an agent plays a role it needs to give an
+implementation to all the operations defined within that role.
+
+Sessions organise the interaction between agents stating the exact order in
+which the messages should succeed. A session brings together related roles
+and maps the set of operations defined in those roles to a particular
+protocol of conversation. A session specifies the agents involved in the
+conversation, as well as the roles they play, then provides a list
+containing entries of the form: message type followed by the sender agent
+and the receiver agent.
+
+AF-Raf statically checks that the type of each call message in a session
+corresponds to an operation defined in the receiver's role, and each return
+message corresponds to an operation defined in the sender's role.
+
+AF-Raf checks dynamically that the agent playing a role actually implements
+the specified types of the operations defined in that role.  For each call
+message there's an associated call id which must appear in the return
+message. This is a way of keeping track of the message pair associated to
+an operation and enable the dynamic check that the message types correspond
+to the ones defined inside the role. If the types do not correspond an
+error is risen.
+
+Further checks are performed at runtime. Each session has a session id.
+Each message has to contain the session id so that it can be associated to
+an specific session. This enables the interpreter to monitor that the
+messages succeed in the right order.
+
+
+
+
+\subsection{Agent Factory} % <<<
+
+AF-Raf uses Agent Factory as a platform. Agent
+Factory~\cite{collier2002agent} is an open-source Java-based development
+framework that provides support for the development and deployment of
+agent-oriented applications.
 
 Agent Factory provides a generic run-time environment for deploying
 agent-based systems that is based on the FIPA
@@ -813,8 +856,8 @@ from within the agent program. If a set of actions and sensors are linked
 together they can be defined within a module. A module may also provide
 resources that are shared amongst several sensors and actions.
 
-Currently there are four Agent Programming Languages that have been built
-using the Common Language Framework:
+Currently there are four Agent Programming Languages that have been
+integrated with Agent Factory using the Common Language Framework:
 \begin{enumerate}
 
 \item \textit{AFAPL}, a reimplementation of the original Agent Factory
@@ -825,7 +868,8 @@ agent programming language that is based on commitment rules;
 \item \textit{AF-TeleoReactive}, an implementation of Nilsson's teleo-reactive
 programming model;
 
-\item and our new \textit{AF-Raf}, described in the next section.
+\item and the new \textit{AF-Raf} programming language, that draws
+inspiration from functional languages .
 \end{enumerate}
 
 Agent Factory is fully integrated with Eclipse in a way that simplifies
@@ -838,7 +882,9 @@ was created in the early 1990s can be found in~\cite{muldoon2009towards}.
 
 % >>>
 
-\subsection{Belief Bases} % <<<
+% >>>
+
+\section{The Belief Base} % <<< 
 
 In most agent-oriented programming languages, agents maintain a
 \emph{belief base}.  The operations available to the agent are
@@ -966,6 +1012,42 @@ forget}(x)$ removes the belief~$x$ from the belief base.  In case $x$~is
 not a belief, ${\bf forget}(x)$ does not modify the belief base.
 
 % >>>
+\section{Types} % <<<
+
+AF-Raf contributes to the AOP languages domain by being the first agent
+oriented programming language to introduce algebraic data types and
+type-checking. From a practical point of view, it tries to improve
+upon the following scenario.
+
+\paragraph{Bad Scenario.}
+
+\rg{Needs a diagram; otherwise, hard to follow.}
+Agent~$a$ sends message $\tau_{ab}$ to agent~$b$. Agent~$b$ stores a
+subterm~$\tau_b$ of~$\tau_{ab}$ into its belief base. Later, when some
+other condition is satisfied, agent~$b$ extracts a subterm~$\tau_{bc}$ of
+term~$\tau_b$ and sends it to agent~$c$. Agent~$c$ extracts a
+subterm~$\tau_c$ of term~$\tau_{bc}$ and stores it in its belief base.
+Later, when some other condition is satisfied, agent~$c$ extracts a
+subterm~$\tau$ of~$\tau_c$. Agent~$c$ expects $\tau$ to be an integer
+literal, but instead $\tau$ is a string literal. Agent~$c$ notices the
+problem, but many things happened since agent~$a$ sent an invalid message.
+
+The goal of AF-Raf's dynamic typing is to notice such errors early.
+
+For this purpose, each agent~$a$ has two attached types. The type $\delta_b(a)$
+represents the type of $a$'s beliefs and the type $\delta_m(a)$ represents the
+type of messages that $a$ can process. These types are selected when the agent
+is created.
+
+Whenever a belief $\tau$ is added to $a$'s belief base, Agent~Factory checks
+whether that belief is in the set of terms defined by the $a$'s belief type;
+that is, the expression $\tau:\delta_b(a)$ is evaluated.  Whenever a
+message~$\tau$ is sent to agent~$a$, the expression $\tau:\delta_m(a)$ is
+evaluated, to check whether that message complies to the type of messages that
+agent~$a$ can process. In order to send a message to agent~$a$, the other agent
+needs the agent identifier of agent~$a$. Agent identifiers typically consist of
+a name and an IP address. To support the check for messages we add
+$\delta_m(a)$ to the agent identifier of agent~$a$.
 
 \subsection{Multi-Sorted Predicate Logic} \label{sec:multi-sorted} % <<<
 
@@ -977,8 +1059,6 @@ notions necessary to our understanding. We also introduce notational
 conventions used in AF-Raf.  Moreover, although these notions are simple,
 their definitions in literature tend to have subtle but important
 differences.
-\rg{Most of this section does not belong to preliminaries, as it is not that
-standard. I would put it somewhere between examples and reference.}
 
 A \emph{term} is a variable, or a function applied to other terms.
 \begin{align}
@@ -1127,182 +1207,372 @@ sets of ground terms that cannot be defined using algebraic data types.
 \rg{These things are probably too cryptic, and should be explained more.}
 
 % >>>
+\subsection{Algebraic Data Types} % <<<
+Algebraic data types are the natural target of pattern-matching functions.
+When the type is parametric then the pattern-matching functions typically
+support parametric polymorphism~\cite{AlgebraicDT09}, meaning that the
+values are handled identically regardless of their actual type. 
+
+In functional programming an algebraic data type is a kind of compound type
+formed by combining other types. In this context an algebra of data types
+denotes a set of types along with a collection of operations on that set of
+types. Those operations are: the Cartesian product, also known as
+multiplication or conjunction, and the discriminated union, also known as
+sum or disjunction. The operations are used to create new types.
+
+
+\paragraph{AF-Raf's Algebraic Data Types, Primitive Types, and Aliases.}
+
+In AF-Raf, a \emph{belief} is a boolean ground term; in AF-Raf, a
+\emph{message} is a non-boolean ground term.
+
+Algebraic data types offer an alternative way of defining sets of ground
+terms. In multi-sorted predicate logic, the sort~$\sigma$ determines a set
+of ground terms, namely those of the form $\nu(*)$, where $\nu$ has a
+signature of the form $*\to\sigma$.  For example, the sort \textit{Bool}
+determines the set of terms that are formulas.  With algebraic data types,
+a type~$\delta$ is defined by a sequence of patterns, each of the form
+$\nu(\delta_1,\ldots,\delta_n)$. For example, one could define the types
+\textit{nat}, $e$, and~$o$ as follows.
+\[\mathbf{type}\,\mathit{nat} =
+  \mathit{zero}()
+  \mid\mathit{succ}(\mathit{nat})
+  \mid\mathit{add}(\mathit{nat},\mathit{nat})\]
+\[\mathbf{type}\,e =
+  \mathit{zero}()
+  \mid\mathit{succ}(o)
+  \mid\mathit{add}(e,e)
+  \mid\mathit{add}(o,o)\]
+\[\mathbf{type}\,o =
+  \mathit{succ}(e)
+  \mid\mathit{add}(o,e)
+  \mid\mathit{add}(e,o)\]
+
+In Agent~Factory, string literals and integer literals are
+also terms, and AF-Raf inherits this decision. AF-Raf has
+predefined corresponding primitive types \textit{string} and
+\textit{integer}. Moreover, any Java type is suitable to be an AF-Raf
+primitive type.
+
+Binary operators such as $+$ are also inherited from Agent~Factory. From
+the point of view of type-checking, an expressions like $2+3$ is equivalent
+to $+(2,3)$. Standard conventions on precedence and associativity are
+obeyed.
+
+More interestingly, AF-Raf has built-in the type $\mathit{integer}[\tau]$,
+where $\tau$ is a formula that may use the special variable \textbf{this}.
+For example, the type \[\mathit{integer}[\mathbf{this}\%2==0]\] defines the
+set of ground terms $\{\,\ldots,-4,-2,0,2,4,\ldots\,\}$. Similarly, AF-Raf
+has built-in the type $\mathit{string}[\tau]$. For example, the type
+\[\mathit{string}[\mathbf{this}\;\mathbf{matches}\;\verb|"[a-z]+"|]\]
+defines the set of string literals that match the given regular expression.
+
+Enhanced with algebraic data types, the AF-Raf programming language has
+virtually endless possibilities to define new types. The primitive types
+are combined using discriminated union and cartesian product in the manner
+described above.
+
+To support the interaction with untyped languages, AF-Raf also has built-in
+the type \textit{Any}, which defines the set of all ground terms.
+
+Finally, one may define type aliases.
+$\mathbf{type}\,\delta=\delta'$
+
+Such aliases are especially useful when $\delta'$ is of the form
+$\mathit{integer}[\tau]$ or $\mathit{string}[\tau]$, and $\tau$~is long.
+
+\todo{Example with something like {\tt type t=int*t list}.}
+
 % >>>
-\section{The AF-Raf programming Language} % <<<
+\subsection{Type Checking} % <<<
+Type-checking is a program analysis that verifies the type safety of a
+program. In the strict sense it verifies that the analysed program
+will not have any type errors when executed. In the weak sense only
+provides some amount of type safety. Type checking can be static or
+dynamic. The static type checking can be based on explicit type decoration
+or based on implicit type inferences.
 
-AF-Raf is a new agent oriented programming language specifically
-developed to incorporate the support for organising multiagent
-systems at the language level.
 
-One important feature of the AF-Raf programming language is its integration
-with the AgentFactory development framework, which provides support for the
-development and deployment of agent-based systems.
+\paragraph{Type Checking in AF-Raf.}
+By \emph{type-checking} we mean deciding whether a given ground term~$\tau$
+belongs to a given type~$\delta$. This is the operation performed, for
+example, on the content of a message before sending it. We include here a
+reference implementation for type-checking. We use the language OCaml, for
+it is terse.
 
-The main particularity of AF-Raf, that makes it unique among agent oriented
-programming languages is that, even though it is built upon the agent
-oriented conceptual framework, it also draws inspiration from functional
-languages.
+First, we need data structures for representing terms and types. Terms are
+either non-primitive (abstract) or primitive (integers or strings).
+\begin{verbatim}
+    type term =
+          | A of string * term list
+          | I of int
+          | S of string
+\end{verbatim}
+A non-primitive term has the shape $A(\nu,\Theta)$, where $\nu$~is a
+function name and $\Theta$~is a list of terms. A primitive term simply maps
+to the primitive types of the language in which the type-checker is
+written.
 
-AF-Raf has two fundamental components, a \textit{belief base}
-and a \textit{rule base}. The belief base models the agent's view of the
-current state of its environment and the rule base models the agent's
-behaviour.
+Similarly, types are either abstract or primitive.
+\begin{verbatim}
+    type type_ =
+          | AT of (string * type_ list) list
+          | IT of (int -> bool)
+          | ST of (string -> bool)
+\end{verbatim}
+An abstract type is defined by a list of patterns. Primitive types contain the
+user-defined predicates. For example, the type
+\[\mathit{integer}[\mathbf{this}\%2==0]\] is represented in the type-checker by
+\begin{verbatim}
+   IT (fun x -> x mod 2 = 0)
+\end{verbatim}
 
-Beliefs are terms, where a term denotes an expression that can be obtained from
-either a constant symbol, a variable or a function symbol. Rules are
-represented by a name (optional), a query and an action.  The code in
-Figure~\ref{fig:AF-Raf} illustrates an AF-Raf agent.
+Type-checking is then straightforward.
+\begin{verbatim}
+   let rec check v ts = match v, ts with
+     | A (v, vs), AT ts ->
+         let f (t, ts) =
+           v = t && all2 check vs ts in
+         List.exists f ts
+     | I v, IT ts -> ts v
+     | S v, ST ts -> ts v
+     | _ -> false
+\end{verbatim}
+This code first checks that the term and the type are of the same kind. For
+example, it returns false if the term is non-primitive but the type is
+primitive. The interesting branch is the first one, which is taken when
+both the term and the type are abstract. It checks whether there exists a
+pattern (in \verb|ts|) that matches the term with the head~\verb|v| and the
+sub-terms~\verb|vs|. The function~\verb|f| processes one pattern with the
+head~\verb|t| and the sub-types~\verb|ts|. The heads must match and the
+sub-terms must match, respectively, the sub-types. The function \verb|all2|
+wraps the standard function \verb|List.for_all2| so that it returns
+\verb|false| when the number of sub-terms is different from the number of
+sub-types.
+\begin{verbatim}
+    let all2 f xs ys =
+      try List.for_all2 f xs ys
+      with Invalid_argument _ -> false
+\end{verbatim}
+
+We exhibited an algorithm, hence type-checking is decidable. As it is, the
+function \verb|check| takes exponential time in the size of the term.
+However, with memoization its complexity is~$O(mn)$, where $m$~is the
+size of the term and $n$~is the size of all type definitions.
+\rg{Maybe expand a bit here, with some example?}
+
+% >>>
+% >>>
+\section{Roles} % <<<
+
+\subsection{Specifying Roles in AF-Raf} % <<<
+
+The theory of organisations, from economy, studies how formal rules of
+interaction enable groups of people to achieve common goals; the theory of
+roles, from sociology, studies how individuals fit in multiple informal
+groups. Both theories influenced prior attempts to structure agent systems.
+Several agent-oriented methodologies and libraries incorporate the concept
+of organisation and the concept of role.  However, there is little work on
+designing language features with the specific purpose of supporting large
+agent systems~\cite{collier2005,DBLP:journals/entcs/BaldoniBT06}. We
+approached this language design problem by drawing inspiration from analogies
+between agent-oriented programming languages and functional languages. For
+concreteness, we focused on 2APL~\cite{DBLP:journals/aamas/Dastani08} and
+Haskell~\cite{web:haskell}.
+
+Haskell and 2APL are very different languages. We did not try to establish
+any sort of formal connection between them, but rather to identify fruitful
+high-level similarities. The task was akin trying to draw the Earth's
+surface on paper---much easier to do locally than globally. We proceeded,
+therefore, by finding a contact point, seeing what it tells about its
+surroundings, and then repeating.
+
+\paragraph{Functions as Messages} % <<<
+
+A function call $f\,x$ is evaluated by `sending'~$x$ to $f$'s body,
+evaluating the body, and then receiving the result. The process is
+analogous to the exchange of a pair of messages between two agents. For
+example, the role \textit{Calculator} could be specified as follows.
+\begin{verbatim}
+role Num a => Calculator a
+  eval :: Expr a -> a
+\end{verbatim}
+An agent that plays the role $\mathit{Calculator}\,\mathit{Int}$ knows
+how to compute expressions such as $(3+3)\times5$, given another agent
+that plays the role $\mathit{Num}\,\mathit{Int}$.
+\begin{verbatim}
+role Num a
+  add :: Pair a -> a
+  multiply :: Pair a -> a
+\end{verbatim}
+An agent that plays the role $\mathit{Num}\,\mathit{Int}$ knows how to
+compute basic operations on integers, such as $3+3$ and $6\times5$. The
+types \textit{Expr} and \textit{Pair} constrain the content of messages.
+\begin{verbatim}
+data Expr a = Times (Expr a) (Expr a)
+            | Plus (Expr a) (Expr a)
+            | Ct a
+data Pair a = MkPair a a
+\end{verbatim}
+Given a user agent~$u$, an agent~$c$ that plays
+$\mathit{Calculator}\,\mathit{Int}$, and an agent~$n$ that plays
+$\mathit{Num}\,\mathit{Int}$, the following is a possible exchange of
+messages.\\ \\
+$u\to c :
+  \mathit{eval}(\mathit{call}(n), \mathit{Times}(
+    \mathit{Plus}(\mathit{Ct}(3),\mathit{Ct}(3)),\mathit{Ct}(5)))\\
+c\to n : \mathit{add}(\mathit{call}(), \mathit{MkPair}(3, 3))\\
+n\to c : \mathit{add}(\mathit{return}(), 6)\\
+c\to n : \mathit{multiply}(\mathit{call}(), \mathit{MkPair}(6, 5))\\
+n\to c : \mathit{multiply}(\mathit{return}(), 30)\\
+c\to u : \mathit{eval}(\mathit{return}(), 30)$\\
+
+In general, $f::a\to b$ says that the agent understands messages of the
+form $f(\mathit{call}(\alpha_1,\ldots,\alpha_n),x)$ and eventually replies
+to each of them with a message of the form $f(\mathit{return}(),y)$. Here,
+$\alpha_1$, \dots,~$\alpha_n$ are (addresses of) other agents, $x$~is a
+value of type~$a$, and $y$~is a value of type~$b$.
+
+The analogy so far is already fruitful. The content of 2APL messages is a
+(ground) term or an atomic formula. Since 2APL is built on top
+JADE~\cite{DBLP:books/sp/map2005/BellifemineBCP05}, the message content may
+also be declared as part of an ontology. However, if we would show the JADE
+ontology for arithmetic expressions we would run over the page limit.
+Contrast with the three short lines used here to define $\mathit{Expr}\,a$.
+The definition is not only short and readable, but also polymorphic in the
+type~$a$ of the constants, and rooted in the theory of algebraic data types
+(see, for example, \cite{DBLP:conf/ctcs/Hagino87}).
 
 \begin{figure}\footnotesize % <<<
 \begin{verbatim}
-include stdio
-
-rule State(initialized()) & Name(n) {
-      println("hello from " + n);
-}
-
-rule Monitoring(name, addr) {
-      println("ask " + name + " for status");
-      send(agentID(name, addr), request(status()));
-}
-
-rule Message(other, status(alive())) {
-      println("OK, ask again.");
-      send(other, request(status()));
-}
-
-rule Message(other, status()) {
-      println("Oh, someone wants me alive!");
-      send(other, inform(status(alive())));
-}
+agent foo plays Calculator Int(n)
+  R-rules:
+    eval(Ct(x)) <- x
+    eval(Times(x, y)) <-
+      n.multiply(MkPair(this.eval(x), this.eval(y)))
+    eval(Plus(x, y)) <-
+      n.add(MkPair(this.eval(x), this.eval(y)))
 \end{verbatim}
-\caption{The code of an AF-Raf agent}
-\label{fig:AF-Raf}
+\caption{Implementing a role in 2APL}\label{fig:roleimpl2APL}
 \end{figure} % >>>
 
-The rules are evaluated at each time-step. The first stage of evaluating a
-rule is to evaluate the query on the current belief base. The result is a
-set of query results. \rg{A result is a set of results? Empty set is
-special?} If the set is not empty, the action is then evaluated for every
-query result. A particular query result says with what term to substitute
-each free variable in the action. In other words, a query result is a set
-of bindings that covers all the free variable in the action (of the rule).
-The first step of evaluating the action is to apply these substitutions.
-The next step is to execute it.
+The analogy is not perfect. The earlier declaration for the role
+$\mathit{Calculator}\,a$ is superficially similar to the following type
+class declaration.
+\begin{verbatim}
+class Num a => Calculator a
+  eval :: Expr a -> a
+\end{verbatim}
+This declaration reads ``a type~$a$ that is a member of the class
+\textit{Num} is also a member of class \textit{Calculator} provided there
+exist a function \textit{eval} with the proper type.'' In contrast, the
+earlier role declaration reads ``an \emph{unnamed} agent plays role
+$\mathit{Calculator}\,a$ if it answers to messages
+$\mathit{eval}(\mathit{call}(n),\ldots)$ by messages
+$\mathit{eval}(\mathit{return}(),\ldots)$, where $n$~is an agent that plays
+$\mathit{Num}\,a$.'' Here $a$~is a type variable.  When implementing a role
+the agent must be named, as seen in Figure~\ref{fig:roleimpl2APL}. Because
+\textit{foo} plays $\mathit{Calculator}\,\mathit{Int}$, the agent
+interpreter creates a goal $\mathit{eval}(m,\mathit{call}(n),x)$ for all
+messages with shape $\mathit{eval}(\mathit{call}(n),x)$ that come from some
+agent~$m$.  One could handle these goals using 2APL's PG-rules.
+\begin{verbatim}
+eval(m, call(n), Ct(x)) <- true |
+  send(m, role, eval(return(), x))
+\end{verbatim}
+The first R-rule in Figure~\ref{fig:roleimpl2APL} does exactly the same,
+but is more compact. The other two R-rules, however, are much more
+cumbersome to simulate with the other kinds of rules. The main reason is
+that the notation $n.\mathit{add}(x)$ hides sending a message
+$\mathit{add}(\mathit{call}(),x)$ to agent~$n$, waiting for a reply
+$\mathit{add}(\mathit{return}(),y)$, and extracting~$y$. The (goal) query
+of an R-rule may only be an atom; the right side of an R-rule is an
+expression that is evaluated as described and whose result is sent as a
+message.  This is a rough and informal sketch of the intended semantics
+that needs to be made precise.
 
-An action is either a simple action or a composed action. Executing a
-simple action means executing a piece of associated Java code. Examples of
-simple actions include sending a message (\textit{send}), logging a string
-(\textit{println}), and adopting a belief (\textit{adopt}).  Composed
-actions, also referred to as plans, include sequence and while loops.
+Note that two agents \textit{foo} and \textit{bar} may be instances of the
+same 2APL module, yet only \textit{foo} plays the role
+$\mathit{Calculator}\,\mathit{Int}$. Also, note that an agent may be
+declared as playing a role without having access to its implementation. In
+fact, it may be that the basic behaviour of the agent is programmed in a
+different language than 2APL. Such flexibility helps code reuse.
 
-Sensors are pieces of Java code that are run at each time-step. They are
-typically used to update the belief base according to the changes in the
-environment. For example, there is a standard sensor (defined in
-\texttt{stdio}) that adds a belief $\mathit{Message}(s,c)$ when a message
-with content~$c$ is received from sender~$s$. % >>>
-\section{Defining core concepts in AF-Raf} % <<<
+In summary, the vague and informal intuition that a function is like a pair
+of messages, one carrying the arguments and one carrying the result, led us
+to two interesting observations. First, algebraic data types are convenient
+for describing the content of messages. We expect to see fewer runtime
+errors once messages are typed. Second, we developed a notion of role in
+the context of the 2APL language. These roles have certain similarities
+with existing 2APL modules and with Java interfaces, but are nevertheless
+distinct concepts.
+% >>>
 
-A number of concepts stand at the foundation of the AF-Raf programming
-language. These concepts include: beliefs, rules, actions, sensors, roles,
-sessions, and types. They are related to one another and the unique
-features of AF-Raf are built upon them.
 
-Beliefs and rules represent the AF-Raf's core concepts. Beliefs in AF-Raf
-are regarded as logical terms and represented in the form of trees of
-strings. Beliefs are grouped together in a belief base that can be accessed
-by, and updated by the agent. On the other hand, rules represent a means
-for accessing the belief base and also a way of triggering agent behaviour.
-Figure~\ref{fig:rule} illustrates a simple AF-Raf rule, where $status()$ and
-$request(status())$ represent AF-Raf beliefs. A rule has
-two main components besides a name, which is optional. These components are
-a query, and an action. The query puts a question to the belief base, and
-if the result matches the query then some action is triggered.  An action
-represents the actual agent's behaviour, which can range from printing
-something to the console to sending a message to another agent, creating
-another agent or even updating the belief base.  Another way to update the
-belief base is through sensors.
+% >>>
+% >>>
+\section{Sessions} % <<<
+\subsection{Specifying AF-Raf Sessions} % <<<
+
+Agents play roles and we wrote roles much like Haskell type
+classes, so it would seem that the analogue of Haskell types are
+agents. A Haskell type class is a set of Haskell types; a role is a
+set of agents that play the role. I would like to explore where
+does the intuition ``types as agents'' lead.
 
 \begin{figure}\footnotesize % <<<
 \begin{verbatim}
-rule Monitoring(name, addr) {
-      println("ask " + name + " for status");
-      send(agentID(name, addr), request(status()));
-}
+session ComputeBasicOperation(a, b)
+  a -> b: Pair Int
+  b -> a: Int
+session ComputeExpression(a, b, c)
+  c -> a: Expr Int
+  repeat ComputeBasicOperation(a, b)
+  a -> c: Int
 \end{verbatim}
-\caption{AF-Raf rules example}
-\label{fig:rule}
+\caption{Sessions for AF-Raf}\label{fig:sessions}
 \end{figure} % >>>
 
-Actions and sensors are pieces of Java code used to extend the AF-Raf
-programs. Actions are invoked within rules. There is a number of actions
-included in the standard library, which any agent can use, there is also
-the option to create new actions. Sensors are run automatically every time
-step. Sensors can range from the monitoring of the agent's message inbox to
-monitoring changes in the agent's environment.
-Figure~\ref{fig:actions-sensors} presents some of the AF-Raf standard
-actions and sensors. Both println and send actions have been used in the
-rule Monitoring illustrated in figure~\ref{fig:rule}.
+{\def\l#1->#2:#3<#4>{\mathtt{#1}\to\mathtt{#2}:#3\langle\mathsf{#4}\rangle}
+We read $f::a\to b$ as ``message $f$ is sent by agent~$a$ to agent~$b$.'' A
+type class lists several function signatures, so its natural analogue is a
+list of messages together with their endpoints. It turns out that such a
+list is very similar to the global types that describe multiparty sessions
+in the context of $\pi$-calculus. Here is an example of such a type from
+Honda et al.~\cite{dblp:conf/popl/hondayc08}:\\
+$\mu\mathbf{t}.$
+  $\l DP->K:d<bool>. $\\
+  $\l KP->K:k<bool>. $\\
+  $\l K->C:c<bool>.\mathbf{t}$
 
+This type means that process \texttt{K} receives two booleans, one from
+\texttt{DP} through channel~$d$ and one from \texttt{KP} through channel~$k$,
+then sends a boolean to~\texttt{C} through channel~$c$, and the whole process
+repeats. The main differences are that we have agents, rather than processes,
+and there are no named channels. We would therefore like to write code like
+that in Figure~\ref{fig:sessions}.  These sessions are a global description of
+the messages that should flow within an agent system. When we project
+$\mathit{ComputeExpression}(a,b,c)$ on agent~$a$ we obtain the role
+$\mathit{Calculator}\,\mathit{Int}$ from the previous section.}
 
-\begin{figure}\footnotesize % <<<
-\begin{verbatim}
-action println(s) =
-          com.agentfactory.raf.RafStandardAction$Println;
+In agent-oriented methodologies it is standard to say that ``an agent plays
+a role within an organisation,'' and therefore organisations are somehow
+collections of interacting roles, just as the sessions above are in a way
+putting together interacting roles. Similarly, in multiparty session types
+there is a notion of projecting global types onto local types. The
+essential advantage of session types is that the projection can be done
+automatically. By imitating session types, we hope that it will be possible
+to at least check automatically that the projection of a certain session on
+a certain agent matches a certain role, which the agent implements.
 
-action send(agentID(name, address), message) =
-             com.agentfactory.raf.RafStandardAction$Send;
-
-sensor com.agentfactory.raf.RafStandardSensor$Message;
-\end{verbatim}
-\caption{Standard actions and sensors}
-\label{fig:actions-sensors}
-\end{figure} % >>>
-
-
-An operation can be defined as a specific kind of rule stating that upon
-receiving a message of a particular type the agent should reply with a
-message of a specified type. The message type can be any type including the
-type unit(), and in this case there is no actual message returned. Even
-though operations can be written as rules, using syntactic sugar to
-automatise the process of message passing makes answering messages much
-easier.
-
-A role's purpose is to group together related behaviour. As stated before
-AF-Raf agents interact through message passing. AF-Raf's role concept
-reflects this by considering only those kind of behaviours (rules) that
-impact other agents through message passing, namely operations. A role is a
-set of operation types, acting in a similar way to interfaces in object
-oriented programming. When an agent plays a role it needs to give an
-implementation to all the operations defined within that role.
-
-Sessions organise the interaction between agents stating the exact order in
-which the messages should succeed. A session brings together related roles
-and maps the set of operations defined in those roles to a particular
-protocol of conversation. A session specifies the agents involved in the
-conversation, as well as the roles they play, then provides a list
-containing entries of the form: message type followed by the sender agent
-and the receiver agent.
-
-AF-Raf statically checks that the type of each call message in a session
-corresponds to an operation defined in the receiver's role, and each return
-message corresponds to an operation defined in the sender's role.
-
-AF-Raf checks dynamically that the agent playing a role actually implements
-the specified types of the operations defined in that role.  For each call
-message there's an associated call id which must appear in the return
-message. This is a way of keeping track of the message pair associated to
-an operation and enable the dynamic check that the message types correspond
-to the ones defined inside the role. If the types do not correspond an
-error is risen.
-
-Further checks are performed at runtime. Each session has a session id.
-Each message has to contain the session id so that it can be associated to
-an specific session. This enables the interpreter to monitor that the
-messages succeed in the right order.
-
-
-\subsection{Examples} % <<<
+In summary, the vague and informal intuition that a Haskell type is
+sometimes like an agent led us to the proposal of specifying global
+interactions in agent-oriented programming languages in terms of sessions.
+Moreover, it seems reasonable to expect that a precise link between these
+session and the roles proposed in the previous section can be found.
+% >>>
+% >>>
+\section{The Calculator Example} % <<<
 
 This section introduces a number of example programs that were contrived to
 illustrate AF-Raf's functionality.
@@ -1429,22 +1699,22 @@ agent BinaryCalcInt : BinaryCalc<integer> {
   rule Message(other, op(call(add(), cid, sid), pair(x, y))) {
     -Message(other, op(call(add(), cid, sid), pair(x, y)));
             z := intadd(x, y);
-    send(other, z);
+    send(other, op(return(add(), cid, sid), z));
   }
   rule Message(other, op(call(sub(), cid, sid), pair(x, y))) {
     -Message(other, op(call(sub(), cid, sid), pair(x, y)));
             z := intsub(x, y);
-    send(other, z);
+    send(other, op(return(sub(), cid, sid), z));
   }
   rule Message(other, op(call(mul(), cid, sid), pair(x, y))) {
     -Message(other, op(call(mul(), cid, sid), pair(x, y)));
             z := intmul(x, y);
-    send(other, z);
+    send(other, op(return(mul(), cid, sid), z));
   }
   rule Message(other, op(call(div(), cid, sid), pair(x, y))) {
     -Message(other, op(call(div(), cid, sid), pair(x, y)));
             z := intdiv(x, y);
-    send(other, z);
+    send(other, op(return(div(), cid, sid), z));
   }
 }
 \end{verbatim}
@@ -1547,9 +1817,258 @@ agent ExprCalc(binaryCalc : BinaryCalc<value>) : Calculator<value> {
 
 
 % >>>
+\section{Related Work}\label{ch:related} % <<<
+
+
+Ricci  and Santi developed a novel programming language, called simpAL, that
+supports types and type checking~\cite{DBLP:conf/promas/RicciS12}. SimpAl
+draws inspiration from the Agent and Artifacts
+model~\cite{DBLP:conf/atal/RicciVO07} and from the Jason programming
+language, which is based on the Belief, Desire, Intention model. SimpAL is
+conceived as an extension to the Java object oriented programming language
+with a separate agent abstraction layer.
+
+Even though this language is very different from AF-Raf, there are a
+number of overlapping concepts. SimpAL imports a social view of computation
+where agents playing different roles constitute an organisation, and work
+within a shared environment. The main building blocks of this model are
+agents, the autonomous components, and artifacts, the environmental
+components that provide functionality or services. The agent has a belief
+base, some tasks to perform and a set of plans to utilise in order to
+acomplish the tasks. SimpAl roles are very similar to AF-Raf roles in that
+they constitute a set of tasks types, where tasks are the analogous to the
+AF-Raf operations.
+
+The roles are organised in a slightly different manner compared to the
+AF-Raf's session type model, which can be seen as a kind of protocol
+prescribing the agent communication. In simpAL organisation models are used
+to define organisation types, that bring together related roles and
+artifact in coherent units named workspaces. Organisation types are
+implemented by concrete organisations. SimpAL organisation types do not put
+any constraint on the order in which interactions between agents occur, as
+AF-Raf session types do, instead they simply group together related roles
+and artifacts working in a similar way to the object oriented programming
+interfaces.
+
+A number of static type checks are performed. At the role level it is
+checked that for each task type there exists at least one plan, and for
+each plan it's checked that the type of the sent messages are only the ones
+defined in the task type. Also it's checked that the assignment of tasks
+corresponds to the task types defined in the role, and that the types of
+the messages sent to an agent correspond to that the agent can understand.
+
+Errors about beliefs that are checked include finding, inside the plans,
+beliefs that are not declared, and beliefs that are assigned with
+expressions of the wrong type.
+
+Similar checks are performed at the environment level. The usage interface
+represents the type of artifact, and contains the observable properties and
+the operations provided by the artifact. Artifact template is the actual
+artifact implementation. On the agent side are checked errors regarding
+artifact operations and its observable state. For each action in the plan
+there must be a matching operation in the artifact's interface.  Likewise,
+for each update belief statement regarding an artifact property there must
+exist a matching observable property in the usage interface. On the
+environment side is checked that the artifact templates match the
+corresponding usage interfaces. First, checks are performed to ascertain
+that for each operation declared in the interface there exists an
+implementation in the template, also for any of the observable properties
+in the template there exists a declaration in the corresponding interface
+with a compatible type.
+
+At the organisation level it is checked that each workspace, artifact, and
+agent types declared in an organisational model is actually implemented in
+the implementation of the organisation.
+\\~\\
+
+Subsequent to my proposal to integrate session types with agent programming
+languages, global session types were exploited further in the context of
+multiagent systems~\cite{DBLP:conf/dalt/AnconaDM12} to specify multiparty
+interactions and verify their correctness. They were used for automatic
+generation of self-monitoring agent systems implemented in Jason. The
+solution suggested was to generate a monitor agent that checks at runtime
+that the ongoing conversation is correct conform to the global session
+type. In this context, global session types are viewed as states, on which
+several transition steps are possible. Transitions occur with each
+successfully sent message.
+
+In order to be able to generate the agent monitor, the developer needs to
+provide Prolog rules to define global session types, to specify possible
+transitions to different states upon message sending, and to specify the
+message content types. As well, a number of changes to the code of the
+participating agents need to be done to support the integration with the
+monitor agent.
+
+There's only one monitor agent that keeps track of all messages and checks
+if there exists a new state that can be reached from the current state. If
+the transition is possible the monitor agent allows the sending action by
+acknowledging it to the sending agent. If such a transition is not
+possible the protocol fails and there's no possibility of self recovery.
+The developer has to change either the agent code or the global session
+type's specification in order to fix the error.
+\\~\\
+
+A proposed extension to the ALPHA programming language that employs roles
+as a run-time construct dates back to 2005\cite{Collier_arole-based}. An
+ALPHA agent is able to play multiple roles and be aware of them at
+run-time. The role construct, also called a role template, consists of a
+variable named role identifier, a set of commitment rules, that defines the
+behaviour, and a set of trigger conditions, that cause the activation of
+the role. Each instance of a role template has to have a unique role
+identifier. A mechanism for inheritance of roles is provided in the form of
+a possibility to  extend the agent behaviour by adding more commitment
+rules and trigger conditions.  Also, a mechanism for composition and
+aggregation of roles is outlined.
+
+However, there is no infrastructure to support the location and enactment
+of roles at run-time, and also there is no mechanism to model the
+interaction between roles. \\~\\
+
+The 3APL programming language\cite{DBLP:conf/aose/DastaniRHDM04} has a
+formal proposal to include roles as first order constructs. An agent role
+is seen as a set of behaviour rules, expected objectives, and information
+resources. An agent can assume multiple roles at a time, but only one of
+them can actually be active, from here the distinction between role
+enactment and role activation. A subset of consistent role, which do not
+contradict each other, are grouped together in agent types. At the end role
+have not been introduced in 3APL, and the decision was carried further to
+2APL\cite{DBLP:journals/aamas/Dastani08}, 3APL's successor, where modules
+are used as a substitute for roles. We argued that modules and roles have
+different functionalities within a programming language, and both are
+useful construct that cannot be reduced one to another.\\~\\
+
+
+Roles and norms for programming agent organisations. Tinnemeier 2009
+\\~\\
 
 % >>>
-%>>>
+% >>>
+
+
+
+\section{Preliminaries} % <<<
+
+This section provides an explanation of the related concepts that
+constitute a basis for the main research presented in this thesis.
+
+\subsection{Functional Languages} % <<<
+
+\subsubsection{Algebraic Data Types}
+In AF-Raf, algebraic data types offer an alternative way of defining sets
+of ground terms.
+
+\subsubsection{Type-checking}
+
+\subsubsection{Modules}
+
+The modular approach to programming implies separating the programs into
+independent modules that perform logically distinct functions. Modules are
+integrated into programs through interfaces. An interface define the
+elements required and provided by the module. The advantage of modular
+programming is that it allows one to write a module having little knowledge
+of the code in another module, and, also, it allows modules to be
+reassembled and replaced without reassembly of the whole
+system~\cite{DBLP:journals/cacm/Parnas72a}.
+
+In Haskell, modules are used to control name-spaces and to create abstract
+data types. A Haskell program can be seen as a collection of modules, where
+the main module loads up the other modules. Loading a module can be
+regarded as a big declaration. A module contains functions, types and type
+classes that are related and serve a common purpose.
+
+
+\subsubsection{Haskell Type Classes}
+
+This section reviews Haskell type classes, because they later inspire our
+notion of `role', and Haskell modules, so that it is clear they are very
+different from type classes. We use sets and equality as examples because
+we assume all readers are familiar with these basic mathematical concepts.
+\rg{Well, in a thesis you can afford the space to explain even basic concepts.}
+
+% modules
+%  - small example
+%  - information hiding and encapsulation
+%    (exact impl may change; but it is ONE)
+%  - separate compilation
+%  - analogy with Java classes
+
+Haskell modules are often used to implement abstract data types such as
+sets.  To illustrate the main features of modules in little space, the code
+in Figure~\ref{fig:haskell} is contrived.  The module \textit{Set} contains
+the type~$T$ and the functions \textit{add}, \textit{has}, and
+\textit{sub}. The \textbf{module} line hides \textit{sub} by not mentioning
+it. The names and types of the exported functions \textit{add} and
+\textit{has} are visible from outside the module, but their
+implementations, which are to the right of~$=$, are hidden.  Similarly, the
+type name~$T$ is visible from outside, but the value constructor~$V$ is
+not. For example, the set $\{1,2\}$ may be represented by the value
+$V[2,1,2]$, but this is not known to the users of the module \textit{Set}.
+The names and types visible from outside constitute the module's
+\emph{interface}.
+
+\begin{figure}\footnotesize % <<<
+\begin{verbatim}
+-- built-in and standard library
+class Eq b where
+  eq :: b -> b -> Bool
+instance Eq Int where ...
+elem x [] = False
+elem x (y:ys) = eq x y || elem x ys
+all p [] = True
+all p (x:xs) = p x && all p xs
+
+-- file set.hs
+module Set (T, add, has) where
+  data T a = V [a]
+  add (V s) x = V (x:s)
+  has (V s) x = elem x s
+  sub (V s) t = all (has t) s
+
+  instance Eq a => Eq (T a) where
+    eq s t = sub s t && sub t s
+\end{verbatim}
+\caption{Haskell type class \textit{Eq} and module \textit{Set}}
+\label{fig:haskell}
+\end{figure} % >>>
+
+% type classes
+%  - continue example
+%  - ad-hoc polymorphism: multiple implementations with the same interface
+%  - analogy with Java interfaces
+
+The type class \textit{Eq} contains types whose values can be compared for
+equality. To make a type belong to the class \textit{Eq} one must write an
+instance declaration that provides an implementation for a function
+named~$eq$. The \textbf{instance} declaration in module \textit{Set} says
+that the type constructor~$T$ transforms members of \textit{Eq} into
+members of \textit{Eq}. For example, $T(T\,\mathit{Int})$ is in \textit{Eq}
+because \textit{Int} is in~\textit{Eq}.
+
+In general, modules are responsible with information
+hiding~\cite{DBLP:journals/cacm/Parnas72a} and encapsulation.  On the other
+hand, type classes are an elegant mechanism to provide ad-hoc polymorphism,
+also known as overloading~\cite{DBLP:conf/popl/WadlerB89}: The same name
+refers to different implementations depending on the context.  Just as
+Haskell type classes are different from Haskell modules, the roles we
+introduce later are different from existing 2APL
+modules~\cite{dblp:conf/prima/dastanims08}.
+
+
+% >>>
+\subsection{Multiparty Session Types} % <<<
+
+Session types represent a type foundation for structured communication
+centered programming, that facilitate communication safety, progress and
+fidelity \cite{dblp:conf/popl/hondayc08}. The research in session types
+initiated in process calculi and programming languages with binary session,
+and it was extended to multiparty asynchronous session types. A session is
+a series of interactions which serve as a unit of communication. The
+structure of a session is abstracted as a type. Such a global type is like
+a shared agreement among communication peers, and represents the basis for
+efficient type checking through its projection onto individual peers.
+
+% >>>
+% >>>
 
 \chapter{Language Definition}\label{ch:langdef} % <<<
 
@@ -2025,386 +2544,8 @@ LINE_COMMENT: '//' ~('\n'|'\r')* ('\r'|'\n');
 \end{figure} % >>>
 
 % >>>
-\section{Algebraic Data Types and Type Checking} % <<<
-
-\subsection{Algebraic Data Types} % <<<
-\subsubsection{Types in AF-Raf}
-
-AF-Raf contributes to the AOP languages domain by being the first agent
-oriented programming language to introduce types and type-checking. \rg{I
-think this needs to be qualified: surely other languages have things like
-integers and strings, which are types.} From a practical point of view, our
-effort tries to improve upon the following scenario.
-
-\paragraph{Bad Scenario.}
-
-\rg{Needs a diagram; otherwise, hard to follow.}
-Agent~$a$ sends message $\tau_{ab}$ to agent~$b$. Agent~$b$ stores a
-subterm~$\tau_b$ of~$\tau_{ab}$ into its belief base. Later, when some
-other condition is satisfied, agent~$b$ extracts a subterm~$\tau_{bc}$ of
-term~$\tau_b$ and sends it to agent~$c$. Agent~$c$ extracts a
-subterm~$\tau_c$ of term~$\tau_{bc}$ and stores it in its belief base.
-Later, when some other condition is satisfied, agent~$c$ extracts a
-subterm~$\tau$ of~$\tau_c$. Agent~$c$ expects $\tau$ to be an integer
-literal, but instead $\tau$ is a string literal. Agent~$c$ notices the
-problem, but many things happened since agent~$a$ sent an invalid message.
-
-The goal of AF-Raf's dynamic typing is to notice such errors early.
-
-For this purpose, each agent~$a$ has two attached types. The type $\delta_b(a)$
-represents the type of $a$'s beliefs and the type $\delta_m(a)$ represents the
-type of messages that $a$ can process. These types are selected when the agent
-is created.
-
-Whenever a belief $\tau$ is added to $a$'s belief base, Agent~Factory checks
-whether that belief is in the set of terms defined by the $a$'s belief type;
-that is, the expression $\tau:\delta_b(a)$ is evaluated.  Whenever a
-message~$\tau$ is sent to agent~$a$, the expression $\tau:\delta_m(a)$ is
-evaluated, to check whether that message complies to the type of messages that
-agent~$a$ can process. In order to send a message to agent~$a$, the other agent
-needs the agent identifier of agent~$a$. Agent identifiers typically consist of
-a name and an IP address. To support the check for messages we add
-$\delta_m(a)$ to the agent identifier of agent~$a$.
-
-\paragraph{Algebraic Data Types, Primitive Types, and Aliases.}
-
-In AF-Raf, a \emph{belief} is a boolean ground term; in AF-Raf, a
-\emph{message} is a non-boolean ground term.
-
-Algebraic data types offer an alternative way of defining sets of ground
-terms. In multi-sorted predicate logic, the sort~$\sigma$ determines a set
-of ground terms, namely those of the form $\nu(*)$, where $\nu$ has a
-signature of the form $*\to\sigma$.  For example, the sort \textit{Bool}
-determines the set of terms that are formulas.  With algebraic data types,
-a type~$\delta$ is defined by a sequence of patterns, each of the form
-$\nu(\delta_1,\ldots,\delta_n)$. For example, one could define the types
-\textit{nat}, $e$, and~$o$ as follows.
-\[\mathbf{type}\,\mathit{nat} =
-  \mathit{zero}()
-  \mid\mathit{succ}(\mathit{nat})
-  \mid\mathit{add}(\mathit{nat},\mathit{nat})\]
-\[\mathbf{type}\,e =
-  \mathit{zero}()
-  \mid\mathit{succ}(o)
-  \mid\mathit{add}(e,e)
-  \mid\mathit{add}(o,o)\]
-\[\mathbf{type}\,o =
-  \mathit{succ}(e)
-  \mid\mathit{add}(o,e)
-  \mid\mathit{add}(e,o)\]
-
-In Agent~Factory, string literals and integer literals are
-also terms, and AF-Raf inherits this decision. AF-Raf has
-predefined corresponding primitive types \textit{string} and
-\textit{integer}. Moreover, any Java type is suitable to be an AF-Raf
-primitive type.
-
-Binary operators such as $+$ are also inherited from Agent~Factory. From
-the point of view of type-checking, an expressions like $2+3$ is equivalent
-to $+(2,3)$. Standard conventions on precedence and associativity are
-obeyed.
-
-More interestingly, AF-Raf has built-in the type $\mathit{integer}[\tau]$,
-where $\tau$ is a formula that may use the special variable \textbf{this}.
-For example, the type \[\mathit{integer}[\mathbf{this}\%2==0]\] defines the
-set of ground terms $\{\,\ldots,-4,-2,0,2,4,\ldots\,\}$. Similarly, AF-Raf
-has built-in the type $\mathit{string}[\tau]$. For example, the type
-\[\mathit{string}[\mathbf{this}\;\mathbf{matches}\;\verb|"[a-z]+"|]\]
-defines the set of string literals that match the given regular expression.
-
-Enhanced with algebraic data types, the AF-Raf programming language has
-virtually endless possibilities to define new types. The primitive types
-are combined using discriminated union and cartesian product in the manner
-described above.
-
-To support the interaction with untyped languages, AF-Raf also has built-in
-the type \textit{Any}, which defines the set of all ground terms.
-
-Finally, one may define type aliases.
-$\mathbf{type}\,\delta=\delta'$
-
-Such aliases are especially useful when $\delta'$ is of the form
-$\mathit{integer}[\tau]$ or $\mathit{string}[\tau]$, and $\tau$~is long.
-
-\todo{Example with something like {\tt type t=int*t list}.}
-
-% >>>
-\subsection{Type Checking} % <<<
-\paragraph{Type Checking.}
-By \emph{type-checking} we mean deciding whether a given ground term~$\tau$
-belongs to a given type~$\delta$. This is the operation performed, for
-example, on the content of a message before sending it. We include here a
-reference implementation for type-checking. We use the language OCaml, for
-it is terse.
-
-First, we need data structures for representing terms and types. Terms are
-either non-primitive (abstract) or primitive (integers or strings).
-\begin{verbatim}
-    type term =
-          | A of string * term list
-          | I of int
-          | S of string
-\end{verbatim}
-A non-primitive term has the shape $A(\nu,\Theta)$, where $\nu$~is a
-function name and $\Theta$~is a list of terms. A primitive term simply maps
-to the primitive types of the language in which the type-checker is
-written.
-
-Similarly, types are either abstract or primitive.
-\begin{verbatim}
-    type type_ =
-          | AT of (string * type_ list) list
-          | IT of (int -> bool)
-          | ST of (string -> bool)
-\end{verbatim}
-An abstract type is defined by a list of patterns. Primitive types contain the
-user-defined predicates. For example, the type
-\[\mathit{integer}[\mathbf{this}\%2==0]\] is represented in the type-checker by
-\begin{verbatim}
-   IT (fun x -> x mod 2 = 0)
-\end{verbatim}
-
-Type-checking is then straightforward.
-\begin{verbatim}
-   let rec check v ts = match v, ts with
-     | A (v, vs), AT ts ->
-         let f (t, ts) =
-           v = t && all2 check vs ts in
-         List.exists f ts
-     | I v, IT ts -> ts v
-     | S v, ST ts -> ts v
-     | _ -> false
-\end{verbatim}
-This code first checks that the term and the type are of the same kind. For
-example, it returns false if the term is non-primitive but the type is
-primitive. The interesting branch is the first one, which is taken when
-both the term and the type are abstract. It checks whether there exists a
-pattern (in \verb|ts|) that matches the term with the head~\verb|v| and the
-sub-terms~\verb|vs|. The function~\verb|f| processes one pattern with the
-head~\verb|t| and the sub-types~\verb|ts|. The heads must match and the
-sub-terms must match, respectively, the sub-types. The function \verb|all2|
-wraps the standard function \verb|List.for_all2| so that it returns
-\verb|false| when the number of sub-terms is different from the number of
-sub-types.
-\begin{verbatim}
-    let all2 f xs ys =
-      try List.for_all2 f xs ys
-      with Invalid_argument _ -> false
-\end{verbatim}
-
-We exhibited an algorithm, hence type-checking is decidable. As it is, the
-function \verb|check| takes exponential time in the size of the term.
-However, with memoization its complexity is~$O(mn)$, where $m$~is the
-size of the term and $n$~is the size of all type definitions.
-\rg{Maybe expand a bit here, with some example?}
-
-% >>>
-% >>>
 \section{Roles and Session Types} % <<<
 
-\subsection{Specifying Roles in AF-Raf} % <<<
-
-The theory of organisations, from economy, studies how formal rules of
-interaction enable groups of people to achieve common goals; the theory of
-roles, from sociology, studies how individuals fit in multiple informal
-groups. Both theories influenced prior attempts to structure agent systems.
-Several agent-oriented methodologies and libraries incorporate the concept
-of organisation and the concept of role.  However, there is little work on
-designing language features with the specific purpose of supporting large
-agent systems~\cite{collier2005,DBLP:journals/entcs/BaldoniBT06}. We
-approached this language design problem by drawing inspiration from analogies
-between agent-oriented programming languages and functional languages. For
-concreteness, we focused on 2APL~\cite{DBLP:journals/aamas/Dastani08} and
-Haskell~\cite{web:haskell}.
-
-Haskell and 2APL are very different languages. We did not try to establish
-any sort of formal connection between them, but rather to identify fruitful
-high-level similarities. The task was akin trying to draw the Earth's
-surface on paper---much easier to do locally than globally. We proceeded,
-therefore, by finding a contact point, seeing what it tells about its
-surroundings, and then repeating.
-
-\paragraph{Functions as Messages} % <<<
-
-A function call $f\,x$ is evaluated by `sending'~$x$ to $f$'s body,
-evaluating the body, and then receiving the result. The process is
-analogous to the exchange of a pair of messages between two agents. For
-example, the role \textit{Calculator} could be specified as follows.
-\begin{verbatim}
-role Num a => Calculator a
-  eval :: Expr a -> a
-\end{verbatim}
-An agent that plays the role $\mathit{Calculator}\,\mathit{Int}$ knows
-how to compute expressions such as $(3+3)\times5$, given another agent
-that plays the role $\mathit{Num}\,\mathit{Int}$.
-\begin{verbatim}
-role Num a
-  add :: Pair a -> a
-  multiply :: Pair a -> a
-\end{verbatim}
-An agent that plays the role $\mathit{Num}\,\mathit{Int}$ knows how to
-compute basic operations on integers, such as $3+3$ and $6\times5$. The
-types \textit{Expr} and \textit{Pair} constrain the content of messages.
-\begin{verbatim}
-data Expr a = Times (Expr a) (Expr a)
-            | Plus (Expr a) (Expr a)
-            | Ct a
-data Pair a = MkPair a a
-\end{verbatim}
-Given a user agent~$u$, an agent~$c$ that plays
-$\mathit{Calculator}\,\mathit{Int}$, and an agent~$n$ that plays
-$\mathit{Num}\,\mathit{Int}$, the following is a possible exchange of
-messages.\\ \\
-$u\to c :
-  \mathit{eval}(\mathit{call}(n), \mathit{Times}(
-    \mathit{Plus}(\mathit{Ct}(3),\mathit{Ct}(3)),\mathit{Ct}(5)))\\
-c\to n : \mathit{add}(\mathit{call}(), \mathit{MkPair}(3, 3))\\
-n\to c : \mathit{add}(\mathit{return}(), 6)\\
-c\to n : \mathit{multiply}(\mathit{call}(), \mathit{MkPair}(6, 5))\\
-n\to c : \mathit{multiply}(\mathit{return}(), 30)\\
-c\to u : \mathit{eval}(\mathit{return}(), 30)$\\
-
-In general, $f::a\to b$ says that the agent understands messages of the
-form $f(\mathit{call}(\alpha_1,\ldots,\alpha_n),x)$ and eventually replies
-to each of them with a message of the form $f(\mathit{return}(),y)$. Here,
-$\alpha_1$, \dots,~$\alpha_n$ are (addresses of) other agents, $x$~is a
-value of type~$a$, and $y$~is a value of type~$b$.
-
-The analogy so far is already fruitful. The content of 2APL messages is a
-(ground) term or an atomic formula. Since 2APL is built on top
-JADE~\cite{DBLP:books/sp/map2005/BellifemineBCP05}, the message content may
-also be declared as part of an ontology. However, if we would show the JADE
-ontology for arithmetic expressions we would run over the page limit.
-Contrast with the three short lines used here to define $\mathit{Expr}\,a$.
-The definition is not only short and readable, but also polymorphic in the
-type~$a$ of the constants, and rooted in the theory of algebraic data types
-(see, for example, \cite{DBLP:conf/ctcs/Hagino87}).
-
-\begin{figure}\footnotesize % <<<
-\begin{verbatim}
-agent foo plays Calculator Int(n)
-  R-rules:
-    eval(Ct(x)) <- x
-    eval(Times(x, y)) <-
-      n.multiply(MkPair(this.eval(x), this.eval(y)))
-    eval(Plus(x, y)) <-
-      n.add(MkPair(this.eval(x), this.eval(y)))
-\end{verbatim}
-\caption{Implementing a role in 2APL}\label{fig:roleimpl2APL}
-\end{figure} % >>>
-
-The analogy is not perfect. The earlier declaration for the role
-$\mathit{Calculator}\,a$ is superficially similar to the following type
-class declaration.
-\begin{verbatim}
-class Num a => Calculator a
-  eval :: Expr a -> a
-\end{verbatim}
-This declaration reads ``a type~$a$ that is a member of the class
-\textit{Num} is also a member of class \textit{Calculator} provided there
-exist a function \textit{eval} with the proper type.'' In contrast, the
-earlier role declaration reads ``an \emph{unnamed} agent plays role
-$\mathit{Calculator}\,a$ if it answers to messages
-$\mathit{eval}(\mathit{call}(n),\ldots)$ by messages
-$\mathit{eval}(\mathit{return}(),\ldots)$, where $n$~is an agent that plays
-$\mathit{Num}\,a$.'' Here $a$~is a type variable.  When implementing a role
-the agent must be named, as seen in Figure~\ref{fig:roleimpl2APL}. Because
-\textit{foo} plays $\mathit{Calculator}\,\mathit{Int}$, the agent
-interpreter creates a goal $\mathit{eval}(m,\mathit{call}(n),x)$ for all
-messages with shape $\mathit{eval}(\mathit{call}(n),x)$ that come from some
-agent~$m$.  One could handle these goals using 2APL's PG-rules.
-\begin{verbatim}
-eval(m, call(n), Ct(x)) <- true |
-  send(m, role, eval(return(), x))
-\end{verbatim}
-The first R-rule in Figure~\ref{fig:roleimpl2APL} does exactly the same,
-but is more compact. The other two R-rules, however, are much more
-cumbersome to simulate with the other kinds of rules. The main reason is
-that the notation $n.\mathit{add}(x)$ hides sending a message
-$\mathit{add}(\mathit{call}(),x)$ to agent~$n$, waiting for a reply
-$\mathit{add}(\mathit{return}(),y)$, and extracting~$y$. The (goal) query
-of an R-rule may only be an atom; the right side of an R-rule is an
-expression that is evaluated as described and whose result is sent as a
-message.  This is a rough and informal sketch of the intended semantics
-that needs to be made precise.
-
-Note that two agents \textit{foo} and \textit{bar} may be instances of the
-same 2APL module, yet only \textit{foo} plays the role
-$\mathit{Calculator}\,\mathit{Int}$. Also, note that an agent may be
-declared as playing a role without having access to its implementation. In
-fact, it may be that the basic behaviour of the agent is programmed in a
-different language than 2APL. Such flexibility helps code reuse.
-
-In summary, the vague and informal intuition that a function is like a pair
-of messages, one carrying the arguments and one carrying the result, led us
-to two interesting observations. First, algebraic data types are convenient
-for describing the content of messages. We expect to see fewer runtime
-errors once messages are typed. Second, we developed a notion of role in
-the context of the 2APL language. These roles have certain similarities
-with existing 2APL modules and with Java interfaces, but are nevertheless
-distinct concepts.
-% >>>
-
-\subsection{Specifying AF-Raf Sessions} % <<<
-
-Agents play roles and we wrote roles much like Haskell type
-classes, so it would seem that the analogue of Haskell types are
-agents. A Haskell type class is a set of Haskell types; a role is a
-set of agents that play the role. I would like to explore where
-does the intuition ``types as agents'' lead.
-
-\begin{figure}\footnotesize % <<<
-\begin{verbatim}
-session ComputeBasicOperation(a, b)
-  a -> b: Pair Int
-  b -> a: Int
-session ComputeExpression(a, b, c)
-  c -> a: Expr Int
-  repeat ComputeBasicOperation(a, b)
-  a -> c: Int
-\end{verbatim}
-\caption{Sessions for AF-Raf}\label{fig:sessions}
-\end{figure} % >>>
-
-{\def\l#1->#2:#3<#4>{\mathtt{#1}\to\mathtt{#2}:#3\langle\mathsf{#4}\rangle}
-We read $f::a\to b$ as ``message $f$ is sent by agent~$a$ to agent~$b$.'' A
-type class lists several function signatures, so its natural analogue is a
-list of messages together with their endpoints. It turns out that such a
-list is very similar to the global types that describe multiparty sessions
-in the context of $\pi$-calculus. Here is an example of such a type from
-Honda et al.~\cite{dblp:conf/popl/hondayc08}:\\
-$\mu\mathbf{t}.$
-  $\l DP->K:d<bool>. $\\
-  $\l KP->K:k<bool>. $\\
-  $\l K->C:c<bool>.\mathbf{t}$
-
-This type means that process \texttt{K} receives two booleans, one from
-\texttt{DP} through channel~$d$ and one from \texttt{KP} through channel~$k$,
-then sends a boolean to~\texttt{C} through channel~$c$, and the whole process
-repeats. The main differences are that we have agents, rather than processes,
-and there are no named channels. We would therefore like to write code like
-that in Figure~\ref{fig:sessions}.  These sessions are a global description of
-the messages that should flow within an agent system. When we project
-$\mathit{ComputeExpression}(a,b,c)$ on agent~$a$ we obtain the role
-$\mathit{Calculator}\,\mathit{Int}$ from the previous section.}
-
-In agent-oriented methodologies it is standard to say that ``an agent plays
-a role within an organisation,'' and therefore organisations are somehow
-collections of interacting roles, just as the sessions above are in a way
-putting together interacting roles. Similarly, in multiparty session types
-there is a notion of projecting global types onto local types. The
-essential advantage of session types is that the projection can be done
-automatically. By imitating session types, we hope that it will be possible
-to at least check automatically that the projection of a certain session on
-a certain agent matches a certain role, which the agent implements.
-
-In summary, the vague and informal intuition that a Haskell type is
-sometimes like an agent led us to the proposal of specifying global
-interactions in agent-oriented programming languages in terms of sessions.
-Moreover, it seems reasonable to expect that a precise link between these
-session and the roles proposed in the previous section can be found.
-% >>>
-% >>>
 
 % >>>
 \section{Operational Semantics}\label{sec:opsem} % <<<
@@ -2570,131 +2711,6 @@ agent ContractNetSeller(b1 : BuyerRole, b2 : BuyerRole): Seller {
 % >>>
 % >>>
 
-\chapter{Related Work}\label{ch:related} % <<<
-
-
-Ricci  and Santi developed a novel programming language, called simpAL, that
-supports types and type checking~\cite{DBLP:conf/promas/RicciS12}. SimpAl
-draws inspiration from the Agent and Artifacts
-model~\cite{DBLP:conf/atal/RicciVO07} and from the Jason programming
-language, which is based on the Belief, Desire, Intention model. SimpAL is
-conceived as an extension to the Java object oriented programming language
-with a separate agent abstraction layer.
-
-Even though this language is very different from AF-Raf, there are a
-number of overlapping concepts. SimpAL imports a social view of computation
-where agents playing different roles constitute an organisation, and work
-within a shared environment. The main building blocks of this model are
-agents, the autonomous components, and artifacts, the environmental
-components that provide functionality or services. The agent has a belief
-base, some tasks to perform and a set of plans to utilise in order to
-acomplish the tasks. SimpAl roles are very similar to AF-Raf roles in that
-they constitute a set of tasks types, where tasks are the analogous to the
-AF-Raf operations.
-
-The roles are organised in a slightly different manner compared to the
-AF-Raf's session type model, which can be seen as a kind of protocol
-prescribing the agent communication. In simpAL organisation models are used
-to define organisation types, that bring together related roles and
-artifact in coherent units named workspaces. Organisation types are
-implemented by concrete organisations. SimpAL organisation types do not put
-any constraint on the order in which interactions between agents occur, as
-AF-Raf session types do, instead they simply group together related roles
-and artifacts working in a similar way to the object oriented programming
-interfaces.
-
-A number of static type checks are performed. At the role level it is
-checked that for each task type there exists at least one plan, and for
-each plan it's checked that the type of the sent messages are only the ones
-defined in the task type. Also it's checked that the assignment of tasks
-corresponds to the task types defined in the role, and that the types of
-the messages sent to an agent correspond to that the agent can understand.
-
-Errors about beliefs that are checked include finding, inside the plans,
-beliefs that are not declared, and beliefs that are assigned with
-expressions of the wrong type.
-
-Similar checks are performed at the environment level. The usage interface
-represents the type of artifact, and contains the observable properties and
-the operations provided by the artifact. Artifact template is the actual
-artifact implementation. On the agent side are checked errors regarding
-artifact operations and its observable state. For each action in the plan
-there must be a matching operation in the artifact's interface.  Likewise,
-for each update belief statement regarding an artifact property there must
-exist a matching observable property in the usage interface. On the
-environment side is checked that the artifact templates match the
-corresponding usage interfaces. First, checks are performed to ascertain
-that for each operation declared in the interface there exists an
-implementation in the template, also for any of the observable properties
-in the template there exists a declaration in the corresponding interface
-with a compatible type.
-
-At the organisation level it is checked that each workspace, artifact, and
-agent types declared in an organisational model is actually implemented in
-the implementation of the organisation.
-\\~\\
-
-Subsequent to my proposal to integrate session types with agent programming
-languages, global session types were exploited further in the context of
-multiagent systems~\cite{DBLP:conf/dalt/AnconaDM12} to specify multiparty
-interactions and verify their correctness. They were used for automatic
-generation of self-monitoring agent systems implemented in Jason. The
-solution suggested was to generate a monitor agent that checks at runtime
-that the ongoing conversation is correct conform to the global session
-type. In this context, global session types are viewed as states, on which
-several transition steps are possible. Transitions occur with each
-successfully sent message.
-
-In order to be able to generate the agent monitor, the developer needs to
-provide Prolog rules to define global session types, to specify possible
-transitions to different states upon message sending, and to specify the
-message content types. As well, a number of changes to the code of the
-participating agents need to be done to support the integration with the
-monitor agent.
-
-There's only one monitor agent that keeps track of all messages and checks
-if there exists a new state that can be reached from the current state. If
-the transition is possible the monitor agent allows the sending action by
-acknowledging it to the sending agent. If such a transition is not
-possible the protocol fails and there's no possibility of self recovery.
-The developer has to change either the agent code or the global session
-type's specification in order to fix the error.
-\\~\\
-
-A proposed extension to the ALPHA programming language that employs roles
-as a run-time construct dates back to 2005\cite{Collier_arole-based}. An
-ALPHA agent is able to play multiple roles and be aware of them at
-run-time. The role construct, also called a role template, consists of a
-variable named role identifier, a set of commitment rules, that defines the
-behaviour, and a set of trigger conditions, that cause the activation of
-the role. Each instance of a role template has to have a unique role
-identifier. A mechanism for inheritance of roles is provided in the form of
-a possibility to  extend the agent behaviour by adding more commitment
-rules and trigger conditions.  Also, a mechanism for composition and
-aggregation of roles is outlined.
-
-However, there is no infrastructure to support the location and enactment
-of roles at run-time, and also there is no mechanism to model the
-interaction between roles. \\~\\
-
-The 3APL programming language\cite{DBLP:conf/aose/DastaniRHDM04} has a
-formal proposal to include roles as first order constructs. An agent role
-is seen as a set of behaviour rules, expected objectives, and information
-resources. An agent can assume multiple roles at a time, but only one of
-them can actually be active, from here the distinction between role
-enactment and role activation. A subset of consistent role, which do not
-contradict each other, are grouped together in agent types. At the end role
-have not been introduced in 3APL, and the decision was carried further to
-2APL\cite{DBLP:journals/aamas/Dastani08}, 3APL's successor, where modules
-are used as a substitute for roles. We argued that modules and roles have
-different functionalities within a programming language, and both are
-useful construct that cannot be reduced one to another.\\~\\
-
-
-Roles and norms for programming agent organisations. Tinnemeier 2009
-\\~\\
-
-% >>>
 
 \chapter{Conclusions}\label{ch:conc} % <<<
 
