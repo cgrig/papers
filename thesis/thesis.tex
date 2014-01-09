@@ -2558,23 +2558,48 @@ LINE_COMMENT: '//' ~('\n'|'\r')* ('\r'|'\n');
 \section{Operational Semantics}\label{sec:opsem} % <<<
 
 There are many alternative ways for describing the semantics of a
-programming language. Operational semantics and, more specifically,
-small-step operational semantics are one of the more pragmatic methods.
+programming language. Operational semantics and are one of the more
+pragmatic methods.
 
-One way to view operational semantics is as a concise way to describe an
-interpreter for the language being defined. This interpreter has a standard
-structure. It consists of a several procedures, each responsible with
-interpreting one type of node in the abstract syntax tree. These procedures
-are often mutually recursive, and they pass around a \emph{context}. The
-typical information one would find in a context is a set of bindings from
-program variables to program values. In this view, the difference between
-big-step operational semantics and small-step operational semantics is as
-follows. In big-step operational semantics, these procedure have no
-side-effects: they all compute a \emph{value} out of a context and an
-\emph{expression}. On the other hand, in small-step operational semantics
-there is a global \emph{state} of the program --- held in an interpreter
-data structure --- which changes while the program is being interpreted.
-The effects of the interpreter's procedure exist and are important.
+One way to view operational semantics is as a concise way to describe a
+reference interpreter for the language that is being defined. The reference
+interpreter for AF-Raf agents is organized as follows. For each type of
+node in the abstract syntax tree (such as rule, assignment statement, and
+so on) there is a method responsible for interpreting it. This method
+receives two arguments, a \emph{scope} and a \emph{node}. The scope is a
+list of bindings that associate terms to local variables. The node is a
+part of the in-memory representation of a part of the agent design. In
+addition, the agent has access to the belief base. These methods can call
+each-other; for example, to interpret a rule we must know how to interpret
+an assignment statement. The methods that interpret statements return a
+term, which is the value to which the statement evaluates. Finally, the
+agents evolve in parallel. The AgentFactory framework handles the parallel
+composition of agents, and the delivery of messages.
+
+To describe the semantics of AF-Raf statements we need two kinds of
+judgments.
+\begin{align}
+\langle \Gamma_1, T_1, C_1 \rangle &\to \langle\Gamma_2,T_2\rangle
+  \label{eq:opsem-j1} \\
+\langle \Gamma_1, T_1, C_1 \rangle &\to \langle \Gamma_2, T_2, C_2 \rangle
+  \label{eq:opsem-j2}
+\end{align}
+Here $\Gamma$~is a scope, $T$~is a belief base, and $C$~is a statement.
+The judgment~\eqref{eq:opsem-j1} says that to execute $C_1$, the
+interpreter must change the scope from~$\Gamma_1$ to~$\Gamma_2$, and must
+update the belief base from~$T_1$ to~$T_2$. The
+judgment~\eqref{eq:opsem-j2} says that, \emph{in addition}, the interpreter
+must continue with interpreting~$C_2$.  States of the form
+$\langle\Gamma,T,C\rangle$ are not final; states of the form
+$\langle\Gamma,T\rangle$ are final.  The semantics for sequential
+composition is given by the following inference rule.
+\begin{align}
+\frac
+  {\langle\Gamma_0,T_0,C_1\rangle\to\langle\Gamma_1,T_1\rangle
+  \quad
+  \langle\Gamma_1,T_1,C_2\rangle\to\langle\Gamma_2,T_2\rangle}
+  {\langle\Gamma_0,T_0,(C_1;C_2)\rangle\to\langle\Gamma_2,T_2\rangle}
+\end{align}
 
 \todo{Continue here. Describe the above more formally, then move on to
 AF-Raf.}
