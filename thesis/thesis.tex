@@ -1057,14 +1057,14 @@ $\delta_m(a)$ to the agent identifier of agent~$a$.
 
 \subsection{Multi-Sorted Predicate Logic} \label{sec:multi-sorted} % <<<
 
-Our starting point is the observation that most agent oriented programming
-languages use first order logic, more specifically predicate logic terms,
-to represent beliefs and messages. As a consequence we look at how the
-introduction of types is managed in mathematical logic, and recall basic
-notions necessary to our understanding. We also introduce notational
-conventions used in AF-Raf.  Moreover, although these notions are simple,
-their definitions in literature tend to have subtle but important
-differences.
+The starting point in designing a type system is the observation that most
+agent oriented programming languages use first order logic, more
+specifically predicate logic terms, to represent beliefs and messages. As a
+consequence we should look at how the introduction of types is managed in
+mathematical logic, and recall basic notions necessary to our
+understanding. And, also, introduce notational conventions used in AF-Raf.
+Moreover, although these notions are simple, their definitions in
+literature tend to have subtle but important differences.
 
 A \emph{term} is a variable, or a function applied to other terms.
 \begin{align}
@@ -1371,29 +1371,122 @@ size of the term and $n$~is the size of all type definitions.
 % >>>
 \section{Roles} % <<<
 
-\subsection{Specifying Roles in AF-Raf} % <<<
+The theory of organisations, from social sciences, studies how formal rules
+of interaction enable groups of people to achieve common goals, on the
+other hand, the theory of roles studies how individuals fit in multiple
+informal groups. Both theories influenced prior attempts to structure agent
+systems. Several agent-oriented methodologies and libraries incorporate the
+concept of organisation and the concept of role.  However, there is little
+work on designing language features with the specific purpose of supporting
+large agent systems by organising agent
+interaction~\cite{collier2005,DBLP:journals/entcs/BaldoniBT06,DBLP:conf/oopsla/RicciS11}.
+The approach taken, regarding this language design problem, was to draw
+inspiration from analogies between agent-oriented programming languages and
+functional languages. For concreteness, we focused on
+2APL~\cite{DBLP:journals/aamas/Dastani08} and Haskell~\cite{web:haskell}.
 
-The theory of organisations, from economy, studies how formal rules of
-interaction enable groups of people to achieve common goals; the theory of
-roles, from sociology, studies how individuals fit in multiple informal
-groups. Both theories influenced prior attempts to structure agent systems.
-Several agent-oriented methodologies and libraries incorporate the concept
-of organisation and the concept of role.  However, there is little work on
-designing language features with the specific purpose of supporting large
-agent systems~\cite{collier2005,DBLP:journals/entcs/BaldoniBT06}. We
-approached this language design problem by drawing inspiration from analogies
-between agent-oriented programming languages and functional languages. For
-concreteness, we focused on 2APL~\cite{DBLP:journals/aamas/Dastani08} and
-Haskell~\cite{web:haskell}.
-
-Haskell and 2APL are very different languages. We did not try to establish
+Haskell and 2APL are very different languages. We do not try to establish
 any sort of formal connection between them, but rather to identify fruitful
-high-level similarities. The task was akin trying to draw the Earth's
-surface on paper---much easier to do locally than globally. We proceeded,
+high-level similarities. The task is akin trying to draw the Earth's
+surface on paper---much easier to do locally than globally. We proceed,
 therefore, by finding a contact point, seeing what it tells about its
-surroundings, and then repeating.
+surroundings, and then repeating. But, in order to do this, let's review
+first the Haskell type classes and modules.
 
-\paragraph{Functions as Messages} % <<<
+\subsubsection{Haskell Type Classes} % <<<
+
+This section reviews Haskell type classes, because they later inspire our
+notion of `role', and Haskell modules, so that it is clear they are very
+different from type classes. We use sets and equality as examples because
+we assume all readers are familiar with these basic mathematical concepts.
+\rg{Well, in a thesis you can afford the space to explain even basic concepts.}
+
+% modules
+%  - small example
+%  - information hiding and encapsulation
+%    (exact impl may change; but it is ONE)
+%  - separate compilation
+%  - analogy with Java classes
+
+The modular approach to programming implies separating the programs into
+independent modules that perform logically distinct functions. Modules are
+integrated into programs through interfaces. An interface define the
+elements required and provided by the module. The advantage of modular
+programming is that it allows one to write a module having little knowledge
+of the code in another module, and, also, it allows modules to be
+reassembled and replaced without reassembly of the whole
+system~\cite{DBLP:journals/cacm/Parnas72a}.
+
+In Haskell, modules are used to control name-spaces and to create abstract
+data types. Moreover, a Haskell program can be seen as a collection of
+modules, where the main module loads up the other modules. A module
+contains functions, types and type classes that are related and serve a
+common purpose.
+
+
+Haskell modules are often used to implement abstract data types such as
+sets.  To illustrate the main features of modules in little space, the code
+in Figure~\ref{fig:haskell} is contrived.  The module \textit{Set} contains
+the type~$T$ and the functions \textit{add}, \textit{has}, and
+\textit{sub}. The \textbf{module} line hides \textit{sub} by not mentioning
+it. The names and types of the exported functions \textit{add} and
+\textit{has} are visible from outside the module, but their
+implementations, which are to the right of~$=$, are hidden.  Similarly, the
+type name~$T$ is visible from outside, but the value constructor~$V$ is
+not. For example, the set $\{1,2\}$ may be represented by the value
+$V[2,1,2]$, but this is not known to the users of the module \textit{Set}.
+The names and types visible from outside constitute the module's
+\emph{interface}.
+
+\begin{figure}\footnotesize % <<<
+\begin{verbatim}
+-- built-in and standard library
+class Eq b where
+  eq :: b -> b -> Bool
+instance Eq Int where ...
+elem x [] = False
+elem x (y:ys) = eq x y || elem x ys
+all p [] = True
+all p (x:xs) = p x && all p xs
+
+-- file set.hs
+module Set (T, add, has) where
+  data T a = V [a]
+  add (V s) x = V (x:s)
+  has (V s) x = elem x s
+  sub (V s) t = all (has t) s
+
+  instance Eq a => Eq (T a) where
+    eq s t = sub s t && sub t s
+\end{verbatim}
+\caption{Haskell type class \textit{Eq} and module \textit{Set}}
+\label{fig:haskell}
+\end{figure} % >>>
+
+% type classes
+%  - continue example
+%  - ad-hoc polymorphism: multiple implementations with the same interface
+%  - analogy with Java interfaces
+
+The type class \textit{Eq} contains types whose values can be compared for
+equality. To make a type belong to the class \textit{Eq} one must write an
+instance declaration that provides an implementation for a function
+named~$eq$. The \textbf{instance} declaration in module \textit{Set} says
+that the type constructor~$T$ transforms members of \textit{Eq} into
+members of \textit{Eq}. For example, $T(T\,\mathit{Int})$ is in \textit{Eq}
+because \textit{Int} is in~\textit{Eq}.
+
+In general, modules are responsible with information
+hiding~\cite{DBLP:journals/cacm/Parnas72a} and encapsulation.  On the other
+hand, type classes are an elegant mechanism to provide ad-hoc polymorphism,
+also known as overloading~\cite{DBLP:conf/popl/WadlerB89}: The same name
+refers to different implementations depending on the context.  Just as
+Haskell type classes are different from Haskell modules, the roles we
+introduce later are different from existing 2APL
+modules~\cite{dblp:conf/prima/dastanims08}.
+% >>>
+
+\paragraph{The Functions as Messages Analogy} % <<<
 
 A function call $f\,x$ is evaluated by `sending'~$x$ to $f$'s body,
 evaluating the body, and then receiving the result. The process is
@@ -1512,13 +1605,10 @@ errors once messages are typed. Second, we developed a notion of role in
 the context of the 2APL language. These roles have certain similarities
 with existing 2APL modules and with Java interfaces, but are nevertheless
 distinct concepts.
-% >>>
-
 
 % >>>
 % >>>
 \section{Sessions} % <<<
-\subsection{Specifying AF-Raf Sessions} % <<<
 
 Agents play roles and we wrote roles much like Haskell type
 classes, so it would seem that the analogue of Haskell types are
@@ -1544,7 +1634,21 @@ We read $f::a\to b$ as ``message $f$ is sent by agent~$a$ to agent~$b$.'' A
 type class lists several function signatures, so its natural analogue is a
 list of messages together with their endpoints. It turns out that such a
 list is very similar to the global types that describe multiparty sessions
-in the context of $\pi$-calculus. Here is an example of such a type from
+in the context of $\pi$-calculus.
+
+Session types represent a type foundation for structured communication
+centered programming, that facilitate communication safety, progress and
+fidelity \cite{dblp:conf/popl/hondayc08}. The research in session types
+initiated in process calculi and programming languages with binary session,
+and it was extended to multiparty asynchronous session types. A session is
+a series of interactions which serve as a unit of communication. The
+structure of a session is abstracted as a type. Such a global type is like
+a shared agreement among communication peers, and represents the basis for
+efficient type checking through its projection onto individual peers.
+
+ 
+
+Here is an example of such a type from 
 Honda et al.~\cite{dblp:conf/popl/hondayc08}:\\
 $\mu\mathbf{t}.$
   $\l DP->K:d<bool>. $\\
@@ -1567,17 +1671,17 @@ collections of interacting roles, just as the sessions above are in a way
 putting together interacting roles. Similarly, in multiparty session types
 there is a notion of projecting global types onto local types. The
 essential advantage of session types is that the projection can be done
-automatically. By imitating session types, we hope that it will be possible
-to at least check automatically that the projection of a certain session on
-a certain agent matches a certain role, which the agent implements.
+automatically. By imitating session types, we check automatically that the
+projection of a certain session on a certain agent matches a certain role,
+which the agent implements.
 
 In summary, the vague and informal intuition that a Haskell type is
 sometimes like an agent led us to the proposal of specifying global
 interactions in agent-oriented programming languages in terms of sessions.
-Moreover, it seems reasonable to expect that a precise link between these
-session and the roles proposed in the previous section can be found.
+%Moreover, it seems reasonable to expect that a precise link between these
+%session and the roles proposed in the previous section can be found.
 % >>>
-% >>>
+
 \section{The Calculator Example} % <<<
 
 This section introduces a number of example programs that were contrived to
@@ -1943,135 +2047,7 @@ are used as a substitute for roles. We argued that modules and roles have
 different functionalities within a programming language, and both are
 useful construct that cannot be reduced one to another.\\~\\
 
-
-Roles and norms for programming agent organisations. Tinnemeier 2009
-\\~\\
-
-% >>>
-% >>>
-
-
-
-\section{Preliminaries} % <<<
-
-This section provides an explanation of the related concepts that
-constitute a basis for the main research presented in this thesis.
-
-\subsection{Functional Languages} % <<<
-
-\subsubsection{Algebraic Data Types}
-In AF-Raf, algebraic data types offer an alternative way of defining sets
-of ground terms.
-
-\subsubsection{Type-checking}
-
-\subsubsection{Modules}
-
-The modular approach to programming implies separating the programs into
-independent modules that perform logically distinct functions. Modules are
-integrated into programs through interfaces. An interface define the
-elements required and provided by the module. The advantage of modular
-programming is that it allows one to write a module having little knowledge
-of the code in another module, and, also, it allows modules to be
-reassembled and replaced without reassembly of the whole
-system~\cite{DBLP:journals/cacm/Parnas72a}.
-
-In Haskell, modules are used to control name-spaces and to create abstract
-data types. A Haskell program can be seen as a collection of modules, where
-the main module loads up the other modules. Loading a module can be
-regarded as a big declaration. A module contains functions, types and type
-classes that are related and serve a common purpose.
-
-
-\subsubsection{Haskell Type Classes}
-
-This section reviews Haskell type classes, because they later inspire our
-notion of `role', and Haskell modules, so that it is clear they are very
-different from type classes. We use sets and equality as examples because
-we assume all readers are familiar with these basic mathematical concepts.
-\rg{Well, in a thesis you can afford the space to explain even basic concepts.}
-
-% modules
-%  - small example
-%  - information hiding and encapsulation
-%    (exact impl may change; but it is ONE)
-%  - separate compilation
-%  - analogy with Java classes
-
-Haskell modules are often used to implement abstract data types such as
-sets.  To illustrate the main features of modules in little space, the code
-in Figure~\ref{fig:haskell} is contrived.  The module \textit{Set} contains
-the type~$T$ and the functions \textit{add}, \textit{has}, and
-\textit{sub}. The \textbf{module} line hides \textit{sub} by not mentioning
-it. The names and types of the exported functions \textit{add} and
-\textit{has} are visible from outside the module, but their
-implementations, which are to the right of~$=$, are hidden.  Similarly, the
-type name~$T$ is visible from outside, but the value constructor~$V$ is
-not. For example, the set $\{1,2\}$ may be represented by the value
-$V[2,1,2]$, but this is not known to the users of the module \textit{Set}.
-The names and types visible from outside constitute the module's
-\emph{interface}.
-
-\begin{figure}\footnotesize % <<<
-\begin{verbatim}
--- built-in and standard library
-class Eq b where
-  eq :: b -> b -> Bool
-instance Eq Int where ...
-elem x [] = False
-elem x (y:ys) = eq x y || elem x ys
-all p [] = True
-all p (x:xs) = p x && all p xs
-
--- file set.hs
-module Set (T, add, has) where
-  data T a = V [a]
-  add (V s) x = V (x:s)
-  has (V s) x = elem x s
-  sub (V s) t = all (has t) s
-
-  instance Eq a => Eq (T a) where
-    eq s t = sub s t && sub t s
-\end{verbatim}
-\caption{Haskell type class \textit{Eq} and module \textit{Set}}
-\label{fig:haskell}
-\end{figure} % >>>
-
-% type classes
-%  - continue example
-%  - ad-hoc polymorphism: multiple implementations with the same interface
-%  - analogy with Java interfaces
-
-The type class \textit{Eq} contains types whose values can be compared for
-equality. To make a type belong to the class \textit{Eq} one must write an
-instance declaration that provides an implementation for a function
-named~$eq$. The \textbf{instance} declaration in module \textit{Set} says
-that the type constructor~$T$ transforms members of \textit{Eq} into
-members of \textit{Eq}. For example, $T(T\,\mathit{Int})$ is in \textit{Eq}
-because \textit{Int} is in~\textit{Eq}.
-
-In general, modules are responsible with information
-hiding~\cite{DBLP:journals/cacm/Parnas72a} and encapsulation.  On the other
-hand, type classes are an elegant mechanism to provide ad-hoc polymorphism,
-also known as overloading~\cite{DBLP:conf/popl/WadlerB89}: The same name
-refers to different implementations depending on the context.  Just as
-Haskell type classes are different from Haskell modules, the roles we
-introduce later are different from existing 2APL
-modules~\cite{dblp:conf/prima/dastanims08}.
-
-
-% >>>
-\subsection{Multiparty Session Types} % <<<
-
-Session types represent a type foundation for structured communication
-centered programming, that facilitate communication safety, progress and
-fidelity \cite{dblp:conf/popl/hondayc08}. The research in session types
-initiated in process calculi and programming languages with binary session,
-and it was extended to multiparty asynchronous session types. A session is
-a series of interactions which serve as a unit of communication. The
-structure of a session is abstracted as a type. Such a global type is like
-a shared agreement among communication peers, and represents the basis for
-efficient type checking through its projection onto individual peers.
+%Roles and norms for programming agent organisations. Tinnemeier 2009
 
 % >>>
 % >>>
@@ -2739,7 +2715,6 @@ agent ContractNetSeller(b1 : BuyerRole, b2 : BuyerRole): Seller {
 
 % >>>
 % >>>
-
 
 \chapter{Conclusions}\label{ch:conc} % <<<
 
