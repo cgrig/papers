@@ -627,7 +627,7 @@ programming languages and multiparty session types. AF-Raf is not the only
 proposal in this sense. SimpAL is, also, a new programming language
 implementing social level construct. Notwithstanding the similarities,
 AF-Raf and simpAL have very different approaches, and we will discuss them
-further in the related work section of this chapter.
+further in the related work section of next chapter.
 
 In comparing the social level approaches we will use the organisational
 components identified as being the most significant to the multiagent
@@ -1960,28 +1960,33 @@ agent ExprCalc(binaryCalc : BinaryCalc<value>) : Calculator<value> {
 % >>>
 \section{Related Work}\label{ch:related} % <<<
 
+\subsubsection{SimpAL} % <<<
+Ricci  and Santi developed a novel programming language, called simpAL,
+that supports organisational structure, types and type
+checking~\cite{DBLP:conf/promas/RicciS12}. SimpAl draws inspiration from
+the Agent and Artifacts model~\cite{DBLP:conf/atal/RicciVO07} and from the
+Jason programming language, which is based on the Belief, Desire, Intention
+model. SimpAL is conceived as an extension to the Java object oriented
+programming language with a separate agent abstraction layer.
 
-Ricci  and Santi developed a novel programming language, called simpAL, that
-supports types and type checking~\cite{DBLP:conf/promas/RicciS12}. SimpAl
-draws inspiration from the Agent and Artifacts
-model~\cite{DBLP:conf/atal/RicciVO07} and from the Jason programming
-language, which is based on the Belief, Desire, Intention model. SimpAL is
-conceived as an extension to the Java object oriented programming language
-with a separate agent abstraction layer.
+Even though this language is very different from AF-Raf, there are a number
+of overlapping concepts. SimpAL imports a social view of computation where
+agents playing different roles constitute an organisation, and work within
+a shared environment. The main building blocks of this model are agents,
+the autonomous components, and artifacts, the environmental components that
+provide functionality or services. The agent has a belief base, some tasks
+to perform and a set of plans to utilise in order to accomplish the tasks.
 
-Even though this language is very different from AF-Raf, there are a
-number of overlapping concepts. SimpAL imports a social view of computation
-where agents playing different roles constitute an organisation, and work
-within a shared environment. The main building blocks of this model are
-agents, the autonomous components, and artifacts, the environmental
-components that provide functionality or services. The agent has a belief
-base, some tasks to perform and a set of plans to utilise in order to
-acomplish the tasks. SimpAl roles are very similar to AF-Raf roles in that
-they constitute a set of tasks types, where tasks are the analogous to the
-AF-Raf operations.
+SimpAl roles are similar to AF-Raf roles in that each role is composed of a
+set of tasks types, in the same way an AF-Raf role is constitute by a set
+of operations, where tasks are the analogous to the AF-Raf operations.
+However, operations and tasks are completely different entities. An
+operation is defined by the type of messages exchanged by the agents, while
+a task is defined by a set of parameters and a set of optional attributes
+(understand, goal, pre-attributes).
 
-The roles are organised in a slightly different manner compared to the
-AF-Raf's session type model, which can be seen as a kind of protocol
+SimpAL roles are organised in a slightly different manner compared to the
+AF-Raf's session model. In AF-Raf sessions provide  which can be seen as a kind of protocol
 prescribing the agent communication. In simpAL organisation models are used
 to define organisation types, that bring together related roles and
 artifact in coherent units named workspaces. Organisation types are
@@ -2020,8 +2025,9 @@ with a compatible type.
 At the organisation level it is checked that each workspace, artifact, and
 agent types declared in an organisational model is actually implemented in
 the implementation of the organisation.
-\\~\\
+% >>>
 
+\subsubsection{Self Monitoring MAS} % <<<
 Subsequent to my proposal to integrate session types with agent programming
 languages, global session types were exploited further in the context of
 multiagent systems~\cite{DBLP:conf/dalt/AnconaDM12} to specify multiparty
@@ -2047,8 +2053,9 @@ acknowledging it to the sending agent. If such a transition is not
 possible the protocol fails and there's no possibility of self recovery.
 The developer has to change either the agent code or the global session
 type's specification in order to fix the error.
-\\~\\
+% >>>
 
+\subsubsection{ALPHA} % <<<
 A proposed extension to the ALPHA programming language that employs roles
 as a run-time construct dates back to 2005\cite{Collier_arole-based}. An
 ALPHA agent is able to play multiple roles and be aware of them at
@@ -2063,8 +2070,10 @@ aggregation of roles is outlined.
 
 However, there is no infrastructure to support the location and enactment
 of roles at run-time, and also there is no mechanism to model the
-interaction between roles. \\~\\
+interaction between roles. 
+% >>>
 
+\subsubsection{3APL} % <<<
 The 3APL programming language\cite{DBLP:conf/aose/DastaniRHDM04} has a
 formal proposal to include roles as first order constructs. An agent role
 is seen as a set of behaviour rules, expected objectives, and information
@@ -2076,10 +2085,9 @@ have not been introduced in 3APL, and the decision was carried further to
 2APL\cite{DBLP:journals/aamas/Dastani08}, 3APL's successor, where modules
 are used as a substitute for roles. We argued that modules and roles have
 different functionalities within a programming language, and both are
-useful construct that cannot be reduced one to another.\\~\\
-
+useful construct that cannot be reduced one to another.
+% >>>
 %Roles and norms for programming agent organisations. Tinnemeier 2009
-
 % >>>
 % >>>
 
