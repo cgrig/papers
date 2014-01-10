@@ -478,11 +478,10 @@ the advantage of promoting proficiency and the need of less transfer time
 between tasks, but also the disadvantage of dissatisfaction associated to
 boredom.
 
-The organisational rules (constraints, conventions), structures (role
-structure) and patterns
-(interaction) have been identified
-as the most significant organisational components to the multiagent system
-development~\cite{DBLP:conf/aose/ZambonelliJW00}.
+The organisational rules (global constraints and conventions), structures
+(role structure) and patterns (describing agent interaction) have been
+identified as the most significant organisational components to the
+multiagent system development~\cite{DBLP:conf/aose/ZambonelliJW00}.
 
 Within the multiagent systems development settings, a number of
 organisational frameworks have been developed to facilitate the definition
@@ -499,18 +498,23 @@ systems~\cite{DBLP:conf/esaw/RiemsdijkHJ09}.
 % >>>
 
 \section{Agent Oriented Programming Languages} % <<<
-Role Theory and Organisational Theory have not been exploited yet at the
-programming language level. Jason~\cite{DBLP:books/sp/map2005/BordiniHV05},
+Role Theory and Organisational Theory have not been yet fully exploited at
+the programming language level.
+Jason~\cite{DBLP:books/sp/map2005/BordiniHV05},
 2APL~\cite{DBLP:journals/aamas/Dastani08}, and
 GOAL~\cite{DBLP:journals/corr/cs-AI-0207008} are three representative agent
-programming languages, being among the most widely used. What are the similarities between them, and what does
-Af-Raf bring new?
+programming languages, being among the most widely used. We will look at
+the similarities similarities between them, and try to identify the
+gap between the established functionality and the desirable functionality of the agent oriented
+programming languages, that could support a more structured multiagent
+interaction.
 
 \subsection{Jason} % <<<
 Jason is an interpreter written in Java for an extended version of the
-AgentSpeak programming language. AgentSpeak is logic based and supports
-Belief Desire Intention agent architecture. Moreover, the AgentSpeak agent
-is a reactive planning system. 
+AgentSpeak programming language, it also provides a platform for the
+development of multiagent systems. AgentSpeak is logic based and supports
+Belief Desire Intention agent architecture. Additionally, the AgentSpeak
+agent is a reactive planning system. 
 
 The core concepts defining an AgentSpeak agent are the belief base, the
 plan library, the goals and the triggering events. The belief base consists
@@ -524,8 +528,8 @@ head, a context and a body. The head is represented by the triggering
 event, the context comprises a conjunction of beliefs which determine if a
 plan is applicable, and the body, which is a sequence of basic actions or
 (sub)goals. In order to be executed plans have to be designated as
-intentions. Actually, intentions represent partially instantiated plans,
-that were selected for execution.
+intentions. More exactly, intentions represent partially instantiated
+plans, that were selected for execution.
 
 Additionally, the AgentSpeak interpreter relies on three selection
 functions. First, the event selection selects a single event from the set
@@ -533,21 +537,25 @@ of events. Second, the option function selects a plan from the set of
 applicable plans. Third, the intentions selection function selects an
 intention from the set of intentions.
 
+For managing the social level of the multiagent system, Jason can be used
+in conjunction with Moise+ organisational framework, combination known as
+J-Moise+~\cite{hubner2007j}.
+
 % >>>
 
 \subsection{2APL} % <<<
 2APL is also a Belief Desire Intention architecture-based programming
-language. 2APL integrates both the declarative and the imperatives style of
-programming. Also, 2APL incorporates two sets of programming constructs:
-the ones that implement multiagent concepts and the ones that implement
-individual agent concepts. The multiagent level constructs include
-functionality like creating individual agents, external environments,
-assigning unique names to agents, and specifying access relations. The
-individual agent concepts include beliefs, goals, actions, plans, events
-and three types of practical reasoning rules. The beliefs and goals are
-implemented in a declarative way to support the reasoning and updating
-mechanisms. Plans, external environments, events, flow of control are
-implemented in an imperative way.
+language. 2APL is modular, and integrates both the declarative and the
+imperatives style of programming. Also, 2APL incorporates two sets of
+programming constructs: the ones that implement multiagent concepts and the
+ones that implement individual agent concepts. The multiagent level
+constructs include functionality like creating individual agents, external
+environments, assigning unique names to agents, and specifying access
+relations. The individual agent concepts include beliefs, goals, actions,
+plans, events and three types of practical reasoning rules. The beliefs and
+goals are implemented in a declarative way to support the reasoning and
+updating mechanisms. Plans, external environments, events, flow of control
+are implemented in an imperative way.
 
 Environments are implemented as Java objects. Information about changes in
 the environment can be accessed by the agents in two different ways,
@@ -563,6 +571,8 @@ actions and communication actions.
 The three types of reasoning rules mentioned earlier are: rules that
 generate plans to achieve goals, rules that process internal events and
 received messages, and rules to handle and repair failed plans.
+
+2APL employs modules to implement the functionality of roles.
 % >>>
 
 \subsection{GOAL} % <<<
@@ -586,26 +596,50 @@ to achieving a goal and only drops it after it was achieved. GOAL
 distinguishes different types of goals: primitive, achievement or achieved
 goals~\cite{DBLP:conf/jelia/indriksH08}.
 
-% >>>
-
-\subsection{simpAL} % <<<
-
+GOAL doesn't manage in an explicit way the social level of the agent system.
 % >>>
 
 \subsection{Discussion} % <<<
 
-All of the languages presented above, Jason, 2APL, and GOAL, have a number
+All of the languages referred to above (Jason, 2APL, and GOAL) have a number
 of constructs to model the agent level concepts: a belief base to model
 agent knowledge, goals that model the agent desires, some sort of plans or
 strategies for achieving agent's goals, actions that result in changes,
 mechanisms for triggering actions based on the mental state of the agent,
 sensing mechanisms to get information about the changes in the environment.
-However, even though Jason and 2APL have specific proposal in this
-direction, none of them incorporate any social concept to organise agent
-interaction. The social level of multiagent systems is where Af-Raf, and
-this research work brings its contribution.
 
-Table x synthesises the main features of 2APL, Jason, GOAL and AF-Raf:
+The perspective is not as uniform when we consider the social level.
+Actually, it is quite the opposite, the approach ranges from employing
+modules to implement roles (2APL) to using an external organisational framework
+(Jason) to manage the social concepts, or disregarding this aspect
+altogether (GOAL). 
+
+None of the languages investigated above incorporate, as first order
+constructs, any social level concepts, that could support organising agent
+interaction. 
+
+The social level of multiagent systems is where this research
+work brings most of its contributions. AF-Raf is a newly designed
+agent oriented programming language, that implements social
+concepts, like the one of role, as first order constructs. It draws
+inspiration from the social sciences as well as form the functional
+programming languages and multiparty session types. AF-Raf is not the only
+proposal in this sense. SimpAL is, also, a new programming language
+implementing social level construct. Notwithstanding the similarities,
+AF-Raf and simpAL have very different approaches, and we will discuss them
+further in the related work section of this chapter.
+
+In comparing the social level approaches we will use the organisational
+components identified as being the most significant to the multiagent
+systems development: (1) the organisational rules (global constraints and
+conventions); the organisational structures (role structure); and (3) the
+organisational patterns (describing agent
+interaction)~\cite{DBLP:conf/aose/ZambonelliJW00}.
+
+Table x synthesises the main features of 2APL, Jason, GOAL, simpAL and
+AF-Raf related to the social level. Additionally is considered one more
+functionality, type checking, which is important not only for the social
+level, but for the whole language as a whole.
 \\
 
 \vbox{\tabskip=0pt \offinterlineskip
@@ -614,20 +648,17 @@ Table x synthesises the main features of 2APL, Jason, GOAL and AF-Raf:
 \hfil#&\vrule#\tabskip=1em plus2em&
 \hfil#& \vrule#& \hfil#\hfil& \vrule#&
 \hfil#& \vrule#\tabskip=0pt\cr\tablerule
-&&\omit\hidewidth \textit{Features}\hidewidth&&
-\omit\hidewidth \bf{Jason}\hidewidth&&
-%\omit\hidewidth \bf{2APL}\hidewidth&&
+&&\omit\hidewidth \textit{Social Level Features}\hidewidth&&
+%\omit\hidewidth \bf{Jason}\hidewidth&&
+\omit\hidewidth \bf{2APL}\hidewidth&&
 %\omit\hidewidth \bf{GOAL}\hidewidth&&
+%\omit\hidewidth \bf{simpAL}\hidewidth&&
 \omit\hidewidth \bf{AF-Raf}\hidewidth&\cr\tablerule
-&&belief base&&+&&+&\cr\tablerule
-&&goals&&+&&+&\cr\tablerule
-&&plans&&+&&+&\cr\tablerule
-&&actions&&+&&+&\cr\tablerule
-&&triggers&&+&&+&\cr\tablerule
-&&rules&&+&&+&\cr\tablerule
-&&sensing&&+&&+&\cr\tablerule
-&&roles&&-&&+&\cr\tablerule
-&&organisation&&-&&+&\cr\tablerule \noalign{\smallskip}
+&&organisational rules&&-&&-&\cr\tablerule
+&&organisational structure&&roles as modules&&roles as first order construct&\cr\tablerule
+&&organisational patterns&&-&&sessions&\cr\tablerule
+&&\textit{Other Functionality}&& && &\cr\tablerule
+&&type checking&&-&&+ algebraic data types&\cr\tablerule \noalign{\smallskip}
 \hfil\cr}}
 
 % >>>
@@ -2737,6 +2768,12 @@ agent ContractNetSeller(b1 : BuyerRole, b2 : BuyerRole): Seller {
 \caption{Contract Net Seller agent}
 \label{fig:contract-seller}
 \end{figure} % >>>
+
+% >>>
+\section{Jason Implementation} % <<<
+
+% >>>
+\section{Discussion} % <<<
 
 % >>>
 % >>>
