@@ -2583,41 +2583,91 @@ node in the abstract syntax tree (such as rule, assignment statement, and
 so on) there is a method responsible for interpreting it. This method
 receives two arguments, a \emph{scope} and a \emph{node}. The scope is a
 list of bindings that associate terms to local variables. The node is a
-part of the in-memory representation of a part of the agent design. In
-addition, the agent has access to the belief base. These methods can call
-each-other; for example, to interpret a rule we must know how to interpret
-an assignment statement. The methods that interpret statements return a
-term, which is the value to which the statement evaluates. Finally, the
-agents evolve in parallel. The AgentFactory framework handles the parallel
-composition of agents, and the delivery of messages.
+part of the in-memory representation of the agent design. In addition, the
+agent has access to the belief base. These methods can call each-other; for
+example, to interpret a rule we must know how to interpret an assignment
+statement. The methods that interpret statements return a term, which is
+the value to which the statement evaluates. Finally, the agents evolve in
+parallel. The AgentFactory framework handles the parallel composition of
+agents, and the delivery of~messages.
 
 To describe the semantics of AF-Raf statements we need two kinds of
 judgments.
 \begin{align}
-\langle \Gamma_1, T_1, C_1 \rangle &\to \langle\Gamma_2,T_2\rangle
+\langle \Gamma_1, T_1, C_1 \rangle &\to \langle\Gamma_2,T_2, t\rangle
   \label{eq:opsem-j1} \\
 \langle \Gamma_1, T_1, C_1 \rangle &\to \langle \Gamma_2, T_2, C_2 \rangle
   \label{eq:opsem-j2}
 \end{align}
-Here $\Gamma$~is a scope, $T$~is a belief base, and $C$~is a statement.
-The judgment~\eqref{eq:opsem-j1} says that to execute $C_1$, the
-interpreter must change the scope from~$\Gamma_1$ to~$\Gamma_2$, and must
-update the belief base from~$T_1$ to~$T_2$. The
-judgment~\eqref{eq:opsem-j2} says that, \emph{in addition}, the interpreter
-must continue with interpreting~$C_2$.  States of the form
-$\langle\Gamma,T,C\rangle$ are not final; states of the form
-$\langle\Gamma,T\rangle$ are final.  The semantics for sequential
-composition is given by the following inference rule.
+Here $\Gamma$~is a scope, $T$~is a belief base, $C$~is a statement, and
+$t$~is a term.  The judgment~\eqref{eq:opsem-j1} says that to execute
+$C_1$, the interpreter may change the scope from~$\Gamma_1$ to~$\Gamma_2$,
+may update the belief base from~$T_1$ to~$T_2$, and may report the
+value~$t$.  The judgment~\eqref{eq:opsem-j2} says that, instead of
+reporting a value as the result, the interpreter will continue with
+interpreting~$C_2$.  Often, but not always, there is at most one transition
+that the interpreter may take. In other words, the semantics are mostly
+\emph{deterministic}. The situations that allow nondeterminism will be
+emphasized later. States of the form $\langle\Gamma,T,C\rangle$ are not
+final; states of the form $\langle\Gamma,T,t\rangle$ are final.
+
+The semantics for sequential composition is given by the following
+inference rule.
 \begin{align}
 \frac
-  {\langle\Gamma_0,T_0,C_1\rangle\to\langle\Gamma_1,T_1\rangle
+  {\langle\Gamma_0,T_0,C_1\rangle\to\langle\Gamma_1,T_1,t_1\rangle
   \quad
-  \langle\Gamma_1,T_1,C_2\rangle\to\langle\Gamma_2,T_2\rangle}
-  {\langle\Gamma_0,T_0,(C_1;C_2)\rangle\to\langle\Gamma_2,T_2\rangle}
+  \langle\Gamma_1,T_1,C_2\rangle\to\langle\Gamma_2,T_2,t_2\rangle}
+  {\langle\Gamma_0,T_0,(C_1;C_2)\rangle\to\langle\Gamma_2,T_2,t_2\rangle}
+  \label{eq:opsem-seq}
+\end{align}
+Such rules are customarily read bottom-up. Below the line is the
+\emph{conclusion} which, in this case, says that the effect of the
+interpreter while executing $C_1;C_2$ could be to change the scope
+from~$\Gamma_0$ to~$\Gamma_2$ and the belief base from~$T_0$ to~$T_1$,
+provided that the hypotheses are satisfied. The \emph{hypotheses} appear
+above the line, and their left-to-right order is \emph{not} important. Any
+implementation of this rule, however, will have to treat hypotheses from
+left to right. The reason is the following. Suppose the interpreter starts
+from the state $\langle\Gamma,T,C\rangle$. The goal of the interpreter is
+to find some transition that goes out of this state. In other word, the
+interpreter will search for an inference rule whose conclusion has the form
+$\langle\Gamma,T,C\rangle\to s$, and whose hypotheses can be satisfied.
+Satisfying the hypotheses will usually imply that $s$~has a certain
+well-determined form; otherwise, the interpreter is free to choose~$s$
+nondeterministically. Now let us go back to rule~\eqref{eq:opsem-seq}. To
+check whether the second hypothesis holds, the interpreter would have to
+choose some values for $\Gamma_1$~and~$T_1$, without any guidance.
+Assuming the guess was lucky, and the second hypothesis holds, the
+interpreter would now have to check the first hypothesis. In the first
+hypothesis, however, most values (namely, $C_1$, $\Gamma_0$, $T_0$,
+$\Gamma_1$, and $T_1$) are fixed. Without much freedom, it is very unlikely
+that the first hypothesis would also work. The interpreter would have to
+backtrack, take another guess for $\Gamma_1$~and~$T_1$, and repeat. Thus,
+strictly speaking, the implementation is allowed by the operational
+semantics formalism to try (several times!) to execute $C_2$ before $C_1$,
+but such an implementation would be extremely unfortunate. It is therefore
+reasonable to say that rule~\eqref{eq:opsem-seq} indicates that $C_1$ must
+be executed before~$C_2$. Note that the value~$t_1$ that results from the
+execution of~$C_1$ is ignored. This is intended.  Other inference rules for
+the operational semantics will be given without such a detailed discussion
+of their implications.
+
+Let us now give the semantics for atomic instructions; that is, for
+assignments, {\bf new} statements, action invocations, and belief updates.
+\todo{First introduce the notations used below.}
+
+\begin{align}
+  \frac
+  {\langle\Gamma_1,T_1,C\rangle\to\langle\Gamma_2,T_2,t_2\rangle}
+  {\langle\Gamma_1,T_1,x:=C\rangle\to\langle\Gamma_2[x\mapsto t_2],T_2,t_2\rangle}
+\\
+  \frac
+  {?}
+  {\langle\Gamma,T,{\bf new}\,{\bf session}\rangle\to\langle\Gamma,T,n\rangle}
 \end{align}
 
-\todo{Continue here. Describe the above more formally, then move on to
-AF-Raf.}
+\todo{Continue here. Might need to add stuff to the state.}
 
 The semantics of programming languages is often specified as transitions
 from a state to another with each step of individual computation. The
