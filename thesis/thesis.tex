@@ -535,7 +535,9 @@ The three types of reasoning rules mentioned earlier are: rules that
 generate plans to achieve goals, rules that process internal events and
 received messages, and rules to handle and repair failed plans.
 
-2APL employs modules to implement the functionality of roles.
+2APL employs modules to implement the functionality of
+roles~\cite{dblp:conf/prima/dastanims08}. We will discuss more about it in
+the next chapter.
 % >>>
 
 \subsection{GOAL} % <<<
@@ -587,7 +589,7 @@ agent oriented programming language, that implements social
 concepts, like the one of role, as first order constructs. It draws
 inspiration from the social sciences as well as form the functional
 programming languages and multiparty session types. AF-Raf is not the only
-proposal in this sense. SimpAL is, also, a new programming language
+proposal in this sense. SimpAL~\cite{DBLP:conf/oopsla/RicciS11} is, also, a new programming language
 implementing social level construct. Notwithstanding the similarities,
 AF-Raf and simpAL have very different approaches, and we will discuss them
 further in the related work section of next chapter.
@@ -641,7 +643,7 @@ development and deployment of agent-based systems.
 The main particularity of AF-Raf, that makes it unique among agent oriented
 programming languages is that, even though it is built upon the agent
 oriented conceptual framework, it also draws inspiration from functional
-languages. Figure~\ref{fig:AF-Raf} illustrates an AF-Raf agent.
+languages.
 
 \begin{figure}\footnotesize % <<<
 \begin{verbatim}
@@ -674,7 +676,8 @@ The AF-Raf core concepts include: beliefs, rules, actions, sensors, roles,
 sessions, and types. They are related to one another and the unique
 features of AF-Raf are built upon them. Among these concepts the ones of
 roles, sessions and types constitute new approaches, and they will be
-described in more depth in the next sections. 
+described in more depth in the next sections. Figure~\ref{fig:AF-Raf}
+illustrates a simple AF-Raf agent.
 
 The first two fundamental components of AF-Raf are the \textit{belief base}
 and the \textit{rule base}. The belief base models the agent's view of the
@@ -941,8 +944,8 @@ focus is not the belief base.  Each query is term that may contain
 variables, which are interpreted as patterns.  \begin{align} \tau &::=
 \nu(\tau,\ldots,\tau) && \text{function term} \\ \tau &::= x &&
 \text{variable term} \\ \nu  &::= {\rm string} &&\text{function symbol} \\
-x &::= {\rm string} && \text{variable symbol} \end{align} The last two
-grammar rules are the same as for beliefs.  Thus, any belief can be used as
+x &::= {\rm string} && \text{variable symbol} \end{align} The grammar rules
+(3.5) and (3.7) are the same as for beliefs.  Thus, any belief can be used as
 a query:  It stands for asking whether the belief base contains that
 particular belief.
 
@@ -1116,6 +1119,9 @@ being a special predicate.
 \end{remark}
 
 \rg{Maybe add some simple examples early on.}
+% >>>
+\subsection{Algebraic Data Types} % <<<
+
 In AF-Raf, a \emph{belief} is a boolean ground term; in AF-Raf, a
 \emph{message} is a non-boolean ground term.
 
@@ -1206,48 +1212,8 @@ sorted ground terms can encode bit-strings.) In particular, there exist
 sets of ground terms that cannot be defined using algebraic data types.
 \rg{These things are probably too cryptic, and should be explained more.}
 
-% >>>
-\subsection{Algebraic Data Types} % <<<
-Algebraic data types are the natural target of pattern-matching functions.
-When the type is parametric then the pattern-matching functions typically
-support parametric polymorphism~\cite{AlgebraicDT09}, meaning that the
-values are handled identically regardless of their actual type. 
-
-In functional programming an algebraic data type is a kind of compound type
-formed by combining other types. In this context an algebra of data types
-denotes a set of types along with a collection of operations on that set of
-types. Those operations are: the Cartesian product, also known as
-multiplication or conjunction, and the discriminated union, also known as
-sum or disjunction. The operations are used to create new types.
-
 
 \paragraph{AF-Raf's Algebraic Data Types, Primitive Types, and Aliases.}
-
-In AF-Raf, a \emph{belief} is a boolean ground term; in AF-Raf, a
-\emph{message} is a non-boolean ground term.
-
-Algebraic data types offer an alternative way of defining sets of ground
-terms. In multi-sorted predicate logic, the sort~$\sigma$ determines a set
-of ground terms, namely those of the form $\nu(*)$, where $\nu$ has a
-signature of the form $*\to\sigma$.  For example, the sort \textit{Bool}
-determines the set of terms that are formulas.  With algebraic data types,
-a type~$\delta$ is defined by a sequence of patterns, each of the form
-$\nu(\delta_1,\ldots,\delta_n)$. For example, one could define the types
-\textit{nat}, $e$, and~$o$ as follows.
-\[\mathbf{type}\,\mathit{nat} =
-  \mathit{zero}()
-  \mid\mathit{succ}(\mathit{nat})
-  \mid\mathit{add}(\mathit{nat},\mathit{nat})\]
-\[\mathbf{type}\,e =
-  \mathit{zero}()
-  \mid\mathit{succ}(o)
-  \mid\mathit{add}(e,e)
-  \mid\mathit{add}(o,o)\]
-\[\mathbf{type}\,o =
-  \mathit{succ}(e)
-  \mid\mathit{add}(o,e)
-  \mid\mathit{add}(e,o)\]
-
 In Agent~Factory, string literals and integer literals are
 also terms, and AF-Raf inherits this decision. AF-Raf has
 predefined corresponding primitive types \textit{string} and
@@ -1282,6 +1248,21 @@ Such aliases are especially useful when $\delta'$ is of the form
 $\mathit{integer}[\tau]$ or $\mathit{string}[\tau]$, and $\tau$~is long.
 
 \todo{Example with something like {\tt type t=int*t list}.}
+
+Algebraic data types are the natural target of pattern-matching functions.
+When the type is parametric then the pattern-matching functions typically
+support parametric polymorphism~\cite{AlgebraicDT09}, meaning that the
+values are handled identically regardless of their actual type. 
+
+In functional programming an algebraic data type is a kind of compound type
+formed by combining other types. In this context, an algebra of data types
+denotes a set of types along with a collection of operations on that set of
+types. Those operations are: the Cartesian product, also known as
+multiplication or conjunction, and the discriminated union, also known as
+sum or disjunction. The operations are used to create new types.
+
+In AF-Raf one of the important uses of algebraic data types is to describe the content of
+messages. Type checking messages leads to fewer runtime errors.  
 
 % >>>
 \subsection{Type Checking} % <<<
@@ -1364,16 +1345,15 @@ size of the term and $n$~is the size of all type definitions.
 % >>>
 % >>>
 \section{Roles} % <<<
-
 The theory of organisations, from social sciences, studies how formal rules
 of interaction enable groups of people to achieve common goals, on the
 other hand, the theory of roles studies how individuals fit in multiple
 informal groups. Both theories influenced prior attempts to structure agent
 systems. Several agent-oriented methodologies and libraries incorporate the
 concept of organisation and the concept of role.  However, there is little
-work on designing language features with the specific purpose of supporting
-large agent systems by organising agent
-interaction~\cite{collier2005,DBLP:journals/entcs/BaldoniBT06,DBLP:conf/oopsla/RicciS11}.
+work on designing language features with the specific purpose of
+structuring the social level of the multiagent
+systems~\cite{collier2005,DBLP:journals/entcs/BaldoniBT06,DBLP:conf/oopsla/RicciS11}.
 The approach taken, regarding this language design problem, was to draw
 inspiration from analogies between agent-oriented programming languages and
 functional languages. For concreteness, we focused on
@@ -1389,11 +1369,10 @@ first the Haskell type classes and modules.
 
 \subsubsection{Haskell Type Classes} % <<<
 
-This section reviews Haskell type classes, because they later inspire our
-notion of `role', and Haskell modules, so that it is clear they are very
-different from type classes. We use sets and equality as examples because
-we assume all readers are familiar with these basic mathematical concepts.
-\rg{Well, in a thesis you can afford the space to explain even basic concepts.}
+This section reviews Haskell type classes, because they inspire our notion
+of `role', and Haskell modules, so that it is clear they are very different
+from type classes. We use the basic mathematical concepts of sets and
+equality as examples, because we assume the readers are familiar with these. 
 
 % modules
 %  - small example
@@ -1402,14 +1381,14 @@ we assume all readers are familiar with these basic mathematical concepts.
 %  - separate compilation
 %  - analogy with Java classes
 
-The modular approach to programming implies separating the programs into
-independent modules that perform logically distinct functions. Modules are
-integrated into programs through interfaces. An interface define the
-elements required and provided by the module. The advantage of modular
-programming is that it allows one to write a module having little knowledge
-of the code in another module, and, also, it allows modules to be
-reassembled and replaced without reassembly of the whole
-system~\cite{DBLP:journals/cacm/Parnas72a}.
+Haskell has a modular approach to programming. Modular programming implies
+separating the programs into independent modules that perform logically
+distinct functions. Modules are integrated into programs through
+interfaces. An interface define the elements required and provided by the
+module. The advantage of modular programming is that it allows one to write
+a module having little knowledge of the code in another module, and, also,
+it allows modules to be reassembled and replaced without reassembly of the
+whole system~\cite{DBLP:journals/cacm/Parnas72a}.
 
 In Haskell, modules are used to control name-spaces and to create abstract
 data types. Moreover, a Haskell program can be seen as a collection of
@@ -1417,10 +1396,9 @@ modules, where the main module loads up the other modules. A module
 contains functions, types and type classes that are related and serve a
 common purpose.
 
-
 Haskell modules are often used to implement abstract data types such as
-sets.  To illustrate the main features of modules in little space, the code
-in Figure~\ref{fig:haskell} is contrived.  The module \textit{Set} contains
+sets.  To illustrate the main features of modules, the code in
+Figure~\ref{fig:haskell} is contrived.  The module \textit{Set} contains
 the type~$T$ and the functions \textit{add}, \textit{has}, and
 \textit{sub}. The \textbf{module} line hides \textit{sub} by not mentioning
 it. The names and types of the exported functions \textit{add} and
@@ -1474,31 +1452,37 @@ In general, modules are responsible with information
 hiding~\cite{DBLP:journals/cacm/Parnas72a} and encapsulation.  On the other
 hand, type classes are an elegant mechanism to provide ad-hoc polymorphism,
 also known as overloading~\cite{DBLP:conf/popl/WadlerB89}: The same name
-refers to different implementations depending on the context.  Just as
-Haskell type classes are different from Haskell modules, the roles we
-introduce later are different from existing 2APL
+refers to different implementations depending on the context.  
+
+A type class defines a set of methods that can be used with types that are
+members of the class. When you declare an instance of that type class
+you have to provide an implementation for all the methods associated with
+that class. Haskell type classes are similar to generic interfaces in Java.
+
+Just as Haskell type classes are different from Haskell modules, the roles
+we introduce are different from existing 2APL
 modules~\cite{dblp:conf/prima/dastanims08}.
 % >>>
 
-\paragraph{The Functions as Messages Analogy} % <<<
+\paragraph{First Analogy: Functions as Messages} % <<<
 
 A function call $f\,x$ is evaluated by `sending'~$x$ to $f$'s body,
 evaluating the body, and then receiving the result. The process is
 analogous to the exchange of a pair of messages between two agents. For
 example, the role \textit{Calculator} could be specified as follows.
 \begin{verbatim}
-role Num a => Calculator a
+role Calculator a
   eval :: Expr a -> a
 \end{verbatim}
 An agent that plays the role $\mathit{Calculator}\,\mathit{Int}$ knows
 how to compute expressions such as $(3+3)\times5$, given another agent
-that plays the role $\mathit{Num}\,\mathit{Int}$.
+that plays the role $\mathit{BinaryCalc}\,\mathit{Int}$.
 \begin{verbatim}
-role Num a
+role BinaryCalc a
   add :: Pair a -> a
   multiply :: Pair a -> a
 \end{verbatim}
-An agent that plays the role $\mathit{Num}\,\mathit{Int}$ knows how to
+An agent that plays the role $\mathit{BinaryCalc}\,\mathit{Int}$ knows how to
 compute basic operations on integers, such as $3+3$ and $6\times5$. The
 types \textit{Expr} and \textit{Pair} constrain the content of messages.
 \begin{verbatim}
@@ -1509,7 +1493,7 @@ data Pair a = MkPair a a
 \end{verbatim}
 Given a user agent~$u$, an agent~$c$ that plays
 $\mathit{Calculator}\,\mathit{Int}$, and an agent~$n$ that plays
-$\mathit{Num}\,\mathit{Int}$, the following is a possible exchange of
+$\mathit{BinaryCalc}\,\mathit{Int}$, the following is a possible exchange of
 messages.\\ \\
 $u\to c :
   \mathit{eval}(\mathit{call}(n), \mathit{Times}(
@@ -1529,12 +1513,12 @@ value of type~$a$, and $y$~is a value of type~$b$.
 The analogy so far is already fruitful. The content of 2APL messages is a
 (ground) term or an atomic formula. Since 2APL is built on top
 JADE~\cite{DBLP:books/sp/map2005/BellifemineBCP05}, the message content may
-also be declared as part of an ontology. However, if we would show the JADE
-ontology for arithmetic expressions we would run over the page limit.
-Contrast with the three short lines used here to define $\mathit{Expr}\,a$.
-The definition is not only short and readable, but also polymorphic in the
-type~$a$ of the constants, and rooted in the theory of algebraic data types
-(see, for example, \cite{DBLP:conf/ctcs/Hagino87}).
+also be declared as part of an ontology. However, the JADE ontology for
+arithmetic expressions would be very long in contrast with the three short
+lines used here to define $\mathit{Expr}\,a$. The definition is not only
+short and readable, but also polymorphic in the type~$a$ of the constants,
+and rooted in the theory of algebraic data types (see, for example,
+\cite{DBLP:conf/ctcs/Hagino87}).
 
 \begin{figure}\footnotesize % <<<
 \begin{verbatim}
@@ -1553,26 +1537,29 @@ The analogy is not perfect. The earlier declaration for the role
 $\mathit{Calculator}\,a$ is superficially similar to the following type
 class declaration.
 \begin{verbatim}
-class Num a => Calculator a
+class BinaryCalc a => Calculator a
   eval :: Expr a -> a
 \end{verbatim}
+
 This declaration reads ``a type~$a$ that is a member of the class
-\textit{Num} is also a member of class \textit{Calculator} provided there
-exist a function \textit{eval} with the proper type.'' In contrast, the
-earlier role declaration reads ``an \emph{unnamed} agent plays role
+\textit{BinaryCalc} is also a member of class \textit{Calculator} provided
+there exist a function \textit{eval} with the proper type.'' In contrast,
+the earlier role declaration reads ``an \emph{unnamed} agent plays role
 $\mathit{Calculator}\,a$ if it answers to messages
 $\mathit{eval}(\mathit{call}(n),\ldots)$ by messages
 $\mathit{eval}(\mathit{return}(),\ldots)$, where $n$~is an agent that plays
-$\mathit{Num}\,a$.'' Here $a$~is a type variable.  When implementing a role
-the agent must be named, as seen in Figure~\ref{fig:roleimpl2APL}. Because
-\textit{foo} plays $\mathit{Calculator}\,\mathit{Int}$, the agent
+$\mathit{BinaryCalc}\,a$.'' Here $a$~is a type variable.  When implementing
+a role the agent must be named, as seen in Figure~\ref{fig:roleimpl2APL}.
+Because \textit{foo} plays $\mathit{Calculator}\,\mathit{Int}$, the agent
 interpreter creates a goal $\mathit{eval}(m,\mathit{call}(n),x)$ for all
 messages with shape $\mathit{eval}(\mathit{call}(n),x)$ that come from some
 agent~$m$.  One could handle these goals using 2APL's PG-rules.
+
 \begin{verbatim}
 eval(m, call(n), Ct(x)) <- true |
   send(m, role, eval(return(), x))
 \end{verbatim}
+
 The first R-rule in Figure~\ref{fig:roleimpl2APL} does exactly the same,
 but is more compact. The other two R-rules, however, are much more
 cumbersome to simulate with the other kinds of rules. The main reason is
@@ -1593,12 +1580,13 @@ different language than 2APL. Such flexibility helps code reuse.
 
 In summary, the vague and informal intuition that a function is like a pair
 of messages, one carrying the arguments and one carrying the result, led us
-to two interesting observations. First, algebraic data types are convenient
-for describing the content of messages. We expect to see fewer runtime
-errors once messages are typed. Second, we developed a notion of role in
-the context of the 2APL language. These roles have certain similarities
-with existing 2APL modules and with Java interfaces, but are nevertheless
-distinct concepts.
+to two interesting observations. First, algebraic data types are a
+convenient way of describing the content of messages, and in contrast with
+ontologies is much shorter. Moreover, algebraic data types are useful for
+type checking, thus leading to fewer runtime errors once messages are
+typed. Second, we developed a distinct notion of roles as a first language
+construct. These roles have certain similarities with existing 2APL modules
+and with Java interfaces, but are nevertheless distinct concepts.
 
 % >>>
 % >>>
@@ -1624,15 +1612,16 @@ session ComputeExpression(a, b, c)
 \end{figure} % >>>
 
 {\def\l#1->#2:#3<#4>{\mathtt{#1}\to\mathtt{#2}:#3\langle\mathsf{#4}\rangle}
-We read $f::a\to b$ as ``message $f$ is sent by agent~$a$ to agent~$b$.'' A
-type class lists several function signatures, so its natural analogue is a
-list of messages together with their endpoints. It turns out that such a
-list is very similar to the global types that describe multiparty sessions
-in the context of $\pi$-calculus.
+\paragraph{Second Analogy: Types as Agents} We read $f::a\to b$ as
+``message $f$ is sent by agent~$a$ to agent~$b$.'' A type class lists
+several function signatures, so its natural analogue is a list of messages
+together with their endpoints. It turns out that such a list is very
+similar to the global types that describe multiparty sessions in the
+context of $\pi$-calculus.
 
 Session types represent a type foundation for structured communication
 centered programming, that facilitate communication safety, progress and
-fidelity \cite{dblp:conf/popl/hondayc08}. The research in session types
+fidelity~\cite{dblp:conf/popl/hondayc08}. The research in session types
 initiated in process calculi and programming languages with binary session,
 and it was extended to multiparty asynchronous session types. A session is
 a series of interactions which serve as a unit of communication. The
@@ -1678,81 +1667,10 @@ interactions in agent-oriented programming languages in terms of sessions.
 
 \section{The Calculator Example} % <<<
 
-This section introduces a number of example programs that were contrived to
-illustrate AF-Raf's functionality.
-
-The Calculator example demonstrates the power of AF-Raf operations, as well
-as being a good opportunity to understand how roles are implemented.
-Figure~\ref{fig:calc-roles} presents the interrelated types, roles and
-sessions associated with the Calculator example. First the types
-\textit{pair} and \textit{expression} are defined. The type \textit{pair}
-<x> is defined such that a value of \textit{pair} of type x is constructed
-by pairing two values of type x. The type \textit{expression} <value> is
-defined using discriminated union meaning that a value of
-\textit{expression} <value> can be either one of the following: a value of
-type <value>, an addition of two \textit{expression} <value>, a subtraction
-of two \textit{expression} <value>, a multiplication of two
-\textit{expression} <value>, or a division of two \textit{expression}
-<value>. There are two roles defined: the \textit{Calculator} and the
-\textit{BinaryCalc}. The \textit{Calculator} is responsible with evaluating
-expressions to a value of type <value>, while the \textit{BinaryCalc} is
-responsible with executing binary operations on values of type <value>. The
-session \textit{EvaluateExpression} <value> articulates the interaction
-between three types of agents that work together in order to evaluate
-expressions of type <value>. These agent types are: any type,
-\textit{Calculator} <value>, and \textit{BinaryCalc} <value>. The
-interaction pattern is described in a recursive manner. The interaction is
-initiated by an agent of any type that asks the \textit{Calculator} agent
-to evaluate an \textit{expression} <value>. The \textit{EvaluateExpression}
-session is run recursively by the \textit{Calculator} agent until a pair of
-<value> can be passed over to the \textit{BinaryCalc} or an expression is
-evaluated to a value.
-
-Figure~\ref{fig:bcalc-rules} presents the implementation of a binary
-calculator agent, an instance of the BinaryCalc role.
-Figure~\ref{fig:calc-rules} is a partial implementation of the expression
-calculator agent, an instance of the Calculator role, more exactly it
-presents the implementation of addition expression evaluation. Both binary
-calculator and calculator implementations are using only rules.
-
-Let's look first at the binary calculator~\ref{fig:bcalc-rules}. There are
-four actions defined, for each basic binary operation: intadd(x, y),
-intsub(x, y), intmul(x, y), intdiv(x, y). Also, each binary operation has
-associated a rule saying that upon receiving a message asking to perform
-that operation on a pair of integers, the agent should first delete the
-message, compute the result, and send the result back to the requester.
-Each message contains the sender's details, the details regarding the
-operation to be executed, and the pair of integers on which the operation
-is performed. The operation details contain the status of the operation,
-the call id, and the session id. The status of the operation could be
-either call or return, and in this particular case the message contains a
-call.
-
-The calculator agent implementation in figure~\ref{fig:calc-rules} is not
-complete, only one of the four cases of evaluation is illustrated, namely
-the addition. The addition is implemented using four rules. The first rule
-states that upon receiving a message to evaluate an expression that matches
-add(x, y), the calculator should recursively evaluate expression x, and save
-the other information from the message to be able to continue from there when
-the result from evaluating expression x is ready. The second rule states
-that upon receiving a message with the result of the evaluation of
-expression x, the calculator should evaluate expression y, and continue
-from there. The third rule states that upon receiving a message with the
-result of evaluation of expression y, the calculator should send a message
-to the binary calculator agent to perform the binary operation on the
-argument send, in this case a pair of integers, and then continue from
-there. The forth rule states that upon receiving the result from the
-binary calculator, the calculator agent should send back to the first agent
-the result received from the binary calculator as the result for the
-evaluation of expression add(x, y).
-
-Figure~\ref{fig:calc-op} presents a much simpler and shorter implementation
-of agents BinaryCalc and Calculator, using operations. In the Binary
-calculator implementation each rule used to model a basic binary operations
-is replaced by a shorter and more concise operation. In the calculator
-implementation one single operation replaces four rules, so the effect is
-much more visible.
-
+This section expands the Calculator example trying to illustrate AF-Raf's
+functionality, and focusing more on types, roles and sessions. It also
+demonstrate the benefit of operations in automatising the process of
+message passing.
 \begin{figure}\footnotesize % <<<
 \begin{verbatim}
 type pair<x> = pair(x, x)
@@ -1788,6 +1706,34 @@ session EvaluateExpression<value>(A : any,
 \caption{Calculator: types, roles and session}
 \label{fig:calc-roles}
 \end{figure} % >>>
+
+\autoref{fig:calc-roles} presents the interrelated types, roles and
+sessions associated with the Calculator example. The type \textit{pair} <x>
+is defined such that a value of this type is constructed by pairing
+together two values of type \textit{x}. The type \textit{expression}
+<value> is defined using discriminated union. In consequence, a value of
+\textit{expression} <value> can be either one of the following: a value of
+type \textit{value}, an addition of two \textit{expression} <value>, a
+subtraction of two \textit{expression} <value>, a multiplication of two
+\textit{expression} <value>, or a division of two \textit{expression}
+<value>. 
+
+There are two roles defined: the \textit{Calculator} and the
+\textit{BinaryCalc}. The \textit{Calculator} is responsible with evaluating
+expressions to a value of type \textit{value}, while the
+\textit{BinaryCalc} is responsible with executing binary operations on
+values of type \textit{value}. 
+
+The session \textit{EvaluateExpression} <value> articulates the interaction
+between three types of agents that work together in order to evaluate
+expressions of type \textit{value}. These agent types are: any type,
+\textit{Calculator} <value>, and \textit{BinaryCalc} <value>. The
+interaction pattern is described in a recursive manner. The interaction is
+initiated by an agent of any type that asks the \textit{Calculator} agent
+to evaluate an \textit{expression} <value>. The \textit{EvaluateExpression}
+session is run recursively by the \textit{Calculator} agent until a pair of
+\textit{value} can be passed over to the \textit{BinaryCalc} or an
+expression is evaluated to a \textit{value}.
 
 \begin{figure}\footnotesize % <<<
 \begin{verbatim}
@@ -1883,6 +1829,51 @@ agent ExprCalc(binaryCalc : BinaryCalc<value>) : Calculator<value> {
 \label{fig:calc-rules}
 \end{figure} % >>>
 
+\autoref{fig:bcalc-rules} presents the implementation of a BinaryCalcInt
+agent, an instance of the BinaryCalc role.  \autoref{fig:calc-rules} is
+a partial implementation of the expression calculator agent, an instance of
+the Calculator role, more exactly it presents an implementation of the
+addition expression evaluation. Both BinaryCalcInt and Calculator
+implementations are using only rules.
+
+Let's look first at the BinaryCalcInt in \autoref{fig:bcalc-rules}. There are four
+actions defined, for each basic binary operation: intadd(x, y), intsub(x,
+y), intmul(x, y), intdiv(x, y). Each binary operation has associated
+a rule. Each rule says that upon receiving a message asking to perform that
+particular operation on a pair of integers, the agent should first delete
+the message, compute the result, and send the result back to the requester.
+Each message contains the sender's details, the details regarding the
+operation to be executed, and the pair of integers on which the operation
+is performed. The operation details contain the status of the operation,
+the call id, and the session id. The status of the operation could be
+either call() or return(), and, in particular, for any of the four rules
+defined in the BinaryCalcInt the message contains a call().
+
+The calculator agent implementation in \autoref{fig:calc-rules} is not
+complete, only one of the four cases of evaluation is illustrated, namely
+the addition. The addition is implemented using four rules. The first rule
+states that upon receiving a message to evaluate an expression that matches
+add(x, y), the calculator should recursively evaluate expression x, and save
+the other information from the message to be able to continue from there when
+the result from evaluating expression x is ready. The second rule states
+that upon receiving a message with the result of the evaluation of
+expression x, the calculator should evaluate expression y, and continue
+from there. The third rule states that upon receiving a message with the
+result of evaluation of expression y, the calculator should send a message
+to the binary calculator agent to perform the binary operation on the
+argument send, in this case a pair of integers, and then continue from
+there. The forth rule states that upon receiving the result from the
+binary calculator, the calculator agent should send back to the first agent
+the result received from the binary calculator as the result for the
+evaluation of expression add(x, y).
+
+\autoref{fig:calc-op} presents a much simpler and shorter implementation of
+agents BinaryCalcInt and Calculator, using operations. In the BinaryCalcInt
+implementation each rule used to model a basic binary operations is
+replaced by a shorter and more concise operation. In the calculator
+implementation one single operation replaces four rules, so the effect is
+much more visible.
+
 \begin{figure}\footnotesize % <<<
 \begin{verbatim}
 include stdio
@@ -1918,7 +1909,20 @@ agent ExprCalc(binaryCalc : BinaryCalc<value>) : Calculator<value> {
 \caption{BinaryCalc and Calculator implementation with operations}
 \label{fig:calc-op}
 \end{figure} % >>>
+ 
+As a concluding remark, our notions of roles and sessions overlap in great
+amount with the multiparty session types developed in the context of
+$\pi$-calculus. Our sessions correspond to their global types, while our
+roles correspond with their local type projections. The benefits of session
+types are well known, they facilitate communication safety, progress and
+fidelity~\cite{dblp:conf/popl/hondayc08}. Additionally, in AF-Raf, roles and
+sessions offer a structured global perspective regarding the social level
+of the multiagent systems.
 
+Moreover, designing our roles similar to Haskell type classes empowers them
+with the great flexibility of polymorphism~\cite{DBLP:conf/popl/WadlerB89}.
+To which we add further the benefits of algebraic data
+types~\cite{DBLP:journals/acta/GuttagH78}.
 
 % >>>
 \section{Related Work}\label{ch:related} % <<<
