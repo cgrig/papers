@@ -2528,6 +2528,11 @@ LINE_COMMENT: '//' ~('\n'|'\r')* ('\r'|'\n');
 \end{figure} % >>>
 
 % >>>
+\section{Syntactic Sugar}\label{sec:sugar} % <<<
+
+\todo{Explain how operations are desugared into rules.}
+
+% >>>
 \section{Type System} % <<<
 
 \todo{Reuse material from \autoref{old-stuff}.}
@@ -2553,6 +2558,49 @@ statement. The methods that interpret statements return a term, which is
 the value to which the statement evaluates. Finally, the agents evolve in
 parallel. The AgentFactory framework handles the parallel composition of
 agents, and the delivery of~messages.
+
+Formally, (structural) operational semantics are described as a transition
+system. A \emph{transition system} is an (typically infinite) directed
+graph. Its vertices are known as \emph{states}; some are tagged as
+\emph{initial}, some are tagged as \emph{final}. Before defining the
+\emph{arcs} of the transition system that represents AF-Raf's operational
+semantics, we must first define the vertices; that is, what goes in the
+state of an AF-Raf program. (For background on structural operational
+semantics, we refer the reader to~\cite[Section~5.2]{harper2012}.)
+
+The state of an AF-Raf program has the following components:
+\begin{itemize}
+\item a mapping from agent identifiers to agent states
+\item a mapping from call identifiers to call states
+\item a mapping from session identifiers to session states
+\end{itemize}
+Let us look at these in turn. The state of one agent consists of the
+following components:
+\begin{itemize}
+\item a scope, which is a mapping from local variables to terms
+\item a belief base, which is a set of ground terms
+\item an expression that needs to be evaluated
+\end{itemize}
+The call state consists of the following components, each of them possibly
+having the special value~$\bot$, meaning `unknown':
+\begin{itemize}
+\item the name of the operation
+\item the identifier of the calling agent
+\item the identifier of the responding agent
+\item the state of the call, which is one of `not started', `call placed',
+`call received', `response sent', `response received'
+\end{itemize}
+The session state consists of the following:
+\begin{itemize}
+\item a scope, which is is a mapping from variables to agent identifiers
+\item a session expression to be evaluated
+\end{itemize}
+The complete state of an AF-Raf program is rather larger. It is therefore
+important to be able to focus our attention on a part of the whole state.
+
+
+\todo{Continue revising from here.}
+
 
 To describe the semantics of AF-Raf statements we need two kinds of
 judgments.
@@ -2628,9 +2676,19 @@ assignments, {\bf new} statements, action invocations, and belief updates.
   \frac
   {?}
   {\langle\Gamma,T,{\bf new}\,{\bf session}\rangle\to\langle\Gamma,T,n\rangle}
+\\
+  \frac
+  {?}
+  {\langle\Gamma,T,{\bf new}\,{\bf call}\rangle\to\langle\Gamma,T,n\rangle}
+\\
+  \frac
+  {?}
+  {\langle\Gamma,T,{\bf new}\,d(a_1,\ldots,a_k)\,n\,\{T'\}\rangle\to\langle\Gamma,T,n\rangle}
 \end{align}
 
-\todo{Continue here. Might need to add stuff to the state.}
+\todo{What is below is quite old. Remove after you make sure that all the
+information was already incorporated in the main text.}
+
 
 The semantics of programming languages is often specified as transitions
 from a state to another with each step of individual computation. The
