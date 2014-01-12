@@ -472,7 +472,7 @@ gap between the established functionality and the desirable functionality of the
 programming languages, that could support a more structured multiagent
 interaction.
 
-\subsection{Jason} % <<<
+\subsection{Jason/Agent Speak} % <<<
 Jason is an interpreter written in Java for an extended version of the
 AgentSpeak programming language, it also provides a platform for the
 development of multiagent systems. AgentSpeak is logic based and supports
@@ -566,12 +566,13 @@ GOAL doesn't manage in an explicit way the social level of the agent system.
 
 \subsection{Discussion} % <<<
 
-All of the languages referred to above (Jason, 2APL, and GOAL) have a number
-of constructs to model the agent level concepts: a belief base to model
-agent knowledge, goals that model the agent desires, some sort of plans or
-strategies for achieving agent's goals, actions that result in changes,
-mechanisms for triggering actions based on the mental state of the agent,
-sensing mechanisms to get information about the changes in the environment.
+All of the languages referred to above (Jason/AgentSpeak, 2APL, and GOAL)
+have a number of constructs to model the agent level concepts: a belief
+base to model agent knowledge, goals that model the agent desires, some
+sort of plans or strategies for achieving agent's goals, actions that
+result in changes, mechanisms for triggering actions based on the mental
+state of the agent, sensing mechanisms to get information about the changes
+in the environment.
 
 The perspective is not as uniform when we consider the social level.
 Actually, it is quite the opposite, the approach ranges from employing
@@ -2736,18 +2737,20 @@ TODO: inference rules
 
 \chapter{Case Study: The Contract Net Interaction Protocol}\label{ch:casestudy} % <<<
 
-This chapter tries to answer the following research question: \textit{Is
-the readability and usability of an agent oriented programming language
-improved by the addition of the role and session programming constructs as
-well as by the algebraic data types and the type checking functionality?}
-In order to answer this twofold research question the Af-Raf implementation
-of a FIPA interaction protocol is analysed in a case study.
+This chapter encapsulates a practical answer to our research question:
+\textit{Is the readability and usability of an agent oriented programming
+language improved by the addition of the role and session programming
+constructs as well as by the algebraic data types and the type checking
+functionality?} In order to give an answer to this twofold research
+question let's analyse an implementation of the Contract Net interaction
+protocol. First, we will look at the AF-Raf implementation, then we will
+consider an alternative implementation in Jason/AgentSpeak.
 
 \section{The FIPA Contract Net Interaction Protocol} % <<<
-The FIPA Contract Net Interaction Protocol\cite{web:fipa} describes a
+The FIPA Contract Net Interaction Protocol~\cite{web:fipa} describes a
 pattern of interaction very similar to the Contract Net Interaction
-Protocol\cite{DBLP:journals/tc/Smith80a} developed by Smith and Davis in
-1980, to which it adds rejection and confirmation communicative acts. One
+Protocol~\cite{DBLP:journals/tc/Smith80a} developed in the early
+'80s, to which it adds rejection and confirmation communicative acts. One
 agent, the initiator, takes the manager role, the other agents are the
 participants. The manager has a task that wants to be performed by the
 participants in the most effective way possible. The effectiveness is
@@ -2760,8 +2763,15 @@ agents have to inform about the execution of the task indicating either the
 success, the failure or by giving a result.
 % >>>
 \section{Af-Raf Implementation} % <<<
-The Af-Raf implementation of the FIPA Contract Net Interaction Protocol.
-Figure~\ref{fig:contract-roles}
+The Af-Raf implementation of the Contract Net Interaction Protocol has
+three main components: (1) the types, roles and sessions that describe the
+Contract Net Interaction Protocol, (2) the implementation of the seller
+agent (the initiator), and (3) the implementation of the buyer agent (the
+participant). This particular example uses three agents, one seller and
+two buyers.
+
+\autoref{fig:contract-roles} illustrates the types, roles and sessions that
+define the Contract Net Interaction Protocol.
 
 \begin{figure}\footnotesize % <<<
 \begin{verbatim}
@@ -2771,8 +2781,7 @@ Figure~\ref{fig:contract-roles}
 
 type conditions = conditions(integer); // say, price
 
-type task = addVAT(integer)
-          | increase(integer, integer)
+type task = increase(integer, integer)
           | reduce(integer, integer);
 
 type request = request(task, conditions, deadline(integer));
@@ -2807,16 +2816,39 @@ session BidRound(owner, s : Seller, b1 : Buyer, b2 : Buyer) {
 \label{fig:contract-roles}
 \end{figure} % >>>
 
+First, a number of supportive types are defined: conditions, task, request,
+bid, decision, result.
+
+The role Buyer defines two operations ask and commit. The operation ask
+states that upon receiving a message of type request the agent must reply
+with a message of type bid. The operation commit states that upon receiving
+a message of type decision the agent has to reply with a message of type
+result.
+
+The role seller defines only one operation, the operation sell, which
+states that upon receiving a message of type request should reply with a
+message of type result.
+
+The session BidRound prescribes the structure of the interaction between
+four agents: owner, seller and two buyers. The interaction is initiated by
+the owner which sends to the seller a message of type request. The seller
+advance the request message further to each of the two buyer agents. For
+each of the buyers are defined two possible scenarios: (1) The buyer sends
+a message of type bid to the seller, then the seller sends a win() message,
+finally, the buyer sends a message of type result to the seller; (2) The
+buyer sends a message of type bit to the seller, then the seller sends a
+lose() message to the buyer. The last message exchanged in the BidRound
+session is a result message sent by the seller to the owner.
+
 \begin{figure}\footnotesize % <<<
 \begin{verbatim}
 include stdio
 include ContractNet
 
               
-action vat(x) = raftest.xx;
-action dec(x, y) = raftest.xx;
-action inc(x, y) = raftest.xx;
-action mul(x, y) = raftest.xx;
+action dec(x, y) = raftest.IntegerDecreaseAction;
+action inc(x, y) = raftest.IntegerIncreaseAction;
+action mul(x, y) = raftest.IntegerMulAction;
 
 agent ContractNetBuyer : Buyer {
   operation ask(request(task, conditions(y), deadline(z)))
@@ -2826,15 +2858,24 @@ agent ContractNetBuyer : Buyer {
   }
   
   operation commit(win()) 
-    when LastTask(sid, decrease(x, y)) { return dec(x, y); }
-    when LastTask(sid, increase(x, y)) { return inc(x, y); }
-    when LastTask(sid, addVAT(x)) { return vat(x); }
+  when LastTask(sid, decrease(x, y)) { 
+    return dec(x, y); 
+    -LastTask(sid, decrease(x,y))
+  }
+  when LastTask(sid, increase(x, y)) {
+    return inc(x, y);  
+    -LastTask(sid, increase(x, y));
+  }
     
 }
 \end{verbatim}
 \caption{Contract Net Buyer agent}
 \label{fig:contract-buyer}
 \end{figure} % >>>
+
+The ContractNetBuyer agent implements the Buyer role defined above. There
+are three actions defined dec(x, y), inc(x, y), mul(x, y). There are two
+operations implemented: ask and commit.
 
 \begin{figure}\footnotesize % <<<
 \begin{verbatim}
@@ -2843,18 +2884,133 @@ include ContractNet
 
 agent ContractNetSeller(b1 : BuyerRole, b2 : BuyerRole): Seller {
   operation sell(r) {
-    return if b1.ask(r) < b2.ask(r) then b1.commit(win()) 
-                                    else b2.commit(win())
+    return if b1.ask(r) < b2.ask(r) then { b1.commit(win()); b2.commit(lose());}                   
+           else { b2.commit(win()); b1.commit(lose());}
+                  
   }
 }
 \end{verbatim}
 \caption{Contract Net Seller agent}
 \label{fig:contract-seller}
 \end{figure} % >>>
-
+The ContractNetSeller agent implements the Seller role. Operation sell...
 % >>>
-\section{Jason Implementation} % <<<
+\section{Jason/AgentSpeak Implementation} % <<<
+We will analyse the AgentSpeak code implementing the Contract Net
+Interaction Protocol provided by the developers of the Jason interpreter
+in~\cite{bordini2007programming}.
 
+We will look at the code implementing the initiator agent and at one of the
+participants, more exactly, we will look at one of the participant agents
+that are able to submit an offer.
+
+\begin{figure}\footnotesize % <<<
+\begin{verbatim}
+/* Rules */
+all_proposals_received(CNPId) :-
+  .count(introduction(participant,_),NP) & // num of participants
+  .count(propose(CNPId,_), NO) &  // number of proposes received
+  .count(refuse(CNPId), NR) &  // number of refusals received
+  NP = NO + NR.
+
+/* Initial goals */
+!startCNP(1,fix(computer_123)).
+
+/* Plans */
+// start the CNP
++!startCNP(Id,Object)
+  <- .wait(2000); // wait participants introduction
+     +cnp_state(Id,propose); // remember the state of the CNP
+     .findall(Name,introduction(participant,Name),LP);
+     .print("Sending CFP to ",LP);
+     .send(LP,tell,cfp(Id,Object));
+     .concat("+!contract(",Id,")",Event);
+     // the deadline of the CNP is now + 4 seconds, so
+     // the event +!contract(Id) is generated at that time
+     .at("now +4 seconds", Event).
+
+// receive proposal
+// if all proposal have been received, don't wait for the deadline
+@r1 +propose(CNPId,Offer)
+  : cnp_state(CNPId,propose) & all_proposals_received(CNPId)
+  <- !contract(CNPId).
+
+// receive refusals
+@r2 +refuse(CNPId)
+  : cnp_state(CNPId,propose) & all_proposals_received(CNPId)
+  <- !contract(CNPId).
+
+// this plan needs to be atomic so as not to accept
+// proposals or refusals while contracting
+@lc1[atomic]
++!contract(CNPId)
+  : cnp_state(CNPId,propose)
+  <- -+cnp_state(CNPId,contract);
+  .findall(offer(O,A),propose(CNPId,O)[source(A)],L);
+  .print("Offers are ",L);
+  L \== []; // constraint the plan execution to at least one offer
+  .min(L,offer(WOf,WAg)); // sort offers, the first is the best
+  .print("Winner is ",WAg," with ",WOf);
+  !announce_result(CNPId,L,WAg);
+  -+cnp_state(Id,finished).
+
+// nothing todo, the current phase is not 'propose'
+@lc2 +!contract(CNPId).
+
+-!contract(CNPId)
+  <- .print("CNP ",CNPId," has failed!").
+
++!announce_result(_,[],_).
+// announce to the winner
++!announce_result(CNPId,[offer(O,WAg)|T],WAg)
+  <- .send(WAg,tell,accept_proposal(CNPId));
+  !announce_result(CNPId,T,WAg).
+// announce to others
++!announce_result(CNPId,[offer(O,LAg)|T],WAg)
+  <- .send(LAg,tell,reject_proposal(CNPId));
+  !announce_result(CNPId,T,WAg).
+\end{verbatim}
+\caption{Contract Net Initiator Jason}
+\label{fig:jasonIn}
+\end{figure} % >>>
+
+
+\begin{figure}\footnotesize % <<<
+\begin{verbatim}
+// gets the price for the product,
+// (a random value between 100 and 110).
+price(Task,X) :- .random(R) & X = (10*R)+100.
+
+plays(initiator,c).
+
+/* Plans */
+// send a message to initiator introducing myself
+// as a participant
++plays(initiator,In)
+   : .my_name(Me)
+   <- .send(In,tell,introduction(participant,Me)).
+
+// answer a Call For Proposal
+@c1 +cfp(CNPId,Task)[source(A)]
+   : plays(initiator,A) & price(Task,Offer)
+   <- +proposal(CNPId,Task,Offer); // remember my proposal
+   .send(A,tell,propose(CNPId,Offer)).
+
+@r1 +accept_proposal(CNPId)
+   : proposal(CNPId,Task,Offer)
+   <- .print("My proposal '",Offer,"' won CNP ",CNPId,
+             " for ",Task,"!").
+         // do the task and report to initiator
+
+@r2 +reject_proposal(CNPId)
+   <- .print("I lost CNP ",CNPId, ".");
+   -proposal(CNPId,_,_). // clear memory
+
+
+\end{verbatim}
+\caption{Contract Net Initiator Jason}
+\label{fig:jasonIn}
+\end{figure} % >>>
 % >>>
 \section{Discussion} % <<<
 
@@ -2865,7 +3021,8 @@ agent ContractNetSeller(b1 : BuyerRole, b2 : BuyerRole): Seller {
 
 Starting from high-level similarities between certain aspects of an
 agent-oriented programming language (2APL) and a functional programming
-language (Haskell), we described three new features for the former:
+language (Haskell), we described three new features that could be
+particularly helpful for the agent oriented programming languages:
 (1)~algebraic data types, which constrain the content of messages,
 (2)~roles, which constrain how particular agents interact, and
 (3)~sessions, which describe slices of the global interactions in the agent
@@ -2873,16 +3030,16 @@ system. Together, these \emph{language features} support organisational
 concepts, which are so far discussed mostly in the literature on
 agent-oriented methodologies and frameworks.
 
-The aim is to provide programmers with a wider set of options at their disposal
-for structuring large agent systems. For example, they can use existing
-methodologies during the design phase and they can use a mixture of our
-proposed language features and existing organisational frameworks during the
-implementation phase. First-class language support has at least two
-advantages over organisational frameworks. First, implementations tend to be
-shorter and more readable. Second, implementations have stronger correctness
-guarantees because of the extra type-checking. On the other hand,
-organisational frameworks may be preferred when one needs to interact with
-legacy code.
+The ultimate aim is to provide programmers with a wider set of options at
+their disposal for structuring large agent systems. For example, they can
+use existing methodologies during the design phase and they can use a
+mixture of our proposed language features and existing organisational
+frameworks during the implementation phase. First-class language support
+has at least two advantages over organisational frameworks. First,
+implementations tend to be shorter and more readable. Second,
+implementations have stronger correctness guarantees because of the extra
+type-checking. On the other hand, organisational frameworks may be
+preferred when one needs to interact with legacy code.
 
 The new agent oriented programming language, AF-Raf, based on the existing
 Agent Factory framework, implements the innovative features that have been
@@ -2891,10 +3048,10 @@ used to constrain the content of the messages. It has type checking, a
 feature very useful in identifying programming errors early on. It has
 roles, which organise agent behaviour, promoting encapsulation and reuse.
 It also have sessions, which further organise agent interaction at a higher
-level, namely at the role level. A case study is used to illustrate the
-results.  The AF-Raf programming language is properly formalised, with its
-grammar specified in EBNF format and its operational semantics is defined
-using inference rules.
+level, namely at the social level. A case study is used to illustrate the
+results. The AF-Raf programming language is properly formalised, with its
+grammar specified in EBNF format and its operational semantics is defined,
+using the small-step operational semantics, as a set of inference rules.
 
 % >>>
 \bibliographystyle{plain}
