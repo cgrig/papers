@@ -2063,8 +2063,8 @@ useful construct that cannot be reduced one to another.
 
 \section{Overview}\label{sec:langdef.overview} % <<<
 
-This chapter presents the AF-Raf language in detail, covering its syntax,
-typing, and semantics.
+This chapter presents the AF-Raf language in detail, covering its syntax
+and semantics.
 
 % >>>
 \section{AF-Raf Syntax}\label{sec:langdef.syntax} % <<<
@@ -2538,11 +2538,6 @@ LINE_COMMENT: '//' ~('\n'|'\r')* ('\r'|'\n');
 \todo{Explain how operations are desugared into rules.}
 
 % >>>
-\section{Type System} % <<<
-
-\todo{Reuse material from \autoref{old-stuff}.}
-
-% >>>
 \section{Operational Semantics}\label{sec:opsem} % <<<
 
 There are many alternative ways to describe the semantics of a programming
@@ -2584,6 +2579,8 @@ following components:
 \item a scope, which is a mapping from local variables to terms
 \item a belief base, which is a set of ground terms
 \item an expression that needs to be evaluated
+\item a queue of outgoing messages
+\item a queue of incoming messages
 \end{itemize}
 The call state consists of the following components, each of them possibly
 having the special value~$\bot$, meaning `unknown':
@@ -2591,7 +2588,7 @@ having the special value~$\bot$, meaning `unknown':
 \item the name of the operation
 \item the identifier of the calling agent
 \item the identifier of the responding agent
-\item the state of the call, which is one of `not started', `call placed',
+\item the phase of the call, which is one of `not started', `call placed',
 `call received', `response sent', `response received'
 \end{itemize}
 The session state consists of the following:
@@ -2623,8 +2620,8 @@ A\pmap B$ is essentially a finite set of pairs
 $\{(a_1,b_1),\ldots,(a_n,b_n)\}$ with $a_k$s distinct and coming from~$A$,
 and $b_k$s coming from~$B$. The expression $\sigma(a)$ denotes the $b$ such
 that $(a,b)\in\sigma$ if such a $b$ exists; otherwise it stands for $\bot$
-(undefined). The expression $[a\mapsto b]$ denotes the singleton partial
-map $\{(a,b)\}$. The concatenation $\sigma_1\sigma_2$ denotes the update
+(undefined). The singleton mapping $\{(a,b)\}$ is denoted also by
+$[a\mapsto b]$.  The concatenation $\sigma_1\sigma_2$ denotes the update
 operation on mappings:
 \begin{align}
 \sigma_1\sigma_2 = \{\,(a,b)\mid
@@ -2653,21 +2650,69 @@ ensure this does not happen.
 
 Agent states are themselves triples.
 \begin{align}
-(\Gamma, T, P) &\;\in\; {\rm AgentState}
+(\Gamma, T, P, I, O) &\;\in\; {\rm AgentState}
 \\
 {\rm AgentState} &\;=\;
-  {\rm AgentScope}\times{\rm BeliefBase}\times{\rm AgentCode}
+  \begin{aligned}[t]
+    &{\rm AgentScope} \times{\rm BeliefBase} \times{\rm AgentCode} \\
+    &\quad\times{\rm Message}^* \times{\rm Message}^*
+  \end{aligned}
 \\
 {\rm AgentScope} &\;=\; {\rm Variable}\pmap{\rm GroundTerm}
 \\
 {\rm BeliefBase} &\;=\; {\rm GroundTerm}\pmap\{0\} \label{eq:bbdef}
+\\
+{\rm Message} &\;=\; {\rm AgentId}\times{\rm GroundTerm}
 \end{align}
 Equation~\eqref{eq:bbdef} simply says that elements of ${\rm BeliefBase}$
 are mappings from ground terms to the element of some singleton set, which
 is the same as saying that they are \emph{finite} subsets of ${\rm
 GroundTerm}$. The sets ${\rm AgentCode}$ and ${\rm GroundTerm}$ are not
 defined here, but the definitions can be easily recovered from the abstract
-grammar (\autoref{sec:langdef.syntax}).
+grammar (\autoref{sec:langdef.syntax}). The message queues $I$~and~$O$ are
+represented in the semantics by finite sequences: the (standard) notation
+$A^*$ stands for the finite sequences of elements from the set~$A$. Each
+message contains the identifier of another agent and the message data,
+which is a grounded term. The queue~$I$ contains agent identifiers for
+senders; the queue~$O$ contains agent identifiers for receivers.
+
+The call state has four components, out of which only the call phase is
+mandatory.
+\begin{align}
+(o,s,r,p) &\;\in\; {\rm CallState}
+\\
+{\rm CallState} &\;=\;
+  \begin{aligned}[t]
+  &{\rm OperationName}_\bot\times{\rm AgentId}_\bot \\
+  &\quad\times{\rm AgentId}_\bot\times{\rm CallPhase}
+  \end{aligned}
+\\
+{\rm CallPhase} &\;=\;
+  \begin{aligned}[t]
+  \{  &{\tt notStarted}, {\tt callPlaced},\\
+      &{\tt callReceived}, {\tt responseSent} \}
+  \end{aligned}
+\end{align}
+The operation name~$o$, like variables, are simply identifiers; that is,
+strings. The agent identifier~$s$ is that of the caller (also known as
+sender), and the agent identifier~$r$ is that of the receiver. The notation
+$A_\bot$ stands for the set $A\cup\{\bot\}$, and is used only when
+$\bot\notin A$. The special element $\bot$ is to be read as `undefined'
+or~`unknown'. In phase ${\tt notStarted}$ the components $o$,~$s$, and~$r$
+are~$\bot$; otherwise, all components are~$\ne\bot$.
+
+Finally, a session state has two components.
+\begin{align}
+(\Delta,Q) &\;\in\;{\rm SessionState}
+\\
+{\rm SessionState} &\;=\; {\rm SessionScope}\times{\rm SessionCode}
+\\
+{\rm SessionScope} &\;=\; {\rm Variable}\pmap{\rm AgentId}
+\end{align}
+The set ${\rm SessionCode}$ consists of expressions that may appear in the
+definition of an AF-Raf session. Just like ${\rm GroundTerm}$ and ${\rm
+AgentCode}$, the definition of ${\rm SessionCode}$ is essentially a part of
+the abstract~grammar.
 
 \todo{Continue revising from here.}
 
