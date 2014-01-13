@@ -2066,7 +2066,7 @@ This chapter presents the AF-Raf language in detail, covering its syntax,
 typing, and semantics.
 
 % >>>
-\section{AF-Raf Syntax} % <<<
+\section{AF-Raf Syntax}\label{sec:langdef.syntax} % <<<
 
 AF-Raf, like most languages, has an abstract grammar and a concrete
 grammar. The abstract grammar describes the structure that programs must
@@ -2544,9 +2544,8 @@ LINE_COMMENT: '//' ~('\n'|'\r')* ('\r'|'\n');
 % >>>
 \section{Operational Semantics}\label{sec:opsem} % <<<
 
-There are many alternative ways for describing the semantics of a
-programming language. Operational semantics and are one of the more
-pragmatic methods.
+There are many alternative ways to describe the semantics of a programming
+language. Operational semantics and are one of the more pragmatic methods.
 
 One way to view operational semantics is as a concise way to describe a
 reference interpreter for the language that is being defined. The reference
@@ -2564,7 +2563,7 @@ parallel. The AgentFactory framework handles the parallel composition of
 agents, and the delivery of~messages.
 
 Formally, (structural) operational semantics are described as a transition
-system. A \emph{transition system} is an (typically infinite) directed
+system. A \emph{transition system} is a (typically infinite) directed
 graph. Its vertices are known as \emph{states}; some are tagged as
 \emph{initial}, some are tagged as \emph{final}. Before defining the
 \emph{arcs} of the transition system that represents AF-Raf's operational
@@ -2599,9 +2598,75 @@ The session state consists of the following:
 \item a scope, which is is a mapping from variables to agent identifiers
 \item a session expression to be evaluated
 \end{itemize}
-The complete state of an AF-Raf program is rather larger. It is therefore
-important to be able to focus our attention on a part of the whole state.
 
+The complete state of an AF-Raf program is rather large. It is therefore
+important to be able to focus our attention on a part of the whole state.
+We now formalize the notion of program state and, at the same time,
+introduce notations that help us focus on parts of it. A \emph{program
+state} is a triple, as follows:
+\begin{align}
+(A, C, S) &\;\in\; {\rm ProgramState}
+\\
+{\rm ProgramState} &\;=\;
+  {\rm AgentMap}\times{\rm CallMap}\times{\rm SessionMap}
+\\
+{\rm AgentMap} &\;=\; {\rm AgentId}\pmap{\rm AgentState}
+\\
+{\rm CallMap} &\;=\; {\rm CallId}\pmap{\rm CallState}
+\\
+{\rm SessionMap} &\;=\; {\rm SessionId}\pmap{\rm SessionState}
+\end{align}
+Here $A\pmap B$ stands for the set of mappings (also known as a finite
+partial functions) from the set~$A$ to the set~$B$. A mapping~$\sigma\in
+A\pmap B$ is essentially a finite set of pairs
+$\{(a_1,b_1),\ldots,(a_n,b_n)\}$ with $a_k$s distinct and coming from~$A$,
+and $b_k$s coming from~$B$. The expression $\sigma(a)$ denotes the $b$ such
+that $(a,b)\in\sigma$ if such a $b$ exists; otherwise it stands for $\bot$
+(undefined). The expression $[a\mapsto b]$ denotes the singleton partial
+map $\{(a,b)\}$. The concatenation $\sigma_1\sigma_2$ denotes the update
+operation on mappings:
+\begin{align}
+\sigma_1\sigma_2 = \{\,(a,b)\mid
+  \text{$\sigma_2(a)=b$, or $\sigma_2(a)=\bot$ and $\sigma_1(a)=b$}\,\}
+\end{align}
+Note that the mapping on the right has priority over the one on the left.
+In particular, we have
+\begin{align}
+\bigl(\sigma[a\mapsto b]\bigr)(x) \;=\;
+  \begin{cases}
+  b & \text{if $x=a$} \\
+  \sigma(a) & \text{otherwise}
+  \end{cases}
+\end{align}
+The notation $\sigma(a)$, where $\sigma$~is a mapping, will help us focus
+on parts of the program state.
+
+Identifiers come from some countable set. For the sake of concreteness, we
+choose them to be integers.
+\begin{align}
+{\rm AgentId} = {\rm CallId} = {\rm SessionId} = \mathbb{Z}.
+\end{align}
+Of course, identifiers of different types should not be confused. An actual
+implementation could use the types of the host programming language to
+ensure this does not happen.
+
+Agent states are themselves triples.
+\begin{align}
+(\Gamma, T, P) &\;\in\; {\rm AgentState}
+\\
+{\rm AgentState} &\;=\;
+  {\rm AgentScope}\times{\rm BeliefBase}\times{\rm AgentCode}
+\\
+{\rm AgentScope} &\;=\; {\rm Variable}\pmap{\rm GroundTerm}
+\\
+{\rm BeliefBase} &\;=\; {\rm GroundTerm}\pmap\{0\} \label{eq:bbdef}
+\end{align}
+Equation~\eqref{eq:bbdef} simply says that elements of ${\rm BeliefBase}$
+are mappings from ground terms to the element of some singleton set, which
+is the same as saying that they are \emph{finite} subsets of ${\rm
+GroundTerm}$. The sets ${\rm AgentCode}$ and ${\rm GroundTerm}$ are not
+defined here, but the definitions can be easily recovered from the abstract
+grammar (\autoref{sec:langdef.syntax}).
 
 \todo{Continue revising from here.}
 
