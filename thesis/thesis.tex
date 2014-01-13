@@ -2535,6 +2535,95 @@ LINE_COMMENT: '//' ~('\n'|'\r')* ('\r'|'\n');
 % >>>
 \section{Syntactic Sugar}\label{sec:sugar} % <<<
 
+Operations do not appear in the abstract syntax of agent designs because
+they are simply special kinds of rules. The parser itself builds an
+abstract syntax tree that contains rules, rather than operations.
+
+\begin{example}
+If the user writes
+\begin{verbatim}
+operation opA(f(x)) when P() { return g(x); }
+\end{verbatim}
+then the interpreter will see
+\begin{verbatim}
+rule Message(other, op(call(opA(), cid, sid), f(x)))
+   & P()
+{ send(other, op(return(opA(), cid, sid), g(x))); }
+\end{verbatim}
+There are several noteworthy issues. Executing an operation means receiving
+a message of a special form, possibly doing some computation, and replying
+with a message of a (similar) special form. Operation guards, which use the
+keyword {\bf when}, are simply conjoined to the condition of the rule that
+represents the operation. The variables ${\it cid}$ and ${\it sid}$ bind to
+the call identifier and to the session identifier, respectively. (See
+\autoref{sec:opsem} for details about call and session identifiers.)
+\end{example}
+
+All messages that carry data for an operation have one of the following two
+forms:
+\begin{align}
+  &{\bf op}\bigl(
+    {\bf call}\bigl({\it opName}(), {\it cid}, {\it sid}\bigr),
+    {\it data}
+  \bigr)
+\\
+  &{\bf op}\bigl(
+    {\bf return}\bigl({\it opName}(), {\it cid}, {\it sid}\bigr),
+    {\it data}
+  \bigr)
+\end{align}
+Here ${\bf op}$, $\bf call$, and $\bf return$ are interpreted function
+symbols; that is, the interpreter will treat messages that have one of
+these form in a special way. Actual messages are ground terms: the variable
+$\it cid$ here stands for a call identifier, the variable $\it sid$ here
+stands for a session identifier, and the variable $\it data$ here stands
+for a ground term. The term $\it data$ is either the (single) argument of
+an operation or the return value.
+
+\begin{remark}
+It may appear that it is rather drastic to limit operations to single
+arguments and single return values. Observe, however, that it is trivial to
+define types
+\begin{align}
+&{\bf type}\,{\it tuple0} = {\it unit}() \\
+&{\bf type}\,{\it tuple1}\langle t_1\rangle = v_{1,1}(t_1) \\
+&{\bf type}\,{\it tuple2}\langle t_1,t_2\rangle = v_{2,1}(t_1) \mid v_{2,2}(t_2) \\
+&\quad\vdots\notag \\
+&{\bf type}\,{\it tuplen}\langle t_1,\ldots,t_n\rangle
+  = v_{n,1}(t_1) \mid \ldots \mid v_{n,n}(t_n)
+\end{align}
+in one's program. Here $v_{i,j}$s are simply fresh identifiers. For
+example, $v_{3,2}$ could be the identifier ${\tt tuple\_value\_3\_2}$.
+Previous examples used the name $\it pair$ for what is called here $\it
+tuple2$.
+\end{remark}
+
+In general, operations may have multiple guard clauses. Such operations are
+first desugared into operations with single guard clauses. The expression
+\begin{align}
+{\bf operation}\,o(x)\,\{ B \}
+\end{align}
+is rewritten as
+\begin{align}
+{\bf operation}\,o(x)\,{\bf when}\,{\it True}()\,\{ B \}
+\end{align}
+(The term ${\it True}()$ is one that all belief bases contain.) The
+expression
+\begin{align}
+&{\bf operation}\,o(x) \\
+&\qquad{\bf when}\,g_1\,\{ B_1 \} \\
+&\qquad\quad\vdots\notag \\
+&\qquad{\bf when}\,g_n\,\{ B_n \} \\
+\end{align}
+is rewritten as
+\begin{align}
+&{\bf operation}\,o(x)\,{\bf when}\,g_1\,\{ B_1 \} \\
+&\quad\vdots\notag\\
+&{\bf operation}\,o(x)\,{\bf when}\,g_n\,\{ B_n \}
+\end{align}
+At this point each operation has exactly one guard.
+
+\todo{expressions to continuations}
 \todo{Explain how operations are desugared into rules.}
 
 % >>>
