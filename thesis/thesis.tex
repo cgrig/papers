@@ -1928,8 +1928,9 @@ types~\cite{DBLP:journals/acta/GuttagH78}.
 \section{Related Work}\label{ch:related} % <<<
 
 \subsubsection{SimpAL} % <<<
-Ricci  and Santi developed a novel programming language, called simpAL,
-that supports organisational structure, types and type
+Ricci  and Santi developed a novel programming language, called
+simpAL~\cite{DBLP:conf/oopsla/RicciS11,DBLP:conf/oopsla/RicciS12}, that
+supports organisational structure, types and type
 checking~\cite{DBLP:conf/promas/RicciS12}. SimpAl draws inspiration from
 the Agent and Artifacts model~\cite{DBLP:conf/atal/RicciVO07} and from the
 Jason programming language, which is based on the Belief, Desire, Intention
@@ -2811,7 +2812,7 @@ protocol. First, we will look at the AF-Raf implementation, then we will
 consider an alternative implementation in Jason/AgentSpeak.
 
 \section{The FIPA Contract Net Interaction Protocol} % <<<
-The FIPA Contract Net Interaction Protocol~\cite{web:fipa} describes a
+The FIPA Contract Net interaction protocol~\cite{web:fipa} describes a
 pattern of interaction very similar to the Contract Net Interaction
 Protocol~\cite{DBLP:journals/tc/Smith80a} developed in the early
 '80s, to which it adds rejection and confirmation communicative acts. One
@@ -2827,15 +2828,15 @@ agents have to inform about the execution of the task indicating either the
 success, the failure or by giving a result.
 % >>>
 \section{Af-Raf Implementation} % <<<
-The Af-Raf implementation of the Contract Net Interaction Protocol has
+The Af-Raf implementation of the Contract Net interaction protocol has
 three main components: (1) the types, roles and sessions that describe the
-Contract Net Interaction Protocol, (2) the implementation of the seller
+Contract Net interaction protocol, (2) the implementation of the seller
 agent (the initiator), and (3) the implementation of the buyer agent (the
-participant). This particular example uses three agents, one seller and
-two buyers.
+participant). This particular implementation employs three agents, one
+seller and two buyers, in order to exemplify the interaction process.
 
 \autoref{fig:contract-roles} illustrates the types, roles and sessions that
-define the Contract Net Interaction Protocol.
+define the Contract Net interaction protocol.
 
 \begin{figure}\footnotesize % <<<
 \begin{verbatim}
@@ -2880,29 +2881,40 @@ session BidRound(owner, s : Seller, b1 : Buyer, b2 : Buyer) {
 \label{fig:contract-roles}
 \end{figure} % >>>
 
-First, a number of supportive types are defined: conditions, task, request,
-bid, decision, result.
+First, a number of supportive types are defined: (a) \textit{conditions}, a
+value of which is a \textit{conditions} of type \textit{integer}; (b)
+\textit{task}, a value of which is either an \textit{increase} of two
+\textit{integer} values or a \textit{decrease} of two \textit{integer}
+values; (c) \textit{request}, a value of which is a \textit{request} of a
+\textit{task} value, a \textit{conditions} value, and a \textit{deadline}
+of type integer value; (d) \textit{bid}, a value of which is a \textit{bid}
+of type integer; (e) \textit{decision}, a value of which is either a
+\textit{win}() or a \textit{lose}(); (f) \textit{result}, a value of which
+is a \textit{success} of type \textit{integer}.
 
-The role Buyer defines two operations ask and commit. The operation ask
-states that upon receiving a message of type request the agent must reply
-with a message of type bid. The operation commit states that upon receiving
-a message of type decision the agent has to reply with a message of type
-result.
+The role Buyer defines two operations: \textit{ask} and \textit{commit}.
+The operation \textit{ask} states that upon receiving a message of type
+\textit{request} the agent must reply with a message of type \textit{bid}.
+The operation \textit{commit} states that upon receiving a message of type
+\textit{decision} the agent has to reply with a message of type
+\textit{result}.
 
-The role seller defines only one operation, the operation sell, which
-states that upon receiving a message of type request should reply with a
-message of type result.
+The role Seller defines only one operation, the operation \textit{sell},
+which states that upon receiving a message of type \textit{request} should reply
+with a message of type \textit{result}.
 
 The session BidRound prescribes the structure of the interaction between
 four agents: owner, seller and two buyers. The interaction is initiated by
-the owner which sends to the seller a message of type request. The seller
-advance the request message further to each of the two buyer agents. For
-each of the buyers are defined two possible scenarios: (1) The buyer sends
-a message of type bid to the seller, then the seller sends a win() message,
-finally, the buyer sends a message of type result to the seller; (2) The
-buyer sends a message of type bit to the seller, then the seller sends a
-lose() message to the buyer. The last message exchanged in the BidRound
-session is a result message sent by the seller to the owner.
+the owner which sends to the seller a message of type \textit{request}. The
+seller advance the \textit{request} message further to each of the two
+buyer agents. For each of the buyers are defined two possible scenarios:
+(1) The buyer sends a message of type \textit{bid} to the seller, then the
+seller sends a textit{win}() message, finally, the buyer sends a message of
+type \textit{result} to the seller; (2) The buyer sends a message of type
+\textit{bit} to the seller, then the seller sends a \textit{lose}() message
+to the buyer, after which no further action is required from the buyer. The
+last message exchanged in the BidRound session is a \textit{result} message
+sent by the seller to the owner.
 
 \begin{figure}\footnotesize % <<<
 \begin{verbatim}
