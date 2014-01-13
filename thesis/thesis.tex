@@ -887,7 +887,6 @@ was created in the early 1990s can be found in~\cite{muldoon2009towards}.
 % >>>
 
 % >>>
-
 \section{The Belief Base} % <<< 
 
 In most agent-oriented programming languages, agents maintain a
@@ -985,7 +984,7 @@ the corresponding subterms to be equal.  Also note that the \emph{empty
 match} differs from \emph{no match}.
 \end{example}
 
-\todo{Conjunctive queries.}
+%\todo{Conjunctive queries.}
 
 \subsubsection{Updates and Revisions}
 
@@ -1025,7 +1024,7 @@ upon the following scenario.
 
 \paragraph{Bad Scenario.}
 
-\rg{Needs a diagram; otherwise, hard to follow.}
+%\rg{Needs a diagram; otherwise, hard to follow.}
 Agent~$a$ sends message $\tau_{ab}$ to agent~$b$. Agent~$b$ stores a
 subterm~$\tau_b$ of~$\tau_{ab}$ into its belief base. Later, when some
 other condition is satisfied, agent~$b$ extracts a subterm~$\tau_{bc}$ of
@@ -1107,8 +1106,8 @@ with uppercase for predicate names, and letter strings starting with
 lowercase for other function names and for variable names.
 
 \begin{remark}
-\rg{I'm not sure about this remark. I think \emph{traditional} logicians
-behave as described here.}
+%\rg{I'm not sure about this remark. I think \emph{traditional} logicians
+%behave as described here.}
 The definitions given here are in-between what applied computer scientists
 tend to prefer and what pure logicians tend to prefer.  Computer scientists
 work with \emph{expressions} (rather than terms and formulas) and do not
@@ -1119,7 +1118,7 @@ not functions. Moreover, logicians single out equality between terms as
 being a special predicate.
 \end{remark}
 
-\rg{Maybe add some simple examples early on.}
+%\rg{Maybe add some simple examples early on.}
 % >>>
 \subsection{Algebraic Data Types} % <<<
 
@@ -1149,8 +1148,8 @@ $\nu(\delta_1,\ldots,\delta_n)$. For example, one could define the types
   \mid\mathit{add}(o,e)
   \mid\mathit{add}(e,o)
 \end{align}
-\rg{These things are presented as if they are completely standard. They're
-not. I think they should be presented as part of the design of AF-RAF.}
+%\rg{These things are presented as if they are completely standard. They're
+%not. I think they should be presented as part of the design of AF-RAF.}
 We make the following observations.
 \begin{enumerate}
 \item
@@ -1211,7 +1210,7 @@ undecidable whether a given term is an element.  (A classic result of
 computability theory is that there are undecidable sets of bit-strings, and
 sorted ground terms can encode bit-strings.) In particular, there exist
 sets of ground terms that cannot be defined using algebraic data types.
-\rg{These things are probably too cryptic, and should be explained more.}
+%\rg{These things are probably too cryptic, and should be explained more.}
 
 
 \paragraph{AF-Raf's Algebraic Data Types, Primitive Types, and Aliases.}
@@ -1248,7 +1247,7 @@ $\mathbf{type}\,\delta=\delta'$
 Such aliases are especially useful when $\delta'$ is of the form
 $\mathit{integer}[\tau]$ or $\mathit{string}[\tau]$, and $\tau$~is long.
 
-\todo{Example with something like {\tt type t=int*t list}.}
+%\todo{Example with something like {\tt type t=int*t list}.}
 
 Algebraic data types are the natural target of pattern-matching functions.
 When the type is parametric then the pattern-matching functions typically
@@ -1341,7 +1340,7 @@ We exhibited an algorithm, hence type-checking is decidable. As it is, the
 function \verb|check| takes exponential time in the size of the term.
 However, with memoization its complexity is~$O(mn)$, where $m$~is the
 size of the term and $n$~is the size of all type definitions.
-\rg{Maybe expand a bit here, with some example?}
+%\rg{Maybe expand a bit here, with some example?}
 
 % >>>
 % >>>
@@ -2812,7 +2811,7 @@ session BidRound(owner, s : Seller, b1 : Buyer, b2 : Buyer) {
   result : s -> owner
 }
 \end{verbatim}
-\caption{Contract Net types, roles and sessions}
+\caption{Contract Net Types, Roles and Sessions in AF-Raf}
 \label{fig:contract-roles}
 \end{figure} % >>>
 
@@ -2869,7 +2868,7 @@ agent ContractNetBuyer : Buyer {
     
 }
 \end{verbatim}
-\caption{Contract Net Buyer agent}
+\caption{Contract Net Buyer, AF-Raf}
 \label{fig:contract-buyer}
 \end{figure} % >>>
 
@@ -2890,7 +2889,7 @@ agent ContractNetSeller(b1 : BuyerRole, b2 : BuyerRole): Seller {
   }
 }
 \end{verbatim}
-\caption{Contract Net Seller agent}
+\caption{Contract Net Seller, AF-Raf}
 \label{fig:contract-seller}
 \end{figure} % >>>
 The ContractNetSeller agent implements the Seller role. Operation sell...
@@ -2916,6 +2915,13 @@ all_proposals_received(CNPId) :-
 /* Initial goals */
 !startCNP(1,fix(computer_123)).
 
+\end{verbatim}
+\caption{Rules and Initial Goals of CNP Initiator, Jason}
+\label{fig:jasonInRG}
+
+\end{figure} % >>>
+\begin{figure}\footnotesize % <<<
+\begin{verbatim}
 /* Plans */
 // start the CNP
 +!startCNP(Id,Object)
@@ -2970,8 +2976,8 @@ all_proposals_received(CNPId) :-
   <- .send(LAg,tell,reject_proposal(CNPId));
   !announce_result(CNPId,T,WAg).
 \end{verbatim}
-\caption{Contract Net Initiator Jason}
-\label{fig:jasonIn}
+\caption{Plans of CNP Initiator, Jason}
+\label{fig:jasonInP}
 \end{figure} % >>>
 
 
@@ -3008,7 +3014,7 @@ plays(initiator,c).
 
 
 \end{verbatim}
-\caption{Contract Net Initiator Jason}
+\caption{CNP Participant, Jason}
 \label{fig:jasonIn}
 \end{figure} % >>>
 % >>>
