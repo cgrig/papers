@@ -2,6 +2,7 @@
 \usepackage{amsmath}
 \usepackage{amsthm}
 \usepackage{arev}
+\usepackage{booktabs}
 \usepackage[T1]{fontenc}
 \usepackage{microtype}
 \usepackage{thmtools}
@@ -229,7 +230,7 @@ usability of Agent Oriented Programming languages. The objective is to
 develop a novel Agent Oriented Programming language that employs roles,
 based on the existing Agent Factory framework, in order to show how the
 concept of role maps to a programming language construct in the specific
-context of Agent Oriented Programming.  
+context of Agent Oriented Programming.
 
 % \rg{Maybe promise only that you show how roles, a concept from sociology,
 %     maps to a programming language construct.}
@@ -459,7 +460,6 @@ programming language level is the preferred approach in order to reduce the
 effort needed for programming and maintaining agent
 systems~\cite{DBLP:conf/esaw/RiemsdijkHJ09}.
 % >>>
-
 \section{Agent Oriented Programming Languages} % <<<
 Role Theory and Organisational Theory have not been yet fully exploited at
 the programming language level.
@@ -477,7 +477,7 @@ Jason is an interpreter written in Java for an extended version of the
 AgentSpeak programming language, it also provides a platform for the
 development of multiagent systems. AgentSpeak is logic based and supports
 Belief Desire Intention agent architecture. Additionally, the AgentSpeak
-agent is a reactive planning system. 
+agent is a reactive planning system.
 
 The core concepts defining an AgentSpeak agent are the belief base, the
 plan library, the goals and the triggering events. The belief base consists
@@ -578,11 +578,11 @@ The perspective is not as uniform when we consider the social level.
 Actually, it is quite the opposite, the approach ranges from employing
 modules to implement roles (2APL) to using an external organisational framework
 (Jason) to manage the social concepts, or disregarding this aspect
-altogether (GOAL). 
+altogether (GOAL).
 
 None of the languages investigated above incorporate, as first order
 constructs, any social level concepts, that could support organising agent
-interaction. 
+interaction.
 
 The social level of multiagent systems is where this research
 work brings most of its contributions. AF-Raf is a newly designed
@@ -602,30 +602,46 @@ conventions); the organisational structures (role structure); and (3) the
 organisational patterns (describing agent
 interaction)~\cite{DBLP:conf/aose/ZambonelliJW00}.
 
-Table x synthesises the main features of 2APL, Jason, GOAL, simpAL and
-AF-Raf related to the social level. Additionally is considered one more
-functionality, type checking, which is important not only for the social
-level, but for the whole language as a whole.
-\\
+\autoref{tbl:comparison} synthesises the main features of 2APL, Jason,
+GOAL, simpAL and AF-Raf related to the social level. Additionally is
+considered one more functionality, type checking, which is important not
+only for the social level, but for the whole language as a whole.
 
-\vbox{\tabskip=0pt \offinterlineskip
-\def\tablerule{\noalign{\hrule}}
-\halign to250pt {
-\hfil#&\vrule#\tabskip=1em plus2em&
-\hfil#& \vrule#& \hfil#\hfil& \vrule#&
-\hfil#& \vrule#\tabskip=0pt\cr\tablerule
-&&\omit\hidewidth \textit{Social Level Features}\hidewidth&&
-%\omit\hidewidth \bf{Jason}\hidewidth&&
-\omit\hidewidth \bf{2APL}\hidewidth&&
-%\omit\hidewidth \bf{GOAL}\hidewidth&&
-%\omit\hidewidth \bf{simpAL}\hidewidth&&
-\omit\hidewidth \bf{AF-Raf}\hidewidth&\cr\tablerule
-&&organisational rules&&-&&-&\cr\tablerule
-&&organisational structure&&roles as modules&&roles as first order construct&\cr\tablerule
-&&organisational patterns&&-&&sessions&\cr\tablerule
-&&\textit{Other Functionality}&& && &\cr\tablerule
-&&type checking&&-&&+ algebraic data types&\cr\tablerule \noalign{\smallskip}
-\hfil\cr}}
+\begin{table}
+\def\.#1{\rlap{\footnote{#1}}}
+\begin{minipage}{\textwidth}\centering
+\begin{tabular}{lccccc}
+\toprule
+Feature & AF-Raf & 2APL & GOAL & Jason & simpAL \\
+\midrule
+rules     & - & - & ? & ? & ? \\
+structure
+  & +\.{roles, as first order construct}
+  & +\.{roles as modules}
+  & ?
+  & ?
+  & ? \\
+patterns
+  & +\.{sessions}
+  & -
+  & ?
+  & ?
+  & ? \\
+types
+  & +\.{algebraic data types}
+  & -
+  & ?
+  & ?
+  & ? \\
+\bottomrule
+\end{tabular}
+\caption{Comparison of Features Related to Agent Interaction: Rules,
+structure, and patterns refer to the organisational rules, structure, and
+patterns defined in~\cite{DBLP:conf/aose/ZambonelliJW00}. Types refer
+specifically to the typing of messages.}
+\label{tbl:comparison}
+\end{minipage}
+\end{table}
 
 % >>>
 % >>>
@@ -691,7 +707,7 @@ be accessed by, and updated by the agent. On the other hand, rules
 represent a means for accessing the belief base and also a way of
 triggering agent behaviour. Figure~\ref{fig:rule} illustrates a simple
 AF-Raf rule, where $status()$ and $request(status())$ represent AF-Raf
-beliefs. 
+beliefs.
 
 A rule has two main components besides a name, which is optional. These
 components are a query, and an action. The query is like a condition that
@@ -708,7 +724,7 @@ substitutions. The next step is to execute it.
 
 Executing an action means executing a piece of associated Java code.
 %Examples of actions include sending a message (\textit{send}), logging a
-%string (\textit{println}), and adopting a belief (\textit{adopt}).  
+%string (\textit{println}), and adopting a belief (\textit{adopt}).
 An action represents the actual agent's behaviour, which can
 range from printing something to the console to sending a message to
 another agent, creating another agent or even updating the belief base.
@@ -718,10 +734,10 @@ Sensors are pieces of Java code that are run at each time-step. They are
 typically used to update the belief base according to the changes in the
 environment. For example, there is a standard sensor (defined in
 \texttt{stdio}) that adds a belief $\mathit{Message}(s,c)$ when a message
-with content~$c$ is received from sender~$s$. 
+with content~$c$ is received from sender~$s$.
 
 %Sensors can range from the monitoring of the agent's message inbox to
-%monitoring changes in the agent's environment.  
+%monitoring changes in the agent's environment.
 
 % modules
 %  - small example
@@ -749,7 +765,7 @@ step. Figure~\ref{fig:actions-sensors} presents some of the AF-Raf standard
 actions and sensors. Both println and send actions have been used in the
 rule Monitoring illustrated in figure~\ref{fig:rule}.
 
- 
+
 \begin{figure}\footnotesize % <<<
 \begin{verbatim}
 action println(s) =
@@ -887,7 +903,7 @@ was created in the early 1990s can be found in~\cite{muldoon2009towards}.
 % >>>
 
 % >>>
-\section{The Belief Base} % <<< 
+\section{The Belief Base} % <<<
 
 In most agent-oriented programming languages, agents maintain a
 \emph{belief base}.  The operations available to the agent are
@@ -1252,7 +1268,7 @@ $\mathit{integer}[\tau]$ or $\mathit{string}[\tau]$, and $\tau$~is long.
 Algebraic data types are the natural target of pattern-matching functions.
 When the type is parametric then the pattern-matching functions typically
 support parametric polymorphism~\cite{AlgebraicDT09}, meaning that the
-values are handled identically regardless of their actual type. 
+values are handled identically regardless of their actual type.
 
 In functional programming an algebraic data type is a kind of compound type
 formed by combining other types. In this context, an algebra of data types
@@ -1262,7 +1278,7 @@ multiplication or conjunction, and the discriminated union, also known as
 sum or disjunction. The operations are used to create new types.
 
 In AF-Raf one of the important uses of algebraic data types is to describe the content of
-messages. Type checking messages leads to fewer runtime errors.  
+messages. Type checking messages leads to fewer runtime errors.
 
 % >>>
 \subsection{Type Checking} % <<<
@@ -1372,7 +1388,7 @@ first the Haskell type classes and modules.
 This section reviews Haskell type classes, because they inspire our notion
 of `role', and Haskell modules, so that it is clear they are very different
 from type classes. We use the basic mathematical concepts of sets and
-equality as examples, because we assume the readers are familiar with these. 
+equality as examples, because we assume the readers are familiar with these.
 
 % modules
 %  - small example
@@ -1452,7 +1468,7 @@ In general, modules are responsible with information
 hiding~\cite{DBLP:journals/cacm/Parnas72a} and encapsulation.  On the other
 hand, type classes are an elegant mechanism to provide ad-hoc polymorphism,
 also known as overloading~\cite{DBLP:conf/popl/WadlerB89}: The same name
-refers to different implementations depending on the context.  
+refers to different implementations depending on the context.
 
 A type class defines a set of methods that can be used with types that are
 members of the class. When you declare an instance of that type class
@@ -1629,9 +1645,9 @@ structure of a session is abstracted as a type. Such a global type is like
 a shared agreement among communication peers, and represents the basis for
 efficient type checking through its projection onto individual peers.
 
- 
 
-Here is an example of such a type from 
+
+Here is an example of such a type from
 Honda et al.~\cite{dblp:conf/popl/hondayc08}:\\
 $\mu\mathbf{t}.$
   $\l DP->K:d<bool>. $\\
@@ -1716,13 +1732,13 @@ together two values of type \textit{x}. The type \textit{expression}
 type \textit{value}, an addition of two \textit{expression} <value>, a
 subtraction of two \textit{expression} <value>, a multiplication of two
 \textit{expression} <value>, or a division of two \textit{expression}
-<value>. 
+<value>.
 
 There are two roles defined: the \textit{Calculator} and the
 \textit{BinaryCalc}. The \textit{Calculator} is responsible with evaluating
 expressions to a value of type \textit{value}, while the
 \textit{BinaryCalc} is responsible with executing binary operations on
-values of type \textit{value}. 
+values of type \textit{value}.
 
 The session \textit{EvaluateExpression} <value> articulates the interaction
 between three types of agents that work together in order to evaluate
@@ -1909,7 +1925,7 @@ agent ExprCalc(binaryCalc : BinaryCalc<value>) : Calculator<value> {
 \caption{BinaryCalc and Calculator implementation with operations}
 \label{fig:calc-op}
 \end{figure} % >>>
- 
+
 As a concluding remark, our notions of roles and sessions overlap in great
 amount with the multiparty session types developed in the context of
 $\pi$-calculus. Our sessions correspond to their global types, while our
@@ -2038,7 +2054,7 @@ aggregation of roles is outlined.
 
 However, there is no infrastructure to support the location and enactment
 of roles at run-time, and also there is no mechanism to model the
-interaction between roles. 
+interaction between roles.
 % >>>
 
 \subsubsection{3APL} % <<<
@@ -2405,10 +2421,10 @@ atom_term: '(' term ')' | literal | LID | function ;
 function: LID '(' term_list ')';
 pred_op: (eq_op | cmp_op) ;
 eq_op: ('==' | '!=');
-cmp_op: ('<' | '>'); 
+cmp_op: ('<' | '>');
 add_op: ('+' | '-');
 mul_op: ('*' | '/' | '%');
-unary_op: ('!' | '-'); 
+unary_op: ('!' | '-');
 \end{verbatim}
 \caption{AF-Raf grammar for formulas and terms}
 \label{fig:grammar-expr}
@@ -3055,7 +3071,7 @@ sent by the seller to the owner.
 include stdio
 include ContractNet
 
-              
+
 action dec(x, y) = raftest.IntegerDecreaseAction;
 action inc(x, y) = raftest.IntegerIncreaseAction;
 action mul(x, y) = raftest.IntegerMulAction;
@@ -3066,17 +3082,17 @@ agent ContractNetBuyer : Buyer {
     +LastTask(sid, task);
     return bid(mul(m, y));
   }
-  
-  operation commit(win()) 
-  when LastTask(sid, decrease(x, y)) { 
-    return dec(x, y); 
+
+  operation commit(win())
+  when LastTask(sid, decrease(x, y)) {
+    return dec(x, y);
     -LastTask(sid, decrease(x,y))
   }
   when LastTask(sid, increase(x, y)) {
-    return inc(x, y);  
+    return inc(x, y);
     -LastTask(sid, increase(x, y));
   }
-    
+
 }
 \end{verbatim}
 \caption{Contract Net Buyer, AF-Raf}
@@ -3094,9 +3110,9 @@ include ContractNet
 
 agent ContractNetSeller(b1 : BuyerRole, b2 : BuyerRole): Seller {
   operation sell(r) {
-    return if b1.ask(r) < b2.ask(r) then { b1.commit(win()); b2.commit(lose());}                   
+    return if b1.ask(r) < b2.ask(r) then { b1.commit(win()); b2.commit(lose());}
            else { b2.commit(win()); b1.commit(lose());}
-                  
+
   }
 }
 \end{verbatim}
