@@ -3451,8 +3451,18 @@ agent ContractNetBuyer : Buyer {
 \end{figure} % >>>
 
 The ContractNetBuyer agent implements the Buyer role defined above. There
-are three actions defined dec(x, y), inc(x, y), mul(x, y). There are two
-operations implemented: ask and commit.
+are three actions defined \textit{dec}(x, y), \textit{inc}(x, y), and
+\textit{mul}(x, y), that extend the agent's functionality. Action
+\textit{dec}(x, y) and \textit{inc}(x, y) are used in performing the task,
+while action \textit{mul}(x, y) is used in calculating the bid offer. The
+ContractNetBuyer agent implements the two operations defined in the Buyer
+role: \textit{ask} and \textit{commit}. 
+
+Operation \textit{ask} has a guard, and it is performed upon receiving a
+message of type \textit{request} if the belief Multiplier(m) has a match in
+the belief base. First, it adds a belief identifying the task and the
+session to the belief base, then returns the result of computing the bid
+offer using the internal action \textit{mul}().
 
 \begin{figure}\footnotesize % <<<
 \begin{verbatim}
