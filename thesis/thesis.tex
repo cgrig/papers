@@ -11,6 +11,7 @@
 \usepackage{hyperref}
 
 \newcommand{\eval}[1]{[\!\![#1]\!\!]}
+\newcommand{\on}[2]{\genfrac{}{}{0pt}{0}{\strut#1}{\strut#2}}
 \newcommand{\pmap}{\rightharpoonup}
 \newcommand{\rg}[1]{\marginpar{\tiny\raggedright\textcolor{blue}{\bf rg:} #1}}
 \newcommand{\todo}[1]{[\textcolor{red}{TODO}: #1]}
@@ -2767,6 +2768,7 @@ style~\cite{DBLP:conf/popl/AppelJ89}.
      & Message(b, op(return(h(), i3, i2), t1))
   {
     // op := f;  other := a1;  cid := i1;  sid := i2
+    -Continue(f2(a1, i1, i2, x, y, i3));
     -Message(b, op(return(h(), i3, i2), t1));
     t2 := a.g(t1);
     t3 := c.g(y);
@@ -2802,6 +2804,7 @@ $\it i2$ is used as the session identifier for all $\it send$ actions.
      & Message(b, op(return(h(), i3, i2), t1))
   {
     // op := f;  other := a1;  cid := i1;  sid := i2
+    -Continue(f2(a1, i1, i2, x, y, i3));
     -Message(b, op(return(h(), i3, i2), t1));
     i4 := new call;
     +Continue(f3(a1, i1, i2, x, y, i3, t1, i4));
@@ -2811,6 +2814,7 @@ $\it i2$ is used as the session identifier for all $\it send$ actions.
      & Message(a, op(return(g(), i3, i2), t2))
   {
     // op := f;  other := a1;  cid := i1;  sid := i2
+    -Continue(f3(a1, i1, i2, x, y, i3, t1, i4));
     -Message(a, op(return(g(), i3, i2), t2));
     i5 := new call;
     +Continue(f4(a1,i1,i2,x,y,i3,t1,i4,t2,i5));
@@ -2820,6 +2824,7 @@ $\it i2$ is used as the session identifier for all $\it send$ actions.
      & Message(c, op(return(g(), i5, i2), t3))
   {
     // op := f;  other := a1;  cid := i1;  sid := i2
+    -Continue(f4(a1,i1,i2,x,y,i3,t1,i4,t2,i5));
     -Message(c, op(return(g(), i5, i2), t3));
     t4 := add(t2, t3);
     return t4;
@@ -2834,6 +2839,7 @@ message. Thus, the last rule from above is desugared into the following:
      & Message(c, op(return(g(), i5, i2), t3))
   {
     // op := f; other := a1;  cid := i1;  sid := i2
+    -Continue(f4(a1,i1,i2,x,y,i3,t1,i4,t2,i5));
     -Message(c, op(return(g(), i5, i2), t3));
     t4 := add(t2, t3);
     send(a1, op(return(f(), i1, i2), t4));
@@ -2893,7 +2899,12 @@ following.
 \begin{align}
 \begin{aligned}
 &{\bf rule}\;{\bf Message}(a,{\bf op}({\bf return}(o'(),i,{\it sid}), t))\\
-&\quad\& {\bf Continue}(o'(\bar v)) \{ B_2 \}
+&\quad\& {\bf Continue}(o'(\bar v))\\
+&\{ \\
+&\quad -{\bf Message}(a,{\bf op}({\bf return}(o'(),i,{\it sid}), t)); \\
+&\quad -{\bf Continue}(o'(\bar v)); \\
+&\quad B_2 \\
+&\}
 \end{aligned}
 \label{eq:cont-rule}
 \end{align}
@@ -2902,7 +2913,7 @@ following.
   rule~\eqref{eq:cont-rule}.
 \item[Step 6:]
   At this point, the body that is being desugared has the form $B_1;{\bf
-  return}\,x\;B_2$. It is desugared into
+  return}\,x;B_2$. It is desugared into
 \begin{align}
 \begin{aligned}
 &B_1; \\
@@ -3091,6 +3102,72 @@ The set ${\rm SessionCode}$ consists of expressions that may appear in the
 definition of an AF-Raf session. Just like ${\rm GroundTerm}$ and ${\rm
 AgentCode}$, the definition of ${\rm SessionCode}$ is essentially a part of
 the abstract~grammar.
+
+To summarize, the state of an AF-Raf program has the following components:
+{\def\.#1{\text{\rlap{ #1}}}
+\begin{align}
+&(A, C, S)\.{is the program state, where} \\
+&\quad A({\it aid})=(\Gamma, T, P, I, O)
+  &&\text{for all agent identifiers~$\it aid$} \\
+&\quad\quad \text{$\Gamma(x)$ is a term} && \text{for variables~$x$} \\
+&\quad\quad T\.{is a belief base} \\
+&\quad\quad P\.{is agent code} \\
+&\quad\quad I=m_1\ldots m_n\.{are the incoming messages} \\
+&\quad\quad O=m_1\ldots m_n\.{are the outgoing messages} \\
+&\quad C({\it cid})=(o,s,r,p)
+  &&\text{for call identifiers~$\it cid$} \\
+&\quad\quad o\.{is an operation name, or $\bot$} \\
+&\quad\quad s\.{is an agent identifier, or $\bot$} \\
+&\quad\quad r\.{is an agent identifier, or $\bot$} \\
+&\quad\quad p\.{is the call phase} \\
+&\quad S({\it sid})=(\Delta,Q)
+  &&\text{for session identifiers~$\it sid$} \\
+&\quad\quad \Delta(x)\.{is an agent identifier, for variables~$x$} \\
+&\quad\quad Q\.{is session code}
+\end{align}}
+
+Recall that the (structural) operational semantics of AF-Raf consists of a
+transition system. The states of this transition system have been defined
+above. It is now time to define its transitions (or arcs, in the
+terminology of graphs). The standard way to define the transitions is to
+use inference rules in a formal system. The basic judgment will be
+\begin{align}
+(A_1,C_1,S_1) \to (A_2, C_2,S_2)
+\label{eq:opsem-j0}
+\end{align}
+meaning that there is a transition from state $(A_1,C_1,S_1)$ to state
+$(A_2,C_2,S_2)$. But other forms of judgment will facilitate focusing on
+relevant parts of the state. For example, agents usually evolve
+independently, and therefore do not need access to other agent's state.
+Thus, the following \emph{inference rule} is useful.
+\begin{align}
+\frac
+  {\on{A_1({\it aid})=(\Gamma_1,T_1,P_1,I,O)}
+  {\on{A_2=A_1[{\it aid}\mapsto(\Gamma_2,T_2,P_2,I,O)]}
+  {(\Gamma_1,T_1,P_1)\to(\Gamma_2,T_2,P_2)}}}
+  {(A_1,C,S)\to(A_2,C,S)}
+\label{eq:opsem-agentfocus1}
+\end{align}
+Such rules are customarily read bottom-up. Below the line is one judgment,
+the \emph{conclusion}. Above the line, next to each other or on top of each
+other, are several judgments, the \emph{hypotheses}. If all the hypotheses
+hold, then the conclusion holds. Strictly speaking,
+\eqref{eq:opsem-agentfocus1}~is a rule \emph{schema}: a rule is obtained by
+istantiating the variables that the schema mentions, such as $A_1$, $A_2$,
+$C$, and so on. The conclusion of~\eqref{eq:opsem-agentfocus1} has the form
+from~\eqref{eq:opsem-j0}: it says that there is a transition in the
+transition system we are defining. Two hypotheses
+of~\eqref{eq:opsem-agentfocus1} are equality constraints --- thus, equality
+constraints are another form of judgment. The third hypothesis has the form
+\begin{align}
+(\Gamma_1,T_1,P_1)\to(\Gamma_2,T_2,P_2)
+\end{align}
+This is another form of judgment, which can be read as a transition
+involving only the local state of one agent. One way to view
+rule~\eqref{eq:opsem-agentfocus1} is that it gives us the means to focus on
+the state of one agent; another way to view it is that it defines the
+concurrent semantics of AF-Raf programs as being interleaving semantics.
+
 
 \todo{Continue revising from here.}
 
