@@ -232,6 +232,8 @@ based on the existing Agent Factory framework, in order to show how the
 concept of role maps to a programming language construct in the specific
 context of Agent Oriented Programming.
 
+\todo{secondary objectives}
+
 % \rg{Maybe promise only that you show how roles, a concept from sociology,
 %     maps to a programming language construct.}
 
@@ -463,14 +465,14 @@ systems~\cite{DBLP:conf/esaw/RiemsdijkHJ09}.
 \section{Agent Oriented Programming Languages} % <<<
 Role Theory and Organisational Theory have not been yet fully exploited at
 the programming language level.
-Jason~\cite{DBLP:books/sp/map2005/BordiniHV05},
+Jason/AgentSpeak~\cite{DBLP:books/sp/map2005/BordiniHV05},
 2APL~\cite{DBLP:journals/aamas/Dastani08}, and
 GOAL~\cite{DBLP:journals/corr/cs-AI-0207008} are three representative agent
 programming languages, being among the most widely used. We will look at
-the similarities similarities between them, and try to identify the
-gap between the established functionality and the desirable functionality of the agent oriented
-programming languages, that could support a more structured multiagent
-interaction.
+the similarities similarities between them, and try to identify the gap
+between the established functionality and the desirable functionality of
+the agent oriented programming languages, that could support a more
+structured multiagent interaction.
 
 \subsection{Jason/Agent Speak} % <<<
 Jason is an interpreter written in Java for an extended version of the
@@ -614,25 +616,25 @@ only for the social level, but for the whole language as a whole.
 \toprule
 Feature & AF-Raf & 2APL & GOAL & Jason & simpAL \\
 \midrule
-rules     & - & - & ? & ? & ? \\
+rules     & - & - & - & -\.{could employ J-Moise+ organisational framework} & - \\
 structure
   & +\.{roles, as first order construct}
   & +\.{roles as modules}
-  & ?
-  & ?
-  & ? \\
+  & -
+  & -\.{could employ J-Moise+ organisational framework}
+  & +\.{roles and organisations, as first order constructs} \\
 patterns
   & +\.{sessions}
   & -
-  & ?
-  & ?
-  & ? \\
+  & -
+  & -\.{could employ J-Moise+ organisational framework}
+  & - \\
 types
   & +\.{algebraic data types}
   & -
-  & ?
-  & ?
-  & ? \\
+  & -
+  & -
+  & + \\
 \bottomrule
 \end{tabular}
 \caption{Comparison of Features Related to Agent Interaction: Rules,
@@ -644,8 +646,10 @@ specifically to the typing of messages.}
 \end{table}
 
 % >>>
+\subsection{Summary} % <<<
+\todo{highlight the findings}
 % >>>
-
+% >>>
 % >>>
 
 \chapter{Main AF-Raf Concepts}\label{ch:concepts} % <<<
@@ -1941,7 +1945,7 @@ To which we add further the benefits of algebraic data
 types~\cite{DBLP:journals/acta/GuttagH78}.
 
 % >>>
-\section{Related Work}\label{ch:related} % <<<
+\section{Comparison with Other Work}\label{ch:related} % <<<
 
 \subsubsection{SimpAL} % <<<
 Ricci  and Santi developed a novel programming language, called
@@ -3000,7 +3004,7 @@ type task = increase(integer, integer)
           | reduce(integer, integer);
 
 type request = request(task, conditions, deadline(integer));
-type bid = bid(conditions);
+type bid = bid(integer);
 type decision = win() | lose();
 type result = failure() | success(integer);
 // success could have, say, price after adding VAT
@@ -3057,14 +3061,15 @@ The session BidRound prescribes the structure of the interaction between
 four agents: owner, seller and two buyers. The interaction is initiated by
 the owner which sends to the seller a message of type \textit{request}. The
 seller advance the \textit{request} message further to each of the two
-buyer agents. For each of the buyers are defined two possible scenarios:
-(1) The buyer sends a message of type \textit{bid} to the seller, then the
-seller sends a textit{win}() message, finally, the buyer sends a message of
-type \textit{result} to the seller; (2) The buyer sends a message of type
-\textit{bit} to the seller, then the seller sends a \textit{lose}() message
-to the buyer, after which no further action is required from the buyer. The
-last message exchanged in the BidRound session is a \textit{result} message
-sent by the seller to the owner.
+buyer agents. For each of the buyers, there are defined two possible
+scenarios: (1) The buyer sends a message of type \textit{bid} to the
+seller, then the seller sends a \textit{win}() message, finally, the buyer
+sends a message of type \textit{result} to the seller; (2) The buyer sends
+a message of type \textit{bit} to the seller, then the seller sends a
+\textit{lose}() message to the buyer, after which no further action is
+required from the buyer. The last message exchange, that conclude the
+BidRound session, and is the same for both scenarios, is a \textit{result}
+message sent by the seller to the owner.
 
 \begin{figure}\footnotesize % <<<
 \begin{verbatim}
@@ -3082,14 +3087,14 @@ agent ContractNetBuyer : Buyer {
     +LastTask(sid, task);
     return bid(mul(m, y));
   }
-
-  operation commit(win())
-  when LastTask(sid, decrease(x, y)) {
-    return dec(x, y);
+  
+  operation commit(win()) 
+  when LastTask(sid, decrease(x, y)) { 
+    return success(dec(x, y)); 
     -LastTask(sid, decrease(x,y))
   }
   when LastTask(sid, increase(x, y)) {
-    return inc(x, y);
+    return success(inc(x, y));  
     -LastTask(sid, increase(x, y));
   }
 
@@ -3110,9 +3115,14 @@ include ContractNet
 
 agent ContractNetSeller(b1 : BuyerRole, b2 : BuyerRole): Seller {
   operation sell(r) {
-    return if b1.ask(r) < b2.ask(r) then { b1.commit(win()); b2.commit(lose());}
-           else { b2.commit(win()); b1.commit(lose());}
-
+    if b1.ask(r) < b2.ask(r) then { 
+      b2.commit(lose());
+      return b1.commit(win());
+    }                   
+    else { 
+      b1.commit(lose());
+      return b2.commit(win()); 
+    }
   }
 }
 \end{verbatim}
@@ -3285,7 +3295,8 @@ level, namely at the social level. A case study is used to illustrate the
 results. The AF-Raf programming language is properly formalised, with its
 grammar specified in EBNF format and its operational semantics is defined,
 using the small-step operational semantics, as a set of inference rules.
-
+\todo{reflect on hypothesis and objectives, how well did I achieve them.
+Refer back to exact place in the thesis where they were discussed.}
 % >>>
 \bibliographystyle{plain}
 \bibliography{thesis}
