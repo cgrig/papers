@@ -2827,9 +2827,69 @@ writes only the short code for operation~$f$, and all the desugaring
 happens while parsing, before the program even begins to be executed.
 \end{example}
 
-
-\todo{expressions to continuations}
-\todo{Explain how operations are desugared into rules.}
+The general algorithm for desugaring operations into rules is the
+following.
+\begin{itemize}
+\item[Step 1:]
+  Desugar operations with multiple guards into multiple operations each
+  with one guard.
+\item[Step 2:]
+  Desugar operations (with one guard) into rules that process the
+  corresponding incoming {\bf call} message. At this point, remember the
+  operation name~$o$, and the (fresh) variables that hold the calling agent
+  identifier $\it other$, the call identifier $\it cid$, and the session
+  identifier $\it sid$.
+\item[Step 3:]
+  Within the body, split expressions into sequences of steps, each
+  involving at most one action invocation or operation invocation.
+\item[Step 4:]
+  Identify the first statement that is either an operation invocation or an
+  operation {\bf return}. For invocations, go to Step~5. For {\bf return}
+  go to Step~6. Otherwise, if there is no invocation and no {\bf return},
+  finish.
+\item[Step 5:]
+  At this point the body to be desugared has the form $B_1;t:=a.f(x); B_2$,
+  where $B_1$~is a sequence of statements without any operation invocation
+  and without any return, $t$~is a variable, $a$~is an agent identifier,
+  $f$~is an operation name, $x$~is a term, and $B_2$~is a sequence of
+  statements. The body is replaced with
+\begin{align}
+\begin{aligned}
+&B_1; \\
+&i:={\bf new}\;{\bf call}; \\
+&+{\bf Continue}(o'(\bar v)); \\
+&{\bf send}(a, {\bf op}({\bf call}(f(), i, {\it sid}), x));
+\end{aligned}
+\end{align}
+  where (1)~$B_1$, $f$, $a$, and~$x$ are taken from the body being
+  processed, (2)~$\it sid$ is the one created at Step~2, (3)~$i$ and~$o'$
+  are fresh identifiers, and (4)~$\bar v$~is a list of all local variables
+  visible at the current point, in some normalized order. In addition, the
+  following rule is created:
+\begin{align}
+\begin{aligned}
+&{\bf rule}\;{\bf Message}(a,{\bf op}({\bf return}(o'(),i,{\it sid}), t))\\
+&\quad\& {\bf Continue}(o'(\bar v)) \{ B_2 \}
+\end{aligned}
+\label{eq:cont-rule}
+\end{align}
+  Here, $t$~is taken from the operation invocation being desugared.  The
+  execution proceeds to Step~4, in order to desugar the body~$B_2$ of the
+  rule~\eqref{eq:cont-rule}.
+\item[Step 6:]
+  At this point, the body that is being desugared has the form $B_1;{\bf
+  return}\,x\;B_2$. It is desugared into
+\begin{align}
+\begin{aligned}
+&B_1; \\
+&{\bf send}({\it other}, {\bf op}({\bf return}(o(), {\it cid}, {\it sid}), x))
+\end{aligned}
+\end{align}
+  where (1)~$\it other$, $o$, $\it cid$, and $\it sid$ are the names chosen
+  at Step~2, and (2)~$x$ is taken from the {\bf return} statement being
+  desugared. (The sequence of operations~$B_2$ is not used.) The algorithm
+  terminates here.
+\end{itemize}
 
 % >>>
 \section{Operational Semantics}\label{sec:opsem} % <<<
