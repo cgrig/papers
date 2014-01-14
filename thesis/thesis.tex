@@ -3103,9 +3103,12 @@ definition of an AF-Raf session. Just like ${\rm GroundTerm}$ and ${\rm
 AgentCode}$, the definition of ${\rm SessionCode}$ is essentially a part of
 the abstract~grammar.
 
-To summarize, the state of an AF-Raf program has the following components:
-{\def\.#1{\text{\rlap{ #1}}}
-\begin{align}
+\autoref{fig:af-raf-state} summarizes the components of the state of an
+AF-Raf program.
+
+\begin{figure}
+\def\.#1{\text{\rlap{ #1}}}
+\begin{align*}
 &(A, C, S)\.{is the program state, where} \\
 &\quad A({\it aid})=(\Gamma, T, P, I, O)
   &&\text{for all agent identifiers~$\it aid$} \\
@@ -3124,7 +3127,10 @@ To summarize, the state of an AF-Raf program has the following components:
   &&\text{for session identifiers~$\it sid$} \\
 &\quad\quad \Delta(x)\.{is an agent identifier, for variables~$x$} \\
 &\quad\quad Q\.{is session code}
-\end{align}}
+\end{align*}
+\caption{The State of an AF-Raf Program}
+\label{fig:af-raf-state}
+\end{figure}
 
 Recall that the (structural) operational semantics of AF-Raf consists of a
 transition system. The states of this transition system have been defined
@@ -3162,35 +3168,50 @@ constraints are another form of judgment. The third hypothesis has the form
 \begin{align}
 (\Gamma_1,T_1,P_1)\to(\Gamma_2,T_2,P_2)
 \end{align}
-This is another form of judgment, which can be read as a transition
+This is another form of judgment, which should be read as a transition
 involving only the local state of one agent. One way to view
 rule~\eqref{eq:opsem-agentfocus1} is that it gives us the means to focus on
 the state of one agent; another way to view it is that it defines the
-concurrent semantics of AF-Raf programs as being interleaving semantics.
+concurrent semantics of AF-Raf programs as being interleaving semantics. In
+particular, this makes the semantic of AF-Raf programs
+\emph{nondeterministic}, something to be expected of a distributed program.
 
-
-\todo{Continue revising from here.}
-
-
-To describe the semantics of AF-Raf statements we need two kinds of
-judgments.
+There are also sources of nondeterminism within one agent. Recall that the
+body of an agent design is a set of rules. There is no constraint on which
+rule is executed first, and there is no constraint on which instantiation of
+a rule is executed first.
 \begin{align}
-\langle \Gamma_1, T_1, C_1 \rangle &\to \langle\Gamma_2,T_2, t\rangle
-  \label{eq:opsem-j1} \\
-\langle \Gamma_1, T_1, C_1 \rangle &\to \langle \Gamma_2, T_2, C_2 \rangle
-  \label{eq:opsem-j2}
+\frac
+  {({\bf rule}\,Q\,\{B\}) \in P}
+  {(\Gamma,T,P)\to(\Gamma,T,({\bf rule}\,Q\,\{B\};P))}
+  \label{eq:opsem-chooserule}
+\\
+\frac
+  {T \models \sigma Q \qquad\text{$\sigma Q$ ground}}
+  {(\Gamma,T,({\bf rule}\,Q\,\{B\}))\to(\Gamma,T,\sigma B)}
+  \label{eq:opsem-instrule}
 \end{align}
-Here $\Gamma$~is a scope, $T$~is a belief base, $C$~is a statement, and
-$t$~is a term.  The judgment~\eqref{eq:opsem-j1} says that to execute
-$C_1$, the interpreter may change the scope from~$\Gamma_1$ to~$\Gamma_2$,
-may update the belief base from~$T_1$ to~$T_2$, and may report the
-value~$t$.  The judgment~\eqref{eq:opsem-j2} says that, instead of
-reporting a value as the result, the interpreter will continue with
-interpreting~$C_2$.  Often, but not always, there is at most one transition
-that the interpreter may take. In other words, the semantics are mostly
-\emph{deterministic}. The situations that allow nondeterminism will be
-emphasized later. States of the form $\langle\Gamma,T,C\rangle$ are not
-final; states of the form $\langle\Gamma,T,t\rangle$ are final.
+Rule~\eqref{eq:opsem-chooserule} says that if the code of an agent is~$P$,
+then execution may pick one of the rules in~$P$, execute the rule, and then
+start over with the execution of~$P$. Rule~\eqref{eq:opsem-instrule} uses
+some new, but standard, notations. Recall that $Q$, the query, is a term.
+Here $\sigma$~is a substitution from variables to ground terms: $\sigma
+Q$~is the result of applying the substitution $\sigma$ to the term~$Q$, and
+$\sigma B$ is the result of applying the substitution $\sigma$ to the rule
+body~$B$. The notation $T\models Q$ means that formula $Q$ hold in the
+theory~$T$. (Recall that belief bases are predicate logic theories.)
+\begin{align}
+T &\models Q  &&\text{if} && Q\in T \\
+T &\models Q_1\&Q_2 &&\text{iff} &&\text{$T\models Q_1$ and $T\models Q_2$}\\
+T &\models Q_1|Q_2 &&\text{iff} &&\text{$T\models Q_1$ or $T\models Q_2$}
+\end{align}
+Thus, rule~\eqref{eq:opsem-instrule} says that any instantiation of a rule
+may be chosen to be executed, as long as the instance of the query holds in
+the current belief base. Rules
+\eqref{eq:opsem-chooserule}~and~\eqref{eq:opsem-instrule}, like the
+concurrency rule~\eqref{eq:opsem-agentfocus1}, are sources of
+nondeterminism.
+
 
 The semantics for sequential composition is given by the following
 inference rule.
@@ -3202,6 +3223,7 @@ inference rule.
   {\langle\Gamma_0,T_0,(C_1;C_2)\rangle\to\langle\Gamma_2,T_2,t_2\rangle}
   \label{eq:opsem-seq}
 \end{align}
+\todo{Describe $(\Gamma,T,t)$.}
 Such rules are customarily read bottom-up. Below the line is the
 \emph{conclusion} which, in this case, says that the effect of the
 interpreter while executing $C_1;C_2$ could be to change the scope
