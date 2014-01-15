@@ -10,14 +10,16 @@
 
 \usepackage{hyperref}
 
-\newcommand{\ato}{\Rightarrow}
 \newcommand{\eval}[1]{[\!\![#1]\!\!]}
+\newcommand{\limp}{\Rightarrow}
 \newcommand{\on}[2]{\genfrac{}{}{0pt}{0}{\strut#1}{\strut#2}}
 \newcommand{\pmap}{\rightharpoonup}
 \newcommand{\rg}[1]{\marginpar{\tiny\raggedright\textcolor{blue}{\bf rg:} #1}}
 \newcommand{\todo}[1]{[\textcolor{red}{TODO}: #1]}
 
 \renewcommand{\chapterautorefname}{Chapter}
+\renewcommand{\sectionautorefname}{Section}
+\renewcommand{\subsectionautorefname}{\sectionautorefname}
 
 \renewcommand{\qed}{% amsthm doesn't know to go on next line if needed
   \ifmmode\mathqed%
@@ -113,8 +115,7 @@ AF-Raf in a systematic way, and could serve as a reference formal
 definition of the language.
 %\rg{Should say that relevant background on type theory goes here?}
 
-Next comes a bigger case study (\autoref{ch:casestudy}) and a more thorough
-discussion of related work (\autoref{ch:related}).
+Last comes a bigger case study (\autoref{ch:casestudy}).
 
 % >>>
 
@@ -308,8 +309,8 @@ to illustrate a software agent. Shoham argues that more complex mental
 notions such as desires, intentions, goals or plans can be included, but
 those three are the most important ones.
 
-The generic agent interpreter's basic loop contains two steps: (1). read
-the current messages and update the mental state; (2). execute commitments
+The generic agent interpreter's basic loop contains two steps: (1)~read
+the current messages and update the mental state; (2)~execute commitments
 (possibly resulting in further belief changes).
 
 Agent0 is a prototype programming language used to illustrate the Agent
@@ -778,8 +779,8 @@ the rule). The first step of evaluating the action is to apply these
 substitutions. The next step is to execute it.
 
 Executing an action means executing a piece of associated Java code.
-%Examples of actions include sending a message (\textit{send}), logging a
-%string (\textit{println}), and adopting a belief (\textit{adopt}).
+%Examples of actions include sending a message (\textit{send}) and logging a
+%string (\textit{println}).
 An action represents the actual agent's behaviour, which can
 range from printing something to the console to sending a message to
 another agent, creating another agent or even updating the belief base.
@@ -817,8 +818,8 @@ programs. Actions are invoked within rules. There is a number of actions
 included in the standard library, which any agent can use, there is also
 the option to create new actions. Sensors are run automatically every time
 step. Figure~\ref{fig:actions-sensors} presents some of the AF-Raf standard
-actions and sensors. Both println and send actions have been used in the
-rule Monitoring illustrated in figure~\ref{fig:rule}.
+actions and sensors. Both {\sf println} and {\sf send} actions have been
+used in the rule illustrated in \autoref{fig:rule}.
 
 
 \begin{figure}\footnotesize % <<<
@@ -876,9 +877,6 @@ Further checks are performed at runtime. Each session has a session id.
 Each message has to contain the session id so that it can be associated to
 an specific session. This enables the interpreter to monitor that the
 messages succeed in the right order.
-
-
-
 
 \subsection{Agent Factory} % <<<
 
@@ -3105,18 +3103,22 @@ $\bot\notin A$. The special element $\bot$ is to be read as `undefined'
 or~`unknown'. In phase ${\tt notStarted}$ the components $o$,~$s$, and~$r$
 are~$\bot$; otherwise, all components are~$\ne\bot$.
 
-Finally, a session state has two components.
+Finally, a session state is a finite set of deterministic session states.
 \begin{align}
-(\Delta,Q) &\;\in\;{\rm SessionState}
+{\rm SessionState} &\;=\; {\rm DetSessionState}\to\{0\}
 \\
-{\rm SessionState} &\;=\; {\rm SessionScope}\times{\rm SessionCode}
+(\Delta,Q) &\;\in\;{\rm DetSessionState}
+\\
+{\rm DetSessionState} &\;=\;
+  {\rm SessionScope}\times{\rm SessionCode}
 \\
 {\rm SessionScope} &\;=\; {\rm Variable}\pmap{\rm AgentId}
 \end{align}
 The set ${\rm SessionCode}$ consists of expressions that may appear in the
 definition of an AF-Raf session. Just like ${\rm GroundTerm}$ and ${\rm
 AgentCode}$, the definition of ${\rm SessionCode}$ is essentially a part of
-the abstract~grammar.
+the abstract~grammar.  As before, $A\pmap\{0\}$ stands for the finite
+subsets of~$A$.
 
 \autoref{fig:af-raf-state} summarizes the components of the state of an
 AF-Raf~program.
@@ -3125,7 +3127,7 @@ AF-Raf~program.
 \def\.#1{\text{\rlap{ #1}}}
 \begin{align*}
 &(A, C, S)\.{is the program state, where} \\
-&\quad A({\it aid})=(\Gamma, T, P, I, O)
+&\quad A({\it aid})=(\Gamma, T, P, I, O, d)
   &&\text{for all agent identifiers~$\it aid$} \\
 &\quad\quad \text{$\Gamma(x)$ is a term} && \text{for variables~$x$} \\
 &\quad\quad T\.{is a belief base} \\
@@ -3139,10 +3141,10 @@ AF-Raf~program.
 &\quad\quad s\.{is an agent identifier, or $\bot$} \\
 &\quad\quad r\.{is an agent identifier, or $\bot$} \\
 &\quad\quad p\.{is the call phase} \\
-&\quad S({\it sid})=(\Delta,Q)
+&\quad S({\it sid})=\{(\Delta_1,Q_1),\ldots\,\}
   &&\text{for session identifiers~$\it sid$} \\
-&\quad\quad \Delta(x)\.{is an agent identifier, for variables~$x$} \\
-&\quad\quad Q\.{is session code}
+&\quad\quad \Delta_k(x)\.{is an agent identifier, for variables~$x$} \\
+&\quad\quad Q_k\.{is a finite set of session expressions}
 \end{align*}
 \caption{The State of an AF-Raf Program}
 \label{fig:af-raf-state}
@@ -3164,8 +3166,8 @@ independently, and therefore do not need access to other agent's state.
 Thus, the following \emph{inference rule} is useful.
 \begin{align}
 \frac
-  {\on{A_1({\it aid})=(\Gamma_1,T_1,P_1,I,O)}
-  {\on{A_2=A_1[{\it aid}\mapsto(\Gamma_2,T_2,P_2,I,O)]}
+  {\on{A_1({\it aid})=(\Gamma_1,T_1,P_1,I,O,d)}
+  {\on{A_2=A_1[{\it aid}\mapsto(\Gamma_2,T_2,P_2,I,O,d)]}
   {(\Gamma_1,T_1,P_1)\to(\Gamma_2,T_2,P_2)}}}
   {(A_1,C,S)\to(A_2,C,S)}
 \label{eq:opsem-agentfocus1}
@@ -3332,10 +3334,10 @@ says that the identifier~$a'_2$ is fresh. Recall that the agent name is
 optional in the grammar: if it is missing, then some fresh identifier will
 be chosen.  The notation $\epsilon$ is used both for an empty scope and for
 an empty message queue. Finally, ${\it body}(d_2)[\bar{a}/{\it args}(d_2)]$
-means that the code for the design~$d_2$ is looked up, and a subsitution is
+means that the code for the design~$d_2$ is looked up, and a substitution is
 applied on its body: the formal argument ${\it args}(d_2)$ are replaced by
 the actual arguments~$\bar a$. The result of this substitution is the code
-that the newily created agent should execute, and it is a set of rules.
+that the newly created agent should execute, and it is a set of rules.
 
 The only property that a new call identifier must have is that it must be
 fresh.
@@ -3361,13 +3363,15 @@ call~identifiers.
   {\on{A_1({\it aid})=\bigl(\Gamma,T,({\bf new}\;{\bf session}\;n),I,O,d\bigr)}
   {\on{A_2({\it aid})=\bigl(\Gamma,T,{\it sid},I,O,d\bigr)}
   {\on{S_1({\it sid})=\bot}
-      {S_2({\it sid})=\bigl(\{\,(a,\bot)\mid a\in{\it args}(n)\,\},\; {\it body}(n)\bigr)}}}}
+      {S_2({\it sid})=\bigl(\{\,(a,\bot)\mid a\in{\it args}(n)\,\},\;
+        \{{\it body}(n)\}\bigr)}}}}
   {(A_1,C,S_1)\to(A_2,C,S_2)}
 \end{align}
 The created session identifier $\it sid$ is fresh. The session state is
 initialized as follows. The scope~$\Delta$ maps all formal arguments ${\it
 args}(n)$ to~$\bot$: it is initially unknown to which agents the session
-applies. The code~$Q$ is the whole body of the session named~$n$.
+applies. The set~$Q$ is a singleton, containing the whole body of the
+session named~$n$.
 
 AF-Raf actions consist of arbitrary Java code, and thus they are
 essentially an escape hatch from AF-Raf's semantics. If something is not
@@ -3410,11 +3414,12 @@ Normal messages are transported by AgentFactory.
 \begin{align}
 \frac
   {\on{A_1(a_1)=\bigl(\Gamma_1,T_1,P_1,I_1,(O_1\cdot(a_2,t)),d_1\bigr)}
-  {\on{A_1(a_2)=\bigl(\Gamma_2,T_2,P_2,I_2,O_2,d_2)\bigr)}
+  {\on{A_1(a_2)=\bigl(\Gamma_2,T_2,P_2,I_2,O_2,d_2\bigr)}
   {\on{A_2(a_1)=\bigl(\Gamma_1,T_1,P_1,I_1,O_1,d_1\bigr)}
-  {\on{A_1(a_2)=\bigl(\Gamma_2,T_2,P_2,((a_1,t)\cdot I_2),O_2,d_2)\bigr)}
+  {\on{A_1(a_2)=\bigl(\Gamma_2,T_2,P_2,((a_1,t)\cdot I_2),O_2,d_2\bigr)}
       {\text{$t\ne{\bf op}(t')$ for all $t'$}}}}}}
   {(A_1,C,S)\to(A_2,C,S)}
+  \label{eq:opsem-msg-nonop}
 \end{align}
 The payload $t$ is not of the special form ${\bf op}(t')$, then it does not
 change the call mapping~$C$, nor the session mapping~$S$. For messages that
@@ -3430,11 +3435,11 @@ session $\it sid$ is checked, unless $\it sid$ is~$\bot$.
 
 Type checking proceeds as follows:
 \begin{itemize}
-\item[Step 1]
+\item[Step 1:]
   Identify the design~$d_2$ of the receiver~$a_2$. Check that an
   operation~$o$ is declared exactly once in the roles that $d_2$
   implements; otherwise, signal an error.
-\item[Step 2]
+\item[Step 2:]
   Let $o:\theta_1\to\theta_2$ be the declaration identified at Step~1.
   Check that $t$ is of type~$\theta_1$ (as in
   \autoref{sec:concepts-adt-check}); otherwise, signal an error.
@@ -3443,19 +3448,128 @@ An obvious modification handles the case of {\bf return} messages. For
 simplicity, and because type checking was already presented in detail
 (\autoref{sec:concepts-adt-check}) we do not integrate (dynamic) type
 checking in the operational semantics. We do, however, fully specify
-session checking.
+session~checking.
 
 Session checking is an angelic process. For example, it is enough for one
 branch of the $\bf oneof$ construct to be satisfied. Similarly, the $\bf
-repeat$ construct only needs to be satisfied for soem fixed number of
-repetitions, not forever. To model this in the operatinal semantics, we
-introduce an angelic transition.
+repeat$ construct only needs to be satisfied for some fixed number of
+repetitions, not forever. This angelic behavior is the reason why $\rm
+SessionState$ is a set of $\it DetSessionState$.  The elements of $S({\it
+sid})$ represent possible ways to match one session. Only if all fail,
+which is represented by $S({\it sid})=\emptyset$, the execution leads to
+error.
 \begin{align}
-(A_1,C_1,S_1)\ato(A_2,C_2,S_2) \label{eq:opsem-atran} \\
-(A_1,C_1,S_1)\to(A_2,C_2,S_2) \label{eq:opsem-dtran}
+&\frac
+  {S({\it sid})=\emptyset}
+  {(A,C,S)\to{\bf error}}
+\\[1ex]
+&\frac
+  {\on{S_1({\it sid})=\bigl\{(\Delta,{\bf endsession})\bigr\}}
+      {S_2=\{\,(a,b)\mid\text{$(a,b)\in S_1$ and $a\ne{\it sid}$}\,\}}}
+  {(A,C,S_1)\to(A,C,S_2)}
+  \label{eq:opsem-s-ok}
 \end{align}
-The transition system now has angelic transitions~\eqref{eq:opsem-atran} in
-addition to the demonic transitions~\eqref{eq:opsem-dtran}.
+Rule~\eqref{eq:opsem-s-ok} specifies the case in which a session was
+successfully tracked to its end. In that case, the identifier $\it sid$ is
+removed from the set of active session identifier, so it can be reused by a
+subsequent {\bf new session} statement. The keyword $\bf endsession$ should
+be viewed as a marker for the end of the bodies of all~sessions.
+
+Let us now see the equivalent of rule~\eqref{eq:opsem-msg-nonop} but for
+messages of the form ${\bf op}(\ldots)$.
+\begin{align}
+\frac
+  {\on{{\it delivery}(a_1,a_2,
+    {\bf op}\bigl({\bf call}\bigl(o(),{\it cid},{\it sid}\bigr),t\bigr))}
+  {\on{S_2({\it sid})=
+        \cup\{\,{\it sNext}((\Delta,Q),a_1,a_2,t)
+          \mid(\Delta,Q)\in S_2\,\}}
+      {Q\;=\;\theta:x_1\to x_2; B}}}
+  {(A_1,C,S_1)\to(A_2,c,S_2)}
+\end{align}
+where ${\it delivery}(a_1,a_2,t)$ is a shorthand for four hypotheses
+that are identical to the ones in rule~\eqref{eq:opsem-msg-nonop}
+\begin{align}
+\begin{aligned}
+&{\it delivery}(a_1,a_2,t) = \\
+  &\qquad
+  \left\{
+  \begin{aligned}
+  A_1(a_1)&=\bigl(\Gamma_1,T_1,P_1,I_1,(O_1\cdot(a_2,t)),d_1\bigr) \\
+  A_1(a_2)&=\bigl(\Gamma_2,T_2,P_2,I_2,O_2,d_2\bigr) \\
+  A_2(a_1)&=\bigl(\Gamma_1,T_1,P_1,I_1,O_1,d_1\bigr) \\
+  A_1(a_2)&=\bigl(\Gamma_2,T_2,P_2,((a_1,t)\cdot I_2),O_2,d_2\bigr)
+  \end{aligned}
+  \right.
+\end{aligned}
+\end{align}
+and $\it sNext$ tracks one step of the session. The function $\it sNext$
+takes a deterministic session state and information about a message
+delivery, and outputs a set of deterministic session states, among which an
+angelic choice should be made.
+\begin{align}
+\begin{aligned}
+{\it sNext} :
+  (&{\rm DetSessionState}\times{\rm AgentId}\times{\rm AgentId}
+\\
+&\quad\times{\rm GroundTerm}) \to {\rm SessionState}
+\end{aligned}
+\end{align}
+The function $\it sUnfold$, defined later, ensures that the session code
+has the form $\theta:x_1\to x_1; B$; that is, it starts with a simple
+session step and continues with the rest~$B$. Thus, in the definition of
+$\it sNext$ we may assume that the type~$\theta$ and the variable names
+$x_1$~and~$x_2$ are available, as well as the continuation~$B$. By
+definition,
+\begin{align}
+&(\Delta_2,B) \in {\it sNext}\bigl((\Delta_1,(\theta:x_1\to x_2;B)),a_1,a_2,t\bigr) \\
+\intertext{if and only if}
+&\begin{aligned}
+&\Delta_1x\ne\Delta_2x \limp \Delta_2x=\bot
+  &&\text{for all variables $x$} \\
+&\Delta_2 x_1=a_1 \qquad \Delta_2 x_2=a_2\\
+&\text{$t$ has type $\theta$}
+\end{aligned}\label{eq:opsem-sNext}
+\end{align}
+Note that the above is a set comprehension, written in a slightly unusual
+way simply because of horizontal space limits. Also note that
+conditions~\eqref{eq:opsem-sNext} could not hold for any choice
+of~$\Delta_2$, in which case ${\it sNext}(\ldots)$ evaluates to the empty
+set.
+
+The function $\it sUnfold$ handles the following constructs: {\bf oneof},
+{\bf maybe}, {\bf repeat}, and nested sessions.
+\begin{align}
+{\it sUnfold} : {\rm SessionCode}\to({\rm SessionCode}\to\{0\})
+\end{align}
+The following inference rule ensures that it is always possible to apply
+unfolding.
+\begin{align}
+\frac
+  {S_2=S_1[{\it sid}\mapsto\{\,(\Delta,Q')
+    \mid\text{$(\Delta,Q)\in S_1({\it sid})$ and $Q'\in{\it sUnfold(Q)}$}\,\}]}
+  {(A,C,S_1)\to(A,C,S_2)}
+\end{align}
+
+The unfoldings for {\bf oneof}, {\bf maybe}, and {\bf repeat} are very
+simple.
+\begin{align}
+&{\it sUnfold\bigl({\bf oneof}\,B_1\ldots B_n; B'\bigr)}
+  = \bigl\{ (B_1;B'),\ldots,(B_n;B')\bigr\}
+\\
+&{\it sUnfold\bigl({\bf maybe}\,B;B'\bigr)}
+  = \bigl\{ B', (B;B')\bigr\} \\
+&{\it sUnfold\bigl({\bf repeat}\,B;B'\bigr)}
+  = \bigl\{ B', (B;{\bf repeat}\,B;B')\bigr\}
+\end{align}
+The unfolding of a nested session amounts to inlining, after the proper
+substitutions have been made.
+\begin{align}
+{\it sUnfold}\bigl(n(\bar{x}); B\bigr)
+  = \bigl\{ {\it body}(n)[\bar{x}/{\it args}(n)]; B \bigr\}
+\end{align}
+
+This concludes the description of AF-Raf's semantics.
 
 % >>>
 % >>>
