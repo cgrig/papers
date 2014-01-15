@@ -4,6 +4,7 @@
 \usepackage{arev}
 \usepackage{booktabs}
 \usepackage[T1]{fontenc}
+\usepackage{graphicx}
 \usepackage{microtype}
 \usepackage{thmtools}
 \usepackage{xcolor}
@@ -16,6 +17,9 @@
 \newcommand{\pmap}{\rightharpoonup}
 \newcommand{\rg}[1]{\marginpar{\tiny\raggedright\textcolor{blue}{\bf rg:} #1}}
 \newcommand{\todo}[1]{[\textcolor{red}{TODO}: #1]}
+
+\renewcommand{\rg}{}
+\renewcommand{\todo}{}
 
 \renewcommand{\chapterautorefname}{Chapter}
 \renewcommand{\sectionautorefname}{Section}
@@ -43,11 +47,46 @@
 % >>>
 % >>>
 \begin{document} % <<<
-\overfullrule=5pt \pretolerance=400 \tolerance=200 % temporary
-\title{Supporting Agent Systems in the Programming Language} % <<<
-\author{Claudia V. Grigore}
-\date{January 2014}
-\maketitle
+% XXX \overfullrule=5pt \pretolerance=400 \tolerance=200 % temporary
+\frontmatter
+
+%\title{Supporting Agent Systems in the Programming Language} % <<<
+%\author{Claudia V. Grigore}
+%\date{January 2014}
+%\maketitle
+
+\begin{titlepage}
+\begin{center}
+\vspace*{\stretch{1}}
+
+\includegraphics{ucd2.png}
+
+\bigskip\bigskip
+{\huge\bf Supporting Agent Systems \\[.5ex] 
+  in the Programming Language}
+\\[3ex]
+{\Large Claudia V.~Grigore}
+
+UCD Student Number: 07266049
+
+\bigskip\bigskip
+The thesis is submitted to University College Dublin
+in fulfillment of the requirements for the degree of
+Doctor of Philosophy in Computer Science.
+
+\bigskip
+School of Computer Science and Informatics Doctoral Studies
+
+\bigskip
+Head of School: Dr.~John Dunnion\\
+Principal Supervisor: Dr.~Rem W.~Collier\\
+\bigskip\bigskip
+
+January 2014
+\vspace*{\stretch{1}}
+\end{center}
+\end{titlepage}
+
 
 \pagenumbering{roman}
 \tableofcontents
@@ -56,9 +95,9 @@
 % >>>
 \baselineskip=21.75pt
 \parskip=3pt plus 3pt minus 3pt
-\chapter*{Acknowledgements} % <<<
-
-% >>>
+%\chapter*{Acknowledgements} % <<<
+%
+%% >>>
 
 \chapter*{Abstract} % <<<
 
@@ -118,7 +157,7 @@ definition of the language.
 Last comes a bigger case study (\autoref{ch:casestudy}).
 
 % >>>
-
+\mainmatter
 \chapter{Introduction}\label{ch:intro} % <<<
 \pagenumbering{arabic}
 
