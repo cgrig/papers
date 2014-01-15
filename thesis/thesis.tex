@@ -2409,11 +2409,14 @@ rule: 'rule' formula sequence_statement;
 role: 'role' id ('<' type_list '>')? '
       {' (operation_type ';')* '}';
 session: 'session' id ('<' type_list '>')?
-         '(' agent_role_list ')' '{' (session_step ';')* '}';
+         '(' agent_role_list ')' sequence_session_step;
 session_step: simple_session_step
-            | nested_session_step;
+            | nested_session_step
+            | choice_session_step;
 simple_session_step: type ':' id '->' id;
 nested_session_step: ('maybe' | 'repeat')? id '(' id_list ')';
+choice_session_step: 'oneof' sequence_session_step*;
+sequence_session_step: '{' (session_step ';')* '}';
 action: 'action' function '=' qualified_id ';';
 sensor: 'sensor' qualified_id ';';
 type_declaration: 'type' LID ('<' lid_list '>')? '='
@@ -2506,7 +2509,7 @@ atom_statement:
   | update_belief;
 assignment: LID ':=' statement;
 new_statement: ( new_id | new_agent );
-new_id: 'new' ( 'call' | 'session' );
+new_id: 'new' ( 'call' | 'session' id );
 new_agent:
   'new' UID ('(' term_list ')')? STRING? ('{' formula_list '}')?;
 term_statement: term;
@@ -2544,7 +2547,7 @@ must be followed by the category of the name that should be generated. In
 the other case, {\bf new} statements are used to instantiate agents. In
 this case, the {\bf new} keyword must be followed by the name of the design
 to be instantiated. Optionally, the user \emph{may} specify a list of agent
-adresses, a name for the new agent, and a set of initial beliefs.
+addresses, a name for the new agent, and a set of initial beliefs.
 
 As mentioned earlier, action invocations have the same syntax as terms.
 Statements that update beliefs also have a very similar syntax: a term
@@ -2970,6 +2973,7 @@ following components:
 \item an expression that needs to be evaluated
 \item a queue of outgoing messages
 \item a queue of incoming messages
+\item the name of the design
 \end{itemize}
 The call state consists of the following components, each of them possibly
 having the special value~$\bot$, meaning `unknown':
@@ -3039,12 +3043,13 @@ ensure this does not happen.
 
 Agent states are themselves triples.
 \begin{align}
-(\Gamma, T, P, I, O) &\;\in\; {\rm AgentState}
+(\Gamma, T, P, I, O,d) &\;\in\; {\rm AgentState}
 \\
 {\rm AgentState} &\;=\;
   \begin{aligned}[t]
     &{\rm AgentScope} \times{\rm BeliefBase} \times{\rm AgentCode} \\
-    &\quad\times{\rm Message}^* \times{\rm Message}^*
+    &\quad\times{\rm Message}^* \times{\rm Message}^* \\
+    &\quad\times{\rm DesignName}
   \end{aligned}
 \\
 {\rm AgentScope} &\;=\; {\rm Variable}\pmap{\rm GroundTerm}
@@ -3104,7 +3109,7 @@ AgentCode}$, the definition of ${\rm SessionCode}$ is essentially a part of
 the abstract~grammar.
 
 \autoref{fig:af-raf-state} summarizes the components of the state of an
-AF-Raf program.
+AF-Raf~program.
 
 \begin{figure}
 \def\.#1{\text{\rlap{ #1}}}
@@ -3117,6 +3122,7 @@ AF-Raf program.
 &\quad\quad P\.{is agent code} \\
 &\quad\quad I=m_1\ldots m_n\.{are the incoming messages} \\
 &\quad\quad O=m_1\ldots m_n\.{are the outgoing messages} \\
+&\quad\quad d\.{is the design name} \\
 &\quad C({\it cid})=(o,s,r,p)
   &&\text{for call identifiers~$\it cid$} \\
 &\quad\quad o\.{is an operation name, or $\bot$} \\
@@ -3159,7 +3165,7 @@ the \emph{conclusion}. Above the line, next to each other or on top of each
 other, are several judgments, the \emph{hypotheses}. If all the hypotheses
 hold, then the conclusion holds. Strictly speaking,
 \eqref{eq:opsem-agentfocus1}~is a rule \emph{schema}: a rule is obtained by
-istantiating the variables that the schema mentions, such as $A_1$, $A_2$,
+instantiating the variables that the schema mentions, such as $A_1$, $A_2$,
 $C$, and so on. The conclusion of~\eqref{eq:opsem-agentfocus1} has the form
 from~\eqref{eq:opsem-j0}: it says that there is a transition in the
 transition system we are defining. Two hypotheses
@@ -3185,7 +3191,7 @@ a rule is executed first.
   {({\bf rule}\,Q\,\{B\}) \in P}
   {(\Gamma,T,P)\to(\Gamma,T,({\bf rule}\,Q\,\{B\};P))}
   \label{eq:opsem-chooserule}
-\\
+\\[1ex]
 \frac
   {T \models \sigma Q \qquad\text{$\sigma Q$ ground}}
   {(\Gamma,T,({\bf rule}\,Q\,\{B\}))\to(\Gamma,T,\sigma B)}
@@ -3212,71 +3218,176 @@ the current belief base. Rules
 concurrency rule~\eqref{eq:opsem-agentfocus1}, are sources of
 nondeterminism.
 
-
 The semantics for sequential composition is given by the following
 inference rule.
 \begin{align}
 \frac
-  {\langle\Gamma_0,T_0,C_1\rangle\to\langle\Gamma_1,T_1,t_1\rangle
+  {(\Gamma_0,T_0,P_1)\to(\Gamma_1,T_1,t_1)
   \quad
-  \langle\Gamma_1,T_1,C_2\rangle\to\langle\Gamma_2,T_2,t_2\rangle}
-  {\langle\Gamma_0,T_0,(C_1;C_2)\rangle\to\langle\Gamma_2,T_2,t_2\rangle}
+  (\Gamma_1,T_1,P_2)\to(\Gamma_2,T_2,t_2)}
+  {(\Gamma_0,T_0,(P_1;P_2))\to(\Gamma_2,T_2,t_2)}
   \label{eq:opsem-seq}
 \end{align}
-\todo{Describe $(\Gamma,T,t)$.}
-Such rules are customarily read bottom-up. Below the line is the
-\emph{conclusion} which, in this case, says that the effect of the
-interpreter while executing $C_1;C_2$ could be to change the scope
+The state $(\Gamma,T,P)$, as before, means that the current agent has
+scope~$\Gamma$, belief base~$T$, and has to execute the code~$P$. The new
+type of state $(\Gamma,T,t)$ means that the current agent has
+scope~$\Gamma$, belief base~$T$, it \emph{finished executing} and the
+result was the ground term~$t$.  The conclusion says that the effect of the
+interpreter while executing $P_1;P_2$ could be to change the scope
 from~$\Gamma_0$ to~$\Gamma_2$ and the belief base from~$T_0$ to~$T_1$,
-provided that the hypotheses are satisfied. The \emph{hypotheses} appear
-above the line, and their left-to-right order is \emph{not} important. Any
-implementation of this rule, however, will have to treat hypotheses from
-left to right. The reason is the following. Suppose the interpreter starts
-from the state $\langle\Gamma,T,C\rangle$. The goal of the interpreter is
-to find some transition that goes out of this state. In other word, the
-interpreter will search for an inference rule whose conclusion has the form
-$\langle\Gamma,T,C\rangle\to s$, and whose hypotheses can be satisfied.
-Satisfying the hypotheses will usually imply that $s$~has a certain
-well-determined form; otherwise, the interpreter is free to choose~$s$
-nondeterministically. Now let us go back to rule~\eqref{eq:opsem-seq}. To
-check whether the second hypothesis holds, the interpreter would have to
-choose some values for $\Gamma_1$~and~$T_1$, without any guidance.
-Assuming the guess was lucky, and the second hypothesis holds, the
-interpreter would now have to check the first hypothesis. In the first
-hypothesis, however, most values (namely, $C_1$, $\Gamma_0$, $T_0$,
-$\Gamma_1$, and $T_1$) are fixed. Without much freedom, it is very unlikely
-that the first hypothesis would also work. The interpreter would have to
-backtrack, take another guess for $\Gamma_1$~and~$T_1$, and repeat. Thus,
-strictly speaking, the implementation is allowed by the operational
-semantics formalism to try (several times!) to execute $C_2$ before $C_1$,
-but such an implementation would be extremely unfortunate. It is therefore
-reasonable to say that rule~\eqref{eq:opsem-seq} indicates that $C_1$ must
-be executed before~$C_2$. Note that the value~$t_1$ that results from the
-execution of~$C_1$ is ignored. This is intended.  Other inference rules for
-the operational semantics will be given without such a detailed discussion
-of their implications.
+provided that the hypotheses are satisfied. The left-to-right order of the
+hypotheses is \emph{not} important. Any implementation of this rule,
+however, will have to treat hypotheses from left to right. The reason is
+the following. Suppose the interpreter starts from the state
+$(\Gamma,T,P)$. The goal of the interpreter is to find some transition that
+goes out of this state. In other word, the interpreter will search for an
+inference rule whose conclusion has the form $(\Gamma,T,P)\to s$, and whose
+hypotheses can be satisfied.  Satisfying the hypotheses will usually imply
+that $s$~has a certain well-determined form; otherwise, the interpreter is
+free to choose~$s$ nondeterministically. Now let us go back to
+rule~\eqref{eq:opsem-seq}. To check whether the second hypothesis holds,
+the interpreter would have to choose some values for $\Gamma_1$~and~$T_1$,
+without any guidance.  Assuming the guess was lucky, and the second
+hypothesis holds, the interpreter would now have to check the first
+hypothesis. In the first hypothesis, however, most values (namely, $P_1$,
+$\Gamma_0$, $T_0$, $\Gamma_1$, and $T_1$) are fixed. Without much freedom,
+it is very unlikely that the first hypothesis would also work. The
+interpreter would have to backtrack, take another guess for
+$\Gamma_1$~and~$T_1$, and repeat. Thus, strictly speaking, the
+implementation is allowed by the operational semantics formalism to try
+(several times!) to execute $P_2$ before $P_1$, but such an implementation
+would be extremely unfortunate. It is therefore reasonable to say that
+rule~\eqref{eq:opsem-seq} indicates that $P_1$ must be executed
+before~$P_2$. Note that the value~$t_1$ that results from the execution
+of~$P_1$ is ignored. This is intended. Another observation is that an
+application of the rule~\eqref{eq:opsem-chooserule} introduces a sequential
+composition, and must therefore be eventually followed by an application of
+the rule~\eqref{eq:opsem-seq}.
 
 Let us now give the semantics for atomic instructions; that is, for
-assignments, {\bf new} statements, action invocations, and belief updates.
-\todo{First introduce the notations used below.}
+assignments, belief updates, {\bf new} statements, and action invocations.
+Out of these, assignments and belief updates have local effects --- they
+only change the state of one agent. The {\bf new} statements will change
+the global state, either by creating new agents or by growing the set of
+call and session identifier that must be managed globally. Finally, action
+invocations will typically have local effects.
 
+The semantics of assignments are given by the following rule.
 \begin{align}
-  \frac
-  {\langle\Gamma_1,T_1,C\rangle\to\langle\Gamma_2,T_2,t_2\rangle}
-  {\langle\Gamma_1,T_1,x:=C\rangle\to\langle\Gamma_2[x\mapsto t_2],T_2,t_2\rangle}
-\\
-  \frac
-  {?}
-  {\langle\Gamma,T,{\bf new}\,{\bf session}\rangle\to\langle\Gamma,T,n\rangle}
-\\
-  \frac
-  {?}
-  {\langle\Gamma,T,{\bf new}\,{\bf call}\rangle\to\langle\Gamma,T,n\rangle}
-\\
-  \frac
-  {?}
-  {\langle\Gamma,T,{\bf new}\,d(a_1,\ldots,a_k)\,n\,\{T'\}\rangle\to\langle\Gamma,T,n\rangle}
+\frac
+  {(\Gamma_1,T_1,P)\to(\Gamma_2,T_2,t_2)}
+  {(\Gamma_1,T_1,x:=P)\to(\Gamma_2[x\mapsto t_2],T_2,t_2)}
 \end{align}
+Thus, executing $x:=P$ amounts to executing~$P$, and then updating the
+agent scope so that $x$~maps to the value to which $P$~evaluated.
+
+The semantics of belief updates are the following:
+\begin{align}
+\frac
+  {\text{$\Gamma t$ ground}}
+  {(\Gamma,T,+t)\to(\Gamma,T\cup\{\Gamma t\},\Gamma t)}
+  \label{eq:opsem-addbelief}
+\\[1ex]
+\frac
+  {\text{$\Gamma t$ ground}}
+  {(\Gamma,T,-t)\to(\Gamma,T-\{\Gamma t\},\Gamma t)}
+  \label{eq:opsem-delbelief}
+\end{align}
+Here the scope $\Gamma$ is used as a substitution. Note that there are two
+substitutions performed on a term before the belief base is updated ---
+once in rule~\eqref{eq:opsem-instrule} and once in rule
+\eqref{eq:opsem-addbelief}~or~\eqref{eq:opsem-delbelief}. The execution
+proceeds only if after applying these two substitutions the result is a
+ground term. At the moment, AF-Raf does not use any interesting belief
+update and revision algorithms. Rules
+\eqref{eq:opsem-addbelief}~and~\eqref{eq:opsem-delbelief} would change if
+AF-Raf were to support non-trivial belief update and revision.
+
+The {\bf new} statements affect the program state~$(A,C,S)$.
+
+The semantics of agent creation are given by the following rule:
+\begin{align}
+\frac
+  {\on{A_1(a'_1)=\bigl(\Gamma,T,({\bf new}\,d_2(\bar{a})\,a'_2\,\{T'\}),I,O,d_1\bigr)}
+  {\on{A_1(a'_2)=\bot}
+  {\on{A_2(a'_1)=\bigl(\Gamma,T,a'_2,I,O,d_1\bigr)}
+  {A_2(a'_2)=\bigl(\epsilon,T',{\it body}(d_2)[\bar{a}/{\it args}(d_2)],\epsilon,\epsilon\bigr)}}}}
+  {(A_1,C,S)\to(A_2,C,S)}
+\label{eq:opsem-newagent}
+\end{align}
+This rule involves two agents, one with identifier~$a'_1$, the other with
+identifier~$a'_2$. Agent $a'_1$ is executing an agent creation statement.
+Agent $a'_2$ is the newly created agent. The hypothesis $A_1(a'_2)=\bot$
+says that the identifier~$a'_2$ is fresh. Recall that the agent name is
+optional in the grammar: if it is missing, then some fresh identifier will
+be chosen.  The notation $\epsilon$ is used both for an empty scope and for
+an empty message queue. Finally, ${\it body}(d_2)[\bar{a}/{\it args}(d_2)]$
+means that the code for the design~$d_2$ is looked up, and a subsitution is
+applied on its body: the formal argument ${\it args}(d_2)$ are replaced by
+the actual arguments~$\bar a$. The result of this substitution is the code
+that the newily created agent should execute, and it is a set of rules.
+
+The only property that a new call identifier must have is that it must be
+fresh.
+\begin{align}
+\frac
+  {\on{A_1({\it aid})=\bigl(\Gamma,T,({\bf new}\;{\bf call}),I,O,d\bigr)}
+  {\on{A_2({\it aid})=\bigl(\Gamma,T,{\it cid},I,O,d\bigr)}
+  {\on{C_1({\it cid})=\bot}
+      {C_2({\it cid})=\bigl(\bot,\bot,\bot,{\tt notStarted}\bigr)}}}}
+  {(A_1,C_1,S)\to(A_2,C_2,S)}
+\end{align}
+Initially, it is not known for which operation the call identifier $\it
+cid$ was created, and the call phase is $\tt notStarted$. More
+interestingly, the sender agent is not necessarily the agent~$\it aid$ that
+created the call identifier. It is possible for one agent to create a call
+identifier for another agent's used. Of course, the identifier would need
+to be transported in a message.
+
+The creation of session identifiers is similar to the creation of
+call~identifiers.
+\begin{align}
+\frac
+  {\on{A_1({\it aid})=\bigl(\Gamma,T,({\bf new}\;{\bf session}\;n),I,O,d\bigr)}
+  {\on{A_2({\it aid})=\bigl(\Gamma,T,{\it sid},I,O,d\bigr)}
+  {\on{S_1({\it sid})=\bot}
+      {S_2({\it sid})=\bigl(\{\,(a,\bot)\mid a\in{\it args}(n)\,\},\; {\it body}(n)\bigr)}}}}
+  {(A_1,C,S_1)\to(A_2,C,S_2)}
+\end{align}
+The created session identifier $\it sid$ is fresh. The session state is
+initialized as follows. The scope~$\Delta$ maps all formal arguments ${\it
+args}(n)$ to~$\bot$: it is initially unknown to which agents the session
+applies. The code~$Q$ is the whole body of the session named~$n$.
+
+AF-Raf actions consist of arbitrary Java code, and thus they are
+essentially an escape hatch from AF-Raf's semantics. If something is not
+possible to do in pure AF-Raf, such as writing to a file, then an AF-Raf
+could be used. It is up to the user not to misuse this great power.
+\begin{align}
+\frac
+  {\on{A_1({\it aid})=\bigl(\Gamma_1,T_1,{\it action}(\ldots),I_1,O_1,d\bigr)}
+      {A_2({\it aid})=\bigl(\Gamma_2,T_2,t,I_2,O_2,d\bigr)}}
+  {(A_1,C_1,S_1)\to(A_2,C_2,S_2)}
+\end{align}
+The best we can say about an action in general is that it returns a
+term~$t$ and may affect the program state in an arbitrary way. Normally,
+developers may use only the AgentFactory framework programming interface in
+the implementation of an action. However, there is nothing stoping a
+developer from using Java reflection to access the internals of the AF-Raf
+inetrpreter.  We define a \emph{well-behaved} action as one that ensures
+\begin{align}
+\Gamma_1&=\Gamma_2  & T_1&=T_2 & I_1&=I_2 & C_1 &=C_2 & S_1&=S_2
+\end{align}
+Note that $O_1=O_2$ is not a requirement: The action {\bf send} available
+in the standard library that modifies the queue of outgoing messages is
+considered well-behaved.
+
+\todo{Perhaps reuse this when discussing action invocations.}
+However, action invocations
+are arbitrary Java code, which could use Java reflection to access the
+internals of the interpreter and perform completely arbitrary actions. They
+are effectively an escape hatch from AF-Raf's semantics, in addition to a
+mean of interacting with arbitrary environments.
 
 \todo{What is below is quite old. Remove after you make sure that all the
 information was already incorporated in the main text.}
@@ -3455,14 +3566,14 @@ agent ContractNetBuyer : Buyer {
     +LastTask(sid, task);
     return bid(mul(m, y));
   }
-  
-  operation commit(win()) 
-  when LastTask(sid, decrease(x, y)) { 
-    return success(dec(x, y)); 
+
+  operation commit(win())
+  when LastTask(sid, decrease(x, y)) {
+    return success(dec(x, y));
     -LastTask(sid, decrease(x,y))
   }
   when LastTask(sid, increase(x, y)) {
-    return success(inc(x, y));  
+    return success(inc(x, y));
     -LastTask(sid, increase(x, y));
   }
 
@@ -3478,7 +3589,7 @@ are three actions defined \textit{dec}(x, y), \textit{inc}(x, y), and
 \textit{dec}(x, y) and \textit{inc}(x, y) are used in performing the task,
 while action \textit{mul}(x, y) is used in calculating the bid offer. The
 ContractNetBuyer agent implements the two operations defined in the Buyer
-role: \textit{ask} and \textit{commit}. 
+role: \textit{ask} and \textit{commit}.
 
 Operation \textit{ask} has a guard, and it is performed upon receiving a
 message of type \textit{request} if the belief Multiplier(m) has a match in
@@ -3493,13 +3604,13 @@ include ContractNet
 
 agent ContractNetSeller(b1 : BuyerRole, b2 : BuyerRole): Seller {
   operation sell(r) {
-    if b1.ask(r) < b2.ask(r) then { 
+    if b1.ask(r) < b2.ask(r) then {
       b2.commit(lose());
       return b1.commit(win());
-    }                   
-    else { 
+    }
+    else {
       b1.commit(lose());
-      return b2.commit(win()); 
+      return b2.commit(win());
     }
   }
 }
