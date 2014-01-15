@@ -1077,7 +1077,7 @@ forget}(x)$ removes the belief~$x$ from the belief base.  In case $x$~is
 not a belief, ${\bf forget}(x)$ does not modify the belief base.
 
 % >>>
-\section{Types} % <<<
+\section{Types}\label{sec:types} % <<<
 
 AF-Raf contributes to the AOP languages domain by being the first agent
 oriented programming language to introduce algebraic data types and
@@ -1406,7 +1406,7 @@ size of the term and $n$~is the size of all type definitions.
 
 % >>>
 % >>>
-\section{Roles} % <<<
+\section{Roles}\label{sec:roles} % <<<
 The theory of organisations, from social sciences, studies how formal rules
 of interaction enable groups of people to achieve common goals, on the
 other hand, the theory of roles studies how individuals fit in multiple
@@ -1652,7 +1652,7 @@ and with Java interfaces, but are nevertheless distinct concepts.
 
 % >>>
 % >>>
-\section{Sessions} % <<<
+\section{Sessions}\label{sec:sessions} % <<<
 
 Agents play roles and we wrote roles much like Haskell type
 classes, so it would seem that the analogue of Haskell types are
@@ -3847,8 +3847,30 @@ level, namely at the social level. A case study is used to illustrate the
 results. The AF-Raf programming language is properly formalised, with its
 grammar specified in EBNF format and its operational semantics is defined,
 using the small-step operational semantics, as a set of inference rules.
-\todo{reflect on hypothesis and objectives, how well did I achieve them.
-Refer back to exact place in the thesis where they were discussed.}
+
+I believe that the research results confirmed our working hypotheses:
+
+\begin{itemize}
+\item \textit{The integration of roles improved the readability and
+usability of the Agent Oriented Programming languages}. Our objective to
+show how the concept of role maps to a programming language construct in
+the specific context of Agent Oriented Programming was achieved by
+implementing roles \autoref{sec:roles}, as first order constructs, in our new AF-Raf
+agent oriented programming language, which was properly formalised in
+\autoref{ch:langdef}.
+
+\item \textit{Applying concepts from mainstream programming, like the ones
+of type classes, session types, type checking and algebraic data types,
+improved the efficiency and functionality of Agent Oriented Programming
+Languages}. Our first objective was achieved by incorporating the concept
+of type classes from functional programming into AF-Raf programming
+language \autoref{sec:roles}. The second objective was achieved by
+incorporating multiparty session types into Af-Raf programming language
+\autoref{sec:sessions}. The third objective was achieved by designing a
+type system and a type checker that include algebraic data types for AF-Raf
+programming languge \autoref{sec:types}.
+
+\end{itemize}
 % >>>
 \bibliographystyle{plain}
 \bibliography{thesis}
