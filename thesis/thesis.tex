@@ -10,6 +10,7 @@
 
 \usepackage{hyperref}
 
+\newcommand{\ato}{\Rightarrow}
 \newcommand{\eval}[1]{[\!\![#1]\!\!]}
 \newcommand{\on}[2]{\genfrac{}{}{0pt}{0}{\strut#1}{\strut#2}}
 \newcommand{\pmap}{\rightharpoonup}
@@ -1326,7 +1327,7 @@ In AF-Raf one of the important uses of algebraic data types is to describe the c
 messages. Type checking messages leads to fewer runtime errors.
 
 % >>>
-\subsection{Type Checking} % <<<
+\subsection{Type Checking}\label{sec:concepts-adt-check} % <<<
 Type-checking is a program analysis that verifies the type safety of a
 program. In the strict sense it verifies that the analysed program
 will not have any type errors when executed. In the weak sense only
@@ -3372,9 +3373,9 @@ could be used. It is up to the user not to misuse this great power.
 The best we can say about an action in general is that it returns a
 term~$t$ and may affect the program state in an arbitrary way. Normally,
 developers may use only the AgentFactory framework programming interface in
-the implementation of an action. However, there is nothing stoping a
+the implementation of an action. However, there is nothing stopping a
 developer from using Java reflection to access the internals of the AF-Raf
-inetrpreter.  We define a \emph{well-behaved} action as one that ensures
+interpreter.  We define a \emph{well-behaved} action as one that ensures
 \begin{align}
 \Gamma_1&=\Gamma_2  & T_1&=T_2 & I_1&=I_2 & C_1 &=C_2 & S_1&=S_2
 \end{align}
@@ -3382,54 +3383,71 @@ Note that $O_1=O_2$ is not a requirement: The action {\bf send} available
 in the standard library that modifies the queue of outgoing messages is
 considered well-behaved.
 
-\todo{Perhaps reuse this when discussing action invocations.}
-However, action invocations
-are arbitrary Java code, which could use Java reflection to access the
-internals of the interpreter and perform completely arbitrary actions. They
-are effectively an escape hatch from AF-Raf's semantics, in addition to a
-mean of interacting with arbitrary environments.
+Messages are transformed into beliefs that use the predicate {\bf Message},
+according to the following~rule:
+\begin{align}
+\frac
+  {\on{A_1(a_1)=\bigl(\Gamma,T,P,(I\cdot(a_2,t)),O,d\bigr)}
+      {A_2(a_1)=\bigl(\Gamma,T\cup\{{\bf Message}(a_2,t)\},P,I,O,d)\bigr)}}
+  {(A_1,C,S)\to(A_2,C,S)}
+  \label{eq:opsem-message}
+\end{align}
+Messages are pairs $(a,t)$ of an agent identifier~$a$ and a term~$t$. The
+agent identifier is of the other agent: the sender for~$I$, the recipient
+for~$O$. In rule~\eqref{eq:opsem-message}, the sender is~$a_2$ and the
+receiver is~$a_1$.
 
-\todo{What is below is quite old. Remove after you make sure that all the
-information was already incorporated in the main text.}
+Normal messages are transported by AgentFactory.
+\begin{align}
+\frac
+  {\on{A_1(a_1)=\bigl(\Gamma_1,T_1,P_1,I_1,(O_1\cdot(a_2,t)),d_1\bigr)}
+  {\on{A_1(a_2)=\bigl(\Gamma_2,T_2,P_2,I_2,O_2,d_2)\bigr)}
+  {\on{A_2(a_1)=\bigl(\Gamma_1,T_1,P_1,I_1,O_1,d_1\bigr)}
+  {\on{A_1(a_2)=\bigl(\Gamma_2,T_2,P_2,((a_1,t)\cdot I_2),O_2,d_2)\bigr)}
+      {\text{$t\ne{\bf op}(t')$ for all $t'$}}}}}}
+  {(A_1,C,S)\to(A_2,C,S)}
+\end{align}
+The payload $t$ is not of the special form ${\bf op}(t')$, then it does not
+change the call mapping~$C$, nor the session mapping~$S$. For messages that
+do have the special form ${\bf op}(t')$, delivery proceeds in a similar
+manner, but extra checks for types and sessions are being performed.
 
+When a message
+\begin{align}
+{\bf op}\bigl({\bf call}\bigl(o(), {\it cid}, {\it sid}\bigr), t\bigr)
+\end{align}
+travels from~$a_1$ to~$a_2$ the type of the term~$t$ is checked, and the
+session $\it sid$ is checked, unless $\it sid$ is~$\bot$.
 
-The semantics of programming languages is often specified as transitions
-from a state to another with each step of individual computation. The
-specification takes the form of a set of inference rules that define valid
-transitions.
-\rg{Technically, these are `small-step operational semantics'.
-Perhaps say that, intuitively, giving the operational semantics of a
-language amounts to providing a simple (perhaps inefficient) interpreter
-for it.}
+Type checking proceeds as follows:
+\begin{itemize}
+\item[Step 1]
+  Identify the design~$d_2$ of the receiver~$a_2$. Check that an
+  operation~$o$ is declared exactly once in the roles that $d_2$
+  implements; otherwise, signal an error.
+\item[Step 2]
+  Let $o:\theta_1\to\theta_2$ be the declaration identified at Step~1.
+  Check that $t$ is of type~$\theta_1$ (as in
+  \autoref{sec:concepts-adt-check}); otherwise, signal an error.
+\end{itemize}
+An obvious modification handles the case of {\bf return} messages. For
+simplicity, and because type checking was already presented in detail
+(\autoref{sec:concepts-adt-check}) we do not integrate (dynamic) type
+checking in the operational semantics. We do, however, fully specify
+session checking.
 
-At each time step, an AF-Raf agent
-\begin{enumerate}
-\item transforms messages from its inbox into beliefs that it received
-those messages,
-\item asks each sensor for new beliefs, and
-\item executes those rules that are activated by the current belief base.
-\end{enumerate}
+Session checking is an angelic process. For example, it is enough for one
+branch of the $\bf oneof$ construct to be satisfied. Similarly, the $\bf
+repeat$ construct only needs to be satisfied for soem fixed number of
+repetitions, not forever. To model this in the operatinal semantics, we
+introduce an angelic transition.
+\begin{align}
+(A_1,C_1,S_1)\ato(A_2,C_2,S_2) \label{eq:opsem-atran} \\
+(A_1,C_1,S_1)\to(A_2,C_2,S_2) \label{eq:opsem-dtran}
+\end{align}
+The transition system now has angelic transitions~\eqref{eq:opsem-atran} in
+addition to the demonic transitions~\eqref{eq:opsem-dtran}.
 
-\rg{This paragraph should be re-written. For example, the first thing you
-say is that the some method is called `execute'. First, the reader has no
-idea that you are talking about the implementation of the interpreter.
-Second, how methods are named in the interpreter is rather unimportant,
-certainly not important enough to be the first thing you mention.}
-An AF-Raf agent program interpretation starts with the execute() method.
-First operation is to copy any messages received into the inbox for the
-agent to process further. Only messages received since the last invocation
-of this method are copied into the inbox. Next step is to get information
-from all the sensors. After that a list is created to hold last fired
-rules. Then each rule is handled in the following way. A query is
-constructed based on the rule's condition and run on the belief base. The
-result will be a list of sets of bindings. In the case the list is not
-empty, for each set of bindings a PlanStep is constructed by applying the
-bindings to the statement of the rule. If all the variables have a binding
-the rule is included in the list of last fired rules and the PlanStep is
-executed. A PlanStep is any of the following statements: an assignment, a block,
-a call, a foreach, an if, an update, or a while.
-
-TODO: inference rules
 % >>>
 % >>>
 
