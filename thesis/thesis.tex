@@ -3480,7 +3480,7 @@ define the Contract Net interaction protocol.
 type conditions = conditions(integer); // say, price
 
 type task = increase(integer, integer)
-          | reduce(integer, integer);
+          | decrease(integer, integer);
 
 type request = request(task, conditions, deadline(integer));
 type bid = bid(integer);
@@ -3586,23 +3586,32 @@ agent ContractNetBuyer : Buyer {
 The ContractNetBuyer agent implements the Buyer role defined above. There
 are three actions defined \textit{dec}(x, y), \textit{inc}(x, y), and
 \textit{mul}(x, y), that extend the agent's functionality. Action
-\textit{dec}(x, y) and \textit{inc}(x, y) are used in performing the task,
-while action \textit{mul}(x, y) is used in calculating the bid offer. The
+\textit{dec} and \textit{inc} are used in performing the task,
+while action \textit{mul} is used in calculating the bid offer. The
 ContractNetBuyer agent implements the two operations defined in the Buyer
 role: \textit{ask} and \textit{commit}.
 
 Operation \textit{ask} has a guard, and it is performed upon receiving a
 message of type \textit{request} if the belief Multiplier(m) has a match in
-the belief base. First, it adds a belief identifying the task and the
-session to the belief base, then returns the result of computing the bid
-offer using the internal action \textit{mul}().
+the belief base. First, it adds a LastTask belief identifying the task and
+the session to the belief base, then returns the result of computing the
+bid offer using the internal action \textit{mul}.
+
+Operation \textit{commit} has two guards that check wheter the last task is
+an \textit{increase} or a \textit{decrease}. So upon receiving a
+\textit{win}() message if the last task is an \textit{increase}, it returns
+a \textit{success} message containing the result of the internal action
+\textit{inc} and deletes the LastTask belief from the belief base. If the last
+task is a \textit{decrease} it returns a \textit{success} message
+containing the result of the internal action \textit{dec} and also deletes
+the LastTask belief from the belief base.
 
 \begin{figure}\footnotesize % <<<
 \begin{verbatim}
 include stdio
 include ContractNet
 
-agent ContractNetSeller(b1 : BuyerRole, b2 : BuyerRole): Seller {
+agent ContractNetSeller(b1 : Buyer, b2 : Buyer): Seller {
   operation sell(r) {
     if b1.ask(r) < b2.ask(r) then {
       b2.commit(lose());
@@ -3618,7 +3627,23 @@ agent ContractNetSeller(b1 : BuyerRole, b2 : BuyerRole): Seller {
 \caption{Contract Net Seller, AF-Raf}
 \label{fig:contract-seller}
 \end{figure} % >>>
-The ContractNetSeller agent implements the Seller role. Operation sell...
+
+The ContractNetSeller agent, implementing the Seller role, needs to know
+two agents that implement the Buyer role in order to comply to the BidRound
+session specifications. ContractNetSeller provides an implementation for
+the operation \textit{sell}. Upon receiving a message, which is statically
+checked to conform the type defined in the Seller role, in this case a
+\textit{request} message, is doing the following:
+
+\begin{itemize}
+\item Checks which bid offer is better. In order to do this, it compares the
+results that came back from the buyer agents performing operation
+\textit{ask}.
+\item Returns the result to the owner. In computing the result it uses the
+buyers' operation \textit{commit}, which at the same time informs the
+buyers about their success.
+\end{itemize}
+
 % >>>
 \section{Jason/AgentSpeak Implementation} % <<<
 We will analyse the AgentSpeak code implementing the Contract Net
@@ -3628,84 +3653,6 @@ in~\cite{bordini2007programming}.
 We will look at the code implementing the initiator agent and at one of the
 participants, more exactly, we will look at one of the participant agents
 that are able to submit an offer.
-
-\begin{figure}\footnotesize % <<<
-\begin{verbatim}
-/* Rules */
-all_proposals_received(CNPId) :-
-  .count(introduction(participant,_),NP) & // num of participants
-  .count(propose(CNPId,_), NO) &  // number of proposes received
-  .count(refuse(CNPId), NR) &  // number of refusals received
-  NP = NO + NR.
-
-/* Initial goals */
-!startCNP(1,fix(computer_123)).
-
-\end{verbatim}
-\caption{Rules and Initial Goals of CNP Initiator, Jason}
-\label{fig:jasonInRG}
-
-\end{figure} % >>>
-\begin{figure}\footnotesize % <<<
-\begin{verbatim}
-/* Plans */
-// start the CNP
-+!startCNP(Id,Object)
-  <- .wait(2000); // wait participants introduction
-     +cnp_state(Id,propose); // remember the state of the CNP
-     .findall(Name,introduction(participant,Name),LP);
-     .print("Sending CFP to ",LP);
-     .send(LP,tell,cfp(Id,Object));
-     .concat("+!contract(",Id,")",Event);
-     // the deadline of the CNP is now + 4 seconds, so
-     // the event +!contract(Id) is generated at that time
-     .at("now +4 seconds", Event).
-
-// receive proposal
-// if all proposal have been received, don't wait for the deadline
-@r1 +propose(CNPId,Offer)
-  : cnp_state(CNPId,propose) & all_proposals_received(CNPId)
-  <- !contract(CNPId).
-
-// receive refusals
-@r2 +refuse(CNPId)
-  : cnp_state(CNPId,propose) & all_proposals_received(CNPId)
-  <- !contract(CNPId).
-
-// this plan needs to be atomic so as not to accept
-// proposals or refusals while contracting
-@lc1[atomic]
-+!contract(CNPId)
-  : cnp_state(CNPId,propose)
-  <- -+cnp_state(CNPId,contract);
-  .findall(offer(O,A),propose(CNPId,O)[source(A)],L);
-  .print("Offers are ",L);
-  L \== []; // constraint the plan execution to at least one offer
-  .min(L,offer(WOf,WAg)); // sort offers, the first is the best
-  .print("Winner is ",WAg," with ",WOf);
-  !announce_result(CNPId,L,WAg);
-  -+cnp_state(Id,finished).
-
-// nothing todo, the current phase is not 'propose'
-@lc2 +!contract(CNPId).
-
--!contract(CNPId)
-  <- .print("CNP ",CNPId," has failed!").
-
-+!announce_result(_,[],_).
-// announce to the winner
-+!announce_result(CNPId,[offer(O,WAg)|T],WAg)
-  <- .send(WAg,tell,accept_proposal(CNPId));
-  !announce_result(CNPId,T,WAg).
-// announce to others
-+!announce_result(CNPId,[offer(O,LAg)|T],WAg)
-  <- .send(LAg,tell,reject_proposal(CNPId));
-  !announce_result(CNPId,T,WAg).
-\end{verbatim}
-\caption{Plans of CNP Initiator, Jason}
-\label{fig:jasonInP}
-\end{figure} % >>>
-
 
 \begin{figure}\footnotesize % <<<
 \begin{verbatim}
@@ -3738,11 +3685,109 @@ plays(initiator,c).
    <- .print("I lost CNP ",CNPId, ".");
    -proposal(CNPId,_,_). // clear memory
 
-
 \end{verbatim}
 \caption{CNP Participant, Jason}
-\label{fig:jasonIn}
+\label{fig:jasonP}
 \end{figure} % >>>
+
+\autoref{fig:jasonP} presents the AgentSpeak code of the participant agent.
+The first rule randomly defines the price for the task. This rule is used
+in plan @c1 to answer a \textit{cfp} message. The agent has two plans @r1
+and @r2 to react to the success or the lack of success in being assigned to
+perform the task.
+
+
+The behaviour of the initiator agent can be described by the following
+steps: initiate the interaction, send a call for proposal, wait for the
+answers, choose the winner, and announce the result. 
+
+\begin{figure}\footnotesize % <<<
+\begin{verbatim}
+/* Plans */
+// start the CNP
++!startCNP(Id,Object)
+  <- .wait(2000); // wait participants introduction
+     +cnp_state(Id,propose); // remember the state of the CNP
+     .findall(Name,introduction(participant,Name),LP);
+     .print("Sending CFP to ",LP);
+     .send(LP,tell,cfp(Id,Object));
+     .concat("+!contract(",Id,")",Event);
+     // the deadline of the CNP is now + 4 seconds, so
+     // the event +!contract(Id) is generated at that time
+     .at("now +4 seconds", Event).
+
+// receive proposal
+// if all proposal have been received, don't wait for the deadln
+@r1 +propose(CNPId,Offer)
+  : cnp_state(CNPId,propose) & all_proposals_received(CNPId)
+  <- !contract(CNPId).
+
+// receive refusals
+@r2 +refuse(CNPId)
+  : cnp_state(CNPId,propose) & all_proposals_received(CNPId)
+  <- !contract(CNPId).
+
+// this plan needs to be atomic so as not to accept
+// proposals or refusals while contracting
+@lc1[atomic]
++!contract(CNPId)
+  : cnp_state(CNPId,propose)
+  <- -+cnp_state(CNPId,contract);
+  .findall(offer(O,A),propose(CNPId,O)[source(A)],L);
+  .print("Offers are ",L);
+  L \== []; // constraint the plan execution to at least 1 offer
+  .min(L,offer(WOf,WAg)); // sort offers, the first is the best
+  .print("Winner is ",WAg," with ",WOf);
+  !announce_result(CNPId,L,WAg);
+  -+cnp_state(Id,finished).
+
+// nothing todo, the current phase is not 'propose'
+@lc2 +!contract(CNPId).
+
+-!contract(CNPId)
+  <- .print("CNP ",CNPId," has failed!").
+
++!announce_result(_,[],_).
+// announce to the winner
++!announce_result(CNPId,[offer(O,WAg)|T],WAg)
+  <- .send(WAg,tell,accept_proposal(CNPId));
+  !announce_result(CNPId,T,WAg).
+// announce to others
++!announce_result(CNPId,[offer(O,LAg)|T],WAg)
+  <- .send(LAg,tell,reject_proposal(CNPId));
+  !announce_result(CNPId,T,WAg).
+\end{verbatim}
+\caption{Plans of CNP Initiator, Jason}
+\label{fig:jasonInP}
+\end{figure} % >>>
+
+\autoref{fig:jasonInP} illustrate the plans of the initiator agent. The
+first plan is to start the protocol. It first set the state to proposal,
+finds all the participants, sends the call for proposals message, and sets
+the deadline to 4 seconds. The second plan, @r1, is to receive proposals.
+Plan @r2 is to receive refusals. Plan @lc1 introduces a new goal
+\textit{!contract}. The first action of this plan is to change the protocol
+state from proposal to contract, then finds and sorts all the offers,
+chooses the best one and announces the results.
+
+%\begin{figure}\footnotesize % <<<
+%\begin{verbatim}
+%/* Rules */
+%all_proposals_received(CNPId) :-
+%  .count(introduction(participant,_),NP) & // n of participants
+%  .count(propose(CNPId,_), NO) &  // number of proposes received
+%  .count(refuse(CNPId), NR) &  // number of refusals received
+%  NP = NO + NR.
+
+%/* Initial goals */
+%!startCNP(1,fix(computer_123)).
+
+%\end{verbatim}
+%\caption{Rules and Initial Goals of CNP Initiator, Jason}
+%\label{fig:jasonInRG}
+%\end{figure} % >>>
+
+
 % >>>
 \section{Discussion} % <<<
 
