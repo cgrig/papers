@@ -323,16 +323,16 @@ of the Agent Oriented Programming languages.
 
 % >>>
 
-\chapter{Background}\label{ch:aop} % <<<
+\part{Background}\label{ch:aop} % <<<
 \todo{1. Rename chapter to Background. 2. Add sections: Functional languages,
 Types, and Session types. 3. Expand roles in OOP. 4. Expand organisational
 frameworks. 5. Add diagrams for
 language architectures. 6. Add simpAL to the AOPLs. 7. Define basic
 concepts.}
-\section{Functional Languages}
-\section{Types}
-\section{Session Types}
-\section{Agent Oriented Programming}
+\chapter{Functional Languages}
+\chapter{Types}
+\chapter{Session Types}
+\chapter{Agent Oriented Programming}
 \section{Overview} % <<<
 
 Using an anthropomorphic metaphor to design computer programs is not a new
@@ -768,7 +768,7 @@ structured and easier to read~\cite{DBLP:journals/csur/CardelliW85}.
 % >>>
 % >>>
 % >>>
-
+\part{AF-Raf Agent Oriented Programming Language}
 \chapter{Main AF-Raf Concepts}\label{ch:concepts} % <<<
 
 \todo{1. Develop an example bit by bit by adding functionality. 2. Describe
@@ -1805,266 +1805,6 @@ interactions in agent-oriented programming languages in terms of sessions.
 %session and the roles proposed in the previous section can be found.
 % >>>
 
-\section{The Calculator Example} % <<<
-
-This section expands the Calculator example trying to illustrate AF-Raf's
-functionality, and focusing more on types, roles and sessions. It also
-demonstrate the benefit of operations in automatising the process of
-message passing.
-\begin{figure}\footnotesize % <<<
-\begin{verbatim}
-type pair<x> = pair(x, x)
-
-type expression<value> =
-  | val(value)
-  | add(expression<value>, expression<value>)
-  | sub(expression<value>, expression<value>)
-  | mul(expression<value>, expression<value>)
-  | div(expression<value>, expression<value>)
-
-role Calculator<value> {
-  eval : expression<value> -> value;
-}
-
-role BinaryCalc<value> {
-  add : pair<value> -> value;
-  sub : pair<value> -> value;
-  mul : pair<value> -> value;
-  div : pair<value> -> value;
-}
-
-session EvaluateExpression<value>(A : any,
-                                  B : Calculator<value>,
-                                  C : BinaryCalc<value>) {
-  expression<value> : A -> B;
-  repeat EvaluateExpression(B, B, C); // actually, 0 or 2 times
-  pair<value> : B -> C;
-  value : C -> B;
-  value : B -> A;
-}
-\end{verbatim}
-\caption{Calculator: types, roles and session}
-\label{fig:calc-roles}
-\end{figure} % >>>
-
-\autoref{fig:calc-roles} presents the interrelated types, roles and
-sessions associated with the Calculator example. The type \textit{pair} <x>
-is defined such that a value of this type is constructed by pairing
-together two values of type \textit{x}. The type \textit{expression}
-<value> is defined using discriminated union. In consequence, a value of
-\textit{expression} <value> can be either one of the following: a value of
-type \textit{value}, an addition of two \textit{expression} <value>, a
-subtraction of two \textit{expression} <value>, a multiplication of two
-\textit{expression} <value>, or a division of two \textit{expression}
-<value>.
-
-There are two roles defined: the \textit{Calculator} and the
-\textit{BinaryCalc}. The \textit{Calculator} is responsible with evaluating
-expressions to a value of type \textit{value}, while the
-\textit{BinaryCalc} is responsible with executing binary operations on
-values of type \textit{value}.
-
-The session \textit{EvaluateExpression} <value> articulates the interaction
-between three types of agents that work together in order to evaluate
-expressions of type \textit{value}. These agent types are: any type,
-\textit{Calculator} <value>, and \textit{BinaryCalc} <value>. The
-interaction pattern is described in a recursive manner. The interaction is
-initiated by an agent of any type that asks the \textit{Calculator} agent
-to evaluate an \textit{expression} <value>. The \textit{EvaluateExpression}
-session is run recursively by the \textit{Calculator} agent until a pair of
-\textit{value} can be passed over to the \textit{BinaryCalc} or an
-expression is evaluated to a \textit{value}.
-
-\begin{figure}\footnotesize % <<<
-\begin{verbatim}
-include stdio
-include CalcTypes
-
-action intadd(x, y) = raftest.IntegerAddAction;
-action intsub(x, y) = raftest.IntegerSubAction;
-action intmul(x, y) = raftest.IntegerMulAction;
-action intdiv(x, y) = raftest.IntegerDivAction;
-
-agent BinaryCalcInt : BinaryCalc<integer> {
-  rule Message(other, op(call(add(), cid, sid), pair(x, y))) {
-    -Message(other, op(call(add(), cid, sid), pair(x, y)));
-            z := intadd(x, y);
-    send(other, op(return(add(), cid, sid), z));
-  }
-  rule Message(other, op(call(sub(), cid, sid), pair(x, y))) {
-    -Message(other, op(call(sub(), cid, sid), pair(x, y)));
-            z := intsub(x, y);
-    send(other, op(return(sub(), cid, sid), z));
-  }
-  rule Message(other, op(call(mul(), cid, sid), pair(x, y))) {
-    -Message(other, op(call(mul(), cid, sid), pair(x, y)));
-            z := intmul(x, y);
-    send(other, op(return(mul(), cid, sid), z));
-  }
-  rule Message(other, op(call(div(), cid, sid), pair(x, y))) {
-    -Message(other, op(call(div(), cid, sid), pair(x, y)));
-            z := intdiv(x, y);
-    send(other, op(return(div(), cid, sid), z));
-  }
-}
-\end{verbatim}
-\caption{BinaryCalc agent implementation}
-\label{fig:bcalc-rules}
-\end{figure} % >>>
-
-\begin{figure}\footnotesize % <<<
-\begin{verbatim}
-include stdio
-include CalcTypes
-
-action intadd(x, y) = raftest.IntegerAddAction;
-action intsub(x, y) = raftest.IntegerSubAction;
-action intmul(x, y) = raftest.IntegerMulAction;
-action intdiv(x, y) = raftest.IntegerDivAction;
-
-agent ExprCalc(binaryCalc : BinaryCalc<value>) : Calculator<value> {
-  rule Message(other, op(call(eval(), cid, sid), add(x, y))) & Iam(self) {
-    -Message(other, op(call(eval(), cid, sid), add(x, y)));
-                xcid := newcall;
-    +Continue(other, cid, xcid, add1(y));
-    send(self, op(call(eval(), xcid, sid)), x);
-  }
-
-  rule Message(self, op(return(eval(), xcid, sid), ctx))
-                & Iam(self)
-                & Continue(other, cid, xcid, add1(y))
-  {
-    -Continue(other, cid, xcid, add1(y));
-    -Message(self, op(return(eval(), xcid, sid), ctx));
-    ycid := newcall;
-    +Continue(other, cid, ycid, add2(ctx));
-    send(self, op(call(eval(), ycid, sid), y));
-  }
-
-  rule Message(self, op(return(eval(), cid, sid), cty))
-                & Iam(self)
-                & Continue(other, cid, ycid, add2(ctx))
-  {
-    -Message(self, op(return(eval(), cid, sid), cty));
-    -Continue(other, cid, ycid, add2(ctx));
-    zcid := newcall;
-    +Continue(other, cid, zcid, add3());
-    send(binaryCalc, op(call(add(), zcid, sid), operands(ctx, cty)));
-  }
-
-  rule Message(binaryCalc, op(return(add(), zcid, sid), z))
-                & Continue(other, cid, zcid, add3())
-  {
-    -Message(binaryCalc, op(return(add(), zcid, sid), z));
-    -Continue(other, cid, zcid, add3());
-     send(other, op(return(eval(), cid, sid), z));
-  }
-
-...
-
-}
-
-\end{verbatim}
-\caption{Calculator: addition expression evaluation}
-\label{fig:calc-rules}
-\end{figure} % >>>
-
-\autoref{fig:bcalc-rules} presents the implementation of a BinaryCalcInt
-agent, an instance of the BinaryCalc role.  \autoref{fig:calc-rules} is
-a partial implementation of the expression calculator agent, an instance of
-the Calculator role, more exactly it presents an implementation of the
-addition expression evaluation. Both BinaryCalcInt and Calculator
-implementations are using only rules.
-
-Let's look first at the BinaryCalcInt in \autoref{fig:bcalc-rules}. There are four
-actions defined, for each basic binary operation: intadd(x, y), intsub(x,
-y), intmul(x, y), intdiv(x, y). Each binary operation has associated
-a rule. Each rule says that upon receiving a message asking to perform that
-particular operation on a pair of integers, the agent should first delete
-the message, compute the result, and send the result back to the requester.
-Each message contains the sender's details, the details regarding the
-operation to be executed, and the pair of integers on which the operation
-is performed. The operation details contain the status of the operation,
-the call id, and the session id. The status of the operation could be
-either call() or return(), and, in particular, for any of the four rules
-defined in the BinaryCalcInt the message contains a call().
-
-The calculator agent implementation in \autoref{fig:calc-rules} is not
-complete, only one of the four cases of evaluation is illustrated, namely
-the addition. The addition is implemented using four rules. The first rule
-states that upon receiving a message to evaluate an expression that matches
-add(x, y), the calculator should recursively evaluate expression x, and save
-the other information from the message to be able to continue from there when
-the result from evaluating expression x is ready. The second rule states
-that upon receiving a message with the result of the evaluation of
-expression x, the calculator should evaluate expression y, and continue
-from there. The third rule states that upon receiving a message with the
-result of evaluation of expression y, the calculator should send a message
-to the binary calculator agent to perform the binary operation on the
-argument send, in this case a pair of integers, and then continue from
-there. The forth rule states that upon receiving the result from the
-binary calculator, the calculator agent should send back to the first agent
-the result received from the binary calculator as the result for the
-evaluation of expression add(x, y).
-
-\autoref{fig:calc-op} presents a much simpler and shorter implementation of
-agents BinaryCalcInt and Calculator, using operations. In the BinaryCalcInt
-implementation each rule used to model a basic binary operations is
-replaced by a shorter and more concise operation. In the calculator
-implementation one single operation replaces four rules, so the effect is
-much more visible.
-
-\begin{figure}\footnotesize % <<<
-\begin{verbatim}
-include stdio
-include CalcTypes
-
-action intadd(x, y) = raftest.IntegerAddAction;
-action intsub(x, y) = raftest.IntegerSubAction;
-action intmul(x, y) = raftest.IntegerMulAction;
-action intdiv(x, y) = raftest.IntegerDivAction;
-
-agent BinaryCalcInt : BinaryCalc<integer> {
-  operation add(pair(x, y)) = { return intadd(x, y); }
-  operation sub(pair(x, y)) = {return intsub(x, y); }
-  operation mul(pair(x, y)) = {return intmul(x, y); }
-  operation div(pair(x, y)) = {return intdiv(x, y); }
-}
-
-agent ExprCalc(binaryCalc : BinaryCalc<value>) : Calculator<value> {
-  operation eval(add(x, y)) {
-    return binaryCalc.add(self.eval(x), self.eval(y));
-  }
-  operation eval(sub(x, y)) {
-    return binaryCalc.sub(self.eval(x), self.eval(y));
-  }
-  operation eval(mul(x, y)) {
-    return binaryCalc.mul(self.eval(x), self.eval(y));
-  }
-  operation eval(div(x, y)) {
-    return binaryCalc.div(self.eval(x), self.eval(y));
-  }
-}
-\end{verbatim}
-\caption{BinaryCalc and Calculator implementation with operations}
-\label{fig:calc-op}
-\end{figure} % >>>
-
-As a concluding remark, our notions of roles and sessions overlap in great
-amount with the multiparty session types developed in the context of
-$\pi$-calculus. Our sessions correspond to their global types, while our
-roles correspond with their local type projections. The benefits of session
-types are well known, they facilitate communication safety, progress and
-fidelity~\cite{dblp:conf/popl/hondayc08}. Additionally, in AF-Raf, roles and
-sessions offer a structured global perspective regarding the social level
-of the multiagent systems.
-
-Moreover, designing our roles similar to Haskell type classes empowers them
-with the great flexibility of polymorphism~\cite{DBLP:conf/popl/WadlerB89}.
-To which we add further the benefits of algebraic data
-types~\cite{DBLP:journals/acta/GuttagH78}.
-
-% >>>
 \section{Comparison with Other Work}\label{ch:related} % <<<
 
 \subsubsection{SimpAL} % <<<
@@ -4020,6 +3760,266 @@ session construct models the pattern of interaction, while the algebraic
 data type provide an elegant way of representing the concepts related to
 the problem to be solved. 
 % >>> >>>
+\section{The Calculator Example} % <<<
+
+This section expands the Calculator example trying to illustrate AF-Raf's
+functionality, and focusing more on types, roles and sessions. It also
+demonstrate the benefit of operations in automatising the process of
+message passing.
+\begin{figure}\footnotesize % <<<
+\begin{verbatim}
+type pair<x> = pair(x, x)
+
+type expression<value> =
+  | val(value)
+  | add(expression<value>, expression<value>)
+  | sub(expression<value>, expression<value>)
+  | mul(expression<value>, expression<value>)
+  | div(expression<value>, expression<value>)
+
+role Calculator<value> {
+  eval : expression<value> -> value;
+}
+
+role BinaryCalc<value> {
+  add : pair<value> -> value;
+  sub : pair<value> -> value;
+  mul : pair<value> -> value;
+  div : pair<value> -> value;
+}
+
+session EvaluateExpression<value>(A : any,
+                                  B : Calculator<value>,
+                                  C : BinaryCalc<value>) {
+  expression<value> : A -> B;
+  repeat EvaluateExpression(B, B, C); // actually, 0 or 2 times
+  pair<value> : B -> C;
+  value : C -> B;
+  value : B -> A;
+}
+\end{verbatim}
+\caption{Calculator: types, roles and session}
+\label{fig:calc-roles}
+\end{figure} % >>>
+
+\autoref{fig:calc-roles} presents the interrelated types, roles and
+sessions associated with the Calculator example. The type \textit{pair} <x>
+is defined such that a value of this type is constructed by pairing
+together two values of type \textit{x}. The type \textit{expression}
+<value> is defined using discriminated union. In consequence, a value of
+\textit{expression} <value> can be either one of the following: a value of
+type \textit{value}, an addition of two \textit{expression} <value>, a
+subtraction of two \textit{expression} <value>, a multiplication of two
+\textit{expression} <value>, or a division of two \textit{expression}
+<value>.
+
+There are two roles defined: the \textit{Calculator} and the
+\textit{BinaryCalc}. The \textit{Calculator} is responsible with evaluating
+expressions to a value of type \textit{value}, while the
+\textit{BinaryCalc} is responsible with executing binary operations on
+values of type \textit{value}.
+
+The session \textit{EvaluateExpression} <value> articulates the interaction
+between three types of agents that work together in order to evaluate
+expressions of type \textit{value}. These agent types are: any type,
+\textit{Calculator} <value>, and \textit{BinaryCalc} <value>. The
+interaction pattern is described in a recursive manner. The interaction is
+initiated by an agent of any type that asks the \textit{Calculator} agent
+to evaluate an \textit{expression} <value>. The \textit{EvaluateExpression}
+session is run recursively by the \textit{Calculator} agent until a pair of
+\textit{value} can be passed over to the \textit{BinaryCalc} or an
+expression is evaluated to a \textit{value}.
+
+\begin{figure}\footnotesize % <<<
+\begin{verbatim}
+include stdio
+include CalcTypes
+
+action intadd(x, y) = raftest.IntegerAddAction;
+action intsub(x, y) = raftest.IntegerSubAction;
+action intmul(x, y) = raftest.IntegerMulAction;
+action intdiv(x, y) = raftest.IntegerDivAction;
+
+agent BinaryCalcInt : BinaryCalc<integer> {
+  rule Message(other, op(call(add(), cid, sid), pair(x, y))) {
+    -Message(other, op(call(add(), cid, sid), pair(x, y)));
+            z := intadd(x, y);
+    send(other, op(return(add(), cid, sid), z));
+  }
+  rule Message(other, op(call(sub(), cid, sid), pair(x, y))) {
+    -Message(other, op(call(sub(), cid, sid), pair(x, y)));
+            z := intsub(x, y);
+    send(other, op(return(sub(), cid, sid), z));
+  }
+  rule Message(other, op(call(mul(), cid, sid), pair(x, y))) {
+    -Message(other, op(call(mul(), cid, sid), pair(x, y)));
+            z := intmul(x, y);
+    send(other, op(return(mul(), cid, sid), z));
+  }
+  rule Message(other, op(call(div(), cid, sid), pair(x, y))) {
+    -Message(other, op(call(div(), cid, sid), pair(x, y)));
+            z := intdiv(x, y);
+    send(other, op(return(div(), cid, sid), z));
+  }
+}
+\end{verbatim}
+\caption{BinaryCalc agent implementation}
+\label{fig:bcalc-rules}
+\end{figure} % >>>
+
+\begin{figure}\footnotesize % <<<
+\begin{verbatim}
+include stdio
+include CalcTypes
+
+action intadd(x, y) = raftest.IntegerAddAction;
+action intsub(x, y) = raftest.IntegerSubAction;
+action intmul(x, y) = raftest.IntegerMulAction;
+action intdiv(x, y) = raftest.IntegerDivAction;
+
+agent ExprCalc(binaryCalc : BinaryCalc<value>) : Calculator<value> {
+  rule Message(other, op(call(eval(), cid, sid), add(x, y))) & Iam(self) {
+    -Message(other, op(call(eval(), cid, sid), add(x, y)));
+                xcid := newcall;
+    +Continue(other, cid, xcid, add1(y));
+    send(self, op(call(eval(), xcid, sid)), x);
+  }
+
+  rule Message(self, op(return(eval(), xcid, sid), ctx))
+                & Iam(self)
+                & Continue(other, cid, xcid, add1(y))
+  {
+    -Continue(other, cid, xcid, add1(y));
+    -Message(self, op(return(eval(), xcid, sid), ctx));
+    ycid := newcall;
+    +Continue(other, cid, ycid, add2(ctx));
+    send(self, op(call(eval(), ycid, sid), y));
+  }
+
+  rule Message(self, op(return(eval(), cid, sid), cty))
+                & Iam(self)
+                & Continue(other, cid, ycid, add2(ctx))
+  {
+    -Message(self, op(return(eval(), cid, sid), cty));
+    -Continue(other, cid, ycid, add2(ctx));
+    zcid := newcall;
+    +Continue(other, cid, zcid, add3());
+    send(binaryCalc, op(call(add(), zcid, sid), operands(ctx, cty)));
+  }
+
+  rule Message(binaryCalc, op(return(add(), zcid, sid), z))
+                & Continue(other, cid, zcid, add3())
+  {
+    -Message(binaryCalc, op(return(add(), zcid, sid), z));
+    -Continue(other, cid, zcid, add3());
+     send(other, op(return(eval(), cid, sid), z));
+  }
+
+...
+
+}
+
+\end{verbatim}
+\caption{Calculator: addition expression evaluation}
+\label{fig:calc-rules}
+\end{figure} % >>>
+
+\autoref{fig:bcalc-rules} presents the implementation of a BinaryCalcInt
+agent, an instance of the BinaryCalc role.  \autoref{fig:calc-rules} is
+a partial implementation of the expression calculator agent, an instance of
+the Calculator role, more exactly it presents an implementation of the
+addition expression evaluation. Both BinaryCalcInt and Calculator
+implementations are using only rules.
+
+Let's look first at the BinaryCalcInt in \autoref{fig:bcalc-rules}. There are four
+actions defined, for each basic binary operation: intadd(x, y), intsub(x,
+y), intmul(x, y), intdiv(x, y). Each binary operation has associated
+a rule. Each rule says that upon receiving a message asking to perform that
+particular operation on a pair of integers, the agent should first delete
+the message, compute the result, and send the result back to the requester.
+Each message contains the sender's details, the details regarding the
+operation to be executed, and the pair of integers on which the operation
+is performed. The operation details contain the status of the operation,
+the call id, and the session id. The status of the operation could be
+either call() or return(), and, in particular, for any of the four rules
+defined in the BinaryCalcInt the message contains a call().
+
+The calculator agent implementation in \autoref{fig:calc-rules} is not
+complete, only one of the four cases of evaluation is illustrated, namely
+the addition. The addition is implemented using four rules. The first rule
+states that upon receiving a message to evaluate an expression that matches
+add(x, y), the calculator should recursively evaluate expression x, and save
+the other information from the message to be able to continue from there when
+the result from evaluating expression x is ready. The second rule states
+that upon receiving a message with the result of the evaluation of
+expression x, the calculator should evaluate expression y, and continue
+from there. The third rule states that upon receiving a message with the
+result of evaluation of expression y, the calculator should send a message
+to the binary calculator agent to perform the binary operation on the
+argument send, in this case a pair of integers, and then continue from
+there. The forth rule states that upon receiving the result from the
+binary calculator, the calculator agent should send back to the first agent
+the result received from the binary calculator as the result for the
+evaluation of expression add(x, y).
+
+\autoref{fig:calc-op} presents a much simpler and shorter implementation of
+agents BinaryCalcInt and Calculator, using operations. In the BinaryCalcInt
+implementation each rule used to model a basic binary operations is
+replaced by a shorter and more concise operation. In the calculator
+implementation one single operation replaces four rules, so the effect is
+much more visible.
+
+\begin{figure}\footnotesize % <<<
+\begin{verbatim}
+include stdio
+include CalcTypes
+
+action intadd(x, y) = raftest.IntegerAddAction;
+action intsub(x, y) = raftest.IntegerSubAction;
+action intmul(x, y) = raftest.IntegerMulAction;
+action intdiv(x, y) = raftest.IntegerDivAction;
+
+agent BinaryCalcInt : BinaryCalc<integer> {
+  operation add(pair(x, y)) = { return intadd(x, y); }
+  operation sub(pair(x, y)) = {return intsub(x, y); }
+  operation mul(pair(x, y)) = {return intmul(x, y); }
+  operation div(pair(x, y)) = {return intdiv(x, y); }
+}
+
+agent ExprCalc(binaryCalc : BinaryCalc<value>) : Calculator<value> {
+  operation eval(add(x, y)) {
+    return binaryCalc.add(self.eval(x), self.eval(y));
+  }
+  operation eval(sub(x, y)) {
+    return binaryCalc.sub(self.eval(x), self.eval(y));
+  }
+  operation eval(mul(x, y)) {
+    return binaryCalc.mul(self.eval(x), self.eval(y));
+  }
+  operation eval(div(x, y)) {
+    return binaryCalc.div(self.eval(x), self.eval(y));
+  }
+}
+\end{verbatim}
+\caption{BinaryCalc and Calculator implementation with operations}
+\label{fig:calc-op}
+\end{figure} % >>>
+
+As a concluding remark, our notions of roles and sessions overlap in great
+amount with the multiparty session types developed in the context of
+$\pi$-calculus. Our sessions correspond to their global types, while our
+roles correspond with their local type projections. The benefits of session
+types are well known, they facilitate communication safety, progress and
+fidelity~\cite{dblp:conf/popl/hondayc08}. Additionally, in AF-Raf, roles and
+sessions offer a structured global perspective regarding the social level
+of the multiagent systems.
+
+Moreover, designing our roles similar to Haskell type classes empowers them
+with the great flexibility of polymorphism~\cite{DBLP:conf/popl/WadlerB89}.
+To which we add further the benefits of algebraic data
+types~\cite{DBLP:journals/acta/GuttagH78}.
+
+% >>>
 
 \chapter{Conclusions}\label{ch:conc} % <<<
 
