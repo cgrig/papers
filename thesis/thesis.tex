@@ -329,9 +329,6 @@ Types, and Session types. 3. Expand roles in OOP. 4. Expand organisational
 frameworks. 5. Add diagrams for
 language architectures. 6. Add simpAL to the AOPLs. 7. Define basic
 concepts.}
-\chapter{Functional Languages}
-\chapter{Types}
-\chapter{Session Types}
 \chapter{Agent Oriented Programming}
 \section{Overview} % <<<
 
@@ -765,6 +762,15 @@ depicted in a thirty years old paper: early detection of
 errors; greater execution-time efficiency; and making the programs more
 structured and easier to read~\cite{DBLP:journals/csur/CardelliW85}.
 
+% >>>
+% >>>
+
+\chapter{Functional Languages} % <<<
+\section{Functional Languages} % <<<
+% >>>
+\section{Types} % <<<
+% >>>
+\section{Multiparty Session Types} % <<<
 % >>>
 % >>>
 % >>>
@@ -1804,7 +1810,30 @@ interactions in agent-oriented programming languages in terms of sessions.
 %Moreover, it seems reasonable to expect that a precise link between these
 %session and the roles proposed in the previous section can be found.
 % >>>
+\section{Designing a program in AF-Raf} % <<<
+We will use the Calculator example to illustrate the thought process of
+designing an AF-Raf program. We will develop the program step by step by
+adding functionality as we go along.
 
+Designing an AF-Raf program can be seen as a two phase process. The first
+phase is the abstractisation phase, which employs the analysis and
+generalisation of the problem to be solved. Abstractisation's main goal is to
+identify the main aspects that have to be considered, like the key data
+types, actions and interaction patterns, and put them in the context of
+reusability. The second phase is the Instantiation phase. Based on the
+general guidelines originated in the Abstractisation phase, a concrete
+implementation is developed so that it fits the concrete problem that has
+to be solved.
+\subsection{Abstractisation} % <<<
+Using abstraction, identify key data types, actions and patterns of
+interaction and transpose them into appropriate algebraic data types, roles
+and sessions.
+% >>>
+
+\subsection{Instantiation} % <<<
+Develop an implementation suitable for your concrete problem to solve.
+% >>>
+% >>>
 \section{Comparison with Other Work}\label{ch:related} % <<<
 
 \subsubsection{SimpAL} % <<<
@@ -2115,7 +2144,7 @@ same values as ${\it expr}\langle{\it int}\rangle$: one could refer to the
 same set of values using different (type) names.
 \end{example}
 
-Each {\it RoleDecaration\/} introduces a new role, by specifying its name,
+Each {\it RoleDeclaration\/} introduces a new role, by specifying its name,
 a list of arguments, and a list of operations. The arguments are type
 variables, which play a similar role as they do in type declarations. The
 arguments may be used inside operations in places where a reference to a
@@ -3402,7 +3431,7 @@ question we will analyse a number of example implementations in AF-Raf. We
 will start with the Calculator example and then we will look at an
 implementation of the Contract Net interaction protocol.
 
-\section{The Calculator Example} % <<<
+\section{The Calculator} % <<<
 
 This section expands the Calculator example trying to illustrate AF-Raf's
 functionality, and focusing more on types, roles and sessions. It also
@@ -3667,7 +3696,7 @@ To which we add further the benefits of algebraic data
 types~\cite{DBLP:journals/acta/GuttagH78}.
 % >>>
 % >>>
-\section{The Contract Net Interaction Protocol Example} % <<< 
+\section{The Contract Net Interaction Protocol} % <<< 
 First, we will look at the AF-Raf implementation of the Contract Net
 Interaction Protocol, then we will consider an alternative implementation
 in Jason/AgentSpeak.
