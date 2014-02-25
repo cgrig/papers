@@ -1810,7 +1810,7 @@ interactions in agent-oriented programming languages in terms of sessions.
 %Moreover, it seems reasonable to expect that a precise link between these
 %session and the roles proposed in the previous section can be found.
 % >>>
-\section{Designing a program in AF-Raf} % <<<
+\section{Designing an AF-Raf program} % <<<
 We will use the Calculator example to illustrate the thought process of
 designing an AF-Raf program. We will develop the program step by step by
 adding functionality as we go along.
@@ -1829,13 +1829,40 @@ Using abstraction, identify key data types, actions and patterns of
 interaction and transpose them into appropriate algebraic data types, roles
 and sessions.
 
-The first step is to identify the role structure, which include the roles
-and the main relationships between them. When you start defining the
-relationships between roles you have to identify the operations associated
-to each of the roles. After identifying the operations you need further
-refinement in finding the actual types of the messages exchanged in an
-operation as well as the succession of the operation. Let's see how this is
-done for the Calculator example.
+The first step is to establish the problem that needs to be solved identify
+the role structure, which include the roles and the main relationships
+between them. When you start defining the relationships between roles you
+have to identify the operations associated to each of the roles. After
+identifying the operations you need further refinement in finding the
+actual types of the messages exchanged in an operation as well as the
+succession of the operation. Let's see how this is done for the Calculator
+example.
+
+First, we establish the problem we want to solve. In this case we would
+like to evaluate some arithmetic expressions. Then, we identify the role
+structure needed to support our endeavour. In this case we are going to use
+one type of agent to perform binary operations, and another type of agent
+will coordinate the process and integrate the results conform to the rules
+of expression evaluation. So far, our program contains two roles: Caculator
+and BinaryCalc, as depicted in \autoref{fig:c-roles}.
+\begin{figure}\footnotesize % <<<
+\begin{verbatim}
+
+role Calculator<value> {
+}
+
+role BinaryCalc<value> {
+}
+
+\end{verbatim}
+\caption{roles}
+\label{fig:c-roles}
+\end{figure} % >>>
+
+Next step is to determine the exact operations that are needed. We will
+start with the BinaryCalc. In this case we will need an operation to
+correspond to each of the binary operations: addition, subtraction, multiplication
+and division.
 % >>>
 
 \subsection{Instantiation} % <<<
