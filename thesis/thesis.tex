@@ -62,8 +62,9 @@
 \includegraphics{ucd2.png}
 
 \bigskip\bigskip
-{\huge\bf Supporting Agent Systems \\[.5ex]
-kind of}
+{\huge\bf AF-Raf, \\
+a New Agent Oriented Programming Language
+with Roles, Sessions and Type Checking}
 %  in the Programming Language}
 \\[3ex]
 {\Large Claudia V.~Grigore}
@@ -81,7 +82,7 @@ School of Computer Science and Informatics Doctoral Studies
 \bigskip
 Head of School: Dr.~John Dunnion\\
 Principal Supervisor: Dr.~Rem W.~Collier\\
-\bigskip\bigskip
+\bigskip
 
 January 2014
 \vspace*{\stretch{1}}
@@ -165,6 +166,8 @@ Last comes a bigger case study (\autoref{ch:casestudy}).
 \todo{1.Add thesis outline/summary. 2. Numbered sections. 3. Separate
 overview from motivation. 4. Bullet point objectives.}
 
+\section{Overview}
+
 Research in multi-agent systems thrived since $\sim2000$.
 Very recently, it began to impact the practice of programming.
 
@@ -191,15 +194,15 @@ be demonstrated and validated through their extensive use within a range of
 real world application domains. In response to this, the multi-agent systems
 research community has created a range of implementation environments, such as
 JADE~\cite{DBLP:books/sp/map2005/BellifemineBCP05}, Agent
-Factory~\cite{collier1999agent}, ZEUS~\cite{DBLP:conf/agents/NwanaNLC99},
-together with a nascent set of standards developed by the Foundation for
+Factory~\cite{collier1999agent}, AgentBuilder~\cite{},
+together with a set of standards developed by the Foundation for
 Intelligent Physical Agents (FIPA), and a diverse set of software engineering
 methodologies, such as GAIA~\cite{DBLP:journals/aamas/WooldridgeJK00}, Agent
 UML~\cite{bauer2001agent}, MaSE~\cite{deloach2001analysis}, and
 Prometheus~\cite{DBLP:conf/atal/PadghamW02}.
 
 One approach to implement agent systems is Agent Oriented Programming.
-This relatively new paradigm ``promotes a societal view of computation, in
+This programming paradigm ``promotes a societal view of computation, in
 which multiple agents interact with one
 another''~\cite{DBLP:journals/ai/Shoham93}.  The agent is the fundamental
 unit of computation, analysed and controlled using mental terms.  The state
@@ -238,8 +241,27 @@ Agent Oriented Software Engineering tries to integrate theories that were
 developed in other disciplines, such as the Role
 Theory~\cite{biddle1986recent}, and their associated concepts, to model
 agent organisation and to structure interactions between the agents inside
-of the organisation. One example in this direction is AALAADIN, a
-meta-model of multi-agent systems~\cite{ferber1998meta}.
+of the organisation. 
+
+%Examples in this direction range from meta-models like
+%the AALAADIN~\cite{ferber1998meta} to popular methodologies
+%like Gaia~\cite{Zambonelli et al., 2003}, which is founded on the
+%view of a multi-agentsystem as a computational organisation
+%consisting of various interacting roles. 
+
+%Other examples
+%include MESSAGE~\cite{Caire et al.,
+%2001}, TROPOS~\cite{Giunchiglia et al., 2002}, and ROADMAP~\cite{Juan et
+%al., 2002}. 
+\todo{fix citations}
+A variety of organization-oriented approaches to multi-agent systems
+engineering have been brought forth.  Towards Organization–Oriented
+Software Engineering~\cite{} groups them in three categories: modelling
+approaches ([FGM03] (AGR), [HSB02] (MOISE), [HL05b] (ODML), [ONL04]),
+complete development methodologies ([ZJW03] (GAIA), [DeL05] (MaSE),
+[VSDD05] (OMNI), [BPG+04] (Tropos)) and middleware ([GF00] (MADKIT),
+[HSB05] (S-MOISE))
+
 
 Implementation-level support for these concepts is a research area. One
 approach is to design organisational models and frameworks such as
@@ -253,8 +275,7 @@ concepts would be to develop custom programming languages, in the context
 of Agent Oriented Programming. The majority of Agent Oriented Programming
 languages are based on theories from mid-nineties and do not reflect the
 increased importance of organisations in multi-agent system design.
-
-\subsubsection{Hypotheses and Objectives}
+\section{Motivation}
 Agent Oriented Programming is a relatively new programming paradigm that
 adopts a social metaphor for the design and implementation of software
 systems.  Specifically, software systems are viewed as communities of
@@ -280,6 +301,18 @@ and flexibility of agent systems by offering the appropriate level of
 granularity. Roles define a set of related behaviours, encapsulating them
 realises a separation of concerns and promotes information hiding.
 
+One way to approach the introduction of new functionality into a domain is
+to try to get inspiration from domains where that functionality is well
+established. I was lucky to be the first one to identify three analogies
+that proved very useful: the analogy between Agent Oriented Programming
+languages and Functional languages, the analogy between agent communication
+and multiparty session types, and the analogy between AOP languages and
+Typed Programming languages. All of them were explored subsequently. For
+example AOP to Functional programming analogy was explored in DALT2012 by
+Traveso, Multiparty sessions types were explored by Mascardi, and type
+checking was explored by Ricci.
+
+\subsubsection{Hypotheses and Objectives}
 (1) The primary hypothesis of my research is that the integration of roles,
 based on sociological Role Theory, will improve the readability and
 usability of Agent Oriented Programming languages. 
@@ -300,8 +333,7 @@ of the Agent Oriented Programming languages.
 \begin{itemize}
 
   \item (2a) The first objective is to explore the analogy between Agent
-    Oriented Programming languages and Functional Programming languages
-    (which, to the best of my knowledge, it was never explored before),
+    Oriented Programming languages and Functional Programming languages,
     identify valuable concepts and incorporate them into our new agent
     oriented programming language. For concreteness, we will focus on two
     specific programming languages: 2APL, an agent oriented programming
@@ -318,7 +350,28 @@ of the Agent Oriented Programming languages.
     type checking.
 
 \end{itemize}
+\section{Thesis Outline}
 
+The introduction (\autoref{ch:intro}) places agent-oriented programming
+within computer science and software engineering. It is meant to provide a
+gentle entry point for the reader who might be a software engineer or a
+researcher in another area of computer science.
+
+The relevant parts of the research literature on agents is surveyed next
+(\autoref{ch:aop}). Since this dissertation is about an agent-oriented
+programming language, other agent-oriented programming languages are
+clearly relevant, as are agent-oriented methodologies. The concept of
+agent, on which these languages and methodologies are based, is inspired by
+sociological theories. These theories are surveyed, because they inform the
+design of AF-Raf.
+
+The next two chapters present the language AF-Raf. The first of these
+(\autoref{ch:concepts}) emphasizes conceptual understanding, makes use of
+plenty of examples, and could serve as a first introduction to the language
+for a programmer. The second of these (\autoref{ch:langdef}) presents
+AF-Raf in a systematic way, and could serve as a reference formal
+definition of the language.
+%\rg{Should say that relevant background on type theory goes here?}
 % \rg{Maybe promise only that you show how roles, a concept from sociology,
 %     maps to a programming language construct.}
 
