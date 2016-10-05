@@ -502,17 +502,17 @@ situations, acting as plans or blueprints to guide behaviour.
 
 An individual plays multiple roles over time, and at the same time. As a
 result roles interact not only at the social level, but at the individual
-level as well. A number of issues arise such as role conflict, role strain,
-role overload, on the negative side, and role accumulation on the positive
-side.
+level as well. A number of issues arise from this interaction such as role
+conflict, role strain, role overload, on the negative side, and role
+accumulation on the positive side.
 
 In summary, Role Theory could be synthesised as follows: Social situations
-are governed by social norms, which determine behavioral expectations,
-which are in turn described in term of duties and rights or obligations and
-permissions. The expectations are both internal and external to the
-individual. Conformity results in rewards while nonconformity triggers
-social sanctions. Role prescriptions are subject to change through social
-pressure.
+are governed by social norms, which determine behavioral
+expectations(social roles), which are in turn described in term of duties
+and rights or obligations and permissions. The expectations are both
+internal and external to the individual. Conformity results in rewards
+while nonconformity triggers social sanctions. Role prescriptions are
+subject to change through social pressure.
 
 During the last 35 years the role metaphor has been applied to many fields
 of computer science including to programming languages, software
@@ -522,22 +522,45 @@ security, and conceptual modelling~\cite{DBLP:journals/ao/BoellaTV07}.
 Unfortunately, there is little consensus between different approaches,
 which makes very hard the transfer of results from one area to another.
 
-Relatively recently the idea of role oriented programming appeared mainly
-related to object oriented programming.
-ObjectTeams~\cite{DBLP:journals/ao/Herrmann07},
-PowerJava~\cite{DBLP:journals/entcs/BaldoniBT06}, and
+The idea of role oriented programming appeared mainly related to object
+oriented programming.  ObjectTeams~\cite{DBLP:journals/ao/Herrmann07}, and
 EpsilonJ~\cite{DBLP:conf/snpd/MonpratarnchaiT08} are examples of such
 object oriented programming languages that have explicit support for roles.
 A role taxonomy was developed~\cite{graversen06nature} to help role
 researchers to understand, communicate and spawn of new ideas, in the
 context of object oriented programming.
 
-In the multiagent systems domain, there have been a number of successful
-endeavours to incorporate the concept of role. Examples include PowerJava,
-an extension of Java, and ROPE~\cite{DBLP:conf/coopis/BechtGKM99}, a
-language independent framework.  Sill, at the present time there is no
-agent oriented programming language to have explicit support for roles.
+\todo{rephrase and add citation}
+JavaScript natively supports various function-based implementations of
+Role[40] patterns like Traits[41][42] and Mixins.[43] Such a function
+defines additional behavior by at least one method bound to the this
+keyword within its function body. A Role then has to be delegated
+explicitly via call or apply to objects that need to feature additional
+behavior that is not shared via the prototype chain.
 
+
+The design of the programming language ObjectTeams/Java is to model roles
+by specific classes and to define a playedBy relationship at the class
+level which specifies that each instance of the bound role class will be
+constantly attached to a given base instance. It is possible  to group a
+number of roles into what we call a team.  Teams combine the concepts of
+classes and packages: They are classes in that they have fields and
+methods, may apply inheritance and are instantiable. They are packages in
+that they contain a set of classes
+
+In the multiagent systems domain, there have been a number of successful
+endeavours to incorporate the concept of role. Examples include
+PowerJava~\cite{DBLP:journals/entcs/BaldoniBT06}, an extension of Java, and
+ROPE~\cite{DBLP:conf/coopis/BechtGKM99}, a language independent framework.
+Sill, at the present time there is no agent oriented programming language
+to have explicit support for roles.
+
+PowerJava: Roles are implemented as classes, which can be instantiated only
+in presence of an instance of the player and of an instance of an
+institution. The definition of a class implementing a role is included in
+the class of the institution, the role belongs to. Powers are methods which
+can access private fields and methods of the institution they belong to,
+and of the other roles of the same institution.
 %Rope: role oriented programming environment for multiagent systems. Becht
 %1999
 
@@ -547,7 +570,7 @@ agent oriented programming language to have explicit support for roles.
 
 Organisational Theory is a discipline of social sciences for more than 100
 years. Organisational Theory studies organisational design, organisational
-structures, the relationship of organisations with their environment, and
+structures, the relationship between organisations and their environment, and
 the behaviour of individuals in organisational settings.
 
 An organisation could be regarded as a coordinated collective action
@@ -557,21 +580,22 @@ within an environment.
 The study of formal organisations accompanied the industrial
 revolution, following the need to organise labour. There are a number of
 organisational theories that can be categorised in three groups or stages
-depending on their main focus: classical theories focus on the product,
-neoclassic theories focus on the employee, and contemporary theories focus
+depending on their main focus: 1) classical theories focus on the product,
+2) neoclassic theories focus on the employee, and 3) contemporary theories focus
 on the environment~\cite{DohertySD01}.
 
 Each of the Organisational Theories can be described in terms of the four
-components of a division of labour: the hierarchy of authority, the span of
-control, the level of centralisation versus decentralisation in decision
-making, and the specialisation of functions or tasks.
+components of a division of labour: 1) the hierarchy of authority, 2) the
+span of control, 3) the level of centralisation versus decentralisation in
+decision making, and 4) the specialisation of functions or tasks.
 
 The hierarchy of authority refers to a system of rules regarding the line
 of communication and control, which determine the organisational structure.
-In this context focusing on the specialisation of tasks results in
-functional organisations, while focusing on the end product results in
-product organisations. Focusing on both function and product results in a
-matrix organisation with a dual authority.
+When you view the organisational structure in relation to the
+specialisation of tasks the result is a functional organisations, while
+focusing on the "end product" results in a product organisations. Focusing
+on both function and product results in a matrix organisation with a dual
+authority.
 
 The span of control can be narrow resulting in a high organisation, with
 multiple levels or wide resulting in a flat organisation, with fewer levels.
@@ -594,17 +618,24 @@ identified as the most significant organisational components to the
 multiagent system development~\cite{DBLP:conf/aose/ZambonelliJW00}.
 
 Within the multiagent systems development settings, a number of
-organisational frameworks have been developed to facilitate the definition
+software frameworks and models that promote organisation oriented
+programming have been developed. They facilitate the definition
 of a social or organisational level on top of the agent level. Examples
 include Moise+~\cite{DBLP:conf/atal/HubnerSB02},
 Gaia~\cite{DBLP:journals/aamas/WooldridgeJK00},
-MASE~\cite{deloach2001analysis}, AALAADDIN~\cite{ferber1998meta}.  However,
-there is no full support at the language level for the organisation of
-agents. It was previously acknowledged that, in programming agent
-organisations, developing new organisational abstractions at the
+MASE~\cite{deloach2001analysis}, AALAADDIN~\cite{ferber1998meta}.  
+
+JaCaMo~\cite{}
+
+2OPL~\cite{}
+
+However, there is no full support at the language level for the
+organisation of agents. It was previously acknowledged that, in programming
+agent organisations, developing new organisational abstractions at the
 programming language level is the preferred approach in order to reduce the
 effort needed for programming and maintaining agent
 systems~\cite{DBLP:conf/esaw/RiemsdijkHJ09}.
+
 % >>>
 \section{Agent Oriented Programming Languages} % <<<
 Role Theory and Organisational Theory have not been yet fully exploited at
@@ -708,6 +739,74 @@ distinguishes different types of goals: primitive, achievement or achieved
 goals~\cite{DBLP:conf/jelia/indriksH08}.
 
 GOAL doesn't manage in an explicit way the social level of the agent system.
+% >>>
+
+\subsubsection{SimpAL} % <<<
+Ricci  and Santi developed a novel programming language, called
+simpAL~\cite{DBLP:conf/oopsla/RicciS11,DBLP:conf/oopsla/RicciS12}, that
+supports organisational structure, types and type
+checking~\cite{DBLP:conf/promas/RicciS12}. SimpAl draws inspiration from
+the Agent and Artifacts model~\cite{DBLP:conf/atal/RicciVO07} and from the
+Jason programming language, which is based on the Belief, Desire, Intention
+model. SimpAL is conceived as an extension to the Java object oriented
+programming language with a separate agent abstraction layer.
+
+Even though this language is very different from AF-Raf, there are a number
+of overlapping concepts. SimpAL imports a social view of computation where
+agents playing different roles constitute an organisation, and work within
+a shared environment. The main building blocks of this model are agents,
+the autonomous components, and artifacts, the environmental components that
+provide functionality or services. The agent has a belief base, some tasks
+to perform and a set of plans to utilise in order to accomplish the tasks.
+
+SimpAl roles are similar to AF-Raf roles in that each role is composed of a
+set of tasks types, in the same way an AF-Raf role is constitute by a set
+of operations, where tasks are the analogous to the AF-Raf operations.
+However, operations and tasks are completely different entities. An
+operation is defined by the type of messages exchanged by the agents, while
+a task is defined by a set of parameters and a set of optional attributes
+(understand, goal, pre-attributes).
+
+SimpAL roles are organised in a slightly different manner compared to the
+AF-Raf's session model. In AF-Raf sessions provide  which can be seen as a kind of protocol
+prescribing the agent communication. In simpAL organisation models are used
+to define organisation types, that bring together related roles and
+artifact in coherent units named workspaces. Organisation types are
+implemented by concrete organisations. SimpAL organisation types do not put
+any constraint on the order in which interactions between agents occur, as
+AF-Raf session types do, instead they simply group together related roles
+and artifacts working in a similar way to the object oriented programming
+interfaces.
+
+A number of static type checks are performed. At the role level it is
+checked that for each task type there exists at least one plan, and for
+each plan it's checked that the type of the sent messages are only the ones
+defined in the task type. Also it's checked that the assignment of tasks
+corresponds to the task types defined in the role, and that the types of
+the messages sent to an agent correspond to that the agent can understand.
+
+Errors about beliefs that are checked include finding, inside the plans,
+beliefs that are not declared, and beliefs that are assigned with
+expressions of the wrong type.
+
+Similar checks are performed at the environment level. The usage interface
+represents the type of artifact, and contains the observable properties and
+the operations provided by the artifact. Artifact template is the actual
+artifact implementation. On the agent side are checked errors regarding
+artifact operations and its observable state. For each action in the plan
+there must be a matching operation in the artifact's interface.  Likewise,
+for each update belief statement regarding an artifact property there must
+exist a matching observable property in the usage interface. On the
+environment side is checked that the artifact templates match the
+corresponding usage interfaces. First, checks are performed to ascertain
+that for each operation declared in the interface there exists an
+implementation in the template, also for any of the observable properties
+in the template there exists a declaration in the corresponding interface
+with a compatible type.
+
+At the organisation level it is checked that each workspace, artifact, and
+agent types declared in an organisational model is actually implemented in
+the implementation of the organisation.
 % >>>
 
 \subsection{Discussion} % <<<
