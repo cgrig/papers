@@ -625,16 +625,40 @@ include Moise+~\cite{DBLP:conf/atal/HubnerSB02},
 Gaia~\cite{DBLP:journals/aamas/WooldridgeJK00},
 MASE~\cite{deloach2001analysis}, AALAADDIN~\cite{ferber1998meta}.  
 
-JaCaMo~\cite{}
+A very recent and slightly different approach is to merge more
+technologies. JaCaMo~\cite{}, a Multi-Agent Programming framework, combines
+three different technologies already widely used: 1. Jason, the agent
+oriented programming language; 2. Cartago, the framework for programming
+environments; and 3. Moise,the organisational model. It advances a new
+programming paradigm, the multi agent programming that incorporates all the
+principles of programming agents, organisations, environments and
+interactions. You would have to understand and be able to proficiently use
+all three technologies.
 
-2OPL~\cite{}
+Recently the were developed a number of normative organisation frameworks
+some of them incorporate programming languages for norm-aware agents and
+normative organisation. Notable are N-2APL and 2OPL.
 
-However, there is no full support at the language level for the
-organisation of agents. It was previously acknowledged that, in programming
-agent organisations, developing new organisational abstractions at the
-programming language level is the preferred approach in order to reduce the
-effort needed for programming and maintaining agent
-systems~\cite{DBLP:conf/esaw/RiemsdijkHJ09}.
+The N-2APL~\cite{Coordination, Organizations, Institutions, and Norms in Agent
+Systems IX} agent oriented programming language is based on the 2-APL
+programming language. N-2APL agents are able to deliberate on their goals,
+norms, and sanctions before deciding which plan to select and execute, and
+they are able to violate norms if it is in their overall interest to do so.
+
+2OPL~\cite{} is a programming language for developing agent organizations.
+The used abstractions in the language are brute facts, effects of actions,
+norms and sanction rules. Brute facts are the state of the environment.
+Effect rules describe how actions change the brute facts. Norms describe
+which environment states counts as violations.  Finally sanction rules can
+be programmed to respond to norm violations. The current implementation is
+based on logic programming (Prolog in particular).
+
+However, there is no agent oriented programming language with full support
+at the language level for the organisation of agents. It was previously
+acknowledged that, in programming agent organisations, developing new
+organisational abstractions at the programming language level is the
+preferred approach in order to reduce the effort needed for programming and
+maintaining agent systems~\cite{DBLP:conf/esaw/RiemsdijkHJ09}.
 
 % >>>
 \section{Agent Oriented Programming Languages} % <<<
@@ -3605,6 +3629,7 @@ This concludes the description of AF-Raf's semantics.
 % >>>
 % >>>
 
+% >>>
 \chapter{Case Studies}\label{ch:casestudy} % <<<
 
 \todo{1. Move calculator example here. 2. Add the request protocol. 3. Add
@@ -4311,7 +4336,6 @@ type system and a type checker that include algebraic data types for AF-Raf
 programming languge \autoref{sec:types}.
 
 \end{itemize}
-% >>>
 % >>>
 \bibliographystyle{plain}
 \bibliography{thesis}
