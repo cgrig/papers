@@ -626,21 +626,23 @@ Gaia~\cite{DBLP:journals/aamas/WooldridgeJK00},
 MASE~\cite{deloach2001analysis}, AALAADDIN~\cite{ferber1998meta}.  
 
 A very recent and slightly different approach is to merge more
-technologies. JaCaMo~\cite{}, a Multi-Agent Programming framework, combines
+technologies. JaCaMo~\cite{}, a multiagent programming framework, combines
 three different technologies already widely used: 1. Jason, the agent
 oriented programming language; 2. Cartago, the framework for programming
 environments; and 3. Moise,the organisational model. It advances a new
-programming paradigm, the multi agent programming that incorporates all the
+programming paradigm, the multiagent programming that incorporates all the
 principles of programming agents, organisations, environments and
 interactions. You would have to understand and be able to proficiently use
 all three technologies.
 
-Recently the were developed a number of normative organisation frameworks
+Recently there were developed a number of normative organisation frameworks
 some of them incorporate programming languages for norm-aware agents and
-normative organisation. Notable are N-2APL and 2OPL.
+normative organisation. Some examples are N-2APL and 2OPL.
 
-The N-2APL~\cite{Coordination, Organizations, Institutions, and Norms in Agent
-Systems IX} agent oriented programming language is based on the 2-APL
+\todo{Coordination, Organizations, Institutions, and Norms in Agent
+Systems IX}
+
+The N-2APL~\cite{} agent oriented programming language is based on the 2-APL
 programming language. N-2APL agents are able to deliberate on their goals,
 norms, and sanctions before deciding which plan to select and execute, and
 they are able to violate norms if it is in their overall interest to do so.
@@ -671,7 +673,9 @@ programming languages, being among the most widely used. We will look at
 the similarities similarities between them, and try to identify the gap
 between the established functionality and the desirable functionality of
 the agent oriented programming languages, that could support a more
-structured multiagent interaction.
+structured multiagent interaction. We will include in our analysis some
+newly developed programming languages, SimpAl and 2OLP, that are relevant
+to our research.
 
 \subsection{Jason/Agent Speak} % <<<
 Jason is an interpreter written in Java for an extended version of the
@@ -831,6 +835,17 @@ with a compatible type.
 At the organisation level it is checked that each workspace, artifact, and
 agent types declared in an organisational model is actually implemented in
 the implementation of the organisation.
+% >>>
+
+\subsection{2OPL} % <<<
+2OPL~\cite{} is a normative organization oriented programming
+language. It allows the programmer to program organizations in terms of
+norms. These norms are represented as logical rules in the language. An
+organization programmed with this language acts between a multi-agent
+platform and the environment, monitoring every action performed by the
+agents on the agent platform and capturing violations and sanctioning the
+performers of these violations to organize the overall behavior of the
+organization.
 % >>>
 
 \subsection{Discussion} % <<<
