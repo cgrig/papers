@@ -383,8 +383,7 @@ Types, and Session types. 3. Expand roles in OOP. 4. Expand organisational
 frameworks. 5. Add diagrams for
 language architectures. 6. Add simpAL to the AOPLs. 7. Define basic
 concepts.}
-\chapter{Agent Oriented Programming}
-\section{Overview} % <<<
+\section{Agent Oriented Programming} % <<<
 
 Using an anthropomorphic metaphor to design computer programs is not a new
 idea. By anthropomorphic metaphor meaning the attribution of human
@@ -965,16 +964,139 @@ structured and easier to read~\cite{DBLP:journals/csur/CardelliW85}.
 
 % >>>
 % >>>
-
-\chapter{Functional Languages} % <<<
 \section{Functional Languages} % <<<
+
+"Programming in a functional language consists of building definitions and
+using the computer to evaluate expressions. The primary role of the
+programmer is to construct a function to solve a given problem. This
+function, which may involve a number of subsidiary functions, is described
+in a notation that obeys normal mathematical principles. The primary role
+of the computer is to act as an evaluator or calculator; its job is to
+evaluate expressions and print the results. In this respect the computer
+acts much like an ordinary pocket calculator. What distinguishes a
+functional calculator from the humbler variety is the programmer's ability
+to make definitions to increase its power of calculations. Expressions that
+contain occurrences of the names of functions defined by the programmer are
+evaluated using the given definitions as simplification rules for converting
+expressions to printable form."~\cite{}
+
+The computer evaluates an expression by reducing it to its simplest
+equivalent form and displaying the result. The terms evaluation,
+simplification and reduction can all be used to describe this
+process. In functional languages, an expression is used only to describe a
+value, but it is important to distinguish between values and their
+representations. There may be many representations for the same value. The
+most important kind of value in functional programming is a function value.
+Even though we can't display a function value, we can apply a function to
+arguments and display the results. The universe of values is partitioned
+into organised collections called types. Each type has associated with it
+certain operations. It is important that every well-formed expression in a
+programming language can be assigned a type.~\cite{}
+
+\subsubsection{Haskell Type Classes} % <<<
+
+This section reviews Haskell type classes, because they inspire our notion
+of `role', and Haskell modules, so that it is clear they are very different
+from type classes. We use the basic mathematical concepts of sets and
+equality as examples, because we assume the readers are familiar with these.
+
+% modules
+%  - small example
+%  - information hiding and encapsulation
+%    (exact impl may change; but it is ONE)
+%  - separate compilation
+%  - analogy with Java classes
+
+Haskell has a modular approach to programming. Modular programming implies
+separating the programs into independent modules that perform logically
+distinct functions. Modules are integrated into programs through
+interfaces. An interface define the elements required and provided by the
+module. The advantage of modular programming is that it allows one to write
+a module having little knowledge of the code in another module, and, also,
+it allows modules to be reassembled and replaced without reassembly of the
+whole system~\cite{DBLP:journals/cacm/Parnas72a}.
+
+In Haskell, modules are used to control name-spaces and to create abstract
+data types. Moreover, a Haskell program can be seen as a collection of
+modules, where the main module loads up the other modules. A module
+contains functions, types and type classes that are related and serve a
+common purpose.
+
+Haskell modules are often used to implement abstract data types such as
+sets.  To illustrate the main features of modules, the code in
+Figure~\ref{fig:haskell} is contrived.  The module \textit{Set} contains
+the type~$T$ and the functions \textit{add}, \textit{has}, and
+\textit{sub}. The \textbf{module} line hides \textit{sub} by not mentioning
+it. The names and types of the exported functions \textit{add} and
+\textit{has} are visible from outside the module, but their
+implementations, which are to the right of~$=$, are hidden.  Similarly, the
+type name~$T$ is visible from outside, but the value constructor~$V$ is
+not. For example, the set $\{1,2\}$ may be represented by the value
+$V[2,1,2]$, but this is not known to the users of the module \textit{Set}.
+The names and types visible from outside constitute the module's
+\emph{interface}.
+
+\begin{figure}\footnotesize % <<<
+\begin{verbatim}
+-- built-in and standard library
+class Eq b where
+  eq :: b -> b -> Bool
+instance Eq Int where ...
+elem x [] = False
+elem x (y:ys) = eq x y || elem x ys
+all p [] = True
+all p (x:xs) = p x && all p xs
+
+-- file set.hs
+module Set (T, add, has) where
+  data T a = V [a]
+  add (V s) x = V (x:s)
+  has (V s) x = elem x s
+  sub (V s) t = all (has t) s
+
+  instance Eq a => Eq (T a) where
+    eq s t = sub s t && sub t s
+\end{verbatim}
+\caption{Haskell type class \textit{Eq} and module \textit{Set}}
+\label{fig:haskell}
+\end{figure} % >>>
+
+% type classes
+%  - continue example
+%  - ad-hoc polymorphism: multiple implementations with the same interface
+%  - analogy with Java interfaces
+
+The type class \textit{Eq} contains types whose values can be compared for
+equality. To make a type belong to the class \textit{Eq} one must write an
+instance declaration that provides an implementation for a function
+named~$eq$. The \textbf{instance} declaration in module \textit{Set} says
+that the type constructor~$T$ transforms members of \textit{Eq} into
+members of \textit{Eq}. For example, $T(T\,\mathit{Int})$ is in \textit{Eq}
+because \textit{Int} is in~\textit{Eq}.
+
+In general, modules are responsible with information
+hiding~\cite{DBLP:journals/cacm/Parnas72a} and encapsulation.  On the other
+hand, type classes are an elegant mechanism to provide ad-hoc polymorphism,
+also known as overloading~\cite{DBLP:conf/popl/WadlerB89}: The same name
+refers to different implementations depending on the context.
+
+A type class defines a set of methods that can be used with types that are
+members of the class. When you declare an instance of that type class
+you have to provide an implementation for all the methods associated with
+that class. Haskell type classes are similar to generic interfaces in Java.
+
+Just as Haskell type classes are different from Haskell modules, the roles
+we introduce are different from existing 2APL
+modules~\cite{dblp:conf/prima/dastanims08}.
+% >>>
 % >>>
 \section{Types} % <<<
 % >>>
 \section{Multiparty Session Types} % <<<
 % >>>
-% >>>
-% >>>
+%>>>
+
+
 \part{AF-Raf Agent Oriented Programming Language} % <<<
 \chapter{Main AF-Raf Concepts}\label{ch:concepts} % <<<
 
@@ -1714,102 +1836,6 @@ therefore, by finding a contact point, seeing what it tells about its
 surroundings, and then repeating. But, in order to do this, let's review
 first the Haskell type classes and modules.
 
-\subsubsection{Haskell Type Classes} % <<<
-
-This section reviews Haskell type classes, because they inspire our notion
-of `role', and Haskell modules, so that it is clear they are very different
-from type classes. We use the basic mathematical concepts of sets and
-equality as examples, because we assume the readers are familiar with these.
-
-% modules
-%  - small example
-%  - information hiding and encapsulation
-%    (exact impl may change; but it is ONE)
-%  - separate compilation
-%  - analogy with Java classes
-
-Haskell has a modular approach to programming. Modular programming implies
-separating the programs into independent modules that perform logically
-distinct functions. Modules are integrated into programs through
-interfaces. An interface define the elements required and provided by the
-module. The advantage of modular programming is that it allows one to write
-a module having little knowledge of the code in another module, and, also,
-it allows modules to be reassembled and replaced without reassembly of the
-whole system~\cite{DBLP:journals/cacm/Parnas72a}.
-
-In Haskell, modules are used to control name-spaces and to create abstract
-data types. Moreover, a Haskell program can be seen as a collection of
-modules, where the main module loads up the other modules. A module
-contains functions, types and type classes that are related and serve a
-common purpose.
-
-Haskell modules are often used to implement abstract data types such as
-sets.  To illustrate the main features of modules, the code in
-Figure~\ref{fig:haskell} is contrived.  The module \textit{Set} contains
-the type~$T$ and the functions \textit{add}, \textit{has}, and
-\textit{sub}. The \textbf{module} line hides \textit{sub} by not mentioning
-it. The names and types of the exported functions \textit{add} and
-\textit{has} are visible from outside the module, but their
-implementations, which are to the right of~$=$, are hidden.  Similarly, the
-type name~$T$ is visible from outside, but the value constructor~$V$ is
-not. For example, the set $\{1,2\}$ may be represented by the value
-$V[2,1,2]$, but this is not known to the users of the module \textit{Set}.
-The names and types visible from outside constitute the module's
-\emph{interface}.
-
-\begin{figure}\footnotesize % <<<
-\begin{verbatim}
--- built-in and standard library
-class Eq b where
-  eq :: b -> b -> Bool
-instance Eq Int where ...
-elem x [] = False
-elem x (y:ys) = eq x y || elem x ys
-all p [] = True
-all p (x:xs) = p x && all p xs
-
--- file set.hs
-module Set (T, add, has) where
-  data T a = V [a]
-  add (V s) x = V (x:s)
-  has (V s) x = elem x s
-  sub (V s) t = all (has t) s
-
-  instance Eq a => Eq (T a) where
-    eq s t = sub s t && sub t s
-\end{verbatim}
-\caption{Haskell type class \textit{Eq} and module \textit{Set}}
-\label{fig:haskell}
-\end{figure} % >>>
-
-% type classes
-%  - continue example
-%  - ad-hoc polymorphism: multiple implementations with the same interface
-%  - analogy with Java interfaces
-
-The type class \textit{Eq} contains types whose values can be compared for
-equality. To make a type belong to the class \textit{Eq} one must write an
-instance declaration that provides an implementation for a function
-named~$eq$. The \textbf{instance} declaration in module \textit{Set} says
-that the type constructor~$T$ transforms members of \textit{Eq} into
-members of \textit{Eq}. For example, $T(T\,\mathit{Int})$ is in \textit{Eq}
-because \textit{Int} is in~\textit{Eq}.
-
-In general, modules are responsible with information
-hiding~\cite{DBLP:journals/cacm/Parnas72a} and encapsulation.  On the other
-hand, type classes are an elegant mechanism to provide ad-hoc polymorphism,
-also known as overloading~\cite{DBLP:conf/popl/WadlerB89}: The same name
-refers to different implementations depending on the context.
-
-A type class defines a set of methods that can be used with types that are
-members of the class. When you declare an instance of that type class
-you have to provide an implementation for all the methods associated with
-that class. Haskell type classes are similar to generic interfaces in Java.
-
-Just as Haskell type classes are different from Haskell modules, the roles
-we introduce are different from existing 2APL
-modules~\cite{dblp:conf/prima/dastanims08}.
-% >>>
 
 \paragraph{First Analogy: Functions as Messages} % <<<
 
