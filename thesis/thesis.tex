@@ -378,12 +378,16 @@ definition of the language.
 % >>>
 
 \part{Background}\label{ch:aop} % <<<
-\todo{1. Rename chapter to Background. 2. Add sections: Functional languages,
-Types, and Session types. 3. Expand roles in OOP. 4. Expand organisational
-frameworks. 5. Add diagrams for
-language architectures. 6. Add simpAL to the AOPLs. 7. Define basic
-concepts.}
-\section{Agent Oriented Programming} % <<<
+\todo{
+%  1. Rename chapter to Background. 
+%  2. Add sections: Functional languages,Types, and Session types. 
+%  3. Expand roles in OOP. 
+%  4. Expand organisational frameworks. 
+  5. Add diagrams for language architectures. 
+%  6. Add simpAL to the AOPLs. 
+  7. Define basic concepts.
+}
+\chapter{Agent Oriented Programming} % <<<
 
 Using an anthropomorphic metaphor to design computer programs is not a new
 idea. By anthropomorphic metaphor meaning the attribution of human
@@ -467,7 +471,7 @@ level lagging behind. Only recently the social level of multiagent systems
 has started to receive more attention.
 
 % >>>
-\section{Role Theory} % <<<
+\chapter{Role Theory} % <<<
 
 The Role Theory elaborated in Sociology and Social Psychology tries to
 explain the predictability of individual behaviour by linking it to the
@@ -565,7 +569,7 @@ and of the other roles of the same institution.
 
 %Roles survey. Ekinci
 % >>>
-\section{Organisational Theory}  % <<<
+\chapter{Organisational Theory}  % <<<
 
 Organisational Theory is a discipline of social sciences for more than 100
 years. Organisational Theory studies organisational design, organisational
@@ -662,7 +666,7 @@ preferred approach in order to reduce the effort needed for programming and
 maintaining agent systems~\cite{DBLP:conf/esaw/RiemsdijkHJ09}.
 
 % >>>
-\section{Agent Oriented Programming Languages} % <<<
+\chapter{Agent Oriented Programming Languages} % <<<
 Role Theory and Organisational Theory have not been yet fully exploited at
 the programming language level.
 Jason/AgentSpeak~\cite{DBLP:books/sp/map2005/BordiniHV05},
@@ -964,7 +968,7 @@ structured and easier to read~\cite{DBLP:journals/csur/CardelliW85}.
 
 % >>>
 % >>>
-\section{Functional Languages} % <<<
+\chapter{Functional Languages} % <<<
 
 "Programming in a functional language consists of building definitions and
 using the computer to evaluate expressions. The primary role of the
@@ -1090,12 +1094,276 @@ we introduce are different from existing 2APL
 modules~\cite{dblp:conf/prima/dastanims08}.
 % >>>
 % >>>
-\section{Types} % <<<
+\chapter{Types} % <<<
+\subsection{Multi-Sorted Predicate Logic} \label{sec:multi-sorted} % <<<
+
+The starting point in designing a type system is the observation that most
+agent oriented programming languages use first order logic, more
+specifically predicate logic terms, to represent beliefs and messages. As a
+consequence we should look at how the introduction of types is managed in
+mathematical logic, and recall basic notions necessary to our
+understanding. And, also, introduce notational conventions used in AF-Raf.
+Moreover, although these notions are simple, their definitions in
+literature tend to have subtle but important differences.
+
+A \emph{term} is a variable, or a function applied to other terms.
+\begin{align}
+\mathit{Term}\quad\tau &::= \omega \mid \phi \\
+\mathit{Variable}\quad\omega &::= \nu \\
+\mathit{Function}\quad\phi &::= \nu(\tau_1,\ldots,\tau_n) \\
+\mathit{Name}\quad\nu
+\end{align}
+In AF-Raf, term names are strings.  Because term names uniquely identify a
+variable or a function we will say ``the function~$\nu$'' rather than ``the
+function with name~$\nu$.'' A term not containing variables is said to be
+\emph{ground}.
+
+\begin{remark}
+Ground terms are essentially trees of strings.
+\end{remark}
+
+A multi-sorted logic has a set~$S$ of sorts.  We use the letter~$\sigma$ to
+denote sorts.
+\begin{align}
+\sigma, \sigma_1, \sigma_2, \sigma_3, \ldots &\in S
+\end{align}
+Each function~$\nu$ has a signature
+$(\sigma_1\times\cdots\times\sigma_n)\to\sigma$.  Function~$\nu$ is always
+applied to $n$~terms whose sorts must be, respectively,
+$\sigma_1$,~$\sigma_2$, \dots,~$\sigma_n$, and the resulting term has
+sort~$\sigma$. We say that $\nu$~has \emph{arity}~$n$. \emph{Constants} are
+functions with arity~$0$.
+
+Typically, in mathematical logic, the set~$S$ of sorts and the function
+signatures are required to satisfy further constraints. \textit{Bool} must
+be one of the sorts. \emph{Formulas} are terms with sort \textit{Bool}.
+The argument sorts ($\sigma_1$,~$\sigma_2$, \dots,~$\sigma_n$) either are
+all \textit{Bool}, or none is \textit{Bool}.  If the argument sorts are
+\textit{Bool}, then the result sort~$\sigma$ must also be \textit{Bool},
+and $\nu$ is said to be a \emph{boolean connective}.  If the argument sorts
+are not \textit{Bool} and the result sort~$\sigma$ is \textit{Bool}, then
+$\nu$ is said to be a \emph{predicate}.  Agent~Factory has these
+constraints and AF-Raf inherits them. In addition, AF-Raf uses an infix
+notation (described later) for boolean connectives, letter strings starting
+with uppercase for predicate names, and letter strings starting with
+lowercase for other function names and for variable names.
+
+\begin{remark}
+%\rg{I'm not sure about this remark. I think \emph{traditional} logicians
+%behave as described here.}
+The definitions given here are in-between what applied computer scientists
+tend to prefer and what pure logicians tend to prefer.  Computer scientists
+work with \emph{expressions} (rather than terms and formulas) and do not
+have constraints on function signatures with respect to booleans.
+Logicians, on the other hand, do have these constraints and, moreover,
+define terms in such a way that formulas are not terms, and predicates are
+not functions. Moreover, logicians single out equality between terms as
+being a special predicate.
+\end{remark}
+
+%\rg{Maybe add some simple examples early on.}
 % >>>
-\section{Multiparty Session Types} % <<<
+\subsection{Algebraic Data Types} % <<<
+
+Algebraic data types offer an alternative way of defining sets of ground
+terms. In multi-sorted predicate logic, the sort~$\sigma$ determines a set
+of ground terms, namely those of the form $\nu(*)$, where $\nu$ has a
+signature of the form $*\to\sigma$.  For example, the sort \textit{Bool}
+determines the set of terms that are formulas.  With algebraic data types,
+a type~$\delta$ is defined by a sequence of patterns, each of the form
+$\nu(\delta_1,\ldots,\delta_n)$. For example, one could define the types
+\textit{nat}, $e$, and~$o$ as follows.
+\begin{align}
+&\mathbf{type}\,\mathit{nat} =
+      \mathit{zero}()
+  \mid\mathit{succ}(\mathit{nat})
+  \mid\mathit{add}(\mathit{nat},\mathit{nat}) \\
+&\mathbf{type}\,e =
+      \mathit{zero}()
+  \mid\mathit{succ}(o)
+  \mid\mathit{add}(e,e)
+  \mid\mathit{add}(o,o) \\
+&\mathbf{type}\,o =
+      \mathit{succ}(e)
+  \mid\mathit{add}(o,e)
+  \mid\mathit{add}(e,o)
+\end{align}
+%\rg{These things are presented as if they are completely standard. They're
+%not. I think they should be presented as part of the design of AF-RAF.}
+We make the following observations.
+\begin{enumerate}
+\item
+  Function names may appear in multiple definitions. For example,
+  \textit{zero} appears in the definition of~$\mathit{nat}$ and also in the
+  definition of~$e$. In particular, the term $\mathit{zero}()$ belongs both
+  to the set of ground terms defined by the type~$\mathit{nat}$ and to the
+  one defined by the type~$e$.
+\item
+  Function names may appear multiple times in the same definition. For
+  example, \textit{add} appears twice in the definition of~$e$. (This
+  property distinguishes our types from polymorphic
+  variants~\cite{garrigue1998}.)
+\item
+  Type definitions may be recursive or mutually recursive. For example,
+  $\mathit{nat}$~appears within the definition of~$\mathit{nat}$.
+\end{enumerate}
+The set of ground terms corresponding to type~$\mathit{nat}$ is the following.
+\begin{equation}
+\begin{aligned}
+\{\,&\mathit{zero}(), \\
+    &\mathit{succ}(\mathit{zero}()),
+        \mathit{succ}(\mathit{succ}(\mathit{zero}())), \ldots \\
+    &\mathit{add}(\mathit{zero}(), \mathit{zero}()),
+        \mathit{add}(\mathit{zero}(), \mathit{succ}(\mathit{zero}())),
+        \ldots \\
+    &\mathit{succ}(\mathit{add}(\mathit{zero}(), \mathit{zero}())),
+        \ldots \\
+    &\ldots\, \}
+\end{aligned}
+\end{equation}
+Moreover, $e$~and~$o$ partition~$\mathit{nat}$.
+
+\begin{proposition}
+Algebraic data types (as defined above) are strictly more expressive than
+sorts. More precisely, (1)~all sets of ground terms that can be defined by
+sorts can also be defined by algebraic data types, and (2)~there are pairs
+of sets of ground terms that can be defined by algebraic data types but
+cannot be defined by sorts.
+\end{proposition}
+
+\begin{proof}
+For~(1), we define a type~$\delta(\sigma)$ for each sort~$\sigma$ as
+follows: For each function $\nu:(\sigma_1,\ldots,\sigma_n)\to\sigma$ we add
+a pattern $\nu(\delta(\sigma_1),\ldots,\delta(\sigma_n))$to the definition
+of type~$\delta(\sigma)$. It is easy to see, by structural induction, that
+the sort~$\sigma$ and the type~$\delta(\sigma)$ define the same sets of
+ground terms.
+
+For~(2), note that, given a fixed set of function signatures, the sets of
+ground terms defined by distinct sorts are disjoint. In the previous
+example, however, the sets of ground terms defined by the types
+$\mathit{nat}$~and~$e$ have (at least) a common element, namely
+$\mathit{zero}()$.
+\end{proof}
+
+Finally, let us note that there are sets of ground terms for which it is
+undecidable whether a given term is an element.  (A classic result of
+computability theory is that there are undecidable sets of bit-strings, and
+sorted ground terms can encode bit-strings.) In particular, there exist
+sets of ground terms that cannot be defined using algebraic data types.
+%\rg{These things are probably too cryptic, and should be explained more.}
+
+% >>>
+% >>>
+\chapter{Multiparty Session Types} % <<<
+
+The next research area we draw inspiration from is the area of multiparty
+session types, developed at the intersection of communications systems and
+type theory. Multiparty session types represent a type systems that ensure
+communication safety among two or more participants. This is achieved by
+the global types, which can be viewed as a global specification of the
+participants' actions, or, in other words a global specification of the
+interaction protocol. The global types are projected at the level of each
+participant as local types. The programs are eventually type checked
+against the local types~\cite{}.
+
+The research in session types initiated in process calculi and programming
+languages for binary session, was extended to multiparty asynchronous
+session types. In binary session types, where you have just two
+participants, the local type serves as the description of the whole
+conversation as well, but for multiparty sessions the whole conversation
+can't be specified without the type abstraction which describes global
+conversation scenarios of multiparty sessions.~\cite{}
+
+A session is a series of interactions which serve as a unit of
+communication. The structure of a session is abstracted as a type. Such a
+global type is like a shared agreement among communication peers, and
+represents the basis for efficient type checking through its projection
+onto individual peers.
+
+{\def\l#1->#2:#3<#4>{\mathtt{#1}\to\mathtt{#2}:#3\langle\mathsf{#4}\rangle}
+
+Here is an example of such a type from
+Honda et al.~\cite{dblp:conf/popl/hondayc08}:\\
+  $\mu\mathbf{t}.$
+  $\l DP->K:d<bool>. $\\
+  $\l KP->K:k<bool>. $\\
+  $\l K->C:c<bool>.\mathbf{t}$
+
+This type means that process \texttt{K} receives two booleans, one from
+\texttt{DP} through channel~$d$ and one from \texttt{KP} through channel~$k$,
+then sends a boolean to~\texttt{C} through channel~$c$, and the whole process
+repeats.
+
+\todo{figure with global type grammar from Nabuco's paper, add citation as
+well}
+
+
+\begin{figure}\footnotesize % <<<
+\begin{verbatim}
+Global G ::= p ->  p' : k <U>.G'        values
+           | p -> p' : k {lj : Gj}j∈J branching
+           | G,G'                     parallel
+           | μt.G                       recursive
+           | t                               variable
+           | end                             end
+Value U ::= S˜ | T@p
+Sort  S ::= bool | nat | ... | <G>
+\end{verbatim}
+\caption{Syntax of Global Types}
+\label{fig:globalType}
+\end{figure} % >>>
+
+The grammar of global session type, or global type, denoted by $G$,$G'$,...
+is given in \ref{fig:globalType}. Type $\l p->p':k<U>G$says that
+participant $p$ sends a message of type $U$ to channel $k$, is received by
+participant $p'$, and interactions described in $G$ takes place. Type $
+p->p:k{lj : Gj}j∈J$ says participant $p$ sends one of the labels to channel
+$k$ which is then received by participant $p$. If $lj$ is sent,
+interactions described in $Gj$ take place.  Type $G,G'$ represents
+concurrent run of interactions specified by $G$ and $G'$ . Type $μt.G$ is a
+recursive type for recurring conversation structures.
+
+\begin{figure}\footnotesize % <<<
+\begin{verbatim}
+Value U ::= S˜ | T@p
+Sort S ::= bool | ... | G
+Local T ::= k!UT send
+          | k? UT receive
+          | k⊕ {li : Ti}i∈I selection
+          | k&{li : Ti}i∈I branching
+          | μt.T | t | end
+\end{verbatim}
+\caption{Syntax of Local Types}
+\label{fig:localType}
+\end{figure} % >>>
+
+Local session types or local types, ranged over by $T$,$T'$ are types for
+local behaviour of processes, acting as a link between global types and
+processes. The grammar is given in~\ref{fig:localType}.
+
+\todo{cite Nabuco's paper}
+
+The following rules define how the projection is performed from the global
+type to the local types of each participant. The value global type is
+projected either as a send local type or as a receive local type. The
+branching global type is projected as either a selection (describes the
+behaviour of selecting from a number of options) or a branching (describes
+the behaviour of waiting for an option to be selected) local type.
+
+Nabuco~\cite{} describes the Programming Methodology for Multiparty
+Interactions as follows: "Once given global types as our tool, we can
+consider the following development steps for programs with multiparty
+sessions.  Step 1 A programmer describes an intended interaction scenario
+as global type G, and checks that it is linear.  Step 2 She develops code,
+one for each participant, incrementally validating its conformance to the
+projection of G onto each participant by efficient type-checking.  When
+programs are executed, their interactions are guaranteed to follow the
+stipulated scenario. The type specification also serves as a basis for
+maintenance and upgrade."
+
 % >>>
 %>>>
-
 
 \part{AF-Raf Agent Oriented Programming Language} % <<<
 \chapter{Main AF-Raf Concepts}\label{ch:concepts} % <<<
@@ -1521,74 +1789,7 @@ needs the agent identifier of agent~$a$. Agent identifiers typically consist of
 a name and an IP address. To support the check for messages we add
 $\delta_m(a)$ to the agent identifier of agent~$a$.
 
-\subsection{Multi-Sorted Predicate Logic} \label{sec:multi-sorted} % <<<
 
-The starting point in designing a type system is the observation that most
-agent oriented programming languages use first order logic, more
-specifically predicate logic terms, to represent beliefs and messages. As a
-consequence we should look at how the introduction of types is managed in
-mathematical logic, and recall basic notions necessary to our
-understanding. And, also, introduce notational conventions used in AF-Raf.
-Moreover, although these notions are simple, their definitions in
-literature tend to have subtle but important differences.
-
-A \emph{term} is a variable, or a function applied to other terms.
-\begin{align}
-\mathit{Term}\quad\tau &::= \omega \mid \phi \\
-\mathit{Variable}\quad\omega &::= \nu \\
-\mathit{Function}\quad\phi &::= \nu(\tau_1,\ldots,\tau_n) \\
-\mathit{Name}\quad\nu
-\end{align}
-In AF-Raf, term names are strings.  Because term names uniquely identify a
-variable or a function we will say ``the function~$\nu$'' rather than ``the
-function with name~$\nu$.'' A term not containing variables is said to be
-\emph{ground}.
-
-\begin{remark}
-Ground terms are essentially trees of strings.
-\end{remark}
-
-A multi-sorted logic has a set~$S$ of sorts.  We use the letter~$\sigma$ to
-denote sorts.
-\begin{align}
-\sigma, \sigma_1, \sigma_2, \sigma_3, \ldots &\in S
-\end{align}
-Each function~$\nu$ has a signature
-$(\sigma_1\times\cdots\times\sigma_n)\to\sigma$.  Function~$\nu$ is always
-applied to $n$~terms whose sorts must be, respectively,
-$\sigma_1$,~$\sigma_2$, \dots,~$\sigma_n$, and the resulting term has
-sort~$\sigma$. We say that $\nu$~has \emph{arity}~$n$. \emph{Constants} are
-functions with arity~$0$.
-
-Typically, in mathematical logic, the set~$S$ of sorts and the function
-signatures are required to satisfy further constraints. \textit{Bool} must
-be one of the sorts. \emph{Formulas} are terms with sort \textit{Bool}.
-The argument sorts ($\sigma_1$,~$\sigma_2$, \dots,~$\sigma_n$) either are
-all \textit{Bool}, or none is \textit{Bool}.  If the argument sorts are
-\textit{Bool}, then the result sort~$\sigma$ must also be \textit{Bool},
-and $\nu$ is said to be a \emph{boolean connective}.  If the argument sorts
-are not \textit{Bool} and the result sort~$\sigma$ is \textit{Bool}, then
-$\nu$ is said to be a \emph{predicate}.  Agent~Factory has these
-constraints and AF-Raf inherits them. In addition, AF-Raf uses an infix
-notation (described later) for boolean connectives, letter strings starting
-with uppercase for predicate names, and letter strings starting with
-lowercase for other function names and for variable names.
-
-\begin{remark}
-%\rg{I'm not sure about this remark. I think \emph{traditional} logicians
-%behave as described here.}
-The definitions given here are in-between what applied computer scientists
-tend to prefer and what pure logicians tend to prefer.  Computer scientists
-work with \emph{expressions} (rather than terms and formulas) and do not
-have constraints on function signatures with respect to booleans.
-Logicians, on the other hand, do have these constraints and, moreover,
-define terms in such a way that formulas are not terms, and predicates are
-not functions. Moreover, logicians single out equality between terms as
-being a special predicate.
-\end{remark}
-
-%\rg{Maybe add some simple examples early on.}
-% >>>
 \subsection{Algebraic Data Types} % <<<
 
 In AF-Raf, a \emph{belief} is a boolean ground term; in AF-Raf, a
