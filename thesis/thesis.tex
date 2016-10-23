@@ -2,6 +2,7 @@
 \usepackage{amsmath}
 \usepackage{amsthm}
 \usepackage{arev}
+\usepackage{bookmark}
 \usepackage{booktabs}
 \usepackage[T1]{fontenc}
 \usepackage{graphicx}
@@ -428,9 +429,16 @@ to illustrate a software agent. Shoham argues that more complex mental
 notions such as desires, intentions, goals or plans can be included, but
 those three are the most important ones.
 
-The generic agent interpreter's basic loop contains two steps: (1)~read
-the current messages and update the mental state; (2)~execute commitments
-(possibly resulting in further belief changes).
+\begin{figure}\footnotesize % <<<
+\includegraphics{Agent0Interp.png}
+\caption{Agent0 interpreter}
+\label{fig:Agent0Interp}
+\end{figure} % >>>
+
+Figure~\ref{fig:Agent0Interp} presents the schematic of the Agent0
+interpreter. The generic agent interpreter's basic loop contains two steps:
+(1)~read the current messages and update the mental state; (2)~execute
+commitments (possibly resulting in further belief changes).
 
 Agent0 is a prototype programming language used to illustrate the Agent
 Oriented Programming paradigm. It includes only constructs related to the
@@ -1300,17 +1308,21 @@ well}
 
 
 \begin{figure}\footnotesize % <<<
-\begin{verbatim}
-Global G ::= p ->  p' : k <U>.G'        values
-           | p -> p' : k {lj : Gj}j∈J branching
-           | G,G'                     parallel
-           | μt.G                       recursive
-           | t                               variable
-           | end                             end
-Value U ::= S˜ | T@p
-Sort  S ::= bool | nat | ... | <G>
-\end{verbatim}
-\caption{Syntax of Global Types}
+\begin{center}
+\begin{tabular}{llcll}
+  Global & $G$ & $::=$ & $p \to p' : k\langle U\rangle.G'$ & values
+  \\  && $\mid$ & $p\to p' : k \{l_j : G_j\}_{j\in J}$  & branching
+  \\ && $\mid$  & $G,G'$ & parallel
+  \\ && $\mid$ & $\mu {\bf t}. G$ & recursive
+  \\ && $\mid$ & ${\bf t}$ & variable
+  \\ && $\mid$ & ${\sf end}$ & end
+\\
+Value & $U$ & $::=$ & $\tilde S \mid T@p$
+\\
+Sort & $S$ & $::=$ & ${\sf bool}\mid {\sf nat}\mid\ldots\mid\langle G\rangle$
+\end{tabular}
+\end{center}
+\caption{Syntax of Global Types~\cite{dblp:conf/popl/hondayc08}}
 \label{fig:globalType}
 \end{figure} % >>>
 
@@ -1363,6 +1375,81 @@ stipulated scenario. The type specification also serves as a basis for
 maintenance and upgrade."
 
 % >>>
+\chapter{Agent Factory} % <<<
+
+Agent Factory~\cite{collier2002agent} is an open-source Java-based
+development framework that provides support for the development and
+deployment of agent-oriented applications.
+
+Agent Factory provides a generic run-time environment for deploying
+agent-based systems that is based on the FIPA
+standards~\cite{poslad2000fipa}.  Central to this environment is one or
+more configurable agent platforms that support the concurrent deployment of
+heterogeneous agent types that make up an application, and which can employ
+a range of agent architectures and interpreters. In other words the agents
+can be categorised in two subgroups: the Application Agents and the System
+Agents. The Application Agents implement the application logic. The System
+Agents provide the services infrastructure needed to support the deployment
+of Application Agents.
+
+Platform-level resources in the form of platform services are shared
+amongst agents. The default platform services are: Agent management
+services, which provides support for creating, terminating, suspending and
+resuming agents; and local message transport service, which provide an
+intra-platform communication channel. Other platform services include the
+HTTP message transport service and the directory facilitator service.
+
+Agent Factory also offers monitoring and inspection tools that aid the
+developer in debugging their implementations.
+
+Another key feature of Agent Factory is the Common Language Framework,
+which represents a collection of pre-written components that facilitates
+the design and implementation of diverse Agent Programming Languages in
+Agent Factory\null. The Common Language Framework includes a generic logic
+framework, a framework for planning and for executing plans, a common API
+model based on sensors, actions and modules, an outline grammar and
+template compiler implementation based on JavaCC, and a configurable
+debugging tool.
+
+The Common Language Framework supports the building of agent interpreters
+on top of the Agent Factory core. These interpreters operate within an
+agent platform to control the execution of the agent according to an
+interpreted Agent Oriented Programming language. This way agents written in
+different languages share the same actions, sensors and modules (libraries
+or APIs). Actions, sensors and modules are written in Java, and they extend
+the agent program so that it can get information about its environment and
+act out its intentions. Actions are used to produce changes to the
+environment, while sensors generate beliefs, and change the knowledge of
+the agent. Each action has an interface that define how it may be invoked
+from within the agent program. If a set of actions and sensors are linked
+together they can be defined within a module. A module may also provide
+resources that are shared amongst several sensors and actions.
+
+There are four Agent Programming Languages that have been integrated with
+Agent Factory using the Common Language Framework: \begin{enumerate}
+
+\item \textit{AFAPL}, a reimplementation of the original Agent Factory
+agent programming language that is based on commitment rules;
+
+\item \textit{AF-AgentSpeak}, an implementation of the AgentSpeak language based on Jason;
+
+\item \textit{AF-TeleoReactive}, an implementation of Nilsson's teleo-reactive
+programming model;
+
+\item and the new \textit{AF-Raf} programming language, that draws
+inspiration from functional languages .
+\end{enumerate}
+
+Agent Factory is fully integrated with Eclipse in a way that simplifies
+the task of providing support for new languages and architectures.
+
+For further details on Agent Factory the reader is directed
+to~\cite{collier2009modeling}. The Common Language Framework is described
+in~\cite{russell2011af}. Also, a discussion on the evolution of Agent
+Factory since it was created in the early 1990s can be found
+in~\cite{muldoon2009towards}.
+% >>>
+
 %>>>
 
 \part{AF-Raf Agent Oriented Programming Language} % <<<
@@ -1420,10 +1507,17 @@ roles, sessions and types constitute new approaches, and they will be
 described in more depth in the next sections. Figure~\ref{fig:AF-Raf}
 illustrates a simple AF-Raf agent.
 
+\begin{figure}\footnotesize % <<<
+\includegraphics{AF-RafArchitecture2.png}
+\caption{AF-Raf agent architecture}
+\label{fig:AF-RafArch}
+\end{figure} % >>>
+
 The first two fundamental components of AF-Raf are the \textit{belief base}
 and the \textit{rule base}. The belief base models the agent's view of the
 current state of its environment and the rule base models the agent's
-behaviour.
+behaviour. Figure~\ref{fig:AF-RafArch} presents the AF-Raf agent
+architecture.
 
 Beliefs in AF-Raf are regarded as logical terms and represented in the form
 of trees of strings. Beliefs are grouped together in a belief base that can
@@ -1439,9 +1533,12 @@ has to be met and can be seen as a question sent to the belief base, if the
 belief base is meeting the condition then some action is triggered. The
 rules are evaluated at each time-step. The first stage of evaluating a rule
 is to evaluate the query on the current belief base. The result is a set of
-query results. If the set is not empty, the action is then evaluated for
-every query result. A particular query result says with what term to
-substitute each free variable in the action. In other words, a query result
+query results, that represent matchings. If the set is not empty, the
+action is then evaluated for every matching. There is no particular order
+in which the matchings are evaluated. 
+
+Each of the matchings from the set of query results says with what term
+to substitute each free variable in the action. In other words, a matching
 is a set of bindings that covers all the free variable in the action (of
 the rule). The first step of evaluating the action is to apply these
 substitutions. The next step is to execute it.
@@ -1546,83 +1643,7 @@ Each message has to contain the session id so that it can be associated to
 an specific session. This enables the interpreter to monitor that the
 messages succeed in the right order.
 
-\subsection{Agent Factory} % <<<
-
-AF-Raf uses Agent Factory as a platform. Agent
-Factory~\cite{collier2002agent} is an open-source Java-based development
-framework that provides support for the development and deployment of
-agent-oriented applications.
-
-Agent Factory provides a generic run-time environment for deploying
-agent-based systems that is based on the FIPA
-standards~\cite{poslad2000fipa}.  Central to this environment is one or
-more configurable agent platforms that support the concurrent deployment of
-heterogeneous agent types that make up an application, and which can employ
-a range of agent architectures and interpreters. In other words the agents
-can be categorised in two subgroups: the Application Agents and the System
-Agents. The Application Agents implement the application logic. The System
-Agents provide the services infrastructure needed to support the deployment
-of Application Agents.
-
-Platform-level resources in the form of platform services are shared
-amongst agents. The default platform services are: Agent management
-services, which provides support for creating, terminating, suspending and
-resuming agents; and local message transport service, which provide an
-intra-platform communication channel. Other platform services include the
-HTTP message transport service and the directory facilitator service.
-
-Agent Factory also offers monitoring and inspection tools that aid the
-developer in debugging their implementations.
-
-Another key feature of Agent Factory is the Common Language Framework,
-which represents a collection of pre-written components that facilitates
-the design and implementation of diverse Agent Programming Languages in
-Agent Factory\null. The Common Language Framework includes a generic logic
-framework, a framework for planning and for executing plans, a common API
-model based on sensors, actions and modules, an outline grammar and
-template compiler implementation based on JavaCC, and a configurable
-debugging tool.
-
-The Common Language Framework supports the building of agent interpreters
-on top of the Agent Factory core. These interpreters operate within an
-agent platform to control the execution of the agent according to an
-interpreted Agent Oriented Programming language. This way agents written in
-different languages share the same actions, sensors and modules (libraries
-or APIs). Actions, sensors and modules are written in Java, and they extend
-the agent program so that it can get information about its environment and
-act out its intentions. Actions are used to produce changes to the
-environment, while sensors generate beliefs, and change the knowledge of
-the agent. Each action has an interface that define how it may be invoked
-from within the agent program. If a set of actions and sensors are linked
-together they can be defined within a module. A module may also provide
-resources that are shared amongst several sensors and actions.
-
-Currently there are four Agent Programming Languages that have been
-integrated with Agent Factory using the Common Language Framework:
-\begin{enumerate}
-
-\item \textit{AFAPL}, a reimplementation of the original Agent Factory
-agent programming language that is based on commitment rules;
-
-\item \textit{AF-AgentSpeak}, an implementation of the AgentSpeak language based on Jason;
-
-\item \textit{AF-TeleoReactive}, an implementation of Nilsson's teleo-reactive
-programming model;
-
-\item and the new \textit{AF-Raf} programming language, that draws
-inspiration from functional languages .
-\end{enumerate}
-
-Agent Factory is fully integrated with Eclipse in a way that simplifies
-the task of providing support for new languages and architectures.
-
-For further details on Agent Factory the reader is directed
-to~\cite{collier2009modeling}. The Common Language Framework is described
-in~\cite{russell2011af}. Also, a discussion on the evolution of Agent Factory since it
-was created in the early 1990s can be found in~\cite{muldoon2009towards}.
-
-% >>>
-
+AF-Raf uses Agent Factory as a platform. 
 % >>>
 \section{The Belief Base} % <<<
 
@@ -1644,11 +1665,14 @@ nodes are labeled by strings: \begin{align} \tau &::= \nu(\tau,\ldots,\tau)
 && \text{function term} \\ \nu  &::= {\rm string} &&\text{function symbol}
 \end{align} The number of arguments can be any non-negative integer.
 
+Beliefs are ground predicate formulas. That means they do not contain any
+free variables.
+
 \begin{example}
 The following are AF-Raf \emph{beliefs}:
 \begin{align}
-&{\it hasColor}({\it my}({\it car}()), {\it blue}()) \\
-&{\it iHave}({\it cat}(), {\it int}({\it 10}()))
+&{\it HasColor}({\it my}({\it car}()), {\it blue}()) \\
+&{\it IHave}({\it cat}(), {\it int}({\it 10}()))
 \end{align}
 Note that any belief must contain a function with $0$~arguments, such as
 {\it car}, {\it blue}, {\it cat}, and {\it 10\/} in this example;
@@ -1677,21 +1701,24 @@ In general, a query $q$ is a sentence in some logic that determines a
 subset of beliefs.  Given a belief base and a query, it is important to be
 able to efficiently find the subset of beliefs from the belief base that
 satisfy the query.  Again, AF-Raf takes a simple approach, because its
-focus is not the belief base.  Each query is term that may contain
-variables, which are interpreted as patterns.  \begin{align} \tau &::=
+focus is not the belief base.  Each query is predicate formula, in other
+words a term that may contain variables, which are interpreted as patterns.
+
+\begin{align} \tau &::=
 \nu(\tau,\ldots,\tau) && \text{function term} \\ \tau &::= x &&
 \text{variable term} \\ \nu  &::= {\rm string} &&\text{function symbol} \\
-x &::= {\rm string} && \text{variable symbol} \end{align} The grammar rules
-(3.5) and (3.7) are the same as for beliefs.  Thus, any belief can be used as
-a query:  It stands for asking whether the belief base contains that
-particular belief.
+x &::= {\rm string} && \text{variable symbol} \end{align} 
+
+The grammar rules (3.5) and (3.7) are the same as for beliefs.  Thus, any
+belief can be used as a query:  It stands for asking whether the belief
+base contains that particular belief.
 
 \begin{example} The following are AF-Raf \emph{queries}: \begin{align}
-&{\it hasColor}({\it my}({\it car}()), x) \label{eq:query.1} \\ &{\it
-hasColor}(y, z) \label{eq:query.2} \end{align} The variables $x$,~$y$,
+&{\it HasColor}({\it my}({\it car}()), x) \label{eq:query.1} \\ &{\it
+HasColor}(y, z) \label{eq:query.2} \end{align} The variables $x$,~$y$,
 and~$z$ are easily identifiable, because they are not followed by
 parentheses.  Suppose the belief base contains exactly one belief, namely
-\begin{align} &{\it hasColor}({\it sky}(), {\it blue}()) \label{eq:skyblue}
+\begin{align} &{\it HasColor}({\it sky}(), {\it blue}()) \label{eq:skyblue}
 \end{align} Belief~\eqref{eq:skyblue} does not match
 query~\eqref{eq:query.1} but does match~\eqref{eq:query.2}.  In the latter
 case, the match is justified by setting $y$ to be ${\it sky}()$, and
@@ -1708,10 +1735,10 @@ $\tau[\tau_1/x_1,\ldots,\tau_n/x_n]$ for the result of substituting in
 parallel $x_k$ with~$\tau_k$, for all $1\le k\le n$.
 
 \begin{example} Consider the following belief base \begin{align} &{\it
-knows}({\it john}(), {\it john}()) \\ &{\it knows}({\it john}(), {\it
+Knows}({\it john}(), {\it john}()) \\ &{\it Knows}({\it john}(), {\it
 laura}()) \end{align} and the following queries \begin{align} &{\it
-knows}(x, y) \\ &{\it knows}(x, x) \\ &{\it knows}({\it laura}(), {\it
-john}()) \\ &{\it knows}({\it john}(), {\it laura}()) \end{align} The
+Knows}(x, y) \\ &{\it Knows}(x, x) \\ &{\it Knows}({\it laura}(), {\it
+john}()) \\ &{\it Knows}({\it john}(), {\it laura}()) \end{align} The
 results of these queries are, respectively, the following sets of
 matchings: \begin{align} &\bigl\{ [{\it john}()/x, {\it john}()/y],\; [{\it
 john}()/x,{\it laura}()/y] \bigr\} \\ &\bigl\{ [{\it john}()/x] \bigr\} \\
@@ -1729,7 +1756,7 @@ In general, belief bases have internal and external consistency
 requirements.  Internally, beliefs should not contradict each-other.
 Externally, beliefs should correspond to reality.
 
-In AF-Raf, the situation is simpler.  There is no other meaning for beliefs
+In AF-Raf, the situation is simple.  There is no other meaning for beliefs
 apart from how they affect the behaviour of the agent, through rules.
 Thus, it is the agent's responsibility to detect inconsistencies.  In other
 words, inconsistencies are detected by programs, not by the programming
@@ -1919,8 +1946,9 @@ $\mathit{integer}[\tau]$ or $\mathit{string}[\tau]$, and $\tau$~is long.
 
 %\todo{Example with something like {\tt type t=int*t list}.}
 
-Algebraic data types are the natural target of pattern-matching functions.
-When the type is parametric then the pattern-matching functions typically
+Algebraic data types are the natural target of pattern-matching functions,
+values of algebraic data types are analysed with pattern matching.  When
+the type is parametric then the pattern-matching functions typically
 support parametric polymorphism~\cite{AlgebraicDT09}, meaning that the
 values are handled identically regardless of their actual type.
 
@@ -1931,8 +1959,9 @@ types. Those operations are: the Cartesian product, also known as
 multiplication or conjunction, and the discriminated union, also known as
 sum or disjunction. The operations are used to create new types.
 
-In AF-Raf one of the important uses of algebraic data types is to describe the content of
-messages. Type checking messages leads to fewer runtime errors.
+In AF-Raf one of the important uses of algebraic data types is to describe
+the content of messages. Type checking messages leads to fewer runtime
+errors.
 
 % >>>
 \subsection{Type Checking}\label{sec:concepts-adt-check} % <<<
@@ -1992,11 +2021,12 @@ Type-checking is then straightforward.
 This code first checks that the term and the type are of the same kind. For
 example, it returns false if the term is non-primitive but the type is
 primitive. The interesting branch is the first one, which is taken when
-both the term and the type are abstract. It checks whether there exists a
+both the term (\verb|v|) and the type (\verb|ts|) are abstract. It checks whether there exists a
 pattern (in \verb|ts|) that matches the term with the head~\verb|v| and the
 sub-terms~\verb|vs|. The function~\verb|f| processes one pattern with the
-head~\verb|t| and the sub-types~\verb|ts|. The heads must match and the
+head~\verb|t| and the sub-types~\verb|ts|. Both heads must match and the
 sub-terms must match, respectively, the sub-types. The function \verb|all2|
+does the check for all pairs of sub-terms (\verb|vs, ts|), and it
 wraps the standard function \verb|List.for_all2| so that it returns
 \verb|false| when the number of sub-terms is different from the number of
 sub-types.
@@ -2008,8 +2038,10 @@ sub-types.
 
 We exhibited an algorithm, hence type-checking is decidable. As it is, the
 function \verb|check| takes exponential time in the size of the term.
-However, with memoization its complexity is~$O(mn)$, where $m$~is the
-size of the term and $n$~is the size of all type definitions.
+However, with memoization (store the results and return from cache when the
+function is called with the same arguments) its complexity is~$O(mn)$,
+where $m$~is the size of the term and $n$~is the size of all type
+definitions.
 %\rg{Maybe expand a bit here, with some example?}
 
 % >>>
@@ -2127,7 +2159,7 @@ a role the agent must be named, as seen in Figure~\ref{fig:roleimpl2APL}.
 Because \textit{foo} plays $\mathit{Calculator}\,\mathit{Int}$, the agent
 interpreter creates a goal $\mathit{eval}(m,\mathit{call}(n),x)$ for all
 messages with shape $\mathit{eval}(\mathit{call}(n),x)$ that come from some
-agent~$m$.  One could handle these goals using 2APL's PG-rules.
+agent~$m$. By way of illustration, one could handle these goals using 2APL's PG-rules.
 
 \begin{verbatim}
 eval(m, call(n), Ct(x)) <- true |
@@ -2326,7 +2358,8 @@ a task is defined by a set of parameters and a set of optional attributes
 (understand, goal, pre-attributes).
 
 SimpAL roles are organised in a slightly different manner compared to the
-AF-Raf's session model. In AF-Raf sessions provide  which can be seen as a kind of protocol
+AF-Raf's session model. In AF-Raf sessions provide a blueprint for
+interaction between agents, which can be seen as a kind of protocol
 prescribing the agent communication. In simpAL organisation models are used
 to define organisation types, that bring together related roles and
 artifact in coherent units named workspaces. Organisation types are
@@ -2456,7 +2489,8 @@ features have been elided.
 This section describes the abstract grammar and briefly gives the concrete
 grammar.
 
-The abstract grammar of AF-Raf~(\autoref{fig:Abstract-Grammar}) is taken
+The abstract grammar of AF-Raf~(\autoref{fig:Abstract-Grammar1},
+\autoref{fig:Abstract-Grammar2}) is taken
 directly from the reference implementation of AF-Raf.  In general, there
 are two equivalent ways to understand abstract grammars. First, an abstract
 grammar is a concise way to specify a set of trees, each of which
@@ -2486,6 +2520,34 @@ RoleDeclaration =
   ImmutableList<String> formals,
   ImmutableList<Operation> operations;
 
+SessionDeclaration =
+  String session,
+  ImmutableList<String> formals,
+  ImmutableList<AgentRole> arguments,
+  ImmutableList<SessionStep> sessionSteps;
+
+SessionStep :> SimpleSessionStep, NestedSessionStep, ChoiceSessionStep;
+
+SimpleSessionStep =
+  Type messageType,
+  String sourceAgent,
+  String targetAgent;
+
+NestedSessionStep :> MaybeSessionStep, RepeatSessionStep;
+
+SessionInvokation =
+  String sessionName,
+  ImmutableList<String> sessionArguments;
+
+MaybeSessionStep =
+  SessionInvokation session;
+
+RepeatSessionStep =
+  SessionInvokation session;
+
+ChoiceSessionStep =
+  ImmutableList<SessionInvokation> alternativeSessions;
+
 Operation =
   String name,
   Type input,
@@ -2495,6 +2557,14 @@ AgentRole =
   String name,
   Type role;
 
+\end{verbatim}
+\caption{AF-Raf Abstract Grammar, part 1}
+\label{fig:Abstract-Grammar1}
+\end{figure}
+% <<<
+
+\begin{figure}\footnotesize % <<<
+\begin{verbatim}
 Type =
   String name,
   ImmutableList<Type> actuals;
@@ -2522,8 +2592,8 @@ Rule =
   IFormula condition,
   IPlanStep statement;
 \end{verbatim}
-\caption{AF-Raf Abstract Grammar}
-\label{fig:Abstract-Grammar}
+\caption{AF-Raf Abstract Grammar, part 2}
+\label{fig:Abstract-Grammar2}
 \end{figure}
 % >>>
 
@@ -2910,7 +2980,6 @@ LINE_COMMENT: '//' ~('\n'|'\r')* ('\r'|'\n');
 \label{fig:Grammar-lexer}
 \end{figure} % >>>
 
-% >>>
 \section{Syntactic Sugar}\label{sec:sugar} % <<<
 
 Operations do not appear in the abstract syntax of agent designs because
@@ -3247,7 +3316,7 @@ following.
 \section{Operational Semantics}\label{sec:opsem} % <<<
 
 There are many alternative ways to describe the semantics of a programming
-language. Operational semantics and are one of the more pragmatic methods.
+language. Operational semantics is one of the more pragmatic methods.
 
 One way to view operational semantics is as a concise way to describe a
 reference interpreter for the language that is being defined. The reference
@@ -3257,12 +3326,13 @@ so on) there is a method responsible for interpreting it. This method
 receives two arguments, a \emph{scope} and a \emph{node}. The scope is a
 list of bindings that associate terms to local variables. The node is a
 part of the in-memory representation of the agent design. In addition, the
-agent has access to the belief base. These methods can call each-other; for
-example, to interpret a rule we must know how to interpret an assignment
-statement. The methods that interpret statements return a term, which is
-the value to which the statement evaluates. Finally, the agents evolve in
-parallel. The AgentFactory framework handles the parallel composition of
-agents, and the delivery of~messages.
+agent has access to the belief base (as a field in the interpreter class).
+These methods can call each-other; for example, to interpret a rule we must
+know how to interpret an assignment statement. The methods that interpret
+statements return a term, which is the value to which the statement
+evaluates. Finally, the agents evolve in parallel. The AgentFactory
+framework handles the parallel composition of agents, and the delivery
+of~messages.
 
 Formally, (structural) operational semantics are described as a transition
 system. A \emph{transition system} is a (typically infinite) directed
@@ -3340,7 +3410,7 @@ In particular, we have
 \bigl(\sigma[a\mapsto b]\bigr)(x) \;=\;
   \begin{cases}
   b & \text{if $x=a$} \\
-  \sigma(a) & \text{otherwise}
+  \sigma(x) & \text{otherwise}
   \end{cases}
 \end{align}
 The notation $\sigma(a)$, where $\sigma$~is a mapping, will help us focus
@@ -3355,7 +3425,7 @@ Of course, identifiers of different types should not be confused. An actual
 implementation could use the types of the host programming language to
 ensure this does not happen.
 
-Agent states are themselves triples.
+Agent states are tuples with six components.
 \begin{align}
 (\Gamma, T, P, I, O,d) &\;\in\; {\rm AgentState}
 \\
@@ -3879,8 +3949,9 @@ This concludes the description of AF-Raf's semantics.
 
 % >>>
 % >>>
-
 % >>>
+% >>>
+
 \chapter{Case Studies}\label{ch:casestudy} % <<<
 
 \todo{1. Move calculator example here. 2. Add the request protocol. 3. Add
@@ -4525,6 +4596,8 @@ the problem to be solved.
 % >>>
 % >>>
 % >>>
+
+\bookmarksetup{startatroot}
 \chapter{Conclusions}\label{ch:conc} % <<<
 
 \todo{1. Add a chapter to describe the implementation (to include integration
