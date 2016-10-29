@@ -351,6 +351,59 @@ of the Agent Oriented Programming languages.
     type checking.
 
 \end{itemize}
+
+\subsubsection{Definitions for Measuring the Achievement of Objectives}% <<<
+
+In order to be able to measure in what degree our objectives have been met
+we need to look more carefully at the specific details of what is to be
+achieved. We need to define rigorously the quantifiable, concrete results
+that will allow us to evaluate whether or not the objectives have been met
+and decide if our hypotheses have been confirmed.
+
+%What are the specific details of what is to be achieved and how it will
+%be achieved (action plan)?
+%What is the desired result? 
+%What are the quantifiable, concrete results that will evaluate whether
+%or not the objective has been met?
+%Have I clearly defined what the overall benefit will be?
+
+First hypothesis states that the introduction of role as a first class
+concept in an agent oriented programming language will increase the
+readability and usability of the language.
+
+We will use the following definitions:
+\begin{itemize}
+  \item \textbf{Role}, is the construct that brings together related behaviour, 
+     it gives a general description, but does not constraint the specific
+     implementation.
+   \item \textbf{Readability}, is the quality of the code that expresses how 
+     easy it is for the programmer to understand that particular written code.
+   \item \textbf{Usability}, in relation to code, indicates that the code 
+     should be easy to use. That includes the qualities of readability,
+     maintainability and the ease of learning. All these three qualities
+     are closely connected, and altering one of them changes all the
+     others.
+\end{itemize}
+
+The second hypothesis states that by analogy, introducing functionality
+that has been proved useful in mainstream programming will increase
+functionality and efficiency of agent programming languages.
+
+With our second hypothesis we will use the following definitions:
+\begin{itemize}
+  \item \textbf{Mainstream programming languages} are the programming languages
+     used on a wide scale in industry, they are very reliable and robust.
+   \item \textbf{Functionality}, as the functionality of a programming language,
+     refers both to the range of operations and to the practicality of
+     that programming language. Where practicality denotes both the ease of
+     use and the likelihood to succeed.
+   \item \textbf{Efficiency}, in relation to code, refers to the following
+     attributes: reliability, speed, algorithmic efficiency, and decreased
+     resource consumption. When measuring the efficiency of our language we
+     will only consider reliability.
+\end{itemize}
+
+% >>>
 \section{Thesis Outline}
 
 The introduction (\autoref{ch:intro}) places agent-oriented programming
@@ -372,6 +425,9 @@ plenty of examples, and could serve as a first introduction to the language
 for a programmer. The second of these (\autoref{ch:langdef}) presents
 AF-Raf in a systematic way, and could serve as a reference formal
 definition of the language.
+
+\todo{continue outline}
+
 %\rg{Should say that relevant background on type theory goes here?}
 % \rg{Maybe promise only that you show how roles, a concept from sociology,
 %     maps to a programming language construct.}
@@ -431,7 +487,7 @@ those three are the most important ones.
 
 \begin{figure}\footnotesize % <<<
 \includegraphics{Agent0Interp.png}
-\caption{Agent0 interpreter}
+\caption{Agent0 interpreter, adapted from~\cite{DBLP:journals/ai/Shoham93}}
 \label{fig:Agent0Interp}
 \end{figure} % >>>
 
@@ -477,8 +533,38 @@ language constructs are first-class constructs. The individual (agent) level
 had most of the attention so far, with environment coming after, and social
 level lagging behind. Only recently the social level of multiagent systems
 has started to receive more attention.
+\section{Defining Agency} % <<<
 
-% >>>
+Wooldridge and Jennings~\cite{DBLP:journals/ker/WooldridgeJ95} outline the
+attributes and characteristics of agents as follows.
+A weak agency has the following attributes:
+
+\begin{itemize}
+  \item "\textbf{autonomy}: agents operate without the direct intervention
+      of humans or others, and have some kind of control over their actions 
+      and internal state (Castelfranchi, 1995);"~\cite{DBLP:journals/ker/WooldridgeJ95}
+    \item "\textbf{social ability}: agents interact with other agents (and
+      possibly humans) via some kind of agent-communication language
+      (Genesereth and Ketchpel, 1994);"~\cite{DBLP:journals/ker/WooldridgeJ95}
+    \item "\textbf{reactivity}: agents perceive their environment, (which may
+      be the physical world, a user via a graphical user interface, a
+      collection of other agents, the INTERNET, or perhaps all of these
+      combined), and respond in a timely fashion to changes that occur in it;"~\cite{DBLP:journals/ker/WooldridgeJ95}
+    \item "\textbf{pro-activeness}: agents do not simply act in response to
+      their environment, they are able to exhibit goal-directed behaviour by
+      taking the initiative."~\cite{DBLP:journals/ker/WooldridgeJ95}
+\end{itemize}
+
+They also identify the characteristics of a strong notion of an agency. The
+more specific meaning implies that on top of the properties listed for the
+weak agency the agents have to be \textbf{conceptualised or implemented
+using human-like attributes} ~\cite{DBLP:journals/ker/WooldridgeJ95} such
+as mentalistic notions (e.g.  knowledge, beliefs, intentions, obligations),
+emotional notions or even graphical resemblance.
+
+\todo{explain how do AF-Raf agents relate to the definitions of weak and
+strong agency}
+% >>> >>>
 \chapter{Role Theory} % <<<
 
 The Role Theory elaborated in Sociology and Social Psychology tries to
@@ -541,13 +627,12 @@ A role taxonomy was developed~\cite{graversen06nature} to help role
 researchers to understand, communicate and spawn of new ideas, in the
 context of object oriented programming.
 
-\todo{rephrase and add citation}
-JavaScript natively supports various function-based implementations of
-Role[40] patterns like Traits[41][42] and Mixins.[43] Such a function
-defines additional behavior by at least one method bound to the this
-keyword within its function body. A Role then has to be delegated
-explicitly via call or apply to objects that need to feature additional
-behavior that is not shared via the prototype chain.
+\todo{rephrase and add citation} JavaScript natively supports various
+function-based implementations of Role[40] patterns like Traits[41][42] and
+Mixins.[43] Such a function defines additional behavior by at least one
+method bound to the this keyword within its function body. A Role then has
+to be delegated explicitly via call or apply to objects that need to
+feature additional behavior that is not shared via the prototype chain.
 
 
 The design of the programming language ObjectTeams/Java is to model roles
@@ -575,8 +660,7 @@ and of the other roles of the same institution.
 %Rope: role oriented programming environment for multiagent systems. Becht
 %1999
 
-%Roles survey. Ekinci
-% >>>
+%Roles survey. Ekinci >>>
 \chapter{Organisational Theory}  % <<<
 
 Organisational Theory is a discipline of social sciences for more than 100
@@ -1101,6 +1185,7 @@ Just as Haskell type classes are different from Haskell modules, the roles
 we introduce are different from existing 2APL
 modules~\cite{dblp:conf/prima/dastanims08}.
 % >>>
+\todo{how is this chapter related to one of my objectives}
 % >>>
 \chapter{Types} % <<<
 \subsection{Multi-Sorted Predicate Logic} \label{sec:multi-sorted} % <<<
@@ -1262,6 +1347,8 @@ sets of ground terms that cannot be defined using algebraic data types.
 %\rg{These things are probably too cryptic, and should be explained more.}
 
 % >>>
+
+\todo{how is this chapter related to one of my objectives}
 % >>>
 \chapter{Multiparty Session Types} % <<<
 
@@ -1374,6 +1461,7 @@ programs are executed, their interactions are guaranteed to follow the
 stipulated scenario. The type specification also serves as a basis for
 maintenance and upgrade."
 
+\todo{how is this chapter related to one of my objectives}
 % >>>
 \chapter{Agent Factory} % <<<
 
@@ -1625,6 +1713,15 @@ protocol of conversation. A session specifies the agents involved in the
 conversation, as well as the roles they play, then provides a list
 containing entries of the form: message type followed by the sender agent
 and the receiver agent.
+
+\begin{figure}\footnotesize % <<<
+\includegraphics{typechecking.png}
+\caption{Type checking in AF-Raf}
+\label{fig:typechecking}
+\end{figure} % >>>
+
+Figure~\ref{fig:typechecking} illustrates the AF-Raf type checking
+functionality.
 
 AF-Raf statically checks that the type of each call message in a session
 corresponds to an operation defined in the receiver's role, and each return
@@ -2045,6 +2142,7 @@ definitions.
 %\rg{Maybe expand a bit here, with some example?}
 
 % >>>
+\todo{link with objectives}
 % >>>
 \section{Roles}\label{sec:roles} % <<<
 The theory of organisations, from social sciences, studies how formal rules
@@ -2195,6 +2293,8 @@ construct. These roles have certain similarities with existing 2APL modules
 and with Java interfaces, but are nevertheless distinct concepts.
 
 % >>>
+
+\todo{link with objectives}
 % >>>
 \section{Sessions}\label{sec:sessions} % <<<
 
@@ -2269,6 +2369,8 @@ sometimes like an agent led us to the proposal of specifying global
 interactions in agent-oriented programming languages in terms of sessions.
 %Moreover, it seems reasonable to expect that a precise link between these
 %session and the roles proposed in the previous section can be found.
+
+\todo{link with objectives}
 % >>>
 \section{Designing an AF-Raf program} % <<<
 We will use the Calculator example to illustrate the thought process of
@@ -2326,7 +2428,10 @@ and division.
 % >>>
 
 \subsection{Instantiation} % <<<
-Develop an implementation suitable for your concrete problem to solve.
+The Instantiation phase involves developing an implementation suitable for
+our concrete problem to solve. A reference implementation is described
+in~\autoref{ch:casestudy}.
+
 % >>>
 % >>>
 \section{Comparison with Other Work}\label{ch:related} % <<<
@@ -2482,9 +2587,9 @@ grammar. The abstract grammar describes the structure that programs must
 have, without much regard to how they are written down. The concrete
 grammar takes into account that the program must be represented as a
 unidimensional string of characters. For example, the abstract grammar
-would not say how should items in a list be delimited. Thus, the abstract
-grammar is essentially a concrete grammar from which the non-essential
-features have been elided.
+would not say how should items in a list be delimited (e.g. comma
+separated). Thus, the abstract grammar is essentially a concrete grammar
+from which the non-essential features have been elided.
 
 This section describes the abstract grammar and briefly gives the concrete
 grammar.
@@ -2561,7 +2666,7 @@ AgentRole =
 \caption{AF-Raf Abstract Grammar, part 1}
 \label{fig:Abstract-Grammar1}
 \end{figure}
-% <<<
+% >>>
 
 \begin{figure}\footnotesize % <<<
 \begin{verbatim}
@@ -2924,14 +3029,15 @@ depending on whether there exists an action named ${\it do\_something}$.
 \end{example}
 
 The {\bf new} statements come in two syntactic flavours. In one case the
-{\bf new} statements are used to obtain fresh names (also called
-identifiers). These names have special meaning, which is presented later
-(\autoref{sec:opsem}). Syntactically, in this case, the keyword {\bf new}
-must be followed by the category of the name that should be generated. In
-the other case, {\bf new} statements are used to instantiate agents. In
-this case, the {\bf new} keyword must be followed by the name of the design
-to be instantiated. Optionally, the user \emph{may} specify a list of agent
-addresses, a name for the new agent, and a set of initial beliefs.
+{\bf new} statements are used to obtain fresh names (call\_id and
+session\_id, also called identifiers). These names have special meaning,
+which is presented later (\autoref{sec:opsem}). Syntactically, in this
+case, the keyword {\bf new} must be followed by the category of the name
+that should be generated. In the other case, {\bf new} statements are used
+to instantiate agents. In this case, the {\bf new} keyword must be followed
+by the name of the design to be instantiated. Optionally, the user
+\emph{may} specify a list of agent addresses, a name for the new agent, and
+a set of initial beliefs.
 
 As mentioned earlier, action invocations have the same syntax as terms.
 Statements that update beliefs also have a very similar syntax: a term
@@ -2979,7 +3085,7 @@ LINE_COMMENT: '//' ~('\n'|'\r')* ('\r'|'\n');
 \caption{AF-Raf Grammar Lexer}
 \label{fig:Grammar-lexer}
 \end{figure} % >>>
-
+% >>>
 \section{Syntactic Sugar}\label{sec:sugar} % <<<
 
 Operations do not appear in the abstract syntax of agent designs because
@@ -3949,9 +4055,10 @@ This concludes the description of AF-Raf's semantics.
 
 % >>>
 % >>>
+\chapter{Implementation} % <<<
 % >>>
 % >>>
-
+\part{Evaluation} % <<<
 \chapter{Case Studies}\label{ch:casestudy} % <<<
 
 \todo{1. Move calculator example here. 2. Add the request protocol. 3. Add
@@ -4594,6 +4701,11 @@ session construct models the pattern of interaction, while the algebraic
 data type provide an elegant way of representing the concepts related to
 the problem to be solved. 
 % >>>
+% >>>
+% >>>
+\chapter{Readability and Usability Survey} % <<<
+% >>>
+\chapter{Results and Evaluation} % <<<
 % >>>
 % >>>
 
