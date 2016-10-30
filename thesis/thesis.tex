@@ -4077,9 +4077,55 @@ The principles behind the implementation of AF-Raf have been thoroughly
 described in the previous chapters (\autoref{ch:concepts},
 \autoref{ch:langdef}), for this reason this chapter will focus on how the
 code is structured.
+
+Both AF-Raf source code (\textit{AF-RAF}) and tests (\textit{AfUseTest})
+are located in the \textit{AF3.0} folder of Agent Factory. 
+
+Let us start by looking at the \textit{AF-RAF} source code. The folder
+contains project settings files like \textit{.project},
+\textit{.classpath}, \textit{.settings} needed for integration with Eclipse
+and Agent Factory. It also contains a library subfolder (\textit{lib})
+needed for running auxiliary software like antlr (parser generator), astgen
+(generates Java code from .ast files -- abstract syntax tree), genericutils
+and guava(core libraries for Java 6+). The generated source subfolder
+(\textit{generated-src}) contains data structures (AST), the lexer, and the
+parser. 
+
+The source code subfolder (\textit{src}) contains the \textit{com}
+subfolder, a fipa integration file, a data structure generator script
+(\textit{mkast}), a parser generator script (\textit{mkparser}), and the
+standard library for AF-Raf (\textit{stdio.raf}). The \textit{com}
+subfolder holds the most important part of the source code including the
+interpreter.
+
+The \textit{com} subfolder contains AF-Raf's grammar (\textit{Raf.g}) and
+abstract grammar (\textit{Raf.ag}), a template (\textit{Raf.tpl}) used by
+antler in conjunction with the grammar file to generate the data
+structures, Java interfaces (\textit{RafAction.java},
+\textit{RafSensor.java}) along with a number of java programs that can be
+grouped as follows: 
+
+\begin{itemize}
+  \item Core AR-Raf functionality: \textit{RafAgent.java} (the interpreter),
+    \textit{RafStandardSensor.java, RafStandardAction.java, RafTypeChecker.java, BeliefBase.java, QueryEngine.java}
+    \item Integration with Agent Factory's core
+      functionality:
+      \textit{RafArchitectureFactory.java, RafAssignmentStep.java,
+      RafLogicPresenter.java, RafMessage.java }
+    \item Integration with Agent Factory's Debugger: \textit{BeliefPanel.java,
+      Inspector.java, RafAgentCreationException.java,
+    RafInspectorFactory.java, RulePanel.java,
+  RafStateManagerFactory.java, StateManager.java, Snapshot.java}
+\end{itemize}
+
+The most significant of these is perhaps the interpreter
+(\textit{RafAgent.java}). Let's look at how is it structured.
+
 % >>>
 % >>>
+
 \part{Evaluation} % <<< 
+
 \chapter{Case Studies}\label{ch:casestudy} 
 % <<<
 
