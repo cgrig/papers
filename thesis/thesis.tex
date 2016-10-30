@@ -2423,8 +2423,11 @@ role BinaryCalc<value> {
 
 Next step is to determine the exact operations that are needed. We will
 start with the BinaryCalc. In this case we will need an operation to
-correspond to each of the binary operations: addition, subtraction, multiplication
-and division.
+correspond to each of the binary operations: addition, subtraction,
+multiplication and division.
+
+\todo{Calculator role}
+\todo{Session}
 % >>>
 
 \subsection{Instantiation} % <<<
@@ -2571,8 +2574,7 @@ useful construct that cannot be reduced one to another.
 
 \chapter{Language Definition}\label{ch:langdef} % <<<
 
-\todo{1. Add abstract grammar for sessions. 2. Remove operations from
-abstract grammar.}
+\todo{1. Add abstract grammar for sessions.}
 
 \section{Overview}\label{sec:langdef.overview} % <<<
 
@@ -4056,10 +4058,30 @@ This concludes the description of AF-Raf's semantics.
 % >>>
 % >>>
 \chapter{Implementation} % <<<
+
+The implementation of AF-Raf can be found along with the rest of
+the Agent Factory code at the following
+address:~\url{https://sourceforge.net/p/agentfactory/code/HEAD/tree/AF3.0/}
+
+AF-Raf is fully integrated with Agent Factory and makes use of the
+following tools, services and data structures available in Agent Factory:
+
+\begin{itemize}
+    \item The infrastructure for sending messages
+    \item The data structures for representing terms and formulas
+    \item The Debugger
+    \item The Agent Management Service
+\end{itemize}
+
+The principles behind the implementation of AF-Raf have been thoroughly
+described in the previous chapters (\autoref{ch:concepts},
+\autoref{ch:langdef}), for this reason this chapter will focus on how the
+code is structured.
 % >>>
 % >>>
-\part{Evaluation} % <<<
-\chapter{Case Studies}\label{ch:casestudy} % <<<
+\part{Evaluation} % <<< 
+\chapter{Case Studies}\label{ch:casestudy} 
+% <<<
 
 \todo{1. Move calculator example here. 2. Add the request protocol. 3. Add
 evaluation.}
@@ -4432,8 +4454,8 @@ The operation \textit{commit} states that upon receiving a message of type
 \textit{result}.
 
 The role Seller defines only one operation, the operation \textit{sell},
-which states that upon receiving a message of type \textit{request} should reply
-with a message of type \textit{result}.
+which states that upon receiving a message of type \textit{request} should
+reply with a message of type \textit{result}.
 
 The session BidRound prescribes the structure of the interaction between
 four agents: owner, seller and two buyers. The interaction is initiated by
