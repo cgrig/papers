@@ -4119,7 +4119,33 @@ grouped as follows:
 \end{itemize}
 
 The most significant of these is perhaps the interpreter
-(\textit{RafAgent.java}). Let's look at how is it structured.
+(\textit{RafAgent.java}). Let's look at how it is structured.
+\textit{RafAgent} extends the Agent Factory's AbstractAgent for a smooth
+integration with Agent Factory. \textit{RafAgent} creates all the necessary
+data structures: the Belief Base, Query Engine, Actions, Sensors, Static
+Type Checker, the list with all available roles, the roles played by the
+current agent. Then a number of auxiliary methods are defined such as:
+\textbf{make}, which instantiates the agent with the
+name, design, initial beliefs and the agent management service; the
+\textbf{load} method creates a RafParser and loads the agent script (agent
+code found in the files with a .raf format); methods \textbf{loadAgent,
+loadRole, loadPlan, loadAction, loadSensor} are used to populate the
+relevant data structures; method \textbf{handleRule} is used to check the
+condition part of the rule (query the Belief Base) and to execute the
+action part of the rule. The class \textbf{Scope} holds the bindings for
+the environment variables. 
+
+The public method \textbf{execute} puts together all we
+described so far and represents all the action performed by the interpreter
+at every time step. That is:
+
+\begin{itemize}
+    \item retrieve messages
+    \item get information from sensors
+    \item for all applicable rules: handle rule
+\end{itemize}
+
+
 
 % >>>
 % >>>
@@ -4406,7 +4432,7 @@ To which we add further the benefits of algebraic data
 types~\cite{DBLP:journals/acta/GuttagH78}.
 % >>>
 % >>>
-\section{The Contract Net Interaction Protocol} % <<< 
+\section{The Contract Net Interaction Protocol}\label{sc:contractNet} % <<< 
 First, we will look at the AF-Raf implementation of the Contract Net
 Interaction Protocol, then we will consider an alternative implementation
 in Jason/AgentSpeak.
@@ -4772,6 +4798,51 @@ the problem to be solved.
 % >>>
 % >>>
 \chapter{Readability and Usability Survey} % <<<
+
+This chapter investigates further our research question:
+\textit{Is the readability and usability of an agent oriented programming
+  language improved by the addition of the role and session programming
+  constructs as well as by the algebraic data types and the type checking
+functionality?} I have designed a survey (see Annex) to compare the
+alternative implementations of the Contract Net Interaction Protocol
+presented in~\autoref{sc:contractNet}.
+
+There are two different types of questionnaires. Type A presents questions
+related to the Jason implementation, and type B presents questions related
+to the AF-Raf implementation. The structure of the questionnaires is as
+follows:
+
+\begin{itemize}
+    \item A piece of code is presented, then the person interviewed is asked
+to describe what does he/she think that that piece of code does. Then it is asked to evaluate how difficult it was to understand that piece of code on a scale from 1 (very easy) to 5 (very hard). This is done first for a warming up
+simpler piece of code, and then for all the individual programs described
+in~\autoref{sc:contractNet}.
+    \item Lastly, the interviewed person is asked to evaluate how difficult
+      it was to put together all related pieces of code (on an identical
+      scale from 1 to 5)
+\end{itemize}
+
+The questionnaires were randomly administered to 22 mature masters
+students (21 males, 1 female), of which only 20 have answered all the
+questions. There were 10 students (all males) who were assigned the
+questionnaire type A and 10 students (1 female, 9 males) who were assigned
+the questionnaire type B. All of them had previous experience in a payed
+programmer job, and were proficient in at least two programming languages,
+mostly Object Oriented programming languages. None of them had any
+experience with Agent Oriented Programming languages, except one who
+reported basic familiarity. Most of them had limited or no experience in
+functional programming.
+
+The results of the questionnaire are statistically significant. When
+correlated to the scale used for evaluation the answers from the
+questionnaires show the following results:
+
+\begin{itemize}
+    \item 
+    \item 
+    \item 
+\end{itemize}
+
 % >>>
 \chapter{Results and Evaluation} % <<<
 % >>>
