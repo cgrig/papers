@@ -9,7 +9,7 @@
 \usepackage{microtype}
 \usepackage{thmtools}
 \usepackage{xcolor}
-
+%\usepackage[toc,page]{appendix}
 \usepackage{hyperref}
 
 \newcommand{\eval}[1]{[\!\![#1]\!\!]}
@@ -4803,13 +4803,14 @@ This chapter investigates further our research question:
 \textit{Is the readability and usability of an agent oriented programming
   language improved by the addition of the role and session programming
   constructs as well as by the algebraic data types and the type checking
-functionality?} I have designed a survey (see Annex) to compare the
+functionality?} I have designed a survey (\autoref{app:SurveyA},
+\autoref{app:SurveyB}) to compare the
 alternative implementations of the Contract Net Interaction Protocol
 presented in~\autoref{sc:contractNet}.
 
 There are two different types of questionnaires. Type A presents questions
-related to the Jason implementation, and type B presents questions related
-to the AF-Raf implementation. The structure of the questionnaires is as
+related to the AF-Raf implementation, and type B presents questions related
+to the Jason implementation. The structure of the questionnaires is as
 follows:
 
 \begin{itemize}
@@ -4824,8 +4825,8 @@ in~\autoref{sc:contractNet}.
 
 The questionnaires were randomly administered to 22 mature masters
 students (21 males, 1 female), of which only 20 have answered all the
-questions. There were 10 students (all males) who were assigned the
-questionnaire type A and 10 students (1 female, 9 males) who were assigned
+questions. There were 10 students (1 female, 9 males) who were assigned the
+questionnaire type A and 10 students (all males) who were assigned
 the questionnaire type B. All of them had previous experience in a payed
 programmer job, and were proficient in at least two programming languages,
 mostly Object Oriented programming languages. None of them had any
@@ -4834,14 +4835,35 @@ reported basic familiarity. Most of them had limited or no experience in
 functional programming.
 
 The results of the questionnaire are statistically significant. When
-correlated to the scale used for evaluation the answers from the
+correlated to the scale used for evaluation, where 1 denotes the easiest to
+understand and 5 denotes the hardest to understand, the answers from the
 questionnaires show the following results:
 
 \begin{itemize}
-    \item 
-    \item 
-    \item 
+    \item the average rating for the difficulty of the first question was
+      3.2 in Af-Raf, similar to the 3.5 in Jason. 
+    \item for the individual agent implementations the difficulty in
+      understanding was rated to 2.93 in AF-Raf compared to 4 in Jason.
+    \item for the understanding of how the individual pieces of code fit
+      together the evaluation was 2.9 in AF-Raf and 3.9 in Jason.
 \end{itemize}
+
+
+\begin{figure}\footnotesize % <<<
+\includegraphics{jasonvsafraf.png}
+\caption{Readability and Understanding -- survey results}
+\label{fig:Survey}
+\end{figure} % >>>
+
+Figure~\ref{fig:Survey} shows a graphical representation of the data.
+
+As the results show, there is a marked decrease in difficulty and a
+significant increase in readability and understanding in programs written
+in AF-Raf compared to the ones written in Jason. This supports and verify
+our hypothesis that the readability and usability of an agent oriented
+programming language is improved by the addition of the role and session
+programming constructs as well as by the algebraic data types and the type
+checking functionality.
 
 % >>>
 \chapter{Results and Evaluation} % <<<
@@ -4912,10 +4934,429 @@ programming languge \autoref{sec:types}.
 
 \end{itemize}
 % >>>
+\newpage
+\appendix
+\chapter{Survey Questionnaire type A}\label{app:SurveyA}
+\begin{verbatim}
+Questions
+Q1. Describe in a few sentences what do you think that the code
+in Figure 1.1 does.
+Q2. How easy is it for you to read the code in Figure 1.1? Circle
+as appropriate.
+ very easy
+ easy
+ neither easy or hard
+ hard
+ very hard
+
+include stdio
+rule Monitoring(name, addr) {
+  send(agentID(name, addr), request(status()));
+}
+rule Message(other, status(alive())) {
+  send(other, request(status()));
+}
+rule Message(other, status()) {
+  send(other, inform(status(alive())));
+}
+Figure 1.1: Monitoring
+Q3. Describe in a few sentences what do you think that the
+code in Figure 1.2 does.
+
+type conditions = conditions(integer);
+type task = increase(integer, integer)
+| decrease(integer, integer);
+type request = request(task, conditions, deadline(integer));
+type bid = bid(integer);
+type decision = win() | lose();
+type result = failure() | success(integer);
+role Buyer {
+  ask : request -> bid;
+  commit : decision -> result;
+}
+role Seller {
+  sell : request -> result;
+}
+session BidRound(owner, s : Seller, b1 : Buyer, b2 : Buyer) {
+  request : owner -> s;
+  request : s -> b1;
+  request : s -> b2;
+  oneof
+  { bid : b1 -> s; win() : s -> b1; result : b1 -> s; }
+  { maybe bid : b1 -> s; lose() : s -> b1; };
+  oneof
+  { bid : b2 -> s; win() : s -> b2; result : b2 -> s; }
+  { maybe bid : b2 -> s; lose() : s -> b2; };
+  result : s -> owner
+}
+Figure 1.2: Types, Roles and Sessions
+
+Q4. How easy is it for you to read the code in Figure 1.2? Circle
+as appropriate.
+ very easy
+ easy
+ neither easy or hard
+ hard
+ very hard
+Q5. Describe in a few sentences what do you think that the
+code in Figure 1.3 does.
+
+include stdio
+include ContractNet
+action dec(x, y) = raftest.IntegerDecreaseAction;
+action inc(x, y) = raftest.IntegerIncreaseAction;
+action mul(x, y) = raftest.IntegerMulAction;
+agent ContractNetBuyer : Buyer {
+  operation ask(request(task, conditions(y), deadline(z)))
+  when Multiplier(m) {
+    +LastTask(sid, task);
+    return bid(mul(m, y));
+  }
+  operation commit(win())
+  when LastTask(sid, decrease(x, y)) {
+    return success(dec(x, y));
+    -LastTask(sid, decrease(x,y))
+  }
+  when LastTask(sid, increase(x, y)) {
+    return success(inc(x, y));
+    -LastTask(sid, increase(x, y));
+  }
+}
+Figure 1.3: Buyer
+
+Q6. How easy is it for you to read the code in Figure 1.3? Circle
+as appropriate.
+ very easy
+ easy
+ neither easy or hard
+ hard
+ very hard
+
+Q7. Describe in a few sentences what do you think that the
+code in Figure 1.4 does.
+Q8. How easy is it for you to read the code in Figure 1.4? Circle
+as appropriate.
+ very easy
+ easy
+ neither easy or hard
+ hard
+ very hard
+
+include stdio
+include ContractNet
+agent ContractNetSeller(b1 : Buyer, b2 : Buyer): Seller {
+  operation sell(r) {
+    if b1.ask(r) < b2.ask(r) then {
+      b2.commit(lose());
+      return b1.commit(win());
+    }
+    else {
+      b1.commit(lose());
+      return b2.commit(win());
+    }
+  }
+}
+Figure 1.4: Seller
+Q9. How easy is it for you to understand how the three pieces
+of code presented in Figure 1.2, Figure 1.3, and Figure 1.4 fit
+together? Circle as appropriate.
+ very easy
+ easy
+ neither easy or hard
+ hard
+ very hard
+Circle as appropriate:
+Q10. Gender.
+ Male
+ Female
+Q11. Age range.
+ <25
+ 25-35
+ >35
+Q12.Years of programming experience in a payed job.
+ <3
+ 3-10
+ >10
+Q13. Number of years since you first started programming.
+ <5
+ 5-10
+ >10
+Q14. Number of programming languages you are proficient in.
+ 1
+ 2-3
+ >3
+Q15. Level of familiarity with Functional languages.
+ very familiar
+ familiar
+ basic familiarity
+ know almost nothing about them
+Q16. Level of familiarity with Object Oriented Programming
+languages.
+ very familiar
+ familiar
+ basic familiarity
+ know almost nothing about them
+Q17. Level of familiarity with Agent Oriented Programming
+languages.
+ very familiar
+ familiar
+ basic familiarity
+ know almost nothing about them
+Q18. Last level of qualification in Computer Science.
+ less than Bachelor Degree
+ Bachelor Degree
+ Postgraduate level
+\end{verbatim}
+
+\chapter{Survey Questionnaire type B}\label{app:SurveyB}
+\begin{verbatim}
+Questions
+
+Q1. Describe in a few sentences what do you think that the code
+in Figure 1.1 does.
+
+Q2. How easy is it for you to read the code in Figure 1.1? Circle
+as appropriate.
+
+ very easy
+ easy
+ neither easy or hard
+ hard
+ very hard
+
++monitoring(?name, ?addr) : true <-
+
+.send(request, agentID(?name, ?addr), status);
+
++message(inform, agentID(?name, ?addr), status(alive)) :
+
+monitoring(?name, ?addr2) <-
+
+.send(request, agentID(?name, ?addr), status);
+
++message(request, ?sender, status) : true <-
+
+.send(inform, ?sender, status(alive));
+
+Figure 1.1: Monitoring
+
+Q3. Describe in a few sentences what do you think that the
+code in Figure 1.2 does.
+
+price(Task,X) :- .random(R) & X = (10*R)+100.
+
+plays(initiator,c).
+
++plays(initiator,In)
+
+: .my_name(Me)
+
+<- .send(In,tell,introduction(participant,Me)).
+
+@c1 +cfp(CNPId,Task)[source(A)]
+
+: plays(initiator,A) & price(Task,Offer)
+
+<- +proposal(CNPId,Task,Offer);
+
+.send(A,tell,propose(CNPId,Offer)).
+
+@r1 +accept_proposal(CNPId)
+
+: proposal(CNPId,Task,Offer)
+
+<- .print("My proposal ’",Offer,"’ won CNP ",CNPId,
+
+" for ",Task,"!").
+
+@r2 +reject_proposal(CNPId)
+
+<- .print("I lost CNP ",CNPId, ".");
+
+-proposal(CNPId,_,_).
+
+Figure 1.2: Participant
+
+Q4. How easy is it for you to read the code in Figure 1.2? Circle
+as appropriate.
+
+ very easy
+ easy
+ neither easy or hard
+ hard
+ very hard
+
+Q5. Describe in a few sentences what do you think that the
+code in Figure 1.3 does.
+
+Q6. How easy is it for you to read the code in Figure 1.3? Circle
+as appropriate.
+
+ very easy
+ easy
+ neither easy or hard
+ hard
+ very hard
+
+all_proposals_received(CNPId) :-
+
+.count(introduction(participant,_),NP) &
+
+.count(propose(CNPId,_), NO) &
+
+.count(refuse(CNPId), NR) &
+
+NP = NO + NR.
+
+!startCNP(1,fix(computer_123)).
+
++!startCNP(Id,Object)
+
+<- .wait(2000);
+
++cnp_state(Id,propose);
+
+.findall(Name,introduction(participant,Name),LP);
+
+.print("Sending CFP to ",LP);
+
+.send(LP,tell,cfp(Id,Object));
+
+.concat("+!contract(",Id,")",Event);
+
+.at("now +4 seconds", Event).
+
+@r1 +propose(CNPId,Offer)
+
+: cnp_state(CNPId,propose) & all_proposals_received(CNPId)
+
+<- !contract(CNPId).
+
+@r2 +refuse(CNPId)
+
+: cnp_state(CNPId,propose) & all_proposals_received(CNPId)
+
+<- !contract(CNPId).
+
+@lc1[atomic]
+
++!contract(CNPId)
+
+: cnp_state(CNPId,propose)
+
+<- -+cnp_state(CNPId,contract);
+
+.findall(offer(O,A),propose(CNPId,O)[source(A)],L);
+
+.print("Offers are ",L);
+
+L \== [];
+
+.min(L,offer(WOf,WAg));
+
+.print("Winner is ",WAg," with ",WOf);
+
+!announce_result(CNPId,L,WAg);
+
+-+cnp_state(Id,finished).
+
+@lc2 +!contract(CNPId).
+
+-!contract(CNPId)
+
+<- .print("CNP ",CNPId," has failed!").
+
++!announce_result(_,[],_).
+
++!announce_result(CNPId,[offer(O,WAg)|T],WAg)
+
+<- .send(WAg,tell,accept_proposal(CNPId));
+
+!announce_result(CNPId,T,WAg).
+
++!announce_result(CNPId,[offer(O,LAg)|T],WAg)
+
+<- .send(LAg,tell,reject_proposal(CNPId));
+
+!announce_result(CNPId,T,WAg).
+
+Figure 1.3: Initiator
+
+
+Q7. How easy is it for you to understand how the two pieces of
+code presented in Figure 1.2 and Figure 1.3 fit together? Circle as
+appropriate.
+
+ very easy
+ easy
+ neither easy or hard
+ hard
+ very hard
+
+Circle as appropriate:
+
+Q8. Gender.
+
+ Male
+ Female
+
+Q9. Age range.
+
+ <25
+ 25-35
+ >35
+
+Q10.Years of programming experience in a payed job.
+
+ <3
+ 3-10
+ >10
+
+Q11. Number of years since you first started programming.
+
+ <5
+ 5-10
+ >10
+
+
+Q12. Number of programming languages you are proficient in.
+
+ 1
+ 2-3
+ >3
+
+Q13. Level of familiarity with Functional languages.
+
+ very familiar
+ familiar
+ basic familiarity
+ know almost nothing about them
+
+Q14. Level of familiarity with Object Oriented Programming
+languages.
+
+ very familiar
+ familiar
+ basic familiarity
+ know almost nothing about them
+
+Q15. Level of familiarity with Agent Oriented Programming
+languages.
+
+ very familiar
+ familiar
+ basic familiarity
+ know almost nothing about them
+
+Q16. Last level of qualification in Computer Science.
+
+ less than Bachelor Degree
+ Bachelor Degree
+ Postgraduate level
+\end{verbatim}
+\backmatter
 \bibliographystyle{plain}
 \bibliography{thesis}
-\appendix
-
 \end{document}
 % >>>
 % vim:fmr=<<<,>>>:tw=75:spell:fo+=t:
