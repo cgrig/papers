@@ -141,49 +141,54 @@ within computer science and software engineering. It is meant to provide a
 gentle entry point for the reader who might be a software engineer or a
 researcher in another area of computer science.
 
-The relevant parts of the research literature on agents is surveyed next
+The relevant parts of the research literature is surveyed next
 (\autoref{ch:aop}). Since this dissertation is about an agent-oriented
 programming language, other agent-oriented programming languages are
 clearly relevant, as are agent-oriented methodologies. The concept of
 agent, on which these languages and methodologies are based, is inspired by
 sociological theories. These theories are surveyed, because they inform the
-design of AF-Raf.
+design of AF-Raf. We've also looked at all the important concepts from
+functional languages, type theory, and  multiparty session types, on which
+we base our analogies. A brief description of Agent Factory is presented.
 
-The next two chapters present the language AF-Raf. The first of these
+The next part (\autoref{part:AF-Raf}) includes two chapters that present the language AF-Raf. The first of these
 (\autoref{ch:concepts}) emphasizes conceptual understanding, makes use of
 plenty of examples, and could serve as a first introduction to the language
 for a programmer. The second of these (\autoref{ch:langdef}) presents
 AF-Raf in a systematic way, and could serve as a reference formal
-definition of the language.
+definition of the language. Lastly, there's a chapter overlooking the
+implementation of AF-Raf (\autoref{ch:implem}).
 %\rg{Should say that relevant background on type theory goes here?}
 
-Last comes a bigger case study (\autoref{ch:casestudy}).
+Last part (\autoref{part:eval})contains a chapter with two case studies
+(\autoref{ch:casestudy}), along with a survey analysis
+(\autoref{ch:survey}), and a summary of the results and evaluation
+(\autoref{ch:results}).
 
 % >>>
 \mainmatter
 \chapter{Introduction}\label{ch:intro} % <<<
 \pagenumbering{arabic}
 
-\todo{1.Add thesis outline/summary. 2. Numbered sections. 3. Separate
-overview from motivation. 4. Bullet point objectives.}
-
 \section{Overview}
 
 Research in multi-agent systems thrived since $\sim2000$.
 Very recently, it began to impact the practice of programming.
 
-Complex systems are often viewed as being hierarchically decomposed into layers
-of subsystems that interact with one another in an inherently decentralized
-manner. It is increasingly accepted that this natural lack of an upper layer of
-control, together with the tendency within such systems for interaction to
-occur between components that are situated within the same layer has a close
-synergy with the concept of a multi-agent
-system~\cite{Jennings00agent-orientedsoftware}. Multi-agent systems promote a
-view of distributed systems as a collection of intelligent (agent) components
-that are autonomous and which interact in a way that is highly disciplined and
-well defined. Further, through this interaction, agents are able to cooperate
-as necessary, allowing competing system objectives to be realized in a context
-sensitive fashion.
+Complex systems are often viewed as being hierarchically decomposed into
+layers of subsystems that interact with one another in an inherently
+decentralized manner. It is increasingly accepted that this natural lack of
+an upper layer of control, together with the tendency within such systems
+for interaction to occur between components that are situated within the
+same layer has a close synergy with the concept of a multi-agent
+system~\cite{Jennings00agent-orientedsoftware}. Multi-agent systems promote
+a view of distributed systems as a collection of intelligent (agent)
+components that are autonomous and which interact in a way that is highly
+disciplined and well defined. Further, through this interaction, agents are
+able to cooperate as necessary, allowing competing system objectives to be
+realized in a context sensitive fashion. The necessary attributes of any
+agent are autonomy, social ability, reactivity and
+pro-activeness~\cite{DBLP:journals/ker/WooldridgeJ95}.
 
 While the above argument presents a strong case for the use of a multi-agent
 systems approach in the design and implementation of complex distributed
@@ -195,7 +200,7 @@ be demonstrated and validated through their extensive use within a range of
 real world application domains. In response to this, the multi-agent systems
 research community has created a range of implementation environments, such as
 JADE~\cite{DBLP:books/sp/map2005/BellifemineBCP05}, Agent
-Factory~\cite{collier1999agent}, AgentBuilder~\cite{},
+Factory~\cite{collier1999agent}, AgentBuilder~\cite{web:agb04},
 together with a set of standards developed by the Foundation for
 Intelligent Physical Agents (FIPA), and a diverse set of software engineering
 methodologies, such as GAIA~\cite{DBLP:journals/aamas/WooldridgeJK00}, Agent
@@ -254,15 +259,12 @@ of the organisation.
 %include MESSAGE~\cite{Caire et al.,
 %2001}, TROPOS~\cite{Giunchiglia et al., 2002}, and ROADMAP~\cite{Juan et
 %al., 2002}. 
-\todo{fix citations}
-A variety of organization-oriented approaches to multi-agent systems
-engineering have been brought forth.  Towards Organization–Oriented
-Software Engineering~\cite{} groups them in three categories: modelling
-approaches ([FGM03] (AGR), [HSB02] (MOISE), [HL05b] (ODML), [ONL04]),
-complete development methodologies ([ZJW03] (GAIA), [DeL05] (MaSE),
-[VSDD05] (OMNI), [BPG+04] (Tropos)) and middleware ([GF00] (MADKIT),
-[HSB05] (S-MOISE))
 
+A variety of organization-oriented approaches to multi-agent systems
+engineering have been brought forth. \cite{DBLP:conf/se/Wester-EbbinghausMRM07} groups them in three categories: modelling
+approaches: AGR, MOISE, ODML; complete development methodologies:
+GAIA~\cite{DBLP:journals/tosem/ZambonelliJW03}, MaSE,
+OMNI, Tropos~\cite{DBLP:conf/aose/GiunchigliaMP02}; and middleware MADKIT, S-MOISE.
 
 Implementation-level support for these concepts is a research area. One
 approach is to design organisational models and frameworks such as
@@ -329,8 +331,8 @@ usability of Agent Oriented Programming languages.
 
 (2) The secondary hypothesis of my research is that by applying concepts
 that had been proved useful, within mainstream programming paradigms, to
-Agent Oriented Programming will improve the efficiency, and functionality
-of the Agent Oriented Programming languages. 
+Agent Oriented Programming will improve the efficiency and increase
+the functionality of the Agent Oriented Programming languages. 
 \begin{itemize}
 
   \item (2a) The first objective is to explore the analogy between Agent
@@ -405,28 +407,34 @@ With our second hypothesis we will use the following definitions:
 
 % >>>
 \section{Thesis Outline}
-
 The introduction (\autoref{ch:intro}) places agent-oriented programming
 within computer science and software engineering. It is meant to provide a
 gentle entry point for the reader who might be a software engineer or a
 researcher in another area of computer science.
 
-The relevant parts of the research literature on agents is surveyed next
+The relevant parts of the research literature is surveyed next
 (\autoref{ch:aop}). Since this dissertation is about an agent-oriented
 programming language, other agent-oriented programming languages are
 clearly relevant, as are agent-oriented methodologies. The concept of
 agent, on which these languages and methodologies are based, is inspired by
 sociological theories. These theories are surveyed, because they inform the
-design of AF-Raf.
+design of AF-Raf. We've also looked at all the important concepts from
+functional languages, type theory, and  multiparty session types, on which
+we base our analogies. A brief description of Agent Factory is presented.
 
-The next two chapters present the language AF-Raf. The first of these
+The next part (\autoref{part:AF-Raf}) includes two chapters that present the language AF-Raf. The first of these
 (\autoref{ch:concepts}) emphasizes conceptual understanding, makes use of
 plenty of examples, and could serve as a first introduction to the language
 for a programmer. The second of these (\autoref{ch:langdef}) presents
 AF-Raf in a systematic way, and could serve as a reference formal
-definition of the language.
+definition of the language. Lastly, there's a chapter overlooking the
+implementation of AF-Raf (\autoref{ch:implem}).
+%\rg{Should say that relevant background on type theory goes here?}
 
-\todo{continue outline}
+Last part (\autoref{part:eval})contains a chapter with two case studies
+(\autoref{ch:casestudy}), along with a survey analysis
+(\autoref{ch:survey}), and a summary of the results and evaluation
+(\autoref{ch:results}).
 
 %\rg{Should say that relevant background on type theory goes here?}
 % \rg{Maybe promise only that you show how roles, a concept from sociology,
@@ -435,15 +443,15 @@ definition of the language.
 % >>>
 
 \part{Background}\label{ch:aop} % <<<
-\todo{
+%\todo{
 %  1. Rename chapter to Background. 
 %  2. Add sections: Functional languages,Types, and Session types. 
 %  3. Expand roles in OOP. 
 %  4. Expand organisational frameworks. 
-  5. Add diagrams for language architectures. 
+%  5. Add diagrams for language architectures. 
 %  6. Add simpAL to the AOPLs. 
-  7. Define basic concepts.
-}
+%  7. Define basic concepts.
+%}
 \chapter{Agent Oriented Programming} % <<<
 
 Using an anthropomorphic metaphor to design computer programs is not a new
@@ -627,22 +635,22 @@ A role taxonomy was developed~\cite{graversen06nature} to help role
 researchers to understand, communicate and spawn of new ideas, in the
 context of object oriented programming.
 
-\todo{rephrase and add citation} JavaScript natively supports various
-function-based implementations of Role[40] patterns like Traits[41][42] and
-Mixins.[43] Such a function defines additional behavior by at least one
-method bound to the this keyword within its function body. A Role then has
-to be delegated explicitly via call or apply to objects that need to
-feature additional behavior that is not shared via the prototype chain.
+%\todo{rephrase and add citation} JavaScript natively supports various
+%function-based implementations of Role[40] patterns like Traits[41][42] and
+%Mixins.[43] Such a function defines additional behavior by at least one
+%method bound to the this keyword within its function body. A Role then has
+%to be delegated explicitly via call or apply to objects that need to
+%feature additional behavior that is not shared via the prototype chain.
 
 
-The design of the programming language ObjectTeams/Java is to model roles
-by specific classes and to define a playedBy relationship at the class
-level which specifies that each instance of the bound role class will be
-constantly attached to a given base instance. It is possible  to group a
-number of roles into what we call a team.  Teams combine the concepts of
-classes and packages: They are classes in that they have fields and
+The programming language ObjectTeams models roles by specific classes and
+defines a playedBy relationship at the class level. This relationship
+specifies that each instance of the role class will be permanently attached
+to a base instance (the class that the role is decorating). It is possible
+to group a number of roles into a team.  Teams combine the concepts of
+classes and packages, they are classes because they have fields and
 methods, may apply inheritance and are instantiable. They are packages in
-that they contain a set of classes
+that they contain a set of classes~\cite{DBLP:journals/ao/Herrmann07}.
 
 In the multiagent systems domain, there have been a number of successful
 endeavours to incorporate the concept of role. Examples include
@@ -651,8 +659,8 @@ ROPE~\cite{DBLP:conf/coopis/BechtGKM99}, a language independent framework.
 Sill, at the present time there is no agent oriented programming language
 to have explicit support for roles.
 
-PowerJava: Roles are implemented as classes, which can be instantiated only
-in presence of an instance of the player and of an instance of an
+In PowerJava~\cite{DBLP:conf/sac/BaldoniBT06} roles are implemented as classes, which can be instantiated only
+in the presence of an instance of the player and of an instance of an
 institution. The definition of a class implementing a role is included in
 the class of the institution, the role belongs to. Powers are methods which
 can access private fields and methods of the institution they belong to,
@@ -721,7 +729,7 @@ Gaia~\cite{DBLP:journals/aamas/WooldridgeJK00},
 MASE~\cite{deloach2001analysis}, AALAADDIN~\cite{ferber1998meta}.  
 
 A very recent and slightly different approach is to merge more
-technologies. JaCaMo~\cite{}, a multiagent programming framework, combines
+technologies. JaCaMo~\cite{DBLP:journals/scp/BoissierBHRS13}, a multiagent programming framework, combines
 three different technologies already widely used: 1. Jason, the agent
 oriented programming language; 2. Cartago, the framework for programming
 environments; and 3. Moise,the organisational model. It advances a new
@@ -734,28 +742,26 @@ Recently there were developed a number of normative organisation frameworks
 some of them incorporate programming languages for norm-aware agents and
 normative organisation. Some examples are N-2APL and 2OPL.
 
-\todo{Coordination, Organizations, Institutions, and Norms in Agent
-Systems IX}
+The N-2APL~\cite{DBLP:conf/aamas/AlechinaDL12} agent oriented programming
+language is based on the 2-APL programming language. "N-2APL agents are able
+to deliberate on their goals, norms, and sanctions before deciding which
+plan to select and execute, and they are able to violate norms if it is in
+their overall interest to do so"~\cite{DBLP:conf/atal/DybalovaTDL13}.
 
-The N-2APL~\cite{} agent oriented programming language is based on the 2-APL
-programming language. N-2APL agents are able to deliberate on their goals,
-norms, and sanctions before deciding which plan to select and execute, and
-they are able to violate norms if it is in their overall interest to do so.
+2OPL~\cite{DBLP:conf/atal/DybalovaTDL13} is a programming language (logic
+based) for developing agent organizations.  2OPL uses the following
+abstractions: brute facts, effects of actions, norms and sanction rules.
+Brute facts are the state of the multiagent organisation, which is
+represented by the environment.  Transition rules describe how
+actions change the brute facts. Norms describe which environment states
+represent violations.  Sanction rules can be programmed to respond to norm
+violations~\cite{dastani2009programming}. 
 
-2OPL~\cite{} is a programming language for developing agent organizations.
-The used abstractions in the language are brute facts, effects of actions,
-norms and sanction rules. Brute facts are the state of the environment.
-Effect rules describe how actions change the brute facts. Norms describe
-which environment states counts as violations.  Finally sanction rules can
-be programmed to respond to norm violations. The current implementation is
-based on logic programming (Prolog in particular).
-
-However, there is no agent oriented programming language with full support
-at the language level for the organisation of agents. It was previously
-acknowledged that, in programming agent organisations, developing new
-organisational abstractions at the programming language level is the
-preferred approach in order to reduce the effort needed for programming and
-maintaining agent systems~\cite{DBLP:conf/esaw/RiemsdijkHJ09}.
+It was previously acknowledged that, in programming agent organisations,
+developing new organisational abstractions at the programming language
+level is the preferred approach in order to reduce the effort needed for
+programming and maintaining agent
+systems~\cite{DBLP:conf/esaw/RiemsdijkHJ09}.
 
 % >>>
 \chapter{Agent Oriented Programming Languages} % <<<
@@ -934,22 +940,23 @@ the implementation of the organisation.
 
 \subsection{2OPL} % <<<
 
-2OPL~\cite{} is a programming language for developing agent organizations.
-The used abstractions in the language are brute facts, effects of actions,
-norms and sanction rules. Brute facts are the state of the environment.
-Effect rules describe how actions change the brute facts. Norms describe
-which environment states counts as violations. Ssanction rules can be
-programmed to respond to norm violations. 2OPL's implementation is based on
-logic programming (Prolog in particular).
+2OPL~\cite{DBLP:conf/atal/DybalovaTDL13} is a programming language for
+developing agent organizations.  The used abstractions in the language are
+brute facts, effects of actions, norms and sanction rules. Brute facts
+represent the state of the environment.  Transition rules describe how
+actions change the brute facts. Norms describe what constitute a violation.
+Sanction rules enforce the prevention of norm violations. 2OPL's
+implementation is based on logic programming.
 
-2OPL~\cite{} is a normative organization oriented programming
-language. It allows the programmer to program organizations in terms of
-norms. These norms are represented as logical rules in the language. An
-organization programmed with this language acts between a multi-agent
-platform and the environment, monitoring every action performed by the
-agents on the agent platform and capturing violations and sanctioning the
-performers of these violations to organize the overall behavior of the
-organization.
+2OPL~\cite{DBLP:conf/atal/DybalovaTDL13} is a normative organization
+oriented programming language. It allows the programmer to program
+organizations in terms of norms. These norms are represented as logical
+rules in the language. An organization programmed with this language acts
+between a multi-agent platform and the environment, monitoring every action
+performed by the agents on the agent platform and capturing violations and
+sanctioning the performers of these violations to organize the overall
+behavior of the organization.
+
 % >>>
 
 \subsection{Discussion} % <<<
@@ -998,29 +1005,33 @@ only for the social level, but for the whole language as a whole.
 \begin{table}
 \def\.#1{\rlap{\footnote{#1}}}
 \begin{minipage}{\textwidth}\centering
-\begin{tabular}{lccccc}
+\begin{tabular}{lcccccc}
 \toprule
-Feature & AF-Raf & 2APL & GOAL & Jason & simpAL \\
+Feature & AF-Raf & 2APL & GOAL & Jason & simpAL & 2OPL\\
 \midrule
-rules     & - & - & - & -\.{could employ J-Moise+ organisational framework} & - \\
+rules     & - & - & - & -\.{could employ J-Moise+ organisational framework}
+& - & +\.{norms and sanction rules}\\
 structure
   & +\.{roles, as first order construct}
   & +\.{roles as modules}
   & -
   & -\.{could employ J-Moise+ organisational framework}
-  & +\.{roles and organisations, as first order constructs} \\
+  & +\.{roles and organisations, as first order constructs}
+  & -\\
 patterns
   & +\.{sessions}
   & -
   & -
   & -\.{could employ J-Moise+ organisational framework}
-  & - \\
+  & -
+  & -\\
 types
   & +\.{algebraic data types}
   & -
   & -
   & -
-  & + \\
+  & + 
+  & -\\
 \bottomrule
 \end{tabular}
 \caption{Comparison of Features Related to Agent Interaction: Rules,
@@ -1074,7 +1085,7 @@ functional calculator from the humbler variety is the programmer's ability
 to make definitions to increase its power of calculations. Expressions that
 contain occurrences of the names of functions defined by the programmer are
 evaluated using the given definitions as simplification rules for converting
-expressions to printable form."~\cite{}
+expressions to printable form."~\cite{bird1988introduction}
 
 The computer evaluates an expression by reducing it to its simplest
 equivalent form and displaying the result. The terms evaluation,
@@ -1087,7 +1098,7 @@ Even though we can't display a function value, we can apply a function to
 arguments and display the results. The universe of values is partitioned
 into organised collections called types. Each type has associated with it
 certain operations. It is important that every well-formed expression in a
-programming language can be assigned a type.~\cite{}
+programming language can be assigned a type.~\cite{bird1988introduction}
 
 \subsubsection{Haskell Type Classes} % <<<
 
@@ -1360,7 +1371,7 @@ the global types, which can be viewed as a global specification of the
 participants' actions, or, in other words a global specification of the
 interaction protocol. The global types are projected at the level of each
 participant as local types. The programs are eventually type checked
-against the local types~\cite{}.
+against the local types~\cite{DBLP:journals/jacm/HondaYC16}.
 
 The research in session types initiated in process calculi and programming
 languages for binary session, was extended to multiparty asynchronous
@@ -1368,7 +1379,7 @@ session types. In binary session types, where you have just two
 participants, the local type serves as the description of the whole
 conversation as well, but for multiparty sessions the whole conversation
 can't be specified without the type abstraction which describes global
-conversation scenarios of multiparty sessions.~\cite{}
+conversation scenarios of multiparty sessions.~\cite{DBLP:journals/jacm/HondaYC16}
 
 A session is a series of interactions which serve as a unit of
 communication. The structure of a session is abstracted as a type. Such a
@@ -1390,10 +1401,6 @@ This type means that process \texttt{K} receives two booleans, one from
 then sends a boolean to~\texttt{C} through channel~$c$, and the whole process
 repeats.
 
-\todo{figure with global type grammar from Nabuco's paper, add citation as
-well}
-
-
 \begin{figure}\footnotesize % <<<
 \begin{center}
 \begin{tabular}{llcll}
@@ -1409,59 +1416,55 @@ Value & $U$ & $::=$ & $\tilde S \mid T@p$
 Sort & $S$ & $::=$ & ${\sf bool}\mid {\sf nat}\mid\ldots\mid\langle G\rangle$
 \end{tabular}
 \end{center}
-\caption{Syntax of Global Types~\cite{dblp:conf/popl/hondayc08}}
+\caption{Syntax of Global Types~\cite{DBLP:journals/jacm/HondaYC16}}
 \label{fig:globalType}
 \end{figure} % >>>
 
 The grammar of global session type, or global type, denoted by $G$,$G'$,...
-is given in \ref{fig:globalType}. Type $\l p->p':k<U>G$says that
-participant $p$ sends a message of type $U$ to channel $k$, is received by
-participant $p'$, and interactions described in $G$ takes place. Type $
-p->p:k{lj : Gj}j∈J$ says participant $p$ sends one of the labels to channel
-$k$ which is then received by participant $p$. If $lj$ is sent,
-interactions described in $Gj$ take place.  Type $G,G'$ represents
-concurrent run of interactions specified by $G$ and $G'$ . Type $μt.G$ is a
-recursive type for recurring conversation structures.
+is given in \ref{fig:globalType}. Type $p \to p' : k\langle U\rangle.G'$
+says that participant $p$ sends a message of type $U$ to channel $k$, is
+received by participant $p'$, and interactions described in $G'$ takes
+place. Type $p\to p' : k \{l_j : G_j\}_{j\in J}$ says participant $p$ sends
+one of the labels to channel $k$ which is then received by participant $p$.
+If $l_j$ is sent, interactions described in $G_j$ take place.  Type $G,G'$
+represents concurrent run of interactions specified by $G$ and $G'$ . Type
+$μt.G$ is a recursive type for recurring conversation structures~\cite{DBLP:journals/jacm/HondaYC16}.
 
-\begin{figure}\footnotesize % <<<
-\begin{verbatim}
-Value U ::= S˜ | T@p
-Sort S ::= bool | ... | G
-Local T ::= k!UT send
-          | k? UT receive
-          | k⊕ {li : Ti}i∈I selection
-          | k&{li : Ti}i∈I branching
-          | μt.T | t | end
-\end{verbatim}
-\caption{Syntax of Local Types}
-\label{fig:localType}
-\end{figure} % >>>
+
+%\begin{figure}\footnotesize % <<<
+%\begin{verbatim}
+%Value U ::= S˜ | T@p
+%Sort S ::= bool | ... | G
+%Local T ::= k!UT send
+%          | k? UT receive
+%          | k⊕ {li : Ti}i∈I selection
+%          | k&{li : Ti}i∈I branching
+%          | μt.T | t | end
+%\end{verbatim}
+%\caption{Syntax of Local Types}
+%\label{fig:localType}
+%\end{figure} % >>>
+%The grammar is given in~\ref{fig:localType}.
 
 Local session types or local types, ranged over by $T$,$T'$ are types for
 local behaviour of processes, acting as a link between global types and
-processes. The grammar is given in~\ref{fig:localType}.
-
-\todo{cite Nabuco's paper}
-
-The following rules define how the projection is performed from the global
-type to the local types of each participant. The value global type is
+processes. The following rules define how the projection is performed from the global type to the local types of each participant. The value global type is
 projected either as a send local type or as a receive local type. The
 branching global type is projected as either a selection (describes the
 behaviour of selecting from a number of options) or a branching (describes
-the behaviour of waiting for an option to be selected) local type.
+the behaviour of waiting for an option to be selected) local type~\cite{DBLP:journals/jacm/HondaYC16}.
 
-Nabuco~\cite{} describes the Programming Methodology for Multiparty
-Interactions as follows: "Once given global types as our tool, we can
-consider the following development steps for programs with multiparty
-sessions.  Step 1 A programmer describes an intended interaction scenario
-as global type G, and checks that it is linear.  Step 2 She develops code,
-one for each participant, incrementally validating its conformance to the
-projection of G onto each participant by efficient type-checking.  When
-programs are executed, their interactions are guaranteed to follow the
-stipulated scenario. The type specification also serves as a basis for
-maintenance and upgrade."
+\cite{DBLP:journals/jacm/HondaYC16} describes the Programming Methodology
+for Multiparty Interactions as follows: "Once given global types as our
+tool, we can consider the following development steps for programs with
+multiparty sessions.  Step 1 A programmer describes an intended interaction
+scenario as global type G, and checks that it is linear.  Step 2 She
+develops code, one for each participant, incrementally validating its
+conformance to the projection of G onto each participant by efficient
+type-checking.  When programs are executed, their interactions are
+guaranteed to follow the stipulated scenario. The type specification also
+serves as a basis for maintenance and upgrade."
 
-\todo{how is this chapter related to one of my objectives}
 % >>>
 \chapter{Agent Factory} % <<<
 
@@ -1540,13 +1543,13 @@ in~\cite{muldoon2009towards}.
 
 %>>>
 
-\part{AF-Raf Agent Oriented Programming Language} % <<<
+\part{AF-Raf Agent Oriented Programming Language}\label{part:AF-Raf} % <<<
 \chapter{Main AF-Raf Concepts}\label{ch:concepts} % <<<
 
-\todo{1. Develop an example bit by bit by adding functionality. 2. Describe
-the thought process of designing the program. 3. Add diagram to Agent
-Factory. 4. Move calculator example to case study. 5. Add discussion to the
-comparison with other work.}
+%\todo{1. Develop an example bit by bit by adding functionality. 2. Describe
+%the thought process of designing the program. 3. Add diagram to Agent
+%Factory. 4. Move calculator example to case study. 5. Add discussion to the
+%comparison with other work.}
 
 \section{An overview of the AF-Raf programming Language} % <<<
 
@@ -4057,7 +4060,7 @@ This concludes the description of AF-Raf's semantics.
 
 % >>>
 % >>>
-\chapter{Implementation} % <<<
+\chapter{Implementation}\label{ch:implem} % <<<
 
 The implementation of AF-Raf can be found along with the rest of
 the Agent Factory code at the following
@@ -4145,15 +4148,12 @@ at every time step. That is:
     \item for all applicable rules: handle rule
 \end{itemize}
 
-
-
 % >>>
 % >>>
 
-\part{Evaluation} % <<< 
+\part{Evaluation}\label{part:eval} % <<< 
 
-\chapter{Case Studies}\label{ch:casestudy} 
-% <<<
+\chapter{Case Studies}\label{ch:casestudy} % <<<
 
 \todo{1. Move calculator example here. 2. Add the request protocol. 3. Add
 evaluation.}
@@ -4797,7 +4797,7 @@ the problem to be solved.
 % >>>
 % >>>
 % >>>
-\chapter{Readability and Usability Survey} % <<<
+\chapter{Readability and Usability Survey}\label{ch:survey} % <<<
 
 This chapter investigates further our research question:
 \textit{Is the readability and usability of an agent oriented programming
@@ -4866,7 +4866,72 @@ programming constructs as well as by the algebraic data types and the type
 checking functionality.
 
 % >>>
-\chapter{Results and Evaluation} % <<<
+\chapter{Results and Evaluation}\label{ch:results} % <<<
+
+Our first hypothesis, \textbf{that the integration of roles, based on
+sociological Role Theory, will improve the readability and usability of
+Agent Oriented Programming languages}, and the corresponding objective:
+
+\begin{itemize}
+  \item (1a) \textit{to develop a novel Agent Oriented Programming language that employs roles, based on the existing Agent Factory framework, in order to show how the concept of role maps to a programming language construct in the specific context of Agent Oriented Programming} 
+\end{itemize}
+were recurrently addressed within this thesis. 
+
+The objective (1a) was achieved by designing (\autoref{sec:roles}),
+defining (\autoref{sec:langdef.syntax}, \autoref{sec:opsem}), and
+developing (\autoref{ch:casestudy}) roles in AF-Raf with consideration for
+readability and usability. Syntactic sugar (\autoref{sec:sugar}) played an
+important role in achieving the desired level of readability and
+understanding.
+
+The results were evaluated through a number of case
+studies (\autoref{ch:casestudy}) and an end-user
+survey (\autoref{ch:survey}) that confirmed the initial hypothesis.
+
+The second hypothesis \textbf{that by applying concepts
+that had been proved useful, within mainstream programming paradigms, to
+Agent Oriented Programming will improve the efficiency and increase
+the functionality of the Agent Oriented Programming languages} and its
+corresponding objectives were addressed as follows.
+
+\begin{itemize}
+  \item (2a) \textit{The first objective, to explore the analogy between Agent
+    Oriented Programming languages and Functional Programming languages,
+    identify valuable concepts and incorporate them into our new agent
+  oriented programming language.} was addressed in (\autoref{sec:roles}).
+\item (2b) \textit{The second objective, to investigate the similarity between
+    the agent interaction in multiagent systems and the communication
+    patterns defined as multiparty session types, and show how the
+    multiparty session types can be integrated into our new agent oriented
+  programming language.} was addressed in (\autoref{sec:sessions})
+\item (2c) \textit{The third objective is to develop a consistent type system,
+    and design the first agent oriented programming language to introduce
+  type checking.} was addressed in (\autoref{sec:types})
+\end{itemize}
+
+Figure~\ref{fig:newFunct} presents what mainstream programming concepts we've applied to AF-Raf and the corresponding new functionality added to AF-Raf
+based on this analogy. All new functionality was properly formalised in
+(\autoref{sec:langdef.syntax} and \autoref{sec:opsem}).
+
+How were objectives (2a, 2b, 2c) achieved and the second hypotheses
+confirmed? It is now clear that the functionality was increased by three
+new functionalities: (1) \textbf{roles} that represent a blueprint for
+related behaviour, (2) \textbf{sessions} that represent a pattern for agent
+communication, and the (3) \textbf{type system} and \textbf{type checking},
+which also increase the efficiency of the programming language by
+increasing its reliability (errors caught early means less errors at
+runtime which in turn leads to more reliability).
+
+The efficiency could be further tested to include evaluation of the speed,
+algorithmic efficiency and resource consumption.
+
+\begin{figure}\footnotesize % <<<
+\includegraphics{NewFunctionality.png}
+\caption{AF-Raf's New Functionality}
+\label{fig:newFunct}
+\end{figure} % >>>
+
+
 % >>>
 % >>>
 
@@ -4922,12 +4987,12 @@ agent oriented programming language, which was properly formalised in
 \autoref{ch:langdef}.
 
 \item \textit{Applying concepts from mainstream programming, like the ones
-of type classes, session types, type checking and algebraic data types,
-improved the efficiency and functionality of Agent Oriented Programming
-Languages}. Our first objective was achieved by incorporating the concept
-of type classes from functional programming into AF-Raf programming
-language \autoref{sec:roles}. The second objective was achieved by
-incorporating multiparty session types into Af-Raf programming language
+  of type classes, session types, type checking and algebraic data types,
+improved the efficiency and increased the functionality of Agent Oriented
+Programming Languages}. Our first objective was achieved by incorporating
+the concept of type classes from functional programming into AF-Raf
+programming language \autoref{sec:roles}. The second objective was achieved
+by incorporating multiparty session types into Af-Raf programming language
 \autoref{sec:sessions}. The third objective was achieved by designing a
 type system and a type checker that include algebraic data types for AF-Raf
 programming languge \autoref{sec:types}.
@@ -4936,13 +5001,16 @@ programming languge \autoref{sec:types}.
 % >>>
 \newpage
 \appendix
-\chapter{Survey Questionnaire type A}\label{app:SurveyA}
+\chapter{Questionnaire type A}\label{app:SurveyA}
 \begin{verbatim}
 Questions
+
 Q1. Describe in a few sentences what do you think that the code
 in Figure 1.1 does.
+
 Q2. How easy is it for you to read the code in Figure 1.1? Circle
 as appropriate.
+
  very easy
  easy
  neither easy or hard
@@ -4959,7 +5027,9 @@ rule Message(other, status(alive())) {
 rule Message(other, status()) {
   send(other, inform(status(alive())));
 }
+
 Figure 1.1: Monitoring
+
 Q3. Describe in a few sentences what do you think that the
 code in Figure 1.2 does.
 
@@ -4989,15 +5059,18 @@ session BidRound(owner, s : Seller, b1 : Buyer, b2 : Buyer) {
   { maybe bid : b2 -> s; lose() : s -> b2; };
   result : s -> owner
 }
+
 Figure 1.2: Types, Roles and Sessions
 
 Q4. How easy is it for you to read the code in Figure 1.2? Circle
 as appropriate.
+
  very easy
  easy
  neither easy or hard
  hard
  very hard
+
 Q5. Describe in a few sentences what do you think that the
 code in Figure 1.3 does.
 
@@ -5022,10 +5095,12 @@ agent ContractNetBuyer : Buyer {
     -LastTask(sid, increase(x, y));
   }
 }
+
 Figure 1.3: Buyer
 
 Q6. How easy is it for you to read the code in Figure 1.3? Circle
 as appropriate.
+
  very easy
  easy
  neither easy or hard
@@ -5034,8 +5109,10 @@ as appropriate.
 
 Q7. Describe in a few sentences what do you think that the
 code in Figure 1.4 does.
+
 Q8. How easy is it for you to read the code in Figure 1.4? Circle
 as appropriate.
+
  very easy
  easy
  neither easy or hard
@@ -5056,59 +5133,81 @@ agent ContractNetSeller(b1 : Buyer, b2 : Buyer): Seller {
     }
   }
 }
+
 Figure 1.4: Seller
+
 Q9. How easy is it for you to understand how the three pieces
 of code presented in Figure 1.2, Figure 1.3, and Figure 1.4 fit
 together? Circle as appropriate.
+
  very easy
  easy
  neither easy or hard
  hard
  very hard
+
 Circle as appropriate:
+
 Q10. Gender.
+
  Male
  Female
+
 Q11. Age range.
+
  <25
  25-35
  >35
+
 Q12.Years of programming experience in a payed job.
+
  <3
  3-10
  >10
+
 Q13. Number of years since you first started programming.
+ 
  <5
  5-10
  >10
+
 Q14. Number of programming languages you are proficient in.
+
  1
  2-3
  >3
+
 Q15. Level of familiarity with Functional languages.
+
  very familiar
  familiar
  basic familiarity
  know almost nothing about them
+
 Q16. Level of familiarity with Object Oriented Programming
 languages.
+ 
  very familiar
  familiar
  basic familiarity
  know almost nothing about them
-Q17. Level of familiarity with Agent Oriented Programming
+
+ Q17. Level of familiarity with Agent Oriented Programming
 languages.
+ 
  very familiar
  familiar
  basic familiarity
  know almost nothing about them
-Q18. Last level of qualification in Computer Science.
- less than Bachelor Degree
+
+ Q18. Last level of qualification in Computer Science.
+
+less than Bachelor Degree
  Bachelor Degree
  Postgraduate level
 \end{verbatim}
 
-\chapter{Survey Questionnaire type B}\label{app:SurveyB}
+\chapter{Questionnaire type B}\label{app:SurveyB}
 \begin{verbatim}
 Questions
 
@@ -5125,17 +5224,11 @@ as appropriate.
  very hard
 
 +monitoring(?name, ?addr) : true <-
-
 .send(request, agentID(?name, ?addr), status);
-
 +message(inform, agentID(?name, ?addr), status(alive)) :
-
 monitoring(?name, ?addr2) <-
-
 .send(request, agentID(?name, ?addr), status);
-
 +message(request, ?sender, status) : true <-
-
 .send(inform, ?sender, status(alive));
 
 Figure 1.1: Monitoring
@@ -5144,35 +5237,20 @@ Q3. Describe in a few sentences what do you think that the
 code in Figure 1.2 does.
 
 price(Task,X) :- .random(R) & X = (10*R)+100.
-
 plays(initiator,c).
-
 +plays(initiator,In)
-
 : .my_name(Me)
-
 <- .send(In,tell,introduction(participant,Me)).
-
 @c1 +cfp(CNPId,Task)[source(A)]
-
 : plays(initiator,A) & price(Task,Offer)
-
 <- +proposal(CNPId,Task,Offer);
-
 .send(A,tell,propose(CNPId,Offer)).
-
 @r1 +accept_proposal(CNPId)
-
 : proposal(CNPId,Task,Offer)
-
 <- .print("My proposal ’",Offer,"’ won CNP ",CNPId,
-
 " for ",Task,"!").
-
 @r2 +reject_proposal(CNPId)
-
 <- .print("I lost CNP ",CNPId, ".");
-
 -proposal(CNPId,_,_).
 
 Figure 1.2: Participant
@@ -5199,89 +5277,48 @@ as appropriate.
  very hard
 
 all_proposals_received(CNPId) :-
-
 .count(introduction(participant,_),NP) &
-
 .count(propose(CNPId,_), NO) &
-
 .count(refuse(CNPId), NR) &
-
 NP = NO + NR.
-
 !startCNP(1,fix(computer_123)).
-
 +!startCNP(Id,Object)
-
 <- .wait(2000);
-
 +cnp_state(Id,propose);
-
 .findall(Name,introduction(participant,Name),LP);
-
 .print("Sending CFP to ",LP);
-
 .send(LP,tell,cfp(Id,Object));
-
 .concat("+!contract(",Id,")",Event);
-
 .at("now +4 seconds", Event).
-
 @r1 +propose(CNPId,Offer)
-
 : cnp_state(CNPId,propose) & all_proposals_received(CNPId)
-
 <- !contract(CNPId).
-
 @r2 +refuse(CNPId)
-
 : cnp_state(CNPId,propose) & all_proposals_received(CNPId)
-
 <- !contract(CNPId).
-
 @lc1[atomic]
-
 +!contract(CNPId)
-
 : cnp_state(CNPId,propose)
-
 <- -+cnp_state(CNPId,contract);
-
 .findall(offer(O,A),propose(CNPId,O)[source(A)],L);
-
 .print("Offers are ",L);
-
 L \== [];
-
 .min(L,offer(WOf,WAg));
-
 .print("Winner is ",WAg," with ",WOf);
-
 !announce_result(CNPId,L,WAg);
-
 -+cnp_state(Id,finished).
-
 @lc2 +!contract(CNPId).
-
 -!contract(CNPId)
-
 <- .print("CNP ",CNPId," has failed!").
-
 +!announce_result(_,[],_).
-
 +!announce_result(CNPId,[offer(O,WAg)|T],WAg)
-
 <- .send(WAg,tell,accept_proposal(CNPId));
-
 !announce_result(CNPId,T,WAg).
-
 +!announce_result(CNPId,[offer(O,LAg)|T],WAg)
-
 <- .send(LAg,tell,reject_proposal(CNPId));
-
 !announce_result(CNPId,T,WAg).
 
 Figure 1.3: Initiator
-
 
 Q7. How easy is it for you to understand how the two pieces of
 code presented in Figure 1.2 and Figure 1.3 fit together? Circle as
@@ -5317,7 +5354,6 @@ Q11. Number of years since you first started programming.
  <5
  5-10
  >10
-
 
 Q12. Number of programming languages you are proficient in.
 
