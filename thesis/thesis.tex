@@ -306,14 +306,15 @@ realises a separation of concerns and promotes information hiding.
 
 One way to approach the introduction of new functionality into a domain is
 to try to get inspiration from domains where that functionality is well
-established. I was lucky to be the first one to identify three analogies
-that proved very useful: the analogy between Agent Oriented Programming
-languages and Functional languages, the analogy between agent communication
-and multiparty session types, and the analogy between AOP languages and
-Typed Programming languages. All of them were explored subsequently. For
-example AOP to Functional programming analogy was explored in DALT2012 by
-Traveso, Multiparty sessions types were explored by Mascardi, and type
-checking was explored by Ricci.
+established. I had identified three original analogies that proved very
+useful: the analogy between Agent Oriented Programming languages and
+Functional languages, the analogy between agent communication and
+multiparty session types, and the analogy between AOP languages and Typed
+Programming languages. All of them were explored subsequently. For example
+AOP to Functional programming analogy was explored
+in~\cite{DBLP:conf/dalt/SolimandoT12}, multiparty sessions types were
+explored in~\cite{DBLP:conf/dalt/AnconaDM12}, and type checking was
+explored in~\cite{DBLP:conf/promas/RicciS12}.
 
 \subsubsection{Hypotheses and Objectives}
 (1) The primary hypothesis of my research is that the integration of roles,
@@ -468,15 +469,14 @@ was to build a society of interacting autonomous agents.
 
 The Agent Oriented Programming paradigm was introduced in early '90 by Yoav
 Shoham along with the first Agent Oriented Programming language, Agent0.
-This relatively new programming paradigm adopts a social metaphor for the
-design and implementation of software systems. Specifically, software
-systems are seen as communities of software entities, known as agents, that
-interact with one another in order to solve problems that are beyond their
-individual capabilities ~\cite{DBLP:journals/ai/Shoham93}. An agent
-is an entity whose state is viewed as consisting of mental components such
-as beliefs, capabilities, choices and commitments. In this context, the role
-of an agent program is to control the evolution of the agent's mental
-state.
+This programming paradigm adopts a social metaphor for the design and
+implementation of software systems. Specifically, software systems are seen
+as communities of software entities, known as agents, that interact with
+one another in order to solve problems that are beyond their individual
+capabilities ~\cite{DBLP:journals/ai/Shoham93}. An agent is an entity whose
+state is viewed as consisting of mental components such as beliefs,
+capabilities, choices and commitments. In this context, the role of an
+agent program is to control the evolution of the agent's mental state.
 
 According to Shoham, an agent oriented programming system, in order to be
 complete, needs each of the following components:
@@ -570,8 +570,8 @@ using human-like attributes} ~\cite{DBLP:journals/ker/WooldridgeJ95} such
 as mentalistic notions (e.g.  knowledge, beliefs, intentions, obligations),
 emotional notions or even graphical resemblance.
 
-\todo{explain how do AF-Raf agents relate to the definitions of weak and
-strong agency}
+%\todo{explain how do AF-Raf agents relate to the definitions of weak and
+%strong agency}
 % >>> >>>
 \chapter{Role Theory} % <<<
 
@@ -1196,7 +1196,7 @@ Just as Haskell type classes are different from Haskell modules, the roles
 we introduce are different from existing 2APL
 modules~\cite{dblp:conf/prima/dastanims08}.
 % >>>
-\todo{how is this chapter related to one of my objectives}
+%\todo{how is this chapter related to one of my objectives}
 % >>>
 \chapter{Types} % <<<
 \subsection{Multi-Sorted Predicate Logic} \label{sec:multi-sorted} % <<<
@@ -1468,9 +1468,9 @@ serves as a basis for maintenance and upgrade."
 % >>>
 \chapter{Agent Factory} % <<<
 
-Agent Factory~\cite{collier2002agent} is an open-source Java-based
-development framework that provides support for the development and
-deployment of agent-oriented applications.
+Agent Factory~\cite{collier2002agent} \cite{russell2011af} is an
+open-source Java-based development framework that provides support for the
+development and deployment of agent-oriented applications.
 
 Agent Factory provides a generic run-time environment for deploying
 agent-based systems that is based on the FIPA
@@ -2145,7 +2145,7 @@ definitions.
 %\rg{Maybe expand a bit here, with some example?}
 
 % >>>
-\todo{link with objectives}
+%\todo{link with objectives}
 % >>>
 \section{Roles}\label{sec:roles} % <<<
 The theory of organisations, from social sciences, studies how formal rules
@@ -2297,7 +2297,7 @@ and with Java interfaces, but are nevertheless distinct concepts.
 
 % >>>
 
-\todo{link with objectives}
+%\todo{link with objectives}
 % >>>
 \section{Sessions}\label{sec:sessions} % <<<
 
@@ -2373,7 +2373,7 @@ interactions in agent-oriented programming languages in terms of sessions.
 %Moreover, it seems reasonable to expect that a precise link between these
 %session and the roles proposed in the previous section can be found.
 
-\todo{link with objectives}
+%\todo{link with objectives}
 % >>>
 \section{Designing an AF-Raf program} % <<<
 We will use the Calculator example to illustrate the thought process of
@@ -2429,8 +2429,8 @@ start with the BinaryCalc. In this case we will need an operation to
 correspond to each of the binary operations: addition, subtraction,
 multiplication and division.
 
-\todo{Calculator role}
-\todo{Session}
+%\todo{Calculator role}
+%\todo{Session}
 % >>>
 
 \subsection{Instantiation} % <<<
@@ -2577,7 +2577,7 @@ useful construct that cannot be reduced one to another.
 
 \chapter{Language Definition}\label{ch:langdef} % <<<
 
-\todo{1. Add abstract grammar for sessions.}
+%\todo{1. Add abstract grammar for sessions.}
 
 \section{Overview}\label{sec:langdef.overview} % <<<
 
@@ -2608,8 +2608,7 @@ represents a program. Second, an abstract grammar is simply a set of data
 types. The relation between the two ways to view abstract grammars is
 simple --- the trees are instances of the data types. Since the reference
 implementation of AF-Raf is in Java, the abstract grammar is a set of Java
-classes. \autoref{fig:Abstract-Grammar} uses a notation less verbose than
-Java code. For example,
+classes. \autoref{fig:Abstract-Grammar1} and \autoref{fig:Abstract-Grammar2} use a notation less verbose than Java code. For example,
 \begin{align}
 \texttt{AgentRole = String name, Type role;}
 \end{align}
@@ -2871,7 +2870,12 @@ Monitoring}(\text{\tt ``Bob''})$; the initial belief of Bob is ${\it
 Friend}(\text{\tt``Alice''})$.
 \end{example}
 
-\todo{Abstract grammar for sessions.}
+%\todo{Abstract grammar for sessions.}
+
+Each SessionDeclaration introduce a new session, by specifying its name, a
+list of type variables, and a list of AgentRoles, and a list of session
+steps. The session steps coul be simple, nested (maybe and repeat), or
+choice session steps.
 
 Let us now move from the abstract grammar to the concrete grammar.  The
 concrete grammar has three main parts: the top-level structures
@@ -3093,10 +3097,11 @@ LINE_COMMENT: '//' ~('\n'|'\r')* ('\r'|'\n');
 % >>>
 \section{Syntactic Sugar}\label{sec:sugar} % <<<
 
-Operations do not appear in the abstract syntax of agent designs because
-they are simply special kinds of rules. The parser itself builds an
-abstract syntax tree that contains rules, rather than operations. This way,
-the interpreter and its associated semantics are kept minimal.
+In order to make roles more concise, easier to read and use, we devised
+operations. Operations do not appear in the abstract syntax of agent
+designs because they are simply special kinds of rules. The parser itself
+builds an abstract syntax tree that contains rules, rather than operations.
+This way, the interpreter and its associated semantics are kept minimal.
 
 \begin{example}
 If the user writes
@@ -3451,8 +3456,10 @@ graph. Its vertices are known as \emph{states}; some are tagged as
 \emph{initial}, some are tagged as \emph{final}. Before defining the
 \emph{arcs} of the transition system that represents AF-Raf's operational
 semantics, we must first define the vertices; that is, what goes in the
-state of an AF-Raf program. (For background on structural operational
-semantics, we refer the reader to~\cite[Section~5.2]{harper2012}.)
+state of an AF-Raf program. AF-Raf's operational semantics is completely
+standard. For background on structural operational
+semantics, we refer the reader to~\cite[Section~5.2]{harper2012} and
+~\cite{plotkin1981structural}.
 
 The state of an AF-Raf program has the following components:
 \begin{itemize}
@@ -3597,9 +3604,17 @@ Finally, a session state is a finite set of deterministic session states.
 (\Delta,Q) &\;\in\;{\rm DetSessionState}
 \\
 {\rm DetSessionState} &\;=\;
-  {\rm SessionScope}\times{\rm SessionCode}
+  \left\{
+  \begin{aligned}
+  &{\rm SessionScope}
+    \\&\times{\rm SessionCode}
+    \\&\times{\rm SessionTypeScope}
+  \end{aligned}
+  \right.
 \\
 {\rm SessionScope} &\;=\; {\rm Variable}\pmap{\rm AgentId}
+\\
+{\rm SessionTypeScope} &\;=\; {\rm Variable}\pmap{\rm Type}
 \end{align}
 The set ${\rm SessionCode}$ consists of expressions that may appear in the
 definition of an AF-Raf session. Just like ${\rm GroundTerm}$ and ${\rm
@@ -3763,13 +3778,13 @@ application of the rule~\eqref{eq:opsem-chooserule} introduces a sequential
 composition, and must therefore be eventually followed by an application of
 the rule~\eqref{eq:opsem-seq}.
 
-Let us now give the semantics for atomic instructions; that is, for
-assignments, belief updates, {\bf new} statements, and action invocations.
-Out of these, assignments and belief updates have local effects --- they
-only change the state of one agent. The {\bf new} statements will change
-the global state, either by creating new agents or by growing the set of
-call and session identifier that must be managed globally. Finally, action
-invocations will typically have local effects.
+Let us now give the semantics for atomic instructions (of agent code); that
+is, for assignments, belief updates, {\bf new} statements, and action
+invocations.  Out of these, assignments and belief updates have local
+effects --- they only change the state of one agent. The {\bf new}
+statements will change the global state, either by creating new agents or
+by growing the set of call and session identifier that must be managed
+globally. Finally, action invocations will typically have local effects.
 
 The semantics of assignments are given by the following rule.
 \begin{align}
@@ -3777,8 +3792,9 @@ The semantics of assignments are given by the following rule.
   {(\Gamma_1,T_1,P)\to(\Gamma_2,T_2,t_2)}
   {(\Gamma_1,T_1,x:=P)\to(\Gamma_2[x\mapsto t_2],T_2,t_2)}
 \end{align}
-Thus, executing $x:=P$ amounts to executing~$P$, and then updating the
-agent scope so that $x$~maps to the value to which $P$~evaluated.
+Thus, executing the assignment $x:=P$ amounts to executing the
+expression~$P$, and then updating the agent scope so that the variable
+$x$~maps to the value to which $P$~evaluated.
 
 The semantics of belief updates are the following:
 \begin{align}
@@ -3810,7 +3826,8 @@ The semantics of agent creation are given by the following rule:
   {\on{A_1(a'_1)=\bigl(\Gamma,T,({\bf new}\,d_2(\bar{a})\,a'_2\,\{T'\}),I,O,d_1\bigr)}
   {\on{A_1(a'_2)=\bot}
   {\on{A_2(a'_1)=\bigl(\Gamma,T,a'_2,I,O,d_1\bigr)}
-  {A_2(a'_2)=\bigl(\epsilon,T',{\it body}(d_2)[\bar{a}/{\it args}(d_2)],\epsilon,\epsilon\bigr)}}}}
+  {A_2(a'_2)=\bigl(\epsilon,T',{\it body}(d_2)[\bar{a}/{\it
+  args}(d_2)],\epsilon,\epsilon, d_2\bigr)}}}}
   {(A_1,C,S)\to(A_2,C,S)}
 \label{eq:opsem-newagent}
 \end{align}
@@ -4155,8 +4172,8 @@ at every time step. That is:
 
 \chapter{Case Studies}\label{ch:casestudy} % <<<
 
-\todo{1. Move calculator example here. 2. Add the request protocol. 3. Add
-evaluation.}
+%\todo{1. Move calculator example here. 2. Add the request protocol. 3. Add
+%evaluation.}
 
 This chapter encapsulates a practical answer to our research question:
 \textit{Is the readability and usability of an agent oriented programming
@@ -4938,8 +4955,8 @@ algorithmic efficiency and resource consumption.
 \bookmarksetup{startatroot}
 \chapter{Conclusions}\label{ch:conc} % <<<
 
-\todo{1. Add a chapter to describe the implementation (to include integration
-with Agent Factory and IDE). 2. Add stdio.h to Annex.}
+%\todo{1. Add a chapter to describe the implementation (to include integration
+%with Agent Factory and IDE). 2. Add stdio.h to Annex.}
 
 Starting from high-level similarities between certain aspects of an
 agent-oriented programming language (2APL) and a functional programming
@@ -5001,7 +5018,7 @@ programming languge \autoref{sec:types}.
 % >>>
 \newpage
 \appendix
-\chapter{Questionnaire type A}\label{app:SurveyA}
+\chapter{Questionnaire type A}\label{app:SurveyA} % <<<
 \begin{verbatim}
 Questions
 
@@ -5207,7 +5224,9 @@ less than Bachelor Degree
  Postgraduate level
 \end{verbatim}
 
-\chapter{Questionnaire type B}\label{app:SurveyB}
+% >>>
+
+\chapter{Questionnaire type B}\label{app:SurveyB} % <<<
 \begin{verbatim}
 Questions
 
@@ -5390,6 +5409,27 @@ Q16. Last level of qualification in Computer Science.
  Bachelor Degree
  Postgraduate level
 \end{verbatim}
+% >>>
+
+\chapter{stdio.raf}\label{app:standardLibrary} % <<<
+
+\begin{verbatim}
+
+action println(s) = 
+        com.agentfactory.raf.RafStandardAction$Println;
+
+action terminate() = 
+        com.agentfactory.raf.RafStandardAction$Terminate;
+
+action send(agentId(name, address), message) =
+        com.agentfactory.raf.RafStandardAction$Send;
+
+sensor com.agentfactory.raf.RafStandardSensor$Message;
+
+\end{verbatim}
+
+% >>>
+
 \backmatter
 \bibliographystyle{plain}
 \bibliography{thesis}
