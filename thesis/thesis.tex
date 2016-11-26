@@ -106,8 +106,8 @@ January 2014
 
 This thesis defines a novel agent-oriented programming language, called
 AF-RAF\null.  The agent-oriented paradigm is just beginning to make strides
-into the practice of programming distributed, asynchronous systems.
-Several methodologies identified the need for organising principles, which
+into the practice of programming distributed asynchronous systems.
+Several methodologies identified the need for organising principles which
 tend to be inspired by theories of sociology and economy.  In particular,
 several methodologies make use of the concepts of role and organisation.
 The exact meaning of these concepts varies from one methodology to the
@@ -141,28 +141,28 @@ within computer science and software engineering. It is meant to provide a
 gentle entry point for the reader who might be a software engineer or a
 researcher in another area of computer science.
 
-The relevant parts of the research literature is surveyed next
-(\autoref{ch:aop}). Since this dissertation is about an agent-oriented
+(\autoref{ch:aop}) surveys the relevant parts of the research literature. Since this dissertation is about an agent-oriented
 programming language, other agent-oriented programming languages are
 clearly relevant, as are agent-oriented methodologies. The concept of
 agent, on which these languages and methodologies are based, is inspired by
-sociological theories. These theories are surveyed, because they inform the
-design of AF-Raf. We've also looked at all the important concepts from
-functional languages, type theory, and  multiparty session types, on which
-we base our analogies. A brief description of Agent Factory is presented.
+sociological theories. These theories are surveyed because they inform the
+design of AF-Raf. I've also included all the important concepts from
+functional languages, type theory, and  multiparty session types, as a base
+for the following analogies. A brief description of Agent Factory is presented.
 
-The next part (\autoref{part:AF-Raf}) includes two chapters that present the language AF-Raf. The first of these
-(\autoref{ch:concepts}) emphasizes conceptual understanding, makes use of
-plenty of examples, and could serve as a first introduction to the language
-for a programmer. The second of these (\autoref{ch:langdef}) presents
-AF-Raf in a systematic way, and could serve as a reference formal
+(\autoref{part:AF-Raf}) includes two chapters that present the language
+AF-Raf. The first of these, (\autoref{ch:concepts}), emphasizes conceptual
+understanding; making use of
+plenty of examples it serves as a first introduction to the language
+for a programmer. The second of these, (\autoref{ch:langdef}), presents
+AF-Raf in a systematic way, and represents a formal
 definition of the language. Lastly, there's a chapter overlooking the
 implementation of AF-Raf (\autoref{ch:implem}).
 %\rg{Should say that relevant background on type theory goes here?}
 
-Last part (\autoref{part:eval})contains a chapter with two case studies
-(\autoref{ch:casestudy}), along with a survey analysis
-(\autoref{ch:survey}), and a summary of the results and evaluation
+(\autoref{part:eval}), the Evaluation, contains a case studies chapter
+(\autoref{ch:casestudy}), a survey analysis chapter
+(\autoref{ch:survey}), and a discussion of the results and evaluation
 (\autoref{ch:results}).
 
 % >>>
@@ -172,15 +172,15 @@ Last part (\autoref{part:eval})contains a chapter with two case studies
 
 \section{Overview}
 
-Research in multi-agent systems thrived since $\sim2000$.
-Very recently, it began to impact the practice of programming.
+Research in multi-agent systems has thrived since before 2000, only
+recently it began to impact the practice of programming.
 
 Complex systems are often viewed as being hierarchically decomposed into
 layers of subsystems that interact with one another in an inherently
 decentralized manner. It is increasingly accepted that this natural lack of
 an upper layer of control, together with the tendency within such systems
 for interaction to occur between components that are situated within the
-same layer has a close synergy with the concept of a multi-agent
+same layer, has a close synergy with the concept of a multi-agent
 system~\cite{Jennings00agent-orientedsoftware}. Multi-agent systems promote
 a view of distributed systems as a collection of intelligent (agent)
 components that are autonomous and which interact in a way that is highly
@@ -247,7 +247,7 @@ Agent Oriented Software Engineering tries to integrate theories that were
 developed in other disciplines, such as the Role
 Theory~\cite{biddle1986recent}, and their associated concepts, to model
 agent organisation and to structure interactions between the agents inside
-of the organisation. 
+the organisation. 
 
 %Examples in this direction range from meta-models like
 %the AALAADIN~\cite{ferber1998meta} to popular methodologies
@@ -308,8 +308,8 @@ One way to approach the introduction of new functionality into a domain is
 to try to get inspiration from domains where that functionality is well
 established. I had identified three original analogies that proved very
 useful: the analogy between Agent Oriented Programming languages and
-Functional languages, the analogy between agent communication and
-multiparty session types, and the analogy between AOP languages and Typed
+Functional languages; the analogy between agent communication and
+multiparty session types; and the analogy between AOP languages and Typed
 Programming languages. All of them were explored subsequently. For example
 AOP to Functional programming analogy was explored
 in~\cite{DBLP:conf/dalt/SolimandoT12}, multiparty sessions types were
@@ -370,14 +370,14 @@ and decide if our hypotheses have been confirmed.
 %or not the objective has been met?
 %Have I clearly defined what the overall benefit will be?
 
-First hypothesis states that the introduction of role as a first class
+The first hypothesis states that the introduction of role as a first class
 concept in an agent oriented programming language will increase the
 readability and usability of the language.
 
 We will use the following definitions:
 \begin{itemize}
   \item \textbf{Role}, is the construct that brings together related behaviour, 
-     it gives a general description, but does not constraint the specific
+     it gives a general description, but does not constrain the specific
      implementation.
    \item \textbf{Readability}, is the quality of the code that expresses how 
      easy it is for the programmer to understand that particular written code.
@@ -413,29 +413,31 @@ within computer science and software engineering. It is meant to provide a
 gentle entry point for the reader who might be a software engineer or a
 researcher in another area of computer science.
 
-The relevant parts of the research literature is surveyed next
-(\autoref{ch:aop}). Since this dissertation is about an agent-oriented
+(\autoref{ch:aop}) surveys the relevant parts of the research literature. Since this dissertation is about an agent-oriented
 programming language, other agent-oriented programming languages are
 clearly relevant, as are agent-oriented methodologies. The concept of
 agent, on which these languages and methodologies are based, is inspired by
-sociological theories. These theories are surveyed, because they inform the
-design of AF-Raf. We've also looked at all the important concepts from
-functional languages, type theory, and  multiparty session types, on which
-we base our analogies. A brief description of Agent Factory is presented.
+sociological theories. These theories are surveyed because they inform the
+design of AF-Raf. I've also included all the important concepts from
+functional languages, type theory, and  multiparty session types, as a base
+for the following analogies. A brief description of Agent Factory is presented.
 
-The next part (\autoref{part:AF-Raf}) includes two chapters that present the language AF-Raf. The first of these
-(\autoref{ch:concepts}) emphasizes conceptual understanding, makes use of
-plenty of examples, and could serve as a first introduction to the language
-for a programmer. The second of these (\autoref{ch:langdef}) presents
-AF-Raf in a systematic way, and could serve as a reference formal
+(\autoref{part:AF-Raf}) includes two chapters that present the language
+AF-Raf. The first of these, (\autoref{ch:concepts}), emphasizes conceptual
+understanding; making use of
+plenty of examples it serves as a first introduction to the language
+for a programmer. The second of these, (\autoref{ch:langdef}), presents
+AF-Raf in a systematic way, and represents a formal
 definition of the language. Lastly, there's a chapter overlooking the
 implementation of AF-Raf (\autoref{ch:implem}).
 %\rg{Should say that relevant background on type theory goes here?}
 
-Last part (\autoref{part:eval})contains a chapter with two case studies
-(\autoref{ch:casestudy}), along with a survey analysis
-(\autoref{ch:survey}), and a summary of the results and evaluation
+(\autoref{part:eval}), the Evaluation, contains a case studies chapter
+(\autoref{ch:casestudy}), a survey analysis chapter
+(\autoref{ch:survey}), and a discussion of the results and evaluation
 (\autoref{ch:results}).
+
+
 
 %\rg{Should say that relevant background on type theory goes here?}
 % \rg{Maybe promise only that you show how roles, a concept from sociology,
@@ -456,7 +458,7 @@ Last part (\autoref{part:eval})contains a chapter with two case studies
 \chapter{Agent Oriented Programming} % <<<
 
 Using an anthropomorphic metaphor to design computer programs is not a new
-idea. By anthropomorphic metaphor meaning the attribution of human
+idea. By "anthropomorphic metaphor", I mean the attribution of human
 characteristics and behaviour to a software program. This idea grew within
 Artificial Intelligence research which focused on developing computational
 models for human thinking. Later, Distributed Artificial Intelligence added
@@ -464,7 +466,7 @@ communication and interaction to the processes studied by Artificial
 Intelligence.  Within Distributed Artificial Intelligence appeared the
 actor model as a way of performing concurrent computation based on message
 passing. From the actor model emerged the idea of open systems, which are
-systems in continuous interaction with an external environment. Next step
+systems in continuous interaction with an external environment. The next step
 was to build a society of interacting autonomous agents.
 
 The Agent Oriented Programming paradigm was introduced in early '90 by Yoav
@@ -491,7 +493,7 @@ implemented in the Agent0 programming language are beliefs, commitments and
 capabilities. This three concepts were identified as the minimum necessary
 to illustrate a software agent. Shoham argues that more complex mental
 notions such as desires, intentions, goals or plans can be included, but
-those three are the most important ones.
+the former three are the most important ones.
 
 \begin{figure}\footnotesize % <<<
 \includegraphics{Agent0Interp.png}
@@ -523,11 +525,11 @@ selection from the current plans execution.  The reactive
 planning~\cite{DBLP:conf/aaai/GeorgeffL87} represents a group of techniques
 used in the process of selecting their actions by autonomous agents.
 Notable agent oriented programming languages, from a historical point of
-view, are AgentSpeak~\cite{DBLP:conf/maamaw/Rao96}, based on speech acts,
-MetateM~\cite{DBLP:conf/promas/Fisher05}, based on temporal logic,
+view, are AgentSpeak~\cite{DBLP:conf/maamaw/Rao96}, based on speech acts;
+MetateM~\cite{DBLP:conf/promas/Fisher05}, based on temporal logic;
 3APL~\cite{DBLP:conf/promas/DastaniRDM03}, based on practical reasoning
-rules, Jason~\cite{DBLP:books/sp/map2005/BordiniHV05}, which extends
-AgentSpeak with communication, and
+rules; Jason~\cite{DBLP:books/sp/map2005/BordiniHV05}, which extends
+AgentSpeak with communication; and
 GOAL~\cite{DBLP:journals/corr/cs-AI-0207008}, based on declarative goals.
 
 A diversity of language constructs are employed to model the abstract
@@ -545,27 +547,28 @@ has started to receive more attention.
 
 Wooldridge and Jennings~\cite{DBLP:journals/ker/WooldridgeJ95} outline the
 attributes and characteristics of agents as follows.
-A weak agency has the following attributes:
+
+"A weak agency has the following attributes:
 
 \begin{itemize}
-  \item "\textbf{autonomy}: agents operate without the direct intervention
+  \item \textbf{autonomy}: agents operate without the direct intervention
       of humans or others, and have some kind of control over their actions 
-      and internal state (Castelfranchi, 1995);"~\cite{DBLP:journals/ker/WooldridgeJ95}
-    \item "\textbf{social ability}: agents interact with other agents (and
+      and internal state (Castelfranchi, 1995);
+    \item \textbf{social ability}: agents interact with other agents (and
       possibly humans) via some kind of agent-communication language
-      (Genesereth and Ketchpel, 1994);"~\cite{DBLP:journals/ker/WooldridgeJ95}
-    \item "\textbf{reactivity}: agents perceive their environment, (which may
+      (Genesereth and Ketchpel, 1994);
+    \item \textbf{reactivity}: agents perceive their environment, (which may
       be the physical world, a user via a graphical user interface, a
       collection of other agents, the INTERNET, or perhaps all of these
-      combined), and respond in a timely fashion to changes that occur in it;"~\cite{DBLP:journals/ker/WooldridgeJ95}
-    \item "\textbf{pro-activeness}: agents do not simply act in response to
+      combined), and respond in a timely fashion to changes that occur in it;
+    \item \textbf{pro-activeness}: agents do not simply act in response to
       their environment, they are able to exhibit goal-directed behaviour by
       taking the initiative."~\cite{DBLP:journals/ker/WooldridgeJ95}
 \end{itemize}
 
 They also identify the characteristics of a strong notion of an agency. The
 more specific meaning implies that on top of the properties listed for the
-weak agency the agents have to be \textbf{conceptualised or implemented
+weak agency, the agents have to be \textbf{conceptualised or implemented
 using human-like attributes} ~\cite{DBLP:journals/ker/WooldridgeJ95} such
 as mentalistic notions (e.g.  knowledge, beliefs, intentions, obligations),
 emotional notions or even graphical resemblance.
@@ -578,19 +581,18 @@ emotional notions or even graphical resemblance.
 The Role Theory elaborated in Sociology and Social Psychology tries to
 explain the predictability of individual behaviour by linking it to the
 social structures. Role Theory uses the theatre metaphor to describe human
-behaviour and patterns of interaction, in this context individuals are
+behaviour and patterns of interaction; in this context individuals are
 viewed as actors enacting a role in a play. There are several approaches to
 Role Theory, each with slightly different definitions of roles, but the
-common idea is that each role has associated some behavioral expectations.
+common idea is that each role has associated behavioral expectations.
 Conformity or nonconformity to these expectations trigger rewards or
 punishments. These behavioral expectations can be expressed as rights and
 duties, and are guided by social norms.
 
 According to B.J. Biddle~\cite{biddle1986recent} there are five major
 approaches to Role Theory: the Functional Role Theory have a static
-understanding of roles, which are seen as a set of expectations from the
-society, inflexible and universally agreed upon; In the Interactionist
-Perspective interpersonal interaction is of major importance, roles being
+understanding of roles, which are seen as a set of expectations from society, inflexible and universally agreed upon; In the Interactionist
+Perspective interpersonal interaction is of major importance, with roles being
 negotiated between individuals on a constant basis; the Structural
 Perspective focus more on social structures like the one of status as the
 key concept in role definition; Organisational Role Theory looks at the
@@ -599,23 +601,23 @@ systems; The Cognitive Role Theory emphasizes the relationship between
 expectations and behaviour.
 
 Role Theory bridges individual behaviour and social structure. Roles as
-social constructs influence individual behaviour on different levels. They
+social constructs which influence individual behaviour on different levels. They
 have associated characteristic beliefs and attitudes, meaning that whenever
-roles are changing beliefs and attitudes change along. Also roles specify
+roles are changing, beliefs and attitudes change along. Roles also specify
 goals, tasks and performance standards required in specific social
 situations, acting as plans or blueprints to guide behaviour.
 
 An individual plays multiple roles over time, and at the same time. As a
-result roles interact not only at the social level, but at the individual
-level as well. A number of issues arise from this interaction such as role
-conflict, role strain, role overload, on the negative side, and role
-accumulation on the positive side.
+result roles interact not only at the social level, but on an individual
+level as well. A number of issues arise from this interaction; on the
+negative side this can cause role conflict, role strain, role overload, but
+on the positive side it also allows for role accumulation.
 
 In summary, Role Theory could be synthesised as follows: Social situations
 are governed by social norms, which determine behavioral
-expectations(social roles), which are in turn described in term of duties
+expectations (social roles), which are in turn, described in term of duties
 and rights or obligations and permissions. The expectations are both
-internal and external to the individual. Conformity results in rewards
+internal and external to the individual. Conformity results in rewards,
 while nonconformity triggers social sanctions. Role prescriptions are
 subject to change through social pressure.
 
@@ -624,15 +626,15 @@ of computer science including to programming languages, software
 engineering, coordination languages, databases, multiagent systems,
 knowledge representation, formal ontology, computational linguistics,
 security, and conceptual modelling~\cite{DBLP:journals/ao/BoellaTV07}.
-Unfortunately, there is little consensus between different approaches,
-which makes very hard the transfer of results from one area to another.
+Unfortunately, there is little consensus between these different approaches,
+which makes it very hard to transfer results from one area to another.
 
-The idea of role oriented programming appeared mainly related to object
+The idea of role oriented programming appeared within object
 oriented programming.  ObjectTeams~\cite{DBLP:journals/ao/Herrmann07}, and
 EpsilonJ~\cite{DBLP:conf/snpd/MonpratarnchaiT08} are examples of such
 object oriented programming languages that have explicit support for roles.
 A role taxonomy was developed~\cite{graversen06nature} to help role
-researchers to understand, communicate and spawn of new ideas, in the
+researchers understand, communicate and spawn new ideas in the
 context of object oriented programming.
 
 %\todo{rephrase and add citation} JavaScript natively supports various
@@ -647,22 +649,22 @@ The programming language ObjectTeams models roles by specific classes and
 defines a playedBy relationship at the class level. This relationship
 specifies that each instance of the role class will be permanently attached
 to a base instance (the class that the role is decorating). It is possible
-to group a number of roles into a team.  Teams combine the concepts of
-classes and packages, they are classes because they have fields and
-methods, may apply inheritance and are instantiable. They are packages in
-that they contain a set of classes~\cite{DBLP:journals/ao/Herrmann07}.
+to group a number of roles into a team.  Teams combine both
+classes and packages. They are classes because they have fields and
+methods, and may apply inheritance and are instantiable. They are packages
+because they contain a set of classes~\cite{DBLP:journals/ao/Herrmann07}.
 
 In the multiagent systems domain, there have been a number of successful
 endeavours to incorporate the concept of role. Examples include
 PowerJava~\cite{DBLP:journals/entcs/BaldoniBT06}, an extension of Java, and
 ROPE~\cite{DBLP:conf/coopis/BechtGKM99}, a language independent framework.
-Sill, at the present time there is no agent oriented programming language
-to have explicit support for roles.
+However, at the present time there is no agent oriented programming language
+to have roles built in as first class programming constructs.
 
 In PowerJava~\cite{DBLP:conf/sac/BaldoniBT06} roles are implemented as classes, which can be instantiated only
 in the presence of an instance of the player and of an instance of an
 institution. The definition of a class implementing a role is included in
-the class of the institution, the role belongs to. Powers are methods which
+the class of the institution the role belongs to. Powers are methods which
 can access private fields and methods of the institution they belong to,
 and of the other roles of the same institution.
 %Rope: role oriented programming environment for multiagent systems. Becht
@@ -671,8 +673,8 @@ and of the other roles of the same institution.
 %Roles survey. Ekinci >>>
 \chapter{Organisational Theory}  % <<<
 
-Organisational Theory is a discipline of social sciences for more than 100
-years. Organisational Theory studies organisational design, organisational
+Organisational Theory is a discipline of social sciences originating over 100
+years ago. Organisational Theory studies organisational design, organisational
 structures, the relationship between organisations and their environment, and
 the behaviour of individuals in organisational settings.
 
@@ -680,8 +682,8 @@ An organisation could be regarded as a coordinated collective action
 towards a common goal. Organisations are governed by rules and placed
 within an environment.
 
-The study of formal organisations accompanied the industrial
-revolution, following the need to organise labour. There are a number of
+The study of formal organisations accompanied the Industrial
+Revolution, following the need to organise labour. There are a number of
 organisational theories that can be categorised in three groups or stages
 depending on their main focus: 1) classical theories focus on the product,
 2) neoclassic theories focus on the employee, and 3) contemporary theories focus
@@ -695,25 +697,25 @@ decision making, and 4) the specialisation of functions or tasks.
 The hierarchy of authority refers to a system of rules regarding the line
 of communication and control, which determine the organisational structure.
 When you view the organisational structure in relation to the
-specialisation of tasks the result is a functional organisations, while
+specialisation of tasks the result is a functional organisation, while
 focusing on the "end product" results in a product organisations. Focusing
 on both function and product results in a matrix organisation with a dual
 authority.
 
-The span of control can be narrow resulting in a high organisation, with
-multiple levels or wide resulting in a flat organisation, with fewer levels.
+The span of control can be narrow, resulting in a high organisation with
+multiple levels, or wide, resulting in a flat organisation with fewer levels.
 
 The centralisation and decentralisation refers to the number of people and
 the grade in which people are involved in decision making. In centralised
-organisation the number of people involved in decision making is small,
+organisation, the number of people involved in decision making is small,
 representing the upper-level in the authority hierarchy. In decentralised
 organisations the decision making is delegated to all levels.
 
 Regarding the specialisation, a high degree of specialisation means that
-each individual need to perform fewer smaller and simpler tasks, which have
+each individual needs to perform fewer smaller and simpler tasks, which have
 the advantage of promoting proficiency and the need of less transfer time
-between tasks, but also the disadvantage of dissatisfaction associated to
-boredom.
+between tasks. However,the disadvantage is the resulting dissatisfaction
+associated with boredom.
 
 The organisational rules (global constraints and conventions), structures
 (role structure) and patterns (describing agent interaction) have been
@@ -732,14 +734,14 @@ A very recent and slightly different approach is to merge more
 technologies. JaCaMo~\cite{DBLP:journals/scp/BoissierBHRS13}, a multiagent programming framework, combines
 three different technologies already widely used: 1. Jason, the agent
 oriented programming language; 2. Cartago, the framework for programming
-environments; and 3. Moise,the organisational model. It advances a new
-programming paradigm, the multiagent programming that incorporates all the
+environments; and 3. Moise, the organisational model. It advances a new
+programming paradigm; the multiagent programming that incorporates all the
 principles of programming agents, organisations, environments and
-interactions. You would have to understand and be able to proficiently use
-all three technologies.
+interactions. In order to use this framework you would have to understand
+and be proficient in all three technologies.
 
-Recently there were developed a number of normative organisation frameworks
-some of them incorporate programming languages for norm-aware agents and
+Recently, a number of normative organisation frameworks were developed,
+some of which incorporate programming languages for norm-aware agents and
 normative organisation. Some examples are N-2APL and 2OPL.
 
 The N-2APL~\cite{DBLP:conf/aamas/AlechinaDL12} agent oriented programming
@@ -751,7 +753,7 @@ their overall interest to do so"~\cite{DBLP:conf/atal/DybalovaTDL13}.
 2OPL~\cite{DBLP:conf/atal/DybalovaTDL13} is a programming language (logic
 based) for developing agent organizations.  2OPL uses the following
 abstractions: brute facts, effects of actions, norms and sanction rules.
-Brute facts are the state of the multiagent organisation, which is
+Brute facts are the state of the multiagent organisation. The state is
 represented by the environment.  Transition rules describe how
 actions change the brute facts. Norms describe which environment states
 represent violations.  Sanction rules can be programmed to respond to norm
@@ -765,18 +767,18 @@ systems~\cite{DBLP:conf/esaw/RiemsdijkHJ09}.
 
 % >>>
 \chapter{Agent Oriented Programming Languages} % <<<
-Role Theory and Organisational Theory have not been yet fully exploited at
-the programming language level.
+Role Theory and Organisational Theory have not yet been fully exploited at
+the programming language level. The three representative agent programming
+alnguages most widely in use are
 Jason/AgentSpeak~\cite{DBLP:books/sp/map2005/BordiniHV05},
 2APL~\cite{DBLP:journals/aamas/Dastani08}, and
-GOAL~\cite{DBLP:journals/corr/cs-AI-0207008} are three representative agent
-programming languages, being among the most widely used. We will look at
+GOAL~\cite{DBLP:journals/corr/cs-AI-0207008}. I will look at
 the similarities similarities between them, and try to identify the gap
 between the established functionality and the desirable functionality of
-the agent oriented programming languages, that could support a more
-structured multiagent interaction. We will include in our analysis some
+the agent oriented programming languages that could support a more
+structured multiagent interaction. I will include in this analysis some
 newly developed programming languages, SimpAl and 2OLP, that are relevant
-to our research.
+to this research.
 
 \subsection{Jason/Agent Speak} % <<<
 Jason is an interpreter written in Java for an extended version of the
@@ -788,22 +790,22 @@ agent is a reactive planning system.
 The core concepts defining an AgentSpeak agent are the belief base, the
 plan library, the goals and the triggering events. The belief base consists
 of a set of ground atomic formulae. There are two types of goals in
-AgentSpeak: achievement goals and test goals, both of them written as
+AgentSpeak: achievement goals and test goals, both of which are written as
 atomic formulae prefixed with either "!" or "?". The first one describes a
 state of the world to be achieved, while the other specifies a check for
 conformity with the agent's belief base. The triggering events can be
 either addition or deletion of beliefs and goals. The plan consists of a
 head, a context and a body. The head is represented by the triggering
-event, the context comprises a conjunction of beliefs which determine if a
-plan is applicable, and the body, which is a sequence of basic actions or
-(sub)goals. In order to be executed plans have to be designated as
+event; the context comprises of a conjunction of beliefs which determine if a
+plan is applicable; the body is a sequence of basic actions or
+(sub)goals. In order to be executed, plans have to be designated as
 intentions. More exactly, intentions represent partially instantiated
-plans, that were selected for execution.
+plans that were selected for execution.
 
 Additionally, the AgentSpeak interpreter relies on three selection
-functions. First, the event selection selects a single event from the set
+functions. Firstly, the event selection selects a single event from the set
 of events. Second, the option function selects a plan from the set of
-applicable plans. Third, the intentions selection function selects an
+applicable plans. And third, the intentions selection function selects an
 intention from the set of intentions.
 
 For managing the social level of the multiagent system, Jason can be used
@@ -826,10 +828,10 @@ goals are implemented in a declarative way to support the reasoning and
 updating mechanisms. Plans, external environments, events, flow of control
 are implemented in an imperative way.
 
-Environments are implemented as Java objects. Information about changes in
-the environment can be accessed by the agents in two different ways,
+Environments are implemented as Java objects. Information regarding changes in
+the environment can be accessed by the agents in two different ways:
 actively through sensors or passively through events. Another distinction
-is made between goals and events. Even though both of them trigger agent
+is made between goals and events. Despite both of them triggering agent
 action, goals correspond to a desirable state, while the events correspond
 to environmental changes.
 
@@ -847,7 +849,7 @@ the next chapter.
 % >>>
 
 \subsection{GOAL} % <<<
-GOAL is a rule-based programming language, its focus is on agent reasoning.
+GOAL is a rule-based programming language, its focus is agent reasoning.
 GOAL agents consist of four components: a belief base, a goal base, action
 rules, and action specifications. An actual GOAL agent program is a set of
 modules each consisting of various sections including knowledge, beliefs,
@@ -863,7 +865,7 @@ provides rules for processing information received from the environment.
 Actions are specified using preconditions and postconditions.
 
 GOAL agents use a blind commitment strategy, meaning that an agent commits
-to achieving a goal and only drops it after it was achieved. GOAL
+to achieving a goal and only drops it after it has been achieved. GOAL
 distinguishes different types of goals: primitive, achievement or achieved
 goals~\cite{DBLP:conf/jelia/indriksH08}.
 
@@ -883,13 +885,13 @@ programming language with a separate agent abstraction layer.
 Even though this language is very different from AF-Raf, there are a number
 of overlapping concepts. SimpAL imports a social view of computation where
 agents playing different roles constitute an organisation, and work within
-a shared environment. The main building blocks of this model are agents,
-the autonomous components, and artifacts, the environmental components that
-provide functionality or services. The agent has a belief base, some tasks
+a shared environment. The main building blocks of this model are agents
+(autonomous components) and artifacts (the environmental components that
+provide functionality or services). The agent has a belief base, some tasks
 to perform and a set of plans to utilise in order to accomplish the tasks.
 
 SimpAl roles are similar to AF-Raf roles in that each role is composed of a
-set of tasks types, in the same way an AF-Raf role is constitute by a set
+set of tasks types, in the same way an AF-Raf role constitutes a set
 of operations, where tasks are the analogous to the AF-Raf operations.
 However, operations and tasks are completely different entities. An
 operation is defined by the type of messages exchanged by the agents, while
@@ -897,21 +899,21 @@ a task is defined by a set of parameters and a set of optional attributes
 (understand, goal, pre-attributes).
 
 SimpAL roles are organised in a slightly different manner compared to the
-AF-Raf's session model. In AF-Raf sessions provide  which can be seen as a kind of protocol
+AF-Raf's session model. In AF-Raf sessions can be seen as a kind of protocol
 prescribing the agent communication. In simpAL organisation models are used
 to define organisation types, that bring together related roles and
 artifact in coherent units named workspaces. Organisation types are
 implemented by concrete organisations. SimpAL organisation types do not put
 any constraint on the order in which interactions between agents occur, as
-AF-Raf session types do, instead they simply group together related roles
+AF-Raf session types do, instead, they simply group together related roles
 and artifacts working in a similar way to the object oriented programming
 interfaces.
 
 A number of static type checks are performed. At the role level it is
-checked that for each task type there exists at least one plan, and for
-each plan it's checked that the type of the sent messages are only the ones
-defined in the task type. Also it's checked that the assignment of tasks
-corresponds to the task types defined in the role, and that the types of
+verified that for each task type there exists at least one plan, and for
+each plan, it's checked that the type of the sent messages are only the ones
+defined in the task type. Assignment of tasks are also checked to
+correspond to the task types defined in the role, and that the types of
 the messages sent to an agent correspond to that the agent can understand.
 
 Errors about beliefs that are checked include finding, inside the plans,
@@ -926,15 +928,15 @@ artifact operations and its observable state. For each action in the plan
 there must be a matching operation in the artifact's interface.  Likewise,
 for each update belief statement regarding an artifact property there must
 exist a matching observable property in the usage interface. On the
-environment side is checked that the artifact templates match the
+environment side, it is checked that the artifact templates match the
 corresponding usage interfaces. First, checks are performed to ascertain
 that for each operation declared in the interface there exists an
-implementation in the template, also for any of the observable properties
+implementation in the template, and for any of the observable properties
 in the template there exists a declaration in the corresponding interface
 with a compatible type.
 
 At the organisation level it is checked that each workspace, artifact, and
-agent types declared in an organisational model is actually implemented in
+agent types declared in an organisational model are actually implemented in
 the implementation of the organisation.
 % >>>
 
@@ -964,13 +966,13 @@ behavior of the organization.
 All of the languages referred to above (Jason/AgentSpeak, 2APL, and GOAL)
 have a number of constructs to model the agent level concepts: a belief
 base to model agent knowledge, goals that model the agent desires, some
-sort of plans or strategies for achieving agent's goals, actions that
+sort of plan or strategy for achieving agent's goals, actions that
 result in changes, mechanisms for triggering actions based on the mental
-state of the agent, sensing mechanisms to get information about the changes
+state of the agent, and sensing mechanisms to get information about the changes
 in the environment.
 
 The perspective is not as uniform when we consider the social level.
-Actually, it is quite the opposite, the approach ranges from employing
+Actually, it is quite the opposite; the approach ranges from employing
 modules to implement roles (2APL) to using an external organisational framework
 (Jason) to manage the social concepts, or disregarding this aspect
 altogether (GOAL).
@@ -979,16 +981,16 @@ None of the languages investigated above incorporate, as first order
 constructs, any social level concepts, that could support organising agent
 interaction.
 
-The social level of multiagent systems is where this research
-work brings most of its contributions. AF-Raf is a newly designed
-agent oriented programming language, that implements social
-concepts, like the one of role, as first order constructs. It draws
-inspiration from the social sciences as well as form the functional
-programming languages and multiparty session types. AF-Raf is not the only
-proposal in this sense. SimpAL~\cite{DBLP:conf/oopsla/RicciS11} is, also, a new programming language
-implementing social level construct. Notwithstanding the similarities,
-AF-Raf and simpAL have very different approaches, and we will discuss them
-further in the related work section of next chapter.
+The social level of multiagent systems is where this research work brings
+most of its contributions. AF-Raf is a newly designed agent oriented
+programming language, that implements social concepts, like the one of
+role, as first order constructs. It draws inspiration from the social
+sciences as well as form the functional programming languages and
+multiparty session types. AF-Raf is not the only proposal in this sense.
+SimpAL~\cite{DBLP:conf/oopsla/RicciS11} is, also, a new programming
+language implementing social level construct. Notwithstanding the
+similarities, AF-Raf and simpAL have very different approaches, and we will
+discuss them further in the related work section of the next chapter.
 
 In comparing the social level approaches we will use the organisational
 components identified as being the most significant to the multiagent
@@ -998,9 +1000,8 @@ organisational patterns (describing agent
 interaction)~\cite{DBLP:conf/aose/ZambonelliJW00}.
 
 \autoref{tbl:comparison} synthesises the main features of 2APL, Jason,
-GOAL, simpAL and AF-Raf related to the social level. Additionally is
-considered one more functionality, type checking, which is important not
-only for the social level, but for the whole language as a whole.
+GOAL, simpAL, 2OPL and AF-Raf related to the social level. In addition, I decided to include one more functionality, type checking, which is important not
+only for the social level, but for the entire language as a whole.
 
 \begin{table}
 \def\.#1{\rlap{\footnote{#1}}}
@@ -1049,25 +1050,25 @@ present functionality of the Agent Oriented Programming languages, to which
 we offer suitable solutions:
 
 (1) The need to structure related social behaviour. One way to accomplish
-this is by introducing the concept of role as a first order language
+this would be introducing the concept of role as a first order language
 construct.
 
 (2) The need to structure agent interactions into patterns. This could be
-achieved by employing our sessions to model interaction patterns.
+achieved by employing sessions to model interaction patterns.
 
-To this list, I would like to add one more need that has been neglected for
-a long time in the Agent Oriented Programming languages, even though the
-other mainstream programming languages have acknowledge its benefits about
+To this list, I would like to add one final area that has long been
+neglected in the Agent Oriented Programming languages, even though the
+other mainstream programming languages have acknowledged its benefits about
 three decades ago.
 
 (3) The need of a consistent type system and type checking mechanisms. We
 designed a type system that include algebraic data types.
 
 
-The benefits of having a type system and type checking are remarkably
-depicted in a thirty years old paper: early detection of
-errors; greater execution-time efficiency; and making the programs more
-structured and easier to read~\cite{DBLP:journals/csur/CardelliW85}.
+A remarkable thirty year old paper depicts the benefits of having a type
+system and type checking: early detection of errors; greater execution-time
+efficiency; and making the programs more structured and easier to
+read~\cite{DBLP:journals/csur/CardelliW85}.
 
 % >>>
 % >>>
@@ -1359,7 +1360,7 @@ sets of ground terms that cannot be defined using algebraic data types.
 
 % >>>
 
-\todo{how is this chapter related to one of my objectives}
+%\todo{how is this chapter related to one of my objectives}
 % >>>
 \chapter{Multiparty Session Types} % <<<
 
@@ -1511,7 +1512,7 @@ or APIs). Actions, sensors and modules are written in Java, and they extend
 the agent program so that it can get information about its environment and
 act out its intentions. Actions are used to produce changes to the
 environment, while sensors generate beliefs, and change the knowledge of
-the agent. Each action has an interface that define how it may be invoked
+the agent. Each action has an interface that defines how it may be invoked
 from within the agent program. If a set of actions and sensors are linked
 together they can be defined within a module. A module may also provide
 resources that are shared amongst several sensors and actions.
@@ -1593,9 +1594,9 @@ rule Message(other, status()) {
 
 The AF-Raf core concepts include: beliefs, rules, actions, sensors, roles,
 sessions, and types. They are related to one another and the unique
-features of AF-Raf are built upon them. Among these concepts the ones of
-roles, sessions and types constitute new approaches, and they will be
-described in more depth in the next sections. Figure~\ref{fig:AF-Raf}
+features of AF-Raf are built upon them. Among these concepts, the ones of
+roles, sessions and types, constitute new approaches and they will be
+described in more depth in the sections to follow. Figure~\ref{fig:AF-Raf}
 illustrates a simple AF-Raf agent.
 
 \begin{figure}\footnotesize % <<<
@@ -1612,34 +1613,34 @@ architecture.
 
 Beliefs in AF-Raf are regarded as logical terms and represented in the form
 of trees of strings. Beliefs are grouped together in a belief base that can
-be accessed by, and updated by the agent. On the other hand, rules
+be accessed by and updated by the agent. On the other hand, rules
 represent a means for accessing the belief base and also a way of
 triggering agent behaviour. Figure~\ref{fig:rule} illustrates a simple
 AF-Raf rule, where $status()$ and $request(status())$ represent AF-Raf
 beliefs.
 
 A rule has two main components besides a name, which is optional. These
-components are a query, and an action. The query is like a condition that
-has to be met and can be seen as a question sent to the belief base, if the
+components are a query and an action. The query is like a condition that
+has to be met and can be seen as a question sent to the belief base. If the
 belief base is meeting the condition then some action is triggered. The
 rules are evaluated at each time-step. The first stage of evaluating a rule
 is to evaluate the query on the current belief base. The result is a set of
-query results, that represent matchings. If the set is not empty, the
+query results that represent matchings. If the set is not empty, the
 action is then evaluated for every matching. There is no particular order
 in which the matchings are evaluated. 
 
-Each of the matchings from the set of query results says with what term
+Each of the matchings from the set of query results indicates what term
 to substitute each free variable in the action. In other words, a matching
-is a set of bindings that covers all the free variable in the action (of
+is a set of bindings that covers all the free variables in the action (of
 the rule). The first step of evaluating the action is to apply these
 substitutions. The next step is to execute it.
 
 Executing an action means executing a piece of associated Java code.
 %Examples of actions include sending a message (\textit{send}) and logging a
 %string (\textit{println}).
-An action represents the actual agent's behaviour, which can
-range from printing something to the console to sending a message to
-another agent, creating another agent or even updating the belief base.
+An action represents the actual agent's behaviour which can
+range from printing something to the console, to sending a message to
+another agent, creating another agent, or even updating the belief base.
 Another way to update the belief base is through sensors.
 
 Sensors are pieces of Java code that are run at each time-step. They are
@@ -1670,9 +1671,9 @@ rule Monitoring(name, addr) {
 \end{figure} % >>>
 
 Actions and sensors are pieces of Java code used to extend the AF-Raf
-programs. Actions are invoked within rules. There is a number of actions
-included in the standard library, which any agent can use, there is also
-the option to create new actions. Sensors are run automatically every time
+programs. Actions are invoked within rules. There are a number of actions
+included in the standard library, which any agent can use, and there is also
+the option to create new actions. Sensors are run automatically at every time
 step. Figure~\ref{fig:actions-sensors} presents some of the AF-Raf standard
 actions and sensors. Both {\sf println} and {\sf send} actions have been
 used in the rule illustrated in \autoref{fig:rule}.
@@ -1694,7 +1695,7 @@ sensor com.agentfactory.raf.RafStandardSensor$Message;
 
 
 An operation can be defined as a specific kind of rule stating that upon
-receiving a message of a particular type the agent should reply with a
+receiving a message of a particular type, the agent should reply with a
 message of a specified type. The message type can be any type including the
 type unit(), and in this case there is no actual message returned. Even
 though operations can be written as rules, using syntactic sugar to
@@ -1736,7 +1737,7 @@ message there's an associated call id which must appear in the return
 message. This is a way of keeping track of the message pair associated to
 an operation and enable the dynamic check that the message types correspond
 to the ones defined inside the role. If the types do not correspond an
-error is risen.
+error is raised.
 
 Further checks are performed at runtime. Each session has a session id.
 Each message has to contain the session id so that it can be associated to
@@ -1856,7 +1857,7 @@ In general, belief bases have internal and external consistency
 requirements.  Internally, beliefs should not contradict each-other.
 Externally, beliefs should correspond to reality.
 
-In AF-Raf, the situation is simple.  There is no other meaning for beliefs
+In AF-Raf, the situation is simple: There is no other meaning for beliefs
 apart from how they affect the behaviour of the agent, through rules.
 Thus, it is the agent's responsibility to detect inconsistencies.  In other
 words, inconsistencies are detected by programs, not by the programming
@@ -2005,7 +2006,7 @@ $\mathit{zero}()$.
 Finally, let us note that there are sets of ground terms for which it is
 undecidable whether a given term is an element.  (A classic result of
 computability theory is that there are undecidable sets of bit-strings, and
-sorted ground terms can encode bit-strings.) In particular, there exist
+sorted ground terms can encode bit-strings.) In particular, there exists
 sets of ground terms that cannot be defined using algebraic data types.
 %\rg{These things are probably too cryptic, and should be explained more.}
 
@@ -2018,7 +2019,7 @@ predefined corresponding primitive types \textit{string} and
 primitive type.
 
 Binary operators such as $+$ are also inherited from Agent~Factory. From
-the point of view of type-checking, an expressions like $2+3$ is equivalent
+the point of view of type-checking, an expression like $2+3$ is equivalent
 to $+(2,3)$. Standard conventions on precedence and associativity are
 obeyed.
 
@@ -2067,7 +2068,7 @@ errors.
 \subsection{Type Checking}\label{sec:concepts-adt-check} % <<<
 Type-checking is a program analysis that verifies the type safety of a
 program. In the strict sense it verifies that the analysed program
-will not have any type errors when executed. In the weak sense only
+will not have any type errors when executed. In the weak sense, it only
 provides some amount of type safety. Type checking can be static or
 dynamic. The static type checking can be based on explicit type decoration
 or based on implicit type inferences.
