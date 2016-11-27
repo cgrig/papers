@@ -2125,8 +2125,8 @@ primitive. The interesting branch is the first one, which is taken when
 both the term (\verb|v|) and the type (\verb|ts|) are abstract. It checks whether there exists a
 pattern (in \verb|ts|) that matches the term with the head~\verb|v| and the
 sub-terms~\verb|vs|. The function~\verb|f| processes one pattern with the
-head~\verb|t| and the sub-types~\verb|ts|. Both heads must match and the
-sub-terms must match, respectively, the sub-types. The function \verb|all2|
+head~\verb|t| and the sub-types~\verb|ts|. Both heads must match, and the
+sub-terms must match respectively the sub-types. The function \verb|all2|
 does the check for all pairs of sub-terms (\verb|vs, ts|), and it
 wraps the standard function \verb|List.for_all2| so that it returns
 \verb|false| when the number of sub-terms is different from the number of
@@ -2139,10 +2139,10 @@ sub-types.
 
 We exhibited an algorithm, hence type-checking is decidable. As it is, the
 function \verb|check| takes exponential time in the size of the term.
-However, with memoization (store the results and return from cache when the
-function is called with the same arguments) its complexity is~$O(mn)$,
-where $m$~is the size of the term and $n$~is the size of all type
-definitions.
+However, with memoization (storing the results and returning them from
+cache when the function is called with the same arguments) its complexity
+is~$O(mn)$, where $m$~is the size of the term and $n$~is the size of all
+type definitions.
 %\rg{Maybe expand a bit here, with some example?}
 
 % >>>
@@ -2150,25 +2150,25 @@ definitions.
 % >>>
 \section{Roles}\label{sec:roles} % <<<
 The theory of organisations, from social sciences, studies how formal rules
-of interaction enable groups of people to achieve common goals, on the
+of interaction enable groups of people to achieve common goals. On the
 other hand, the theory of roles studies how individuals fit in multiple
-informal groups. Both theories influenced prior attempts to structure agent
+informal groups. Both theories influenced previous attempts to structure agent
 systems. Several agent-oriented methodologies and libraries incorporate the
 concept of organisation and the concept of role.  However, there is little
 work on designing language features with the specific purpose of
 structuring the social level of the multiagent
 systems~\cite{collier2005,DBLP:journals/entcs/BaldoniBT06,DBLP:conf/oopsla/RicciS11}.
-The approach taken, regarding this language design problem, was to draw
+The approach taken regarding this language design problem, was to draw
 inspiration from analogies between agent-oriented programming languages and
-functional languages. For concreteness, we focused on
+functional languages. In particular I've focused on
 2APL~\cite{DBLP:journals/aamas/Dastani08} and Haskell~\cite{web:haskell}.
 
-Haskell and 2APL are very different languages. We do not try to establish
+Haskell and 2APL are very different languages. I did not try to establish
 any sort of formal connection between them, but rather to identify fruitful
-high-level similarities. The task is akin trying to draw the Earth's
-surface on paper---much easier to do locally than globally. We proceed,
+high-level similarities. The task is akin to trying to draw the Earth's
+surface on paper---much easier to do locally than globally. I proceeded,
 therefore, by finding a contact point, seeing what it tells about its
-surroundings, and then repeating. But, in order to do this, let's review
+surroundings, and then repeating this. But, in order to do this, let's review
 first the Haskell type classes and modules.
 
 
@@ -2288,7 +2288,7 @@ different language than 2APL. Such flexibility helps code reuse.
 
 In summary, the vague and informal intuition that a function is like a pair
 of messages, one carrying the arguments and one carrying the result, led us
-to two interesting observations. First, algebraic data types are a
+to two interesting observations: First, algebraic data types are a
 convenient way of describing the content of messages, and in contrast with
 ontologies is much shorter. Moreover, algebraic data types are useful for
 type checking, thus leading to fewer runtime errors once messages are
@@ -2302,7 +2302,7 @@ and with Java interfaces, but are nevertheless distinct concepts.
 % >>>
 \section{Sessions}\label{sec:sessions} % <<<
 
-Agents play roles and we wrote roles much like Haskell type
+Agents play roles and AF-Raf roles are designed to look like Haskell type
 classes, so it would seem that the analogue of Haskell types are
 agents. A Haskell type class is a set of Haskell types; a role is a
 set of agents that play the role. I would like to explore where
@@ -2369,7 +2369,7 @@ projection of a certain session on a certain agent matches a certain role,
 which the agent implements.
 
 In summary, the vague and informal intuition that a Haskell type is
-sometimes like an agent led us to the proposal of specifying global
+sometimes like an agent, led us to the proposal of specifying global
 interactions in agent-oriented programming languages in terms of sessions.
 %Moreover, it seems reasonable to expect that a precise link between these
 %session and the roles proposed in the previous section can be found.
@@ -2395,22 +2395,23 @@ Using abstraction, identify key data types, actions and patterns of
 interaction and transpose them into appropriate algebraic data types, roles
 and sessions.
 
-The first step is to establish the problem that needs to be solved identify
-the role structure, which include the roles and the main relationships
+The first step is to establish the problem that needs to be solved, identify
+the role structure which include the roles and the main relationships
 between them. When you start defining the relationships between roles you
 have to identify the operations associated to each of the roles. After
 identifying the operations you need further refinement in finding the
 actual types of the messages exchanged in an operation as well as the
 succession of the operation. Let's see how this is done for the Calculator
-example.
+example:
 
 First, we establish the problem we want to solve. In this case we would
 like to evaluate some arithmetic expressions. Then, we identify the role
-structure needed to support our endeavour. In this case we are going to use
-one type of agent to perform binary operations, and another type of agent
-will coordinate the process and integrate the results conform to the rules
-of expression evaluation. So far, our program contains two roles: Caculator
-and BinaryCalc, as depicted in \autoref{fig:c-roles}.
+structure needed to support our endeavour. In this case, we are going to
+use one type of agent to perform binary operations, and another type of
+agent will coordinate the process and integrate the results, ensuring they
+conform to the rules of expression evaluation. So far, our program contains
+two roles: Caculator and BinaryCalc, as depicted in \autoref{fig:c-roles}.
+
 \begin{figure}\footnotesize % <<<
 \begin{verbatim}
 
@@ -2449,7 +2450,7 @@ simpAL~\cite{DBLP:conf/oopsla/RicciS11,DBLP:conf/oopsla/RicciS12}, that
 supports organisational structure, types and type
 checking~\cite{DBLP:conf/promas/RicciS12}. SimpAl draws inspiration from
 the Agent and Artifacts model~\cite{DBLP:conf/atal/RicciVO07} and from the
-Jason programming language, which is based on the Belief, Desire, Intention
+
 model. SimpAL is conceived as an extension to the Java object oriented
 programming language with a separate agent abstraction layer.
 
@@ -2470,20 +2471,20 @@ a task is defined by a set of parameters and a set of optional attributes
 (understand, goal, pre-attributes).
 
 SimpAL roles are organised in a slightly different manner compared to the
-AF-Raf's session model. In AF-Raf sessions provide a blueprint for
-interaction between agents, which can be seen as a kind of protocol
-prescribing the agent communication. In simpAL organisation models are used
-to define organisation types, that bring together related roles and
+AF-Raf's session model. In AF-Raf, sessions provide a blueprint for
+interaction between agents which can be seen as a kind of protocol
+prescribing the agent communication. In simpAL, organisation models are used
+to define organisation types that bring together related roles and
 artifact in coherent units named workspaces. Organisation types are
 implemented by concrete organisations. SimpAL organisation types do not put
-any constraint on the order in which interactions between agents occur, as
-AF-Raf session types do, instead they simply group together related roles
+any constraints on the order in which interactions between agents occur, as
+AF-Raf session types do. Instead, they simply group together related roles
 and artifacts working in a similar way to the object oriented programming
 interfaces.
 
-A number of static type checks are performed. At the role level it is
-checked that for each task type there exists at least one plan, and for
-each plan it's checked that the type of the sent messages are only the ones
+A number of static type checks are performed; at the role level a check is
+undertaken that for each task type there exists at least one plan, and
+further that for each plan, the type of the sent messages are only the ones
 defined in the task type. Also it's checked that the assignment of tasks
 corresponds to the task types defined in the role, and that the types of
 the messages sent to an agent correspond to that the agent can understand.
@@ -2499,16 +2500,16 @@ artifact implementation. On the agent side are checked errors regarding
 artifact operations and its observable state. For each action in the plan
 there must be a matching operation in the artifact's interface.  Likewise,
 for each update belief statement regarding an artifact property there must
-exist a matching observable property in the usage interface. On the
-environment side is checked that the artifact templates match the
-corresponding usage interfaces. First, checks are performed to ascertain
+exist a matching observable property in the usage interface. The
+environment side is checked to ensure the artifact templates match the
+corresponding usage interfaces. Checks are performed to ascertain
 that for each operation declared in the interface there exists an
-implementation in the template, also for any of the observable properties
+implementation in the template, and also for any of the observable properties
 in the template there exists a declaration in the corresponding interface
 with a compatible type.
 
 At the organisation level it is checked that each workspace, artifact, and
-agent types declared in an organisational model is actually implemented in
+agent types declared in an organisational model are actually implemented in
 the implementation of the organisation.
 % >>>
 
@@ -2520,24 +2521,25 @@ interactions and verify their correctness. They were used for automatic
 generation of self-monitoring agent systems implemented in Jason. The
 solution suggested was to generate a monitor agent that checks at runtime
 that the ongoing conversation is correct conform to the global session
-type. In this context, global session types are viewed as states, on which
+type. In this context, global session types are viewed as states on which
 several transition steps are possible. Transitions occur with each
 successfully sent message.
 
 In order to be able to generate the agent monitor, the developer needs to
 provide Prolog rules to define global session types, to specify possible
 transitions to different states upon message sending, and to specify the
-message content types. As well, a number of changes to the code of the
+message content types. In addition, a number of changes to the code of the
 participating agents need to be done to support the integration with the
 monitor agent.
 
-There's only one monitor agent that keeps track of all messages and checks
-if there exists a new state that can be reached from the current state. If
-the transition is possible the monitor agent allows the sending action by
-acknowledging it to the sending agent. If such a transition is not
-possible the protocol fails and there's no possibility of self recovery.
-The developer has to change either the agent code or the global session
-type's specification in order to fix the error.
+Only one monitor agent keeps track of all messages and checks if there
+exists a new state that can be reached from the current state. If the
+transition is possible the monitor agent allows the sending action by
+acknowledging it to the sending agent. If such a transition is not possible
+the protocol fails and there's no possibility of self recovery.  The
+developer has to change either the agent code or the global session type's
+specification in order to fix the error.
+
 % >>>
 
 \subsubsection{ALPHA} % <<<
@@ -2546,7 +2548,7 @@ as a run-time construct dates back to 2005\cite{Collier_arole-based}. An
 ALPHA agent is able to play multiple roles and be aware of them at
 run-time. The role construct, also called a role template, consists of a
 variable named role identifier, a set of commitment rules, that defines the
-behaviour, and a set of trigger conditions, that cause the activation of
+behaviour, and a set of trigger conditions that cause the activation of
 the role. Each instance of a role template has to have a unique role
 identifier. A mechanism for inheritance of roles is provided in the form of
 a possibility to  extend the agent behaviour by adding more commitment
@@ -2554,7 +2556,7 @@ rules and trigger conditions.  Also, a mechanism for composition and
 aggregation of roles is outlined.
 
 However, there is no infrastructure to support the location and enactment
-of roles at run-time, and also there is no mechanism to model the
+of roles at run-time, and there is also no mechanism to model the
 interaction between roles.
 % >>>
 
@@ -2563,14 +2565,15 @@ The 3APL programming language\cite{DBLP:conf/aose/DastaniRHDM04} has a
 formal proposal to include roles as first order constructs. An agent role
 is seen as a set of behaviour rules, expected objectives, and information
 resources. An agent can assume multiple roles at a time, but only one of
-them can actually be active, from here the distinction between role
-enactment and role activation. A subset of consistent role, which do not
-contradict each other, are grouped together in agent types. At the end role
-have not been introduced in 3APL, and the decision was carried further to
+them can actually be active; this is the distinction between role enactment
+and role activation. A subset of consistent roles, which do not contradict
+each other, are grouped together in agent types. At the end, the role has
+not been introduced in 3APL, and the decision was carried further to
 2APL\cite{DBLP:journals/aamas/Dastani08}, 3APL's successor, where modules
 are used as a substitute for roles. We argued that modules and roles have
 different functionalities within a programming language, and both are
 useful construct that cannot be reduced one to another.
+
 % >>>
 %Roles and norms for programming agent organisations. Tinnemeier 2009
 % >>>
@@ -2844,7 +2847,7 @@ would print the string `test' to the console.
 
 Each {\it Rule\/} has a query\slash condition and a body, which is usually
 a composed statement. The formula is obtained by connecting several
-predicates with boolean operators; that is, there are no explicit
+predicates with boolean operators; that is to say, there are no explicit
 quantifiers. Both {\it IFormula\/} and {\it IPlanStep\/} are interfaces
 reused from the AgentFactory infrastructure. AF-Raf adds a few new classes
 that implement {\it IPlanStep\/}; in other words, AF-Raf has some new
@@ -2873,7 +2876,7 @@ Friend}(\text{\tt``Alice''})$.
 
 %\todo{Abstract grammar for sessions.}
 
-Each SessionDeclaration introduce a new session, by specifying its name, a
+Each SessionDeclaration introduces a new session, by specifying its name, a
 list of type variables, and a list of AgentRoles, and a list of session
 steps. The session steps coul be simple, nested (maybe and repeat), or
 choice session steps.
@@ -4144,7 +4147,7 @@ The most significant of these is perhaps the interpreter
 \textit{RafAgent} extends the Agent Factory's AbstractAgent for a smooth
 integration with Agent Factory. \textit{RafAgent} creates all the necessary
 data structures: the Belief Base, Query Engine, Actions, Sensors, Static
-Type Checker, the list with all available roles, the roles played by the
+Type Checker, the list with all available roles, and the roles played by the
 current agent. Then a number of auxiliary methods are defined such as:
 \textbf{make}, which instantiates the agent with the
 name, design, initial beliefs and the agent management service; the
@@ -4189,7 +4192,7 @@ implementation of the Contract Net interaction protocol.
 
 This section expands the Calculator example trying to illustrate AF-Raf's
 functionality, and focusing more on types, roles and sessions. It also
-demonstrate the benefit of operations in automatising the process of
+demonstrates the benefit of operations in automatising the process of
 message passing.
 
 \subsection{Types, Roles, and Sessions} % <<<
@@ -4240,7 +4243,7 @@ subtraction of two \textit{expression} <value>, a multiplication of two
 \textit{expression} <value>, or a division of two \textit{expression}
 <value>.
 
-There are two roles defined: the \textit{Calculator} and the
+There are two defined roles: the \textit{Calculator} and the
 \textit{BinaryCalc}. The \textit{Calculator} is responsible with evaluating
 expressions to a value of type \textit{value}, while the
 \textit{BinaryCalc} is responsible with executing binary operations on
@@ -4361,9 +4364,9 @@ implementations are using only rules.
 
 Let's look first at the BinaryCalcInt in \autoref{fig:bcalc-rules}. There
 are four actions defined, for each basic binary operation: intadd(x, y),
-intsub(x, y), intmul(x, y), intdiv(x, y). Each binary operation has
-associated a rule. Each rule says that upon receiving a message asking to
-perform that particular operation on a pair of integers, the agent should
+intsub(x, y), intmul(x, y), intdiv(x, y). Each binary operation has an
+associated rule. Each rule says that upon receiving a message asking to
+perform a particular operation on a pair of integers, the agent should
 first delete the message, compute the result, and send the result back to
 the requester.  Each message contains the sender's details, the details
 regarding the operation to be executed, and the pair of integers on which
@@ -4435,14 +4438,14 @@ agent ExprCalc(binaryCalc : BinaryCalc<value>) : Calculator<value> {
 \end{figure} % >>>
 % >>>
 \subsection{Discussion} % <<<
-As a concluding remark, our notions of roles and sessions overlap in great
-amount with the multiparty session types developed in the context of
-$\pi$-calculus. Our sessions correspond to their global types, while our
-roles correspond with their local type projections. The benefits of session
-types are well known, they facilitate communication safety, progress and
-fidelity~\cite{dblp:conf/popl/hondayc08}. Additionally, in AF-Raf, roles and
-sessions offer a structured global perspective regarding the social level
-of the multiagent systems.
+As a concluding remark, AF-Raf's roles and sessions overlap in great amount
+with the multiparty session types developed in the context of
+$\pi$-calculus. AF-Raf sessions correspond to their global types, while
+AF-Raf roles correspond with their local type projections. The benefits of
+session types are well known, they facilitate communication safety,
+progress and fidelity~\cite{dblp:conf/popl/hondayc08}. In addition, in
+AF-Raf, roles and sessions offer a structured global perspective regarding
+the social level of the multiagent systems.
 
 Moreover, designing our roles similar to Haskell type classes empowers them
 with the great flexibility of polymorphism~\cite{DBLP:conf/popl/WadlerB89}.
@@ -4461,11 +4464,11 @@ pattern of interaction very similar to the Contract Net Interaction
 Protocol~\cite{DBLP:journals/tc/Smith80a} developed in the early
 '80s, to which it adds rejection and confirmation communicative acts. One
 agent, the initiator, takes the manager role, the other agents are the
-participants. The manager has a task that wants to be performed by the
+participants. The manager has a task that needs to be performed by the
 participants in the most effective way possible. The effectiveness is
 considered with regard to some specified properties like the price, the
-time to completion, or the fair distribution of tasks. The participants
-have to respond before a given deadline with either a refuse or a proposal.
+time until completion, or the fair distribution of tasks. The participants
+have to respond before a given deadline with either a refusal or a proposal.
 Negotiation continues with the participants that proposed, from which one,
 several or no agent is chosen to actually perform the task. The chosen
 agents have to inform about the execution of the task indicating either the
@@ -4553,12 +4556,12 @@ the owner which sends to the seller a message of type \textit{request}. The
 seller advance the \textit{request} message further to each of the two
 buyer agents. For each of the buyers, there are defined two possible
 scenarios: (1) The buyer sends a message of type \textit{bid} to the
-seller, then the seller sends a \textit{win}() message, finally, the buyer
+seller, then the seller sends a \textit{win}() message. Finally, the buyer
 sends a message of type \textit{result} to the seller; (2) The buyer sends
 a message of type \textit{bit} to the seller, then the seller sends a
 \textit{lose}() message to the buyer, after which no further action is
-required from the buyer. The last message exchange, that conclude the
-BidRound session, and is the same for both scenarios, is a \textit{result}
+required from the buyer. The last message exchange, that concludes the
+BidRound session is the same for both scenarios, and is a \textit{result}
 message sent by the seller to the owner.
 
 \begin{figure}\footnotesize % <<<
@@ -4608,12 +4611,12 @@ the belief base. First, it adds a LastTask belief identifying the task and
 the session to the belief base, then returns the result of computing the
 bid offer using the internal action \textit{mul}.
 
-Operation \textit{commit} has two guards that check wheter the last task is
-an \textit{increase} or a \textit{decrease}. So upon receiving a
-\textit{win}() message if the last task is an \textit{increase}, it returns
+Operation \textit{commit} has two guards that check whether the last task is
+an \textit{increase} or a \textit{decrease}. Upon receiving a
+\textit{win}() message, if the last task is an \textit{increase}, it returns
 a \textit{success} message containing the result of the internal action
 \textit{inc} and deletes the LastTask belief from the belief base. If the last
-task is a \textit{decrease} it returns a \textit{success} message
+task is a \textit{decrease}, it returns a \textit{success} message
 containing the result of the internal action \textit{dec} and also deletes
 the LastTask belief from the belief base.
 
@@ -4643,8 +4646,8 @@ The ContractNetSeller agent, implementing the Seller role, needs to know
 two agents that implement the Buyer role in order to comply to the BidRound
 session specifications. ContractNetSeller provides an implementation for
 the operation \textit{sell}. Upon receiving a message, which is statically
-checked to conform the type defined in the Seller role, in this case a
-\textit{request} message, is doing the following:
+checked to conform to the type defined in the Seller role (in this case a
+\textit{request} message), it is doing the following:
 
 \begin{itemize}
 \item Checks which bid offer is better. In order to do this, it compares the
@@ -4662,7 +4665,7 @@ Interaction Protocol provided by the developers of the Jason interpreter
 in~\cite{bordini2007programming}.
 
 We will look at the code implementing the initiator agent and at one of the
-participants, more exactly, we will look at one of the participant agents
+participants, to be more precise, we will look at one of the participant agents
 that are able to submit an offer.
 
 \begin{figure}\footnotesize % <<<
@@ -4773,13 +4776,13 @@ answers, choose the winner, and announce the result.
 \end{figure} % >>>
 
 \autoref{fig:jasonInP} illustrate the plans of the initiator agent. The
-first plan is to start the protocol. It first set the state to proposal,
+first plan is to start the protocol. It first sets the state to proposal,
 finds all the participants, sends the call for proposals message, and sets
 the deadline to 4 seconds. The second plan, @r1, is to receive proposals.
 Plan @r2 is to receive refusals. Plan @lc1 introduces a new goal
 \textit{!contract}. The first action of this plan is to change the protocol
-state from proposal to contract, then finds and sorts all the offers,
-chooses the best one and announces the results.
+state from proposal to contract, then find and sort all the offers,
+choose the best one, and announce the results.
 
 %\begin{figure}\footnotesize % <<<
 %\begin{verbatim}
@@ -4804,11 +4807,11 @@ chooses the best one and announces the results.
 Different programming languages have individual strengths and weaknesses.
 This is one reason why specific implementations have distinct approaches to
 the problems and focus on different aspects. While Jason implementation
-focusses more on the timeline, and breaks down the protocol into successive
-states, the AF-Raf implementation focusses more on breaking down the
+focuses more on the timeline and breaks down the protocol into successive
+states, the AF-Raf implementation focuses more on breaking down the
 interaction into patterns.
 
-The AF-Raf role construct encapsulates related social behaviour, the
+The AF-Raf role construct encapsulates related social behaviour; The
 session construct models the pattern of interaction, while the algebraic
 data type provide an elegant way of representing the concepts related to
 the problem to be solved. 
@@ -4817,7 +4820,7 @@ the problem to be solved.
 % >>>
 \chapter{Readability and Usability Survey}\label{ch:survey} % <<<
 
-This chapter investigates further our research question:
+This chapter further investigates the research question:
 \textit{Is the readability and usability of an agent oriented programming
   language improved by the addition of the role and session programming
   constructs as well as by the algebraic data types and the type checking
@@ -4826,26 +4829,33 @@ functionality?} I have designed a survey (\autoref{app:SurveyA},
 alternative implementations of the Contract Net Interaction Protocol
 presented in~\autoref{sc:contractNet}.
 
-There are two different types of questionnaires. Type A presents questions
+There are two different types of questionnaires: Type A presents questions
 related to the AF-Raf implementation, and type B presents questions related
-to the Jason implementation. The structure of the questionnaires is as
-follows:
+to the Jason implementation. Both questionnaires have the same structure:
 
 \begin{itemize}
-    \item A piece of code is presented, then the person interviewed is asked
-to describe what does he/she think that that piece of code does. Then it is asked to evaluate how difficult it was to understand that piece of code on a scale from 1 (very easy) to 5 (very hard). This is done first for a warming up
-simpler piece of code, and then for all the individual programs described
-in~\autoref{sc:contractNet}.
-    \item Lastly, the interviewed person is asked to evaluate how difficult
+    \item The first part: Each question presents piece of code, and the
+      person interviewed is asked to describe what does he/she think that
+      that piece of code does. They are then  asked to evaluate how
+      difficult it was to understand that piece of code on a scale from 1
+      (very easy) to 5 (very hard). The first question represents a warming
+      up exercise as the code is simpler than the rest of the programs. The
+      following questions introduce the interviewee to all the individual
+      programs described in~\autoref{sc:contractNet}.
+
+    \item Second, the interviewee is asked to evaluate how difficult
       it was to put together all related pieces of code (on an identical
-      scale from 1 to 5)
+      scale from 1 to 5).
+
+    \item Last part, the identification questions.
+
 \end{itemize}
 
 The questionnaires were randomly administered to 22 mature masters
 students (21 males, 1 female), of which only 20 have answered all the
 questions. There were 10 students (1 female, 9 males) who were assigned the
 questionnaire type A and 10 students (all males) who were assigned
-the questionnaire type B. All of them had previous experience in a payed
+the questionnaire type B. All of them had previous experience in a paid
 programmer job, and were proficient in at least two programming languages,
 mostly Object Oriented programming languages. None of them had any
 experience with Agent Oriented Programming languages, except one who
@@ -4860,9 +4870,9 @@ questionnaires show the following results:
 \begin{itemize}
     \item the average rating for the difficulty of the first question was
       3.2 in Af-Raf, similar to the 3.5 in Jason. 
-    \item for the individual agent implementations the difficulty in
+    \item for the individual agent implementations, the difficulty in
       understanding was rated to 2.93 in AF-Raf compared to 4 in Jason.
-    \item for the understanding of how the individual pieces of code fit
+    \item for understanding how the individual pieces of code fit
       together the evaluation was 2.9 in AF-Raf and 3.9 in Jason.
 \end{itemize}
 
@@ -4873,15 +4883,13 @@ questionnaires show the following results:
 \label{fig:Survey}
 \end{figure} % >>>
 
-Figure~\ref{fig:Survey} shows a graphical representation of the data.
-
-As the results show, there is a marked decrease in difficulty and a
-significant increase in readability and understanding in programs written
-in AF-Raf compared to the ones written in Jason. This supports and verify
-our hypothesis that the readability and usability of an agent oriented
-programming language is improved by the addition of the role and session
-programming constructs as well as by the algebraic data types and the type
-checking functionality.
+Figure~\ref{fig:Survey} shows a graphical representation of the results.
+There is a marked decrease in difficulty and a significant increase in
+readability and understanding in programs written in AF-Raf compared to the
+ones written in Jason. This supports and verify our hypothesis that the
+readability and usability of an agent oriented programming language is
+improved by the addition of the role and session programming constructs as
+well as by the algebraic data types and the type checking functionality.
 
 % >>>
 \chapter{Results and Evaluation}\label{ch:results} % <<<
@@ -4891,7 +4899,7 @@ sociological Role Theory, will improve the readability and usability of
 Agent Oriented Programming languages}, and the corresponding objective:
 
 \begin{itemize}
-  \item (1a) \textit{to develop a novel Agent Oriented Programming language that employs roles, based on the existing Agent Factory framework, in order to show how the concept of role maps to a programming language construct in the specific context of Agent Oriented Programming} 
+  \item (1a) \textit{to develop a novel Agent Oriented Programming language that employs roles based on the existing Agent Factory framework, in order to show how the concept of role maps to a programming language construct in the specific context of Agent Oriented Programming} 
 \end{itemize}
 were recurrently addressed within this thesis. 
 
@@ -4913,18 +4921,18 @@ the functionality of the Agent Oriented Programming languages} and its
 corresponding objectives were addressed as follows.
 
 \begin{itemize}
-  \item (2a) \textit{The first objective, to explore the analogy between Agent
+  \item (2a) \textit{The first objective "to explore the analogy between Agent
     Oriented Programming languages and Functional Programming languages,
     identify valuable concepts and incorporate them into our new agent
-  oriented programming language.} was addressed in (\autoref{sec:roles}).
-\item (2b) \textit{The second objective, to investigate the similarity between
+  oriented programming language"}, was addressed in (\autoref{sec:roles}).
+\item (2b) \textit{The second objective "to investigate the similarity between
     the agent interaction in multiagent systems and the communication
     patterns defined as multiparty session types, and show how the
     multiparty session types can be integrated into our new agent oriented
-  programming language.} was addressed in (\autoref{sec:sessions})
-\item (2c) \textit{The third objective is to develop a consistent type system,
+  programming language"}, was addressed in (\autoref{sec:sessions})
+\item (2c) \textit{The third objective "to develop a consistent type system,
     and design the first agent oriented programming language to introduce
-  type checking.} was addressed in (\autoref{sec:types})
+  type checking"}, was addressed in (\autoref{sec:types})
 \end{itemize}
 
 Figure~\ref{fig:newFunct} presents what mainstream programming concepts we've applied to AF-Raf and the corresponding new functionality added to AF-Raf
@@ -4937,8 +4945,8 @@ new functionalities: (1) \textbf{roles} that represent a blueprint for
 related behaviour, (2) \textbf{sessions} that represent a pattern for agent
 communication, and the (3) \textbf{type system} and \textbf{type checking},
 which also increase the efficiency of the programming language by
-increasing its reliability (errors caught early means less errors at
-runtime which in turn leads to more reliability).
+increasing its reliability, (errors caught early mean less errors at
+runtime, which in turn leads to more reliability).
 
 The efficiency could be further tested to include evaluation of the speed,
 algorithmic efficiency and resource consumption.
@@ -4967,7 +4975,7 @@ particularly helpful for the agent oriented programming languages:
 (2)~roles, which constrain how particular agents interact, and
 (3)~sessions, which describe slices of the global interactions in the agent
 system. Together, these \emph{language features} support organisational
-concepts, which are so far discussed mostly in the literature on
+concepts, which are so far discussed mostly in literature on
 agent-oriented methodologies and frameworks.
 
 The ultimate aim is to provide programmers with a wider set of options at
@@ -4987,7 +4995,7 @@ identified. AF-Raf has types, including algebraic data types, which are
 used to constrain the content of the messages. It has type checking, a
 feature very useful in identifying programming errors early on. It has
 roles, which organise agent behaviour, promoting encapsulation and reuse.
-It also have sessions, which further organise agent interaction at a higher
+It also has sessions, which further organise agent interaction at a higher
 level, namely at the social level. A case study is used to illustrate the
 results. The AF-Raf programming language is properly formalised, with its
 grammar specified in EBNF format and its operational semantics is defined,
