@@ -1,0 +1,417 @@
+%{{{ latex prelude
+\documentclass{article}
+\usepackage{xcolor}
+
+\def\fb#1{\textbf{#1}}
+
+\newcommand{\todo}[1]{[\textcolor{red}{TODO}: #1]}
+
+\newenvironment{them}{\noindent\begingroup\color{blue}}{\endgroup\par}
+
+\title{Correction Report}
+\author{Claudia Grigore}
+% latex prelude }}}
+
+\begin{document}
+\maketitle
+
+%{{{ introduction
+\section{Introduction}
+
+\todo{Continue here.}
+%}}} introduction
+%{{{ corrections
+\section{Corrections and Clarifications}
+
+\begin{them}
+General comments
+\end{them}
+
+
+\end{them}
+\begin{them}
+
+\begin{them}
+-- Title
+The title of the thesis is very general and refers neither to the introduction of roles, sessions and type checking into the agent oriented programming paradigm, nor to the AF-Raf programming language which has been actually extended. A more precise title is required.
+\end{them}
+
+
+\begin{them}
+-- Structure of the thesis
+A “Background” chapter is missing; many background notions are scattered throughout the thesis, whereas they should be included in a chapter, just after the Introduction, as customary.
+\end{them}
+
+\begin{them}
+-- Structure of the thesis
+One chapter devoted to the “Implementation” of AF-Raf (with link to an online prototype) and one
+devoted to “Experiments” should be added before the Conclusions.
+\end{them}
+
+\begin{them}
+The thesis has four main objectives: 1a: integration of roles as first class entities into the AOP paradigm in general, and into AF-Raf in particular; 2a: exploration of the analogy between AOP and functional languages; 2b: integration of multiparty session types into the AOP paradigm in general, and into AF-Raf in particular; 2c: integration of type checking capabilities into the AOP paradigm in general, and into AF-Raf in particular.
+The structure of the thesis should reflect these four objectives and should allow the reader to clearly identify in which point of the thesis each objective is dealt with. In particular, for objectives 1a, 2b, 2c a high level description of the design of how the objective can be achieved within a programming language in general, a detailed description of how it was achieved in AF-Raf, a discussion of the implementation details, a well-motivated evaluation of the benefits of having achieved that objective, and a careful comparison with the related work should be provided.
+One way to structure the thesis in such a way that each objective is suitably covered might be to
+devote a complete chapter (or more) to each objective. Another way might be to keep the structure
+of the thesis close to the current one, but clarifying with proper sections and subsections which
+objective is being dealt with in each chapter.
+The format and graphical layout of the thesis should be homogeneous and should help the reader in
+easily finding the titles of sections and subsections. Examples should not be provided inline with the text.
+\end{them}
+\begin{them}
+-- Evaluation and comparison with the related work
+The evaluation of the proposed approach is not strongly supported; the comparison with the related work is somehow limited. Whatever the structure of the thesis, a well motivated evaluation and a deep comparison with the related work should be provided for each of the four objectives of the
+thesis.
+
+\end{them}
+\begin{them}
+-- High level description, syntax and semantics of the proposed AF-Raf language
+The high level description of AF-Raf might should include the description of the AF-Raf architecture of one single agent (which are the AF-Raf agent's components? For example, a rule library, a belief library, a session library, a set of execution stacks...) and of the control flow, or interpreter, working on them. If some AF-Raf components are defined at the MAS level rather than at the agent level, the AF-Raf MAS architecture and control flow should be given as well.
+An explanation of how the basic features of agents (autonomy, situatedness, proactivity, reactivity, sociality) are supported by the language should be provided. The relationships between AF-Raf agents and the environment where they live should be explained: how are the agents' sensors and effectors implemented? Syntax and semantics should be correct and consistent throughout the entire thesis. In the detailed comments below a subset of the technical errors found are highlighted and discussed, but the revision made by the candidate should go beyond the specific points raised by the reviewers.
+\end{them}
+\begin{them}
+-- Fluency
+The thesis requires a revision by a native English speaker, as many typos and involved sentences were found which should be removed in the final version.
+\end{them}
+
+Detailed Comments
+-- Chapter 1
+Internal Examiner: External Examiner:
+Dr Eleni Mangina Prof. Viviana Mascardi
+Signature: Signature:
+Page 1:
+The usual references to the definition of agents and MASs are the pre-2000 papers by Wooldridge
+and Jennings (KES 1995) or by Jennings, Sycara and Wooldridge (JAAMAS 1998): reference 46 does
+not seem appropriate.
+Page 2:
+Stating that the set of standards by FIPA is “nascent” is debatable, as it is very old.
+Reference to AgentFactory is very old, something more recent should be used instead (if it exixts).
+ZEUS is a dead project, maybe it is not worth citing.
+The methodologies cited in the middle of the page are almost old: additional more recent references
+should be looked for and added.
+“This relatively new paradigm” is debatable, as AOP is more than 20 years old.
+Page 3:
+Reference 47 does not meet the standard for bibliographic items.
+References in page 3 are all very old (for example [32]: there are more recent proposals for metamodels
+that might be added); this section of the thesis should be revised in order to be more up-todate.
+Page 5:
+The statement that the analogy between AOP and Functional Programming was never explored is not
+correct; although it was a preliminary work, the paper by Solimando and Traverso published in
+DALT2012 dealt with this issue.
+Page 6:
+The sentence “and design the first AOP language to introduce type checking” is not clear, and the
+third objective of the thesis should be better analyzed in the thesis.
+-- Chapter 2
+This chapter should be entitled “Background” and all the background knowledge needed to
+understand the thesis' contribution should be moved here. The description of AgentFactory, the BDI
+model and AgentSpeak(L), SimpAL, JADE, the global and session types theories and their projection,
+ALPHA, etc, should be all introduced here at a level of detail which makes the thesis self-contained
+(for a computer scientist).
+Important topics to introduce in the Background section are agent communication principles and
+languages. Asynchronous message passing using high level ACL like FIPA ACL and KQML should be
+introduced here in order to better motivate the “Functions as Messages” analogy in page 47, putting
+it into the right context.
+In a similar way, what are ontologies, how they are used in JADE and in other agent programming
+frameworks, and the usefulness of having an ontology to support interoperability among
+heterogeneous agents should be introduced here, in order to contextualize the statements in page
+48.
+Page 8:
+Again, the “relatively” new paradigm is debatable.
+Page 11:
+What does it mean that roles are negotiated on a constant basis?
+Page 12:
+The idea of role oriented programming should be better detailed and explained, as it is closely
+connected with objective 1a of this thesis. Powerjava is cited as both an extension of OOP, and as an
+extension of AOP: a better understanding and synthesis of this language is needed. ROPE dates back
+to 1999; more recent proposals should be mentioned.
+Internal Examiner: External Examiner:
+Dr Eleni Mangina Prof. Viviana Mascardi
+Signature: Signature:
+Page 14:
+Gaia, MASE, AALAADDIN are AOSE methodologies, whereas they are described in the thesis as
+“organizational frameworks”; this point should be better expanded.
+The sentence “there is no full support at the language level for the organization of agents” is not
+cleas, as it refers to AOSE methodologies and not to AOP languages. Also, at least Gaia and MASE
+include the notions of role and protocol, so they do provide a support to these concepts. A recent
+extension to MASE, o-MASE (JAOSE 2010), integrates organizational concepts. It might be interesting
+for the thesis.
+Page 20:
+Table 2.1 should be improved and integrated with other features (rows) and other related proposals
+(columns) in order to provide a complete comparison between AF-Raf and other languages.
+-- Chapter 3
+This chapter should provide a gentle introduction to AF-Raf; it should start with
+1. a clear description of the AF-Raf architecture based on a graphical representation of the
+architecture's modules and sub-modules and
+2. a clear description of the control flow among the architecture's component described at least in a
+graphical way and in structured natural language; maybe a high level pseudo-code could also help as
+done for example in http://www.upv.es/sma/teoria/teoria_ag/bdi%20agents%20from%20theoryRao.pdf,
+Section 5.
+In the architecture, the relationships between the modules and the thesis' objectives should be
+made explicit, as it would be natural to find a module for supporting each of the objectives 1a, 2b,
+2c.
+Short and easy to understand fragments of code could be used to exemplify each element of the
+language: examples for beliefs, rules, roles, messages, actions, (software) sensors, (software)
+effectors, sessions, and so on, should be provided.
+Page 23:
+Figure 3.1, 5.2 and 5.3 all show the code of an agent but they look very different from one another,
+making the reader confused. The caption of each example and code fragment in the thesis should
+clearly state which feature of the language is going to be shown. All the examples should be
+consistent. If examples showing the same features are different, their captions should briefly explain
+why.
+In the second line of Figure 3.1 a conjunction is used in the rule head, but in page 31 only queries
+without conjunctions are shown and the use of “&” as “and” is not explained.
+Page 24:
+Figure 3.2 is useless as it is a sub-fragment of Figure 3.1
+Which is the relationship between the sentence “executing an action means executing a piece of
+associated Java code” and the situatedness of agents? Are all these Java actions a form of effectors
+operating in the environment? How does sensing take place?
+Page 26:
+The sentence “then provides a list containing entries of the form: message type....”, referring to
+sessions, should be associated with a BNF giving the syntax of a session. From the definition of
+session given in page 26, the reader understands that a session is a plain sequence of messages. This
+is probably false as in page 73 the maybe, repeat, oneof operators - introduced nowhere in the thesis
+- are mentioned in the BNF, anyway page 24 gives a limitative view of sessions (or global types,
+meaning the global description of the interaction protocol) as they usually include operators for
+representing choices, interleaving, concatenation of sessions, synchronization. In the Background
+section a detailed description of formalisms for global types and multiparty session types should be
+Internal Examiner: External Examiner:
+Dr Eleni Mangina Prof. Viviana Mascardi
+Signature: Signature:
+provided, together with a comparison of their expressive power and the expressive power of the
+formalism supported by AF-Raf. One of the best papers on the topic is, in the reviewers' opinion,
+http://arxiv.org/pdf/1203.0780.pdf. The candidate should acquire a good understanding of its
+content. Each operator of some standard formalism for global types (or session types, depending on
+the global vs local perspective) should be put in relation with the AF-Raf operator offering the same
+functionality. When the reader reaches page 26, the notion of global and session types should be
+already clear, and their integration into AF-Raf should be given in a correct and complete way.
+Dynamic and static checks are shortly mentioned in page 26: the topic should be dealt with in more
+detail as type checking is one of the thesis' objectives.
+Page 27:
+Section 3.1.1. should be moved in the Background.
+Page 29:
+The sentence “an update corresponds to a change in the environment” seems not appropriate for a
+section dealing with the Belief Base. A section dealing with the representation and management of
+the Environment in AF-Raf should be added.
+Page 30:
+For sake of clarity, syntax and semantics should be kept separate; in page 30 the focus seems to be
+on the syntax; the sentence “funtion symbols can represent both values and typing information”
+deals with the semantics and should be moved in a more suitable place.
+Page 31:
+The sentence “a query is a sentence in some logic” is too general, as this section should provide the
+AF-Raf syntax, not a general introduction of what queries are. The candidate should state in which
+logic AF-Raf queries are expressed, which operators can appear in a query, and should provide
+examples demonstrating many different forms of queries, not just “atomic” ones.
+Page 32:
+Ground terms are defined in page 36, they should be defined here.
+Is parallel substitution really necessary? Since beliefs are ground, maybe it is not. Please check.
+Page 34:
+The candidate should introduce types only after the syntax of each element of the language has been
+fully explained. For example, at the end of the page, the candidate refers to the type of messages,
+but messages were not introduced before.
+Given the definitions 3.1 and 3.2 in page 30, the only type for a belief is “string”. Since each belief has
+type string, it is difficult to understand this section about typing.
+The “Bad scenario” description is too involved: “tau”s should be substituted with concrete messages
+in order to make this example clearer.
+Page 35:
+Section 3.3.1 deals with semantics; it should be better to state when the discussion about the syntax
+has completed and when the thesis moves into semantics issues.
+Page 36:
+Remark 2: ground terms are trees of strings; what are nonground terms? It should be also noted that
+this remark deals with syntax inside a section dealing with semantics.
+Sentence “Typically, in mathematical logic,....” seems a complex way to define predicates and
+formulae, which might be given for granted as they belong to the background of any computer
+scientist.
+Page 37:
+Remark 3 highlights a problem: which is the candidate's solution to it?
+Page 38:
+Is Proposition 1 an original outcome of this thesis? If yes, it would be worth emphaising that result. If
+not, references should be provided.
+Page 39:
+Internal Examiner: External Examiner:
+Dr Eleni Mangina Prof. Viviana Mascardi
+Signature: Signature:
++(2,3) should be +(2(), 3()); is this syntax actually used in AF-Raf agents' programs?
+Page 41:
+“Those operations are: ....” has been already said in page 40.
+In section 3.3.3 it would be interesting to see the actual implementation of type checking, not a
+general one.
+Page 47:
+The analogy “Functions as messages” should be better clarified, as it seems not to fit the common
+understanding that messages are structured according to the speech act theory, their content is
+written in some high level language, maybe using an ontology to give meaning to terms appearing
+there, and communication is asynchronous.
+The relationships between the role Calculator, CalculatorInt and BinaryCalcInt should be better
+explained. A diagram might help.
+Page 48:
+“Messages” do not meet the state of the art format (see FIPA ACL, KQML): a motivation should be
+provided for that.
+The syntax f::a->b was never introduced before.
+The paragraph about the analogy between an ontology for arithmetic expression and the algebraic
+data types is debatable, as the need to define an ontology fo arithmentic expressions just to be sure
+that the content of a message adheres to their syntax is not so evident. Ontologies are used for other
+purposes than giving a syntax of a language or defining the types of expressions. Dealing with their
+purposes and usage in the “Background” section should help.
+Page 49:
+“In contrast, the earlier role....” should be explained before.
+2APL's PG rules and R-rules have not been defined before.
+Page 50:
+The statement “In summary, the vague and informal intuition...” is not supported by evidence in the
+thesis.
+Page 51:
+The statement “such a list is very similar to the global types that describe multiparty sessions...” is
+debatable, as global types represent patterns of interaction among agents which are much more
+complex than sequences.
+Page 52:
+The problem of projecting global types to session types has been widely discussed in the literature
+(see for example Section 4 of http://arxiv.org/pdf/1203.0780.pdf, but also
+http://arxiv.org/pdf/1304.1902.pdf and http://mrg.doc.ic.ac.uk/publications/the-scribble-protocollanguage/invited.pdf).
+References should be given and a comparison should be drawn.
+Page 53:
+The Calculator Example should start with an explanation of why a calculator is an agent w.r.t. its
+autonomy, situatedness, reactivity, proactivity, sociality.
+Page 55 and 56:
+The code fragments would be more readable if they had inline comments explaining each line of
+code; if they become too large, they can be splitted into more figures.
+Page 58:
+The concluding remark “our notions of roles and sessions overlap in great amount with the
+multiparty session types developed in the context of the Pi-calculus” should be supported by a more
+precise comparison of the two formalisms carried out based on the operators they support, on their
+expressiveness (do they define regular languages of sequences over messages? context free
+languages? ...), on the definition of “well-formedness” (not all global/session types are well formed),
+on the assumptions for using them (determinism, no cover channels, and so on). The comparison
+with the projection operator should be carried out as well.
+Internal Examiner: External Examiner:
+Dr Eleni Mangina Prof. Viviana Mascardi
+Signature: Signature:
+Page 60:
+This section should be moved in the Backgroud; despite the title, the comparison is missing: a careful
+comparison should be provided.
+Page 61:
+What does sentence “In AF-Raf sessions provide which can be seen as a kind of protocol...” mean?
+-- Chapter 4
+This chapter should provide more details on AF-Raf w.r.t. chapter 3, that should be a gentle and high
+level introduction to AF-Raf. However, all the components of the AF-Raf language should be
+introduced in Chapter 3: in Chapter 4, they should just be discussed in more detail.
+Page 66:
+A link to the reference implementation of AF-Raf mentioned in the second line is required
+What is an “agent design”? Was the “AgentDeclaration” already introduced as a component of the
+agent's code?
+Page 67:
+A standard style for BNF should be used, with “::=” and “|” in the body for separating the various
+forms that the body may have; inline comments might be added to enhance clarity; each definition
+(left hand side of the “=”) should be used somewhere and each definition used in the body of a BNF
+rule (right hand side of “=”), should be provided in the grammar. If recursive definitions are
+interpreted in the standard inductive way, they should have a base; if they are interpreted
+coinductively as they define infinite terms, this should be made explicit.
+RoelDeclaration is not used
+Type is defined recursively but it has no base
+TypeDeclaration is not used
+TypeBranch uses a syntax different from the other rules
+AgentDeclaration is not used
+Function is not defined
+QualifiedId is defined recursively but it has no base
+Iformula and IplanStep are not defined
+Page 70:
+Stating that an Array is a Role seems not very close to the common intuition of what a Role is.In the
+common understanding of agents' roles, a role may be “Seller”, “Buyer”, “Initiator”, “Participant”,
+“Bidder” (see FIPA Protocols, for example) and so on. It is difficult to imagine an autonomous agent
+playing the role “Array”.
+Page 72:
+References to LL(k) grammars and ANTLR should be given.
+Page 77:
+“keyword new must be followed by the category of the name....”: what do you mean by category of
+the name?
+Sentence “The core of AF-Raf performs no hidden actions” should be moved (and better explained)
+at the beginning of Chapter 3, when the AF-Raf architecture and control flow are described.
+Page 78:
+If syntactic sugaring and desugaring are really relevant for the proposed approach, they should
+appear in the AF-Raf control flow in the beginning of Chapter 3 and should be introduced there,
+leaving the detailed description in Chapter 4: in general, syntactic sugar does not seem so relevant
+(it's just sugar, and as such it could be avoided) so it is not easy to uderstand why it deserves 12
+pages.
+Page 90:
+Internal Examiner: External Examiner:
+Dr Eleni Mangina Prof. Viviana Mascardi
+Signature: Signature:
+“Unknown” is named “undefined” in page 92, and only in page 93 there is the statement that
+unknown and undefined are the same thing. Please choose one and use it only.
+Page 92:
+The thesis states that “agents states themselves are triples”, but in definition 4.31 they are 6-tuples.
+Such mismatches raise a lot of confusion and a careful consistency check should be performed.
+Page 93:
+“The sets AgentCode and GroundTerm are not defined here, but the definitions can be easily
+recovered from the abstract grammar”: it should be better to define them here, instead.
+Page 95:
+“P is the agent code”: the syntax of the agent code should be necessarily given since this component
+is not clearly defined; in the reviewers' opinion, P is not the actual agent code (meant as the program
+for an agent) but it is the “agent's execution state”, which is a deeply different concept and requires
+suitable data structures. The agent's code does not (usually) change, whereas its excecution state
+does. Referring to the BDI model, the the AF-Raf agent code can be compared with the plan library +
+the belief base, whereas the execution state can be compared with the intentions set. Given the use
+of P made in page 95 and the following ones, P seems closer to the BDI intentions set. A clarification
+on the syntax and data structures used for P is required, as well as a coherence check in all the
+transition rules.
+Page 96:
+Rule 4.44 states that we can discard I, O and d in the transition. It should be stated where these
+components come into play again.
+Page 97:
+The premise of rule 4.46 states that an agent's program is a set (since the “belongs to P” operator is
+used), which is not consistent with the definition of “agent code” (for example, the agent code
+contains “include” statements and it should include the beliefs as well). The consequence of the rule
+states that an agent program is some data structure providing a “;” operator. This is in contrast with
+stating that an agent's program is a set, as sets – as usually defined - do not support a “;” operator,
+whatever the meaning of “;” is. The rule also states that the agent's code changes over time, which
+supports the reviewers' understanding that P is not the agent code, but the agent execution state.
+Finally, the premise of the rule introduces a degree of nondeterminism. How are rules actually
+selected for execution by the interpreter? A selection function should be introduced, as in
+AgentSpeak(L). The candidate can stick to one specific selection function for her implementation, but
+in the transition rules the choice of the program rule to use should be demanded to a selection
+function, for generality,
+Page 99:
+Rule 4.52: what does “X:=P” mean? Whatever P, assigning an agent code (which is a set?) to a
+variable is not clear.
+Rule 4.53:
+An agent code can be a belief? As Gamma t is a belief.
+“Here the scope Gamma is used as a substitution”: which are the relationship with the notion of
+m.g.u.? Why not using the standard notation for substitutions and m.g.u.s?
+Page 100:
+In the premise of rule 4.55 one element is missing as it should be a 6-tuple
+“The result of this substitution is the code that the newly created agent should execute, and is a set
+of rules”: in Rule 4.53 it seemed that the agent code could include beliefs as well. Also, the
+comments to page 97 raise doubts that P can be a set because of the “;” operator.
+Page 101:
+“AF-Raf actions .. are an escape hatch from AF-Raf's semantics”: AF-Raf actions should have a clean
+semantics as well; if it is not the case, a strong motivation should be provided.
+Internal Examiner: External Examiner:
+Dr Eleni Mangina Prof. Viviana Mascardi
+Signature: Signature:
+“If something is not possible to do in pure AF-Raf, ..., than an AF-Raf should be used”: what does this
+sentence mean?
+Page 102:
+The action send.... : what about the action receive? Is it supported? Which is its semantics?
+Page 104:
+Where was DetSessionState defined?
+In Rule 4.63, sid binds to nothing
+Page 106:
+Oneof, maybe, repeat have been introduced and explained nowhere.
+-- Chapter 5
+The chapter shows the implementation of the same MAS in both Jason and AF-Raf, but no systematic
+comparison is provided.
+-- Chapter 6
+Page 118:
+The sentence “AF-Raf implementations tend to be shorter and more readable” is subjective. It may
+be true, but nothing in the thesis supports this statement.
+The sentence “The AF-Raf programming language is properly formalised .... and its operational
+semantics is defined...” is not completely true in the current version of the thesis: this is rather an
+objective that should be achieved in the revised one.
+Page 119:
+The sentence “...improved the efficiency...” is subjective. Maybe it is true, but nothing in the thesis
+supports this statement.
+The internal (Dr Eleni Mangina) and the external examiner (Prof. Viviana Mascardi) will be
+responsible for ensuring that the corrections specified in the report have been properly made
+within the next 12 months from the date of the viva voce exam.
+Internal Examiner: External Examiner:
+Dr Eleni Mangina Prof. Viviana Mascardi
+Signature: Signature:
+%}}} corrections
+\end{document}
