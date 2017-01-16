@@ -1,6 +1,7 @@
 %{{{ latex prelude
 \documentclass{article}
 \usepackage{xcolor}
+\usepackage{hyperref}
 
 \def\fb#1{\textbf{#1}}
 
@@ -28,57 +29,82 @@ General comments
 \end{them}
 
 
-\end{them}
-\begin{them}
-
 \begin{them}
 -- Title
+
 The title of the thesis is very general and refers neither to the introduction of roles, sessions and type checking into the agent oriented programming paradigm, nor to the AF-Raf programming language which has been actually extended. A more precise title is required.
 \end{them}
-
+Fixed
 
 \begin{them}
 -- Structure of the thesis
+
 A “Background” chapter is missing; many background notions are scattered throughout the thesis, whereas they should be included in a chapter, just after the Introduction, as customary.
 \end{them}
+Fixed
 
 \begin{them}
--- Structure of the thesis
-One chapter devoted to the “Implementation” of AF-Raf (with link to an online prototype) and one
-devoted to “Experiments” should be added before the Conclusions.
+One chapter devoted to the “Implementation” of AF-Raf (with link to an online prototype) and one devoted to “Experiments” should be added before the Conclusions.
 \end{them}
+Fixed
+
 
 \begin{them}
 The thesis has four main objectives: 1a: integration of roles as first class entities into the AOP paradigm in general, and into AF-Raf in particular; 2a: exploration of the analogy between AOP and functional languages; 2b: integration of multiparty session types into the AOP paradigm in general, and into AF-Raf in particular; 2c: integration of type checking capabilities into the AOP paradigm in general, and into AF-Raf in particular.
 The structure of the thesis should reflect these four objectives and should allow the reader to clearly identify in which point of the thesis each objective is dealt with. In particular, for objectives 1a, 2b, 2c a high level description of the design of how the objective can be achieved within a programming language in general, a detailed description of how it was achieved in AF-Raf, a discussion of the implementation details, a well-motivated evaluation of the benefits of having achieved that objective, and a careful comparison with the related work should be provided.
-One way to structure the thesis in such a way that each objective is suitably covered might be to
-devote a complete chapter (or more) to each objective. Another way might be to keep the structure
-of the thesis close to the current one, but clarifying with proper sections and subsections which
-objective is being dealt with in each chapter.
-The format and graphical layout of the thesis should be homogeneous and should help the reader in
-easily finding the titles of sections and subsections. Examples should not be provided inline with the text.
+One way to structure the thesis in such a way that each objective is suitably covered might be to devote a complete chapter (or more) to each objective. Another way might be to keep the structure of the thesis close to the current one, but clarifying with proper sections and subsections which objective is being dealt with in each chapter.
 \end{them}
+\todo{clarify this}
+
+\begin{them}
+The format and graphical layout of the thesis should be homogeneous and should help the reader in easily finding the titles of sections and subsections.
+\end{them}
+Fixed. The table of contents lists all the titles of sections and subsections
+
+\begin{them}
+ Examples should not be provided inline with the text.
+\end{them}
+\todo{I have no idea what you mean!}
+
 \begin{them}
 -- Evaluation and comparison with the related work
+
 The evaluation of the proposed approach is not strongly supported; the comparison with the related work is somehow limited. Whatever the structure of the thesis, a well motivated evaluation and a deep comparison with the related work should be provided for each of the four objectives of the
 thesis.
-
 \end{them}
+Fixed. Evaluation
+\todo{comparison with related work}
+
 \begin{them}
 -- High level description, syntax and semantics of the proposed AF-Raf language
+
 The high level description of AF-Raf might should include the description of the AF-Raf architecture of one single agent (which are the AF-Raf agent's components? For example, a rule library, a belief library, a session library, a set of execution stacks...) and of the control flow, or interpreter, working on them. If some AF-Raf components are defined at the MAS level rather than at the agent level, the AF-Raf MAS architecture and control flow should be given as well.
-An explanation of how the basic features of agents (autonomy, situatedness, proactivity, reactivity, sociality) are supported by the language should be provided. The relationships between AF-Raf agents and the environment where they live should be explained: how are the agents' sensors and effectors implemented? Syntax and semantics should be correct and consistent throughout the entire thesis. In the detailed comments below a subset of the technical errors found are highlighted and discussed, but the revision made by the candidate should go beyond the specific points raised by the reviewers.
 \end{them}
+Partly fixed.
+\todo{clarify interpreter}
+
+\begin{them}
+An explanation of how the basic features of agents (autonomy, situatedness, proactivity, reactivity, sociality) are supported by the language should be provided. The relationships between AF-Raf agents and the environment where they live should be explained: how are the agents' sensors and effectors implemented? 
+\end{them}
+\todo{clarify this}
+
+\begin{them}
+Syntax and semantics should be correct and consistent throughout the entire thesis. In the detailed comments below a subset of the technical errors found are highlighted and discussed, but the revision made by the candidate should go beyond the specific points raised by the reviewers.
+\end{them}
+Fixed. Syntax and semantics are correct and consistent.
+
 \begin{them}
 -- Fluency
+
 The thesis requires a revision by a native English speaker, as many typos and involved sentences were found which should be removed in the final version.
 \end{them}
+Fixed.
 
+\begin{them}
 Detailed Comments
+
 -- Chapter 1
-Internal Examiner: External Examiner:
-Dr Eleni Mangina Prof. Viviana Mascardi
-Signature: Signature:
+
 Page 1:
 The usual references to the definition of agents and MASs are the pre-2000 papers by Wooldridge
 and Jennings (KES 1995) or by Jennings, Sycara and Wooldridge (JAAMAS 1998): reference 46 does
@@ -101,6 +127,10 @@ DALT2012 dealt with this issue.
 Page 6:
 The sentence “and design the first AOP language to introduce type checking” is not clear, and the
 third objective of the thesis should be better analyzed in the thesis.
+\end{them}
+
+
+\begin{them}
 -- Chapter 2
 This chapter should be entitled “Background” and all the background knowledge needed to
 understand the thesis' contribution should be moved here. The description of AgentFactory, the BDI
@@ -124,9 +154,6 @@ The idea of role oriented programming should be better detailed and explained, a
 connected with objective 1a of this thesis. Powerjava is cited as both an extension of OOP, and as an
 extension of AOP: a better understanding and synthesis of this language is needed. ROPE dates back
 to 1999; more recent proposals should be mentioned.
-Internal Examiner: External Examiner:
-Dr Eleni Mangina Prof. Viviana Mascardi
-Signature: Signature:
 Page 14:
 Gaia, MASE, AALAADDIN are AOSE methodologies, whereas they are described in the thesis as
 “organizational frameworks”; this point should be better expanded.
@@ -138,28 +165,25 @@ for the thesis.
 Page 20:
 Table 2.1 should be improved and integrated with other features (rows) and other related proposals
 (columns) in order to provide a complete comparison between AF-Raf and other languages.
+\end{them}
+
+
+\begin{them}
 -- Chapter 3
 This chapter should provide a gentle introduction to AF-Raf; it should start with
 1. a clear description of the AF-Raf architecture based on a graphical representation of the
 architecture's modules and sub-modules and
 2. a clear description of the control flow among the architecture's component described at least in a
 graphical way and in structured natural language; maybe a high level pseudo-code could also help as
-done for example in http://www.upv.es/sma/teoria/teoria_ag/bdi%20agents%20from%20theoryRao.pdf,
+done for example in
+
+\url{http://www.upv.es/sma/teoria/teoria_ag/bdi\%20agents\%20from\%20theoryRao.pdf},
 Section 5.
-In the architecture, the relationships between the modules and the thesis' objectives should be
-made explicit, as it would be natural to find a module for supporting each of the objectives 1a, 2b,
-2c.
-Short and easy to understand fragments of code could be used to exemplify each element of the
-language: examples for beliefs, rules, roles, messages, actions, (software) sensors, (software)
-effectors, sessions, and so on, should be provided.
+In the architecture, the relationships between the modules and the thesis' objectives should be made explicit, as it would be natural to find a module for supporting each of the objectives 1a, 2b, 2c.
+Short and easy to understand fragments of code could be used to exemplify each element of the language: examples for beliefs, rules, roles, messages, actions, (software) sensors, (software) effectors, sessions, and so on, should be provided.
 Page 23:
-Figure 3.1, 5.2 and 5.3 all show the code of an agent but they look very different from one another,
-making the reader confused. The caption of each example and code fragment in the thesis should
-clearly state which feature of the language is going to be shown. All the examples should be
-consistent. If examples showing the same features are different, their captions should briefly explain
-why.
-In the second line of Figure 3.1 a conjunction is used in the rule head, but in page 31 only queries
-without conjunctions are shown and the use of “&” as “and” is not explained.
+Figure 3.1, 5.2 and 5.3 all show the code of an agent but they look very different from one another, making the reader confused. The caption of each example and code fragment in the thesis should clearly state which feature of the language is going to be shown. All the examples should be consistent. If examples showing the same features are different, their captions should briefly explain why.
+In the second line of Figure 3.1 a conjunction is used in the rule head, but in page 31 only queries without conjunctions are shown and the use of “\&” as “and” is not explained.
 Page 24:
 Figure 3.2 is useless as it is a sub-fragment of Figure 3.1
 Which is the relationship between the sentence “executing an action means executing a piece of
@@ -174,9 +198,6 @@ is probably false as in page 73 the maybe, repeat, oneof operators - introduced 
 meaning the global description of the interaction protocol) as they usually include operators for
 representing choices, interleaving, concatenation of sessions, synchronization. In the Background
 section a detailed description of formalisms for global types and multiparty session types should be
-Internal Examiner: External Examiner:
-Dr Eleni Mangina Prof. Viviana Mascardi
-Signature: Signature:
 provided, together with a comparison of their expressive power and the expressive power of the
 formalism supported by AF-Raf. One of the best papers on the topic is, in the reviewers' opinion,
 http://arxiv.org/pdf/1203.0780.pdf. The candidate should acquire a good understanding of its
@@ -227,9 +248,6 @@ Page 38:
 Is Proposition 1 an original outcome of this thesis? If yes, it would be worth emphaising that result. If
 not, references should be provided.
 Page 39:
-Internal Examiner: External Examiner:
-Dr Eleni Mangina Prof. Viviana Mascardi
-Signature: Signature:
 +(2,3) should be +(2(), 3()); is this syntax actually used in AF-Raf agents' programs?
 Page 41:
 “Those operations are: ....” has been already said in page 40.
@@ -280,14 +298,12 @@ expressiveness (do they define regular languages of sequences over messages? con
 languages? ...), on the definition of “well-formedness” (not all global/session types are well formed),
 on the assumptions for using them (determinism, no cover channels, and so on). The comparison
 with the projection operator should be carried out as well.
-Internal Examiner: External Examiner:
-Dr Eleni Mangina Prof. Viviana Mascardi
-Signature: Signature:
 Page 60:
 This section should be moved in the Backgroud; despite the title, the comparison is missing: a careful
 comparison should be provided.
 Page 61:
 What does sentence “In AF-Raf sessions provide which can be seen as a kind of protocol...” mean?
+\end{them}
 -- Chapter 4
 This chapter should provide more details on AF-Raf w.r.t. chapter 3, that should be a gentle and high
 level introduction to AF-Raf. However, all the components of the AF-Raf language should be
@@ -330,9 +346,6 @@ leaving the detailed description in Chapter 4: in general, syntactic sugar does 
 (it's just sugar, and as such it could be avoided) so it is not easy to uderstand why it deserves 12
 pages.
 Page 90:
-Internal Examiner: External Examiner:
-Dr Eleni Mangina Prof. Viviana Mascardi
-Signature: Signature:
 “Unknown” is named “undefined” in page 92, and only in page 93 there is the statement that
 unknown and undefined are the same thing. Please choose one and use it only.
 Page 92:
@@ -382,9 +395,6 @@ comments to page 97 raise doubts that P can be a set because of the “;” oper
 Page 101:
 “AF-Raf actions .. are an escape hatch from AF-Raf's semantics”: AF-Raf actions should have a clean
 semantics as well; if it is not the case, a strong motivation should be provided.
-Internal Examiner: External Examiner:
-Dr Eleni Mangina Prof. Viviana Mascardi
-Signature: Signature:
 “If something is not possible to do in pure AF-Raf, ..., than an AF-Raf should be used”: what does this
 sentence mean?
 Page 102:
@@ -407,11 +417,5 @@ objective that should be achieved in the revised one.
 Page 119:
 The sentence “...improved the efficiency...” is subjective. Maybe it is true, but nothing in the thesis
 supports this statement.
-The internal (Dr Eleni Mangina) and the external examiner (Prof. Viviana Mascardi) will be
-responsible for ensuring that the corrections specified in the report have been properly made
-within the next 12 months from the date of the viva voce exam.
-Internal Examiner: External Examiner:
-Dr Eleni Mangina Prof. Viviana Mascardi
-Signature: Signature:
 %}}} corrections
 \end{document}
