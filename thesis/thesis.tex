@@ -1397,6 +1397,7 @@ sets of ground terms that cannot be defined using algebraic data types.
 % >>>
 \chapter{Multiparty Session Types} % <<<
 
+\marginpar{
 Plan:
 \begin{itemize}
 \item intro: what multiparty async session types are good for
@@ -1405,6 +1406,49 @@ Plan:
 \item global types: projection
 \item conclusion: which bits we'll use
 \end{itemize}
+}
+
+The design of AF-Raf is partly inspired
+  by the multiparty asynchronous session types
+  of Honda, Yoshida, and Carbone~\cite{DBLP:journals/jacm/HondaYC16}.
+More specifically,
+  AF-Raf sessions correspond to global types,
+  and AF-Raf roles correspond to local types.
+The correspondence is informal.
+Nevertheless,
+  to understand AF-Raf sessions and roles,
+  it helps to have some background on multiparty asynchronous session types.
+
+Session types were developed as a foundation for typing communication.
+They sprung from the theory community around $\pi$-calculus,
+  but they are now making inroads in practice.
+For example, popular languages like Scala
+  now have implementations of session types.
+
+What follows is a condensed summary of \cite{DBLP:journals/jacm/HondaYC16}.
+We begin by introducing a small programming language (\autoref{sec:pi}),
+  continue by presenting
+    local types (\autoref{sec:mast-local})
+    and global types (\autoref{sec:mast-global}),
+  and we finally conclude by explaining how session types affected the
+    design of AF-Raf (\autoref{sec:mast-vs-afraf}).
+
+
+\section{Multiparty, asynchronous $\pi$-calculus}
+\label{sec:pi}
+
+\section{Local Types}
+\label{sec:mast-local}
+
+\section{Global Types}
+\label{sec:mast-global}
+
+\section{Connection to AF-Raf}
+\label{sec:mast-vs-afraf}
+
+\section{Old}
+
+
 
 The next research area we draw inspiration from is the area of multiparty
 session types, developed at the intersection of communications systems and
