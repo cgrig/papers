@@ -773,42 +773,70 @@ systems~\cite{DBLP:conf/esaw/RiemsdijkHJ09}.
 Agent communication languages were designed to provide the agent with the 
 means to exchange information and knowledge\cite{}
 
-Agent communication languages are not programming languages. They offer a 
+Agent communication languages are not programming languages. They offer a
 library of communication acts to be used by the agents, but it is the MAS
-programmer's responsibility to create code that actually processes the messages.
+programmer's responsibility to create code that actually processes the
+messages.
 
-KQML\cite{} and FIPA ACL\cite{} are two representative agent communication 
-languages. They share many similarities regarding their syntax, and their core 
-concepts and principles. They are both based on speech act theory, and they 
-include conversational protocols.
+KQML\cite{} and FIPA ACL\cite{} are two representative agent communication
+languages. They share many similarities regarding their syntax, and their
+core concepts and principles. They are both based on speech act theory, and
+they include conversational protocols. Both of them provide support for
+using external ontologies.
 
-KQML is designed on three levels: content layer, communication layer, and 
+KQML is designed on three levels: content layer, communication layer, and
 message layer. The content layer contains the actual content of the message
-which could be written in any format or language, as KQML ignores this part 
-of the message. The communication layer contains information about the sender, 
-receiver and also a unique identifier for the conversation. The message 
-layer's function is to identify the protocol to be used as well as supplying 
-a speech act label to associate with the message.
+which could be written in any format or language, as KQML ignores this part
+of the message. The communication layer contains information about the
+sender, receiver and also a unique identifier for the conversation. The
+message layer's function is to identify the protocol to be used as well as
+supplying a speech act label to associate with the message.
 
-FIPA ACL\cite{}, also refered to as the Agent Interaction Protocol Suite is syntactically 
-structured on two levels: 1) transport and encoding level and 2) message structure 
-level. Semantically the message structure level is composed of two 
-parts: the context of the message and the content of the message. The context 
-includes the interaction processes and the comunication acts, while the content 
-is represented by the content language and the content onltology.
+FIPA ACL\cite{}, also refered to as the Agent Interaction Protocol Suite is
+syntactically structured on two levels: 1) transport and encoding level and
+2) message structure level. Semantically the message structure level is
+composed of two parts: the context of the message and the content of the
+message. The context includes the interaction processes and the
+communication acts, while the content is represented by the content language
+and the content ontology.
 % >>>
 
 \section{Ontologies} % <<<
 
-An ontology represents a set of concepts their definitions and their inter-relationships\cite{}. 
-Ontologies can represent the knowledge related to a specific or generic domain, 
-and they are in constant evolution. Their purpose is to improve communication 
-through shared understanding. Agents may use ontologies to help with the knowledge 
-sharing and exchange part of the communication. A number of languages to define 
-ontologies exist, among them the web ontology language OWL is the most notable.
+Ontologies define the structure of knowledge in a given domain, and are
+typically used for knowledge representation. An ontology represents a set
+of concepts, their definitions and their inter-relationships~\cite{}. 
 
-Using an ontology implies that the ontology is available to all agents. The  ontology 
-has to be well maintained and has to evolve along with the necessary changes.
+Ontologies can represent the knowledge related to a specific or generic
+domain, and they are in constant evolution. Their purpose is to improve
+communication through shared understanding. Agents may use ontologies to
+help with the knowledge sharing and exchange part of the communication. A
+number of languages to define ontologies exist, among them the web ontology
+language OWL is the most notable.
+
+Using an ontology implies that the ontology is available to all agents. The
+ontology has to be well maintained and has to evolve along with the
+necessary changes.
+
+%http://www.fipa.org/specs/fipa00086/XC00086C.html
+
+FIPA has an ontology service~\cite{} that implies a dedicated agent, the
+Ontology Agent, offers ontology services to the other agents. This includes
+searching for public ontologies, maintaining a set of public ontologies,
+translating between different ontologies, identifying common ontologies for
+agents that need to communicate.
+
+The are strong incentives to combine agents and ontologies, especially in
+situations where a variety of agents from different applications need have
+a shared understanding. One example would be the application development on
+the semantic web~\cite{}.
+
+%Agent-Oriented Programming with Underlying Ontological Reasoning
+
+But using ontologies is not always the best choice. First, you need an ontology,
+creating and maintaining an ontology takes time and resources. Second, you
+need an agent programming language that has the ability to process
+that type of ontologies. 
 % >>>
 
 % >>>
