@@ -1503,6 +1503,27 @@ We begin by introducing a small programming language (\autoref{sec:pi}),
 \section{Multiparty, asynchronous $\pi$-calculus}
 \label{sec:pi}
 
+Multiparty, asynchronous session types were originally introduced
+  in the context of a small programming language,
+    which is amenable to theoretical analysis.
+This small programming language
+  is a $\pi$-calculus with several extensions,
+  including sessions and buffers.
+The rest of the subsection presents this enriched $\pi$-calculus,
+  without assuming prior knowledge of the standard $\pi$-calculus.
+
+Several \emph{processes} communicate through \emph{channels}.
+The channels themselves are \emph{values}:
+  they can be created,
+  and they can themselves be communicated over (other) channels.
+In the particular flavour of $\pi$-calculus described here,
+  channels are created by establishing a session.
+To establish a session,
+  several processes need to coordinate,
+  and agree on the shared set of newly created channels.
+
+
+
 \section{Local Types}
 \label{sec:mast-local}
 
@@ -1511,6 +1532,11 @@ We begin by introducing a small programming language (\autoref{sec:pi}),
 
 \section{Connection to AF-Raf}
 \label{sec:mast-vs-afraf}
+
+TODO: say that $\pi$ is too high-level -- session creation
+
+TODO: say that $\pi$ is too low-level
+  -- no ADTs (though Fournet and Abadi), and no ???
 
 \section{Old}
 
