@@ -1513,14 +1513,55 @@ The rest of the subsection presents this enriched $\pi$-calculus,
   without assuming prior knowledge of the standard $\pi$-calculus.
 
 Several \emph{processes} communicate through \emph{channels}.
-The channels themselves are \emph{values}:
-  they can be created,
-  and they can themselves be communicated over (other) channels.
+Over channels, one can send \emph{messages},
+  which include integers, labels, and channels.
+Informally, one could think of a channel as a queue data structure:
+(1)~sending a value to a channel corresponds to pushing into the queue;
+(2)~receiving a value from a channel corresponds to popping from the queue;
+and
+(3)~sending a channel~$x$ over a channel~$y$ corresponds to
+  pushing the `object reference'~$x$ into the queue~$y$.
 In the particular flavour of $\pi$-calculus described here,
   channels are created by establishing a session.
 To establish a session,
   several processes need to coordinate,
   and agree on the shared set of newly created channels.
+\emph{Labels} are distinguished values that can be used in branching:
+  $\pi$-calculus has a statement similar to Java's {\tt switch}.
+
+
+\begin{figure} % <<<
+\begin{center}
+\begin{tabular}{lcll}
+  $P$ & $::=$ & $\bar{a}[2..n](\tilde{s}).P$ & session request
+  \\  & $\mid$ & $a[p](\tilde{s}).P$  & session accept
+  \\ & $\mid$  & $s!\langle\tilde{e}\rangle;P$ & send value
+  \\ & $\mid$ & $s?\langle\tilde{x}\rangle;P$ & receive value
+  \\ & $\mid$ & $s \triangleleft l; P$ & send label
+  \\ & $\mid$ & $s \triangleright \{l_i:P_i\}_{i\in I}$ & receive label
+  \\ & $\mid$ & $P_1|P_2$ & parallel composition
+  \\ & $\mid$ & def $D$ in $P$ & recursion
+  \\ & $\mid$ & $X\langle\tilde{e}\tilde{s}\rangle$ & process call
+  \\ & $\mid$ & $s :: \tilde{h}$ & message queue
+  \\
+  $e$ & $::=$ & $v \mid e_1 \land e_2 \mid \ldots$ & expression
+  \\
+  $v$ & $::=$ & $a \mid \text{true} \mid \text{false}$ & value
+  \\
+  $h$ & $::=$ & $l \mid \tilde{v} \mid \tilde{s}$ & message
+  \\
+  $D$ & $::=$ & $\{X_i(\tilde{x}_i\tilde{s}_i)=P_i\}_{i\in I}$
+    & declaration for recursion
+  \\
+  $s$ & & & channel
+  \\
+  $a$ & & & session
+\end{tabular}
+\end{center}
+\caption{Syntax of Multiparty, Asynchronous $\pi$-calculus}
+\label{fig:pi-calculus}
+\end{figure} % >>>
+
 
 
 
