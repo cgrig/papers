@@ -418,7 +418,7 @@ sections, and subsections that deal with them.
   \item Objective (1a) \textit{to develop a novel Agent Oriented Programming language that employs roles based on the existing Agent Factory framework, in order to show how the concept of role maps to a programming language construct in the specific context of Agent Oriented Programming} 
 \end{itemize}
 
-The background for objective (1a) is presented in ()
+The background for objective (1a) is presented in (\autoref{ch:aop}).
 The objective (1a) was achieved by designing (\autoref{sec:roles}),
 defining (\autoref{sec:langdef.syntax}, \autoref{sec:opsem}), and
 developing (\autoref{ch:casestudy}) roles in AF-Raf with consideration for
@@ -426,9 +426,8 @@ readability and usability. Syntactic sugar (\autoref{sec:sugar}) played an
 important role in achieving the desired level of readability and
 understanding.
 
-The results were evaluated through a number of case
-studies (\autoref{ch:casestudy}) and an end-user
-survey (\autoref{ch:survey}).
+The results were evaluated through a number of case studies
+(\autoref{ch:casestudy}) and an end-user survey (\autoref{ch:survey}).
 
 
 \begin{itemize}
@@ -438,9 +437,9 @@ survey (\autoref{ch:survey}).
   oriented programming language}
 \end{itemize}
 
-The background for (2a) was presented in (\autoref{})
+The background for (2a) was presented in (\autoref{ch:flang})
 Objective (2a) was addressed in (\autoref{sec:roles})
-Objective (2a) was  evaluated in (\autoref{})
+Objective (2a) was  evaluated in (\autoref{ch:casestudy})
 
 \begin{itemize}
 \item Objective (2b) \textit{To investigate the similarity between
@@ -450,14 +449,19 @@ Objective (2a) was  evaluated in (\autoref{})
   programming language}
 \end{itemize}
   
+The background for (2b) was presented in (\autoref{})
 Objective (2b) was addressed in (\autoref{sec:sessions})
+Objective (2b) was  evaluated in (\autoref{ch:casestudy})
 
 \begin{itemize}
 \item Objective (2c) \textit{To develop a consistent type system,
     and design the first agent oriented programming language to introduce
   type checking}
 \end{itemize}
+
+The background for (2c) was presented in (\autoref{})
 Objective (2c) was addressed in (\autoref{sec:types})
+Objective (2c) was  evaluated in (\autoref{ch:casestudy})
 
 An overview of how the objectives were addressed and achieved is given in
 (\autoref{ch:results})
@@ -1228,7 +1232,7 @@ read~\cite{DBLP:journals/csur/CardelliW85}.
 
 % >>>
 % >>>
-\chapter{Functional Languages} % <<<
+\chapter{Functional Languages}\label{ch:flang} % <<<
 
 "Programming in a functional language consists of building definitions and
 using the computer to evaluate expressions. The primary role of the
@@ -5197,19 +5201,34 @@ the functionality of the Agent Oriented Programming languages} and its
 corresponding objectives were addressed as follows.
 
 \begin{itemize}
-  \item (2a) \textit{The first objective "to explore the analogy between Agent
+  \item Objective (2a) \textit{To explore the analogy between Agent
     Oriented Programming languages and Functional Programming languages,
     identify valuable concepts and incorporate them into our new agent
-  oriented programming language"}, was addressed in (\autoref{sec:roles}).
-\item (2b) \textit{The second objective "to investigate the similarity between
+  oriented programming language}, 
+\end{itemize}
+  
+The objective (2a) was addressed in (\autoref{sec:roles}). Exploring the
+analogy between AOP languages and Functional Languages lead to
+incorporating Haskell type classes principles into AF-Raf roles. This idea
+played a fundamental role in achieving the objective (1a) as well. Moreover,
+achieving (2a) was the foundation to achieving (1a).
+
+\begin{itemize}
+\item Objective (2b) \textit{To investigate the similarity between
     the agent interaction in multiagent systems and the communication
     patterns defined as multiparty session types, and show how the
     multiparty session types can be integrated into our new agent oriented
-  programming language"}, was addressed in (\autoref{sec:sessions})
-\item (2c) \textit{The third objective "to develop a consistent type system,
-    and design the first agent oriented programming language to introduce
-  type checking"}, was addressed in (\autoref{sec:types})
+  programming language},
 \end{itemize}
+  
+  was addressed in (\autoref{sec:sessions})
+\begin{itemize}
+\item Objective (2c) \textit{To develop a consistent type system,
+    and design the first agent oriented programming language to introduce
+  type checking}, 
+  
+\end{itemize}
+  was addressed in (\autoref{sec:types})
 
 Figure~\ref{fig:newFunct} presents what mainstream programming concepts we've applied to AF-Raf and the corresponding new functionality added to AF-Raf
 based on this analogy. All new functionality was properly formalised in
