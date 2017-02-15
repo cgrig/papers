@@ -5174,7 +5174,7 @@ well as by the algebraic data types and the type checking functionality.
 % >>>
 \chapter{Results and Evaluation}\label{ch:results} % <<<
 
-Our first hypothesis, \textbf{that the integration of roles, based on
+The primary hypothesis, \textbf{that the integration of roles, based on
 sociological Role Theory, will improve the readability and usability of
 Agent Oriented Programming languages}, and the corresponding objective:
 
@@ -5194,10 +5194,13 @@ The results were evaluated through a number of case
 studies (\autoref{ch:casestudy}) and an end-user
 survey (\autoref{ch:survey}) that confirmed the initial hypothesis.
 
-The second hypothesis \textbf{that by applying concepts
+The secondary hypothesis \textbf{that by applying concepts
 that had been proved useful, within mainstream programming paradigms, to
 Agent Oriented Programming will improve the efficiency and increase
-the functionality of the Agent Oriented Programming languages} and its
+the functionality of the Agent Oriented Programming languages} forms the
+foundation for our primary hypothesis, as the implementation of roles is
+based on the identified analogies with Functional Programming, Multiparty
+Session Types and Typed Programming Languages. This hypothesis and its
 corresponding objectives were addressed as follows.
 
 \begin{itemize}
@@ -5208,7 +5211,7 @@ corresponding objectives were addressed as follows.
 \end{itemize}
   
 The objective (2a) was addressed in (\autoref{sec:roles}). Exploring the
-analogy between AOP languages and Functional Languages lead to
+analogy between AOP languages and Functional Languages led to
 incorporating Haskell type classes principles into AF-Raf roles. This idea
 played a fundamental role in achieving the objective (1a) as well. Moreover,
 achieving (2a) was the foundation to achieving (1a).
@@ -5221,17 +5224,22 @@ achieving (2a) was the foundation to achieving (1a).
   programming language},
 \end{itemize}
   
-  was addressed in (\autoref{sec:sessions})
+The objective (2b) was addressed in (\autoref{sec:sessions}). Exploring
+the analogy with multiparty session types led to designing AF-Raf sessions
+as role based communication patterns.
+
 \begin{itemize}
 \item Objective (2c) \textit{To develop a consistent type system,
     and design the first agent oriented programming language to introduce
   type checking}, 
   
 \end{itemize}
-  was addressed in (\autoref{sec:types})
+Objective (2c) was addressed in (\autoref{sec:types}). Exploring types led
+to two 
 
-Figure~\ref{fig:newFunct} presents what mainstream programming concepts we've applied to AF-Raf and the corresponding new functionality added to AF-Raf
-based on this analogy. All new functionality was properly formalised in
+Figure~\ref{fig:newFunct} presents what mainstream programming concepts
+applied to AF-Raf and the corresponding new functionality added to AF-Raf
+based on each analogy. All new functionality was properly formalised in
 (\autoref{sec:langdef.syntax} and \autoref{sec:opsem}).
 
 How were objectives (2a, 2b, 2c) achieved and the second hypotheses
