@@ -13,10 +13,12 @@
 \usepackage{hyperref}
 
 \newcommand{\eval}[1]{[\!\![#1]\!\!]}
+\newcommand*\llangle{\mathopen{\langle\!\langle}}
 \newcommand{\limp}{\Rightarrow}
 \newcommand{\on}[2]{\genfrac{}{}{0pt}{0}{\strut#1}{\strut#2}}
 \newcommand{\pmap}{\rightharpoonup}
 \newcommand{\rg}[1]{\marginpar{\tiny\raggedright\textcolor{blue}{\bf rg:} #1}}
+\newcommand*\rrangle{\mathclose{\rangle\!\rangle}}
 \newcommand{\todo}[1]{[\textcolor{red}{TODO}: #1]}
 
 \renewcommand{\rg}{}
@@ -1587,9 +1589,9 @@ In the particular flavour of $\pi$-calculus described here,
 To establish a session,
   several processes need to coordinate,
   and agree on the shared set of newly created channels.
-\emph{Labels} are distinguished values that can be used in branching:
+\emph{Labels} are distinguished messages
+  that can be used in branching on the receiving side:
   $\pi$-calculus has a statement similar to Java's {\tt switch}.
-
 
 \begin{figure} % <<<
 \begin{center}
@@ -1597,7 +1599,9 @@ To establish a session,
   $P$ & $::=$ & $\bar{a}[2..n](\tilde{s}).P$ & session request
   \\  & $\mid$ & $a[p](\tilde{s}).P$  & session accept
   \\ & $\mid$  & $s!\langle\tilde{e}\rangle;P$ & send value
-  \\ & $\mid$ & $s?\langle\tilde{x}\rangle;P$ & receive value
+  \\ & $\mid$ & $s?(\tilde{x});P$ & receive value
+  \\ & $\mid$  & $s!\llangle\tilde{e}\rrangle;P$ & send channels
+  \\ & $\mid$ & $s?((\tilde{x}));P$ & receive channels
   \\ & $\mid$ & $s \triangleleft l; P$ & send label
   \\ & $\mid$ & $s \triangleright \{l_i:P_i\}_{i\in I}$ & receive label
   \\ & $\mid$ & $P_1|P_2$ & parallel composition
@@ -1617,13 +1621,53 @@ To establish a session,
   $s$ & & & channel
   \\
   $a$ & & & session
+  \\
+  $l$ & & & label
 \end{tabular}
 \end{center}
 \caption{Syntax of Multiparty, Asynchronous $\pi$-calculus}
 \label{fig:pi-calculus}
 \end{figure} % >>>
 
+\autoref{fig:pi-calculus} gives the syntax.
+The first two statements are used for initiating a session.
+For example,
+\begin{align}
+  \bar{{\tt t}}[2,3]({\tt x},{\tt y}).P_1
+  \mid
+  {\tt t}[2]({\tt x},{\tt y}).P_2
+  \mid
+  {\tt t}[3]({\tt x},{\tt y}).P_3
+\end{align}
+initiates a session named~$t$.
+Afterwards,
+  execution continues with processes $P_1$, $P_2$, and~$P_3$
+  all having access to two newly created channels,
+    named ${\tt x}$~and~${\tt y}$.
 
+There are three types of messages that can be sent and received:
+  values, channels, and labels.
+The statements used for transmitting values and channels
+  are similar to each-other:
+\begin{align}
+  &s! \langle {\sf true} \rangle; P_1 \mid s? (x); P_2
+\\
+  &s! \llangle {\tt x},{\tt y} \rrangle; P_3 \mid s? ((s_x,s_y)); P_4
+\end{align}
+In the first example,
+  the execution will continue with $P_1$ in parallel
+    with a copy of $P_2$ that has the value `true' substituted
+    in place of variable~$x$.
+So, the value `true' is transmitted from one process to another.
+In the second example,
+  the channels {\tt x}~and~{\tt y} are transmitted.
+As before,
+  each free occurrence of $s_x$ in the body of~$P_4$ is replaced by~{\tt x};
+  and each free occurrence of $s_y$ is replaced by~{\tt y}.
+Notice that two channels ({\tt x}~and~{\tt y}) are sent simultaneously.
+Because groups of channels are essentially sessions,
+  the statement $s!\llangle\tilde{s}\rrangle$ is sometimes
+    called \emph{session delegation}.
 
 
 \section{Local Types}
