@@ -1361,7 +1361,7 @@ modules~\cite{dblp:conf/prima/dastanims08}.
 % >>>
 %\todo{how is this chapter related to one of my objectives}
 % >>>
-\chapter{Types} % <<<
+\chapter{Types}\label{ch:types} % <<<
 \subsection{Multi-Sorted Predicate Logic} \label{sec:multi-sorted} % <<<
 
 The starting point in designing a type system is the observation that most
@@ -5241,7 +5241,7 @@ survey (\autoref{ch:survey}) that confirmed the initial hypothesis.
 The secondary hypothesis \textbf{that by applying concepts
 that had been proved useful, within mainstream programming paradigms, to
 Agent Oriented Programming will improve the efficiency and increase
-the functionality of the Agent Oriented Programming languages} forms the
+the functionality of the Agent Oriented Programming languages} lays the
 foundation for our primary hypothesis, as the implementation of roles is
 based on the identified analogies with Functional Programming, Multiparty
 Session Types and Typed Programming Languages. This hypothesis and its
@@ -5254,11 +5254,12 @@ corresponding objectives were addressed as follows.
   oriented programming language}, 
 \end{itemize}
   
-The objective (2a) was addressed in (\autoref{sec:roles}). Exploring the
-analogy between AOP languages and Functional Languages led to
-incorporating Haskell type classes principles into AF-Raf roles. This idea
-played a fundamental role in achieving the objective (1a) as well. Moreover,
-achieving (2a) was the foundation to achieving (1a).
+The objective (2a) was addressed in (\autoref{sec:roles},
+\autoref{ch:flang}). Exploring the analogy between AOP languages and
+Functional Languages led to incorporating Haskell type classes principles
+into AF-Raf roles. Objective (2a) played a fundamental part in achieving
+objective (1a). More exactly, achieving objective (2a) laied the foundation
+to designing and implementing roles. 
 
 \begin{itemize}
 \item Objective (2b) \textit{To investigate the similarity between
@@ -5278,8 +5279,10 @@ as role based communication patterns.
   type checking}, 
   
 \end{itemize}
-Objective (2c) was addressed in (\autoref{sec:types}). Exploring types led
-to two 
+Objective (2c) was addressed in (\autoref{sec:types}, \autoref{ch:types}).
+Exploring types in the context of multisorted predicate logic, as well as
+algebraic data types led to the construction of a type system and a type
+checking mechanism both for messages and agents.
 
 Figure~\ref{fig:newFunct} presents what mainstream programming concepts
 applied to AF-Raf and the corresponding new functionality added to AF-Raf
