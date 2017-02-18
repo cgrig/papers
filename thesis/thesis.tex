@@ -2086,9 +2086,10 @@ environment, while a revision is exclusively a mental state change.
 In general, beliefs are sentences in some logic.  However, the focus of
 this work is on roles and organisations, not on beliefs.  Thus, AF-Raf uses
 a very simple language for beliefs\,---\,they are essentially trees whose
-nodes are labeled by strings: \begin{align} \tau &::= \nu(\tau,\ldots,\tau)
-&& \text{function term} \\ \nu  &::= {\rm string} &&\text{function symbol}
-\end{align} The number of arguments can be any non-negative integer.
+nodes are labeled by strings: \begin{align} \pi &::=
+\upsilon(\tau,\ldots,\tau) && \text{predicate formula} \\ \tau &::= \nu(\tau,\ldots,\tau)
+&& \text{function term} \\ \nu  &::= {\rm string-LID} &&\text{function symbol}
+\\ \upsilon  &::= {\rm string-UID} &&\text{predicate symbol} \end{align} The number of arguments can be any non-negative integer.
 
 Beliefs are ground predicate formulas. That means they do not contain any
 free variables.
@@ -2129,10 +2130,12 @@ satisfy the query.  Again, AF-Raf takes a simple approach, because its
 focus is not the belief base.  Each query is predicate formula, in other
 words a term that may contain variables, which are interpreted as patterns.
 
-\begin{align} \tau &::=
+\begin{align} \pi &::=
+\upsilon(\tau,\ldots,\tau) && \text{predicate formula} \\\tau &::=
 \nu(\tau,\ldots,\tau) && \text{function term} \\ \tau &::= x &&
-\text{variable term} \\ \nu  &::= {\rm string} &&\text{function symbol} \\
-x &::= {\rm string} && \text{variable symbol} \end{align} 
+\text{variable term} \\ \nu  &::= {\rm string-LID} &&\text{function symbol} \\
+x &::= {\rm string-LID} && \text{variable symbol} \\ \upsilon  &::= {\rm
+string-UID} &&\text{predicate symbol} \end{align} 
 
 The grammar rules (3.5) and (3.7) are the same as for beliefs.  Thus, any
 belief can be used as a query:  It stands for asking whether the belief
@@ -2315,10 +2318,12 @@ cannot be defined by sorts.
 
 \begin{proof}
 For~(1), we define a type~$\delta(\sigma)$ for each sort~$\sigma$ as
-follows: For each signature $\nu:(\sigma_1,\ldots,\sigma_n)\to\sigma$ we
-add a pattern $\nu(\delta(\sigma_1),\ldots,\delta(\sigma_n))$. It is easy
-to see, by structural induction, that the sort~$\sigma$ and the
-type~$\delta(\sigma)$ define the same sets of ground terms.
+follows: For each function signature
+$\nu:(\sigma_1,\ldots,\sigma_n)\to\sigma$ we add a pattern
+$\nu(\delta(\sigma_1),\ldots,\delta(\sigma_n))$ to the definition of
+type~$\delta(\sigma)$. It is easy to see, by structural induction, that the
+sort~$\sigma$ and the type~$\delta(\sigma)$ define the same sets of ground
+terms.
 
 For~(2), note that, given a fixed set of function signatures, the sets of
 ground terms defined by distinct sorts are disjoint. In the previous
@@ -4076,7 +4081,7 @@ type of state $(\Gamma,T,t)$ means that the current agent has
 scope~$\Gamma$, belief base~$T$, it \emph{finished executing} and the
 result was the ground term~$t$.  The conclusion says that the effect of the
 interpreter while executing $P_1;P_2$ could be to change the scope
-from~$\Gamma_0$ to~$\Gamma_2$ and the belief base from~$T_0$ to~$T_1$,
+from~$\Gamma_0$ to~$\Gamma_2$ and the belief base from~$T_0$ to~$T_2$,
 provided that the hypotheses are satisfied. The left-to-right order of the
 hypotheses is \emph{not} important. Any implementation of this rule,
 however, will have to treat hypotheses from left to right. The reason is
@@ -4185,7 +4190,7 @@ Initially, it is not known for which operation the call identifier $\it
 cid$ was created, and the call phase is $\tt notStarted$. More
 interestingly, the sender agent is not necessarily the agent~$\it aid$ that
 created the call identifier. It is possible for one agent to create a call
-identifier for another agent's used. Of course, the identifier would need
+identifier for another agent's use. Of course, the identifier would need
 to be transported in a message.
 
 The creation of session identifiers is similar to the creation of
@@ -4202,13 +4207,12 @@ call~identifiers.
 The created session identifier $\it sid$ is fresh. The session state is
 initialized as follows. The scope~$\Delta$ maps all formal arguments ${\it
 args}(n)$ to~$\bot$: it is initially unknown to which agents the session
-applies. The set~$Q$ is a singleton, containing the whole body of the
-session named~$n$.
+applies. ${\it body}(n)$ contains the whole body of the session named~$n$.
 
 AF-Raf actions consist of arbitrary Java code, and thus they are
 essentially an escape hatch from AF-Raf's semantics. If something is not
 possible to do in pure AF-Raf, such as writing to a file, then an AF-Raf
-could be used. It is up to the user not to misuse this great power.
+action could be used. It is up to the user not to misuse this great power.
 \begin{align}
 \frac
   {\on{A_1({\it aid})=\bigl(\Gamma_1,T_1,{\it action}(\ldots),I_1,O_1,d\bigr)}
@@ -4370,9 +4374,10 @@ of~$\Delta_2$, in which case ${\it sNext}(\ldots)$ evaluates to the empty
 set.
 
 The function $\it sUnfold$ handles the following constructs: {\bf oneof},
-{\bf maybe}, {\bf repeat}, and nested sessions.
+{\bf maybe}, {\bf repeat}, and nested sessions (which refer to opening a
+new session within the current one).
 \begin{align}
-{\it sUnfold} : {\rm SessionCode}\to({\rm SessionCode}\to\{0\})
+{\it sUnfold} : {\rm SessionCode}\to({\rm SessionCode}\pmap\{0\})
 \end{align}
 The following inference rule ensures that it is always possible to apply
 unfolding.
