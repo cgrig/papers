@@ -1937,11 +1937,11 @@ architecture.
 
 Beliefs in AF-Raf are regarded as logical terms and represented in the form
 of trees of strings. Beliefs are grouped together in a belief base that can
-be accessed by and updated by the agent. On the other hand, rules
-represent a means for accessing the belief base and also a way of
-triggering agent behaviour. Figure~\ref{fig:rule} illustrates a simple
-AF-Raf rule, where $status()$ and $request(status())$ represent AF-Raf
-beliefs.
+be accessed by and updated by the agent. On the other hand, rules represent
+a means for accessing the belief base and also a way of triggering agent
+behaviour. For a concrete example, let's look at a simple rule from the
+code presented in figure~\ref{fig:AF-Raf}: in rule Monitoring both
+$status()$ and $request(status())$ represent AF-Raf beliefs.
 
 A rule has two main components besides a name, which is optional. These
 components are a query and an action. The query is like a condition that
@@ -2127,7 +2127,7 @@ In general, a query $q$ is a sentence in some logic that determines a
 subset of beliefs.  Given a belief base and a query, it is important to be
 able to efficiently find the subset of beliefs from the belief base that
 satisfy the query.  Again, AF-Raf takes a simple approach, because its
-focus is not the belief base.  Each query is predicate formula, in other
+focus is not the belief base.  Each query is a predicate formula, in other
 words a term that may contain variables, which are interpreted as patterns.
 
 \begin{align} \pi &::=
