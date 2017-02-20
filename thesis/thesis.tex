@@ -1577,7 +1577,7 @@ The rest of the subsection presents this enriched $\pi$-calculus,
 
 Several \emph{processes} communicate through \emph{channels}.
 Over channels, one can send \emph{messages},
-  which include integers, labels, and channels.
+  which include integers, channels, and labels.
 Informally, one could think of a channel as a queue data structure:
 (1)~sending a value to a channel corresponds to pushing into the queue;
 (2)~receiving a value from a channel corresponds to popping from the queue;
@@ -1607,6 +1607,7 @@ To establish a session,
   \\ & $\mid$ & $P_1|P_2$ & parallel composition
   \\ & $\mid$ & def $D$ in $P$ & recursion
   \\ & $\mid$ & $X\langle\tilde{e}\tilde{s}\rangle$ & process call
+  \\ & $\mid$ & $0$ & do nothing
   \\ & $\mid$ & $s :: \tilde{h}$ & message queue
   \\
   $e$ & $::=$ & $v \mid e_1 \land e_2 \mid \ldots$ & expression
@@ -1623,9 +1624,17 @@ To establish a session,
   $a$ & & & session
   \\
   $l$ & & & label
+  \\
+  $x$ & & & variable
 \end{tabular}
 \end{center}
-\caption{Syntax of Multiparty, Asynchronous $\pi$-calculus}
+\caption{
+  Syntax of Multiparty, Asynchronous $\pi$-calculus.
+  The notation $\tilde{\cdot}$ stands for sequences:
+    $\tilde{s}$~is a sequence of channels,
+    $\tilde{x}$~is a sequence of variables,
+    and so on.
+}
 \label{fig:pi-calculus}
 \end{figure} % >>>
 
@@ -1650,7 +1659,7 @@ There are three types of messages that can be sent and received:
 The statements used for transmitting values and channels
   are similar to each-other:
 \begin{align}
-  &s! \langle {\sf true} \rangle; P_1 \mid s? (x); P_2
+  &s! \langle {\tt true} \rangle; P_1 \mid s? (x); P_2
 \\
   &s! \llangle {\tt x},{\tt y} \rrangle; P_3 \mid s? ((s_x,s_y)); P_4
 \end{align}
@@ -1669,6 +1678,31 @@ Because groups of channels are essentially sessions,
   the statement $s!\llangle\tilde{s}\rrangle$ is sometimes
     called \emph{session delegation}.
 
+Sending labels is paired on the receiving side with branching;
+  for example,
+\begin{align}
+  s \triangleleft 2; P_0
+  \mid
+  s \triangleright \{ 1: P_1,\; 2:P_2,\; 3:P_3 \}
+\end{align}
+will continue with processes $P_0$~and~$P_2$ running in parallel.
+In other words,
+  the first process sends the value~$2$ and then continues executing~$P_0$,
+  while the second process receives value~$2$ and branches according to it.
+
+It is also possible to define a set of named procedures, and call them.
+For example,
+\begin{align}
+\begin{aligned}
+  &{\rm def}\;\{{\it foo}(y,t)=(t\triangleleft 2; P'_0)\}\;{\rm in} \\
+  &\quad {\it foo}(x,s)
+    \mid
+    s \triangleright \{ 1: P_1,\; 2:P_2,\; 3:P_3 \}
+\end{aligned}
+\end{align}
+is essentially equivalent to the previous example,
+  provided that we obtain $P_0$ from $P'_0$ after doing argument substitutions;
+  that is, $P'_0[x/y,s/t]=P_0$.
 
 \section{Local Types}
 \label{sec:mast-local}
@@ -1683,6 +1717,8 @@ TODO: say that $\pi$ is too high-level -- session creation
 
 TODO: say that $\pi$ is too low-level
   -- no ADTs (though Fournet and Abadi), and no ???
+
+TODO: say we use similar style of opsem?
 
 \section{Old}
 
