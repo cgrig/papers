@@ -1598,7 +1598,7 @@ To establish a session,
   that can be used in branching on the receiving side:
   $\pi$-calculus has a statement similar to Java's {\tt switch}.
 
-\begin{figure} % <<<
+\begin{figure} % fig:pi-calculus <<<
 \begin{center}
 \begin{tabular}{lcll}
   $P$ & $::=$ & $\bar{a}[2..n](\tilde{s}).P$ & session request
@@ -1634,7 +1634,7 @@ To establish a session,
 \end{tabular}
 \end{center}
 \caption{
-  Syntax of Multiparty, Asynchronous $\pi$-calculus.
+  Syntax of multiparty, asynchronous $\pi$-calculus.
   The notation $\tilde{\cdot}$ stands for sequences:
     $\tilde{s}$~is a sequence of channels,
     $\tilde{x}$~is a sequence of variables,
@@ -1709,6 +1709,64 @@ is essentially equivalent to the previous example,
   provided that we obtain $P_0$ from $P'_0$ after doing argument substitutions;
   that is, $P'_0[x/y,s/t]=P_0$.
 
+The program $0$ is simply a terminator,
+  present for syntactic reasons.
+For example,
+  $s!\langle1\rangle$ does not conform to the syntax in
+    \autoref{fig:pi-calculus},
+  but $s!\langle1\rangle;0$ does.
+Message queues like $s::\tilde{h}$
+  are not meant to be written down by the programmer.
+Instead,
+  they are introduced to ease the definition of the operational semantics.
+\autoref{fig:pi-opsem} gives
+  a representative sample of operational semantics rules.
+As usual~\cite[Chapter~5]{harper2012},
+  the operational semantics are a transition system
+    defined by natural deduction inference rules.
+(Natural deduction was introduced by Gentzen~\cite{gentzen1969},
+  and applied to programming languages by Martin-L\"of~\cite{martinlof1980}.)
+That is, the operational semantics is a relation
+  ${\to} \subseteq P \times P$,
+  where $P$~is the set of syntax trees,
+    which is defined inductively in \autoref{fig:pi-calculus}.
+
+
+\begin{figure}
+\begin{align}
+  &\frac
+    {}
+    {\begin{aligned}
+      \bar{a}[2..n](\tilde{s}).P_1
+    \mid a[2](\tilde{s}).P_2
+    \mid \ldots
+    \mid a[n](\tilde{s}).P_n
+    \;\to\qquad\\ \to\;
+    P_1 \mid\ldots\mid P_n
+    \mid s_1::\emptyset \mid\ldots\mid s_n::\emptyset
+    \end{aligned}}
+\\
+  &\frac
+    {\tilde{e}\mathrel{\downarrow}\tilde{v}}
+    {s!\langle\tilde{e}\rangle;P \mid s :: \tilde{h}
+    \;\to\;
+    P \mid s :: \tilde{h}\cdot\tilde{v}}
+\\
+  &\frac
+    {}
+    {s?(\tilde{x});P \mid s :: \tilde{v}\cdot \tilde{h}
+    \;\to\;
+    P[\tilde{v}/\tilde{x}] \mid s :: \tilde{h}}
+\\
+  &\text{todo: rule for process call}
+\end{align}
+\caption{
+  A representative set of operational semantics rules
+    for the multiparty, asynchronous $\pi$-calculus
+}
+\label{fig:pi-opsem}
+\end{figure}
+
 \section{Local Types}
 \label{sec:mast-local}
 
@@ -1723,7 +1781,7 @@ TODO: say that $\pi$ is too high-level -- session creation
 TODO: say that $\pi$ is too low-level
   -- no ADTs (though Fournet and Abadi), and no ???
 
-TODO: say we use similar style of opsem?
+TODO: say we use similar style of opsem
 
 \section{Old}
 
