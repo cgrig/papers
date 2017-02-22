@@ -1704,6 +1704,7 @@ For example,
     \mid
     s \triangleright \{ 1: P_1,\; 2:P_2,\; 3:P_3 \}
 \end{aligned}
+  \label{eq:ex-mast-send-label}
 \end{align}
 is essentially equivalent to the previous example,
   provided that we obtain $P_0$ from $P'_0$ after doing argument substitutions;
@@ -1731,7 +1732,6 @@ That is, the operational semantics is a relation
   where $P$~is the set of syntax trees,
     which is defined inductively in \autoref{fig:pi-calculus}.
 
-
 \begin{figure}
 \begin{align}
   &\frac
@@ -1745,27 +1745,100 @@ That is, the operational semantics is a relation
     P_1 \mid\ldots\mid P_n
     \mid s_1::\emptyset \mid\ldots\mid s_n::\emptyset
     \end{aligned}}
-\\
+    \label{eq:mast-opsem-link}
+\\[1ex]
   &\frac
     {\tilde{e}\mathrel{\downarrow}\tilde{v}}
     {s!\langle\tilde{e}\rangle;P \mid s :: \tilde{h}
     \;\to\;
     P \mid s :: \tilde{h}\cdot\tilde{v}}
-\\
+    \label{eq:mast-opsem-send}
+\\[1ex]
   &\frac
     {}
     {s?(\tilde{x});P \mid s :: \tilde{v}\cdot \tilde{h}
     \;\to\;
     P[\tilde{v}/\tilde{x}] \mid s :: \tilde{h}}
-\\
-  &\text{todo: rule for process call}
+    \label{eq:mast-opsem-recv}
+\\[1ex]
+  &\frac
+    {}
+    {s \triangleleft l;P \mid s :: \tilde{h}
+    \;\to\;
+    P \mid s :: \tilde{h}\cdot l}
+    \label{eq:mast-opsem-label}
+\\[1ex]
+  &\frac
+    {j \in I}
+    {s \triangleright \{l_i : P_i\}_{i\in I} \mid s :: l_j \cdot \tilde{h}
+    \;\to\;
+    P_j \mid s :: \tilde{h}}
+    \label{eq:mast-opsem-branch}
+\\[1ex]
+  &\frac
+    {\tilde{e}\mathrel{\downarrow}\tilde{v}
+      \qquad \bigl(X\langle\tilde{x}\tilde{s}\rangle=P\bigr) \in D}
+    {\text{def $D$ in $\bigl(X\langle\tilde{e}\tilde{s}\rangle\mid Q\bigr)$}
+    \;\to\;
+    \text{def $D$ in $\bigl(P[\tilde{v}/\tilde{x}]\mid Q\bigr)$}}
+    \label{eq:mast-opsem-def}
+\\[1ex]
+  &\frac
+    {P \;\to\; P'}
+    {P\mid Q \;\to\; P'\mid Q}
+    \label{eq:mast-opsem-par}
+\\[1ex]
+  &\frac
+    {P \;\to\; P'}
+    {\text{def $D$ in $P$} \;\to\; \text{def $D$ in $P'$}}
+    \label{eq:mast-opsem-defin}
 \end{align}
 \caption{
   A representative set of operational semantics rules
-    for the multiparty, asynchronous $\pi$-calculus
+    for the multiparty, asynchronous $\pi$-calculus.
+  Here, the notation $e\downarrow v$ means
+    that expression~$e$ evaluates to value~$v$.
 }
 \label{fig:pi-opsem}
 \end{figure}
+
+Using the rules from \autoref{fig:pi-opsem},
+  we can deduce, for example, the following steps:
+\begin{align*}
+  & \bar{a}[2](s). s\triangleleft {\rm yes}; 0
+    \mid a[2](s). s\triangleright\{{\rm no} : P_{\rm no},\;
+      {\rm yes} : P_{\rm yes} \}
+\\
+  \to\;
+  & s\triangleleft {\rm yes}; 0
+    \mid s\triangleright\{{\rm no} : P_{\rm no},\;{\rm yes} : P_{\rm yes}\}
+    \mid s :: \emptyset
+    &&\text{by \eqref{eq:mast-opsem-link}}
+\\
+  \to\;
+  & 0
+    \mid s\triangleright\{{\rm no} : P_{\rm no},\;{\rm yes} : P_{\rm yes}\}
+    \mid s :: {\rm yes}
+    &&\text{by \eqref{eq:mast-opsem-label} and \eqref{eq:mast-opsem-par}}
+\\
+  \to\;
+  & s\triangleright\{{\rm no} : P_{\rm no},\;{\rm yes} : P_{\rm yes}\}
+    \mid s :: {\rm yes}
+    &&\text{(*)}
+\\
+  \to\;
+  & P_{\rm yes} \mid s :: \emptyset
+  &&\text{by \eqref{eq:mast-opsem-branch}}
+\end{align*}
+The main thing to notice in the derivation above
+  is how the sending and receiving of a label is made
+    asynchronous by the use of message queues.
+The step marked above with~(*) says that the program 0 terminates.
+To make that step formal,
+  the authors of \cite{DBLP:journals/jacm/HondaYC16} introduce a
+    structural congruence relation.
+This is a rather technical detail,
+  so we omit it in this brief informal introduction to session types.
 
 \section{Local Types}
 \label{sec:mast-local}
