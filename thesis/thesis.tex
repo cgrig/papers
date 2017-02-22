@@ -1367,163 +1367,21 @@ modules~\cite{dblp:conf/prima/dastanims08}.
 %\todo{how is this chapter related to one of my objectives}
 % >>>
 \chapter{Types}\label{ch:types} % <<<
-\subsection{Multi-Sorted Predicate Logic} \label{sec:multi-sorted} % <<<
-
-The starting point in designing a type system is the observation that most
-agent oriented programming languages use first order logic, more
-specifically predicate logic terms, to represent beliefs and messages. As a
-consequence we should look at how the introduction of types is managed in
-mathematical logic, and recall basic notions necessary to our
-understanding. And, also, introduce notational conventions used in AF-Raf.
-Moreover, although these notions are simple, their definitions in
-literature tend to have subtle but important differences.
-
-A \emph{term} is a variable, or a function applied to other terms.
-\begin{align}
-\mathit{Term}\quad\tau &::= \omega \mid \phi \\
-\mathit{Variable}\quad\omega &::= \nu \\
-\mathit{Function}\quad\phi &::= \nu(\tau_1,\ldots,\tau_n) \\
-\mathit{Name}\quad\nu
-\end{align}
-In AF-Raf, term names are strings.  Because term names uniquely identify a
-variable or a function we will say ``the function~$\nu$'' rather than ``the
-function with name~$\nu$.'' A term not containing variables is said to be
-\emph{ground}.
-
-\begin{remark}
-Ground terms are essentially trees of strings.
-\end{remark}
-
-A multi-sorted logic has a set~$S$ of sorts.  We use the letter~$\sigma$ to
-denote sorts.
-\begin{align}
-\sigma, \sigma_1, \sigma_2, \sigma_3, \ldots &\in S
-\end{align}
-Each function~$\nu$ has a signature
-$(\sigma_1\times\cdots\times\sigma_n)\to\sigma$.  Function~$\nu$ is always
-applied to $n$~terms whose sorts must be, respectively,
-$\sigma_1$,~$\sigma_2$, \dots,~$\sigma_n$, and the resulting term has
-sort~$\sigma$. We say that $\nu$~has \emph{arity}~$n$. \emph{Constants} are
-functions with arity~$0$.
-
-Typically, in mathematical logic, the set~$S$ of sorts and the function
-signatures are required to satisfy further constraints. \textit{Bool} must
-be one of the sorts. \emph{Formulas} are terms with sort \textit{Bool}.
-The argument sorts ($\sigma_1$,~$\sigma_2$, \dots,~$\sigma_n$) either are
-all \textit{Bool}, or none is \textit{Bool}.  If the argument sorts are
-\textit{Bool}, then the result sort~$\sigma$ must also be \textit{Bool},
-and $\nu$ is said to be a \emph{boolean connective}.  If the argument sorts
-are not \textit{Bool} and the result sort~$\sigma$ is \textit{Bool}, then
-$\nu$ is said to be a \emph{predicate}.  Agent~Factory has these
-constraints and AF-Raf inherits them. In addition, AF-Raf uses an infix
-notation (described later) for boolean connectives, letter strings starting
-with uppercase for predicate names, and letter strings starting with
-lowercase for other function names and for variable names.
-
-\begin{remark}
-%\rg{I'm not sure about this remark. I think \emph{traditional} logicians
-%behave as described here.}
-The definitions given here are in-between what applied computer scientists
-tend to prefer and what pure logicians tend to prefer.  Computer scientists
-work with \emph{expressions} (rather than terms and formulas) and do not
-have constraints on function signatures with respect to booleans.
-Logicians, on the other hand, do have these constraints and, moreover,
-define terms in such a way that formulas are not terms, and predicates are
-not functions. Moreover, logicians single out equality between terms as
-being a special predicate.
-\end{remark}
-
-%\rg{Maybe add some simple examples early on.}
-% >>>
 \subsection{Algebraic Data Types} % <<<
 
-Algebraic data types offer an alternative way of defining sets of ground
-terms. In multi-sorted predicate logic, the sort~$\sigma$ determines a set
-of ground terms, namely those of the form $\nu(*)$, where $\nu$ has a
-signature of the form $*\to\sigma$.  For example, the sort \textit{Bool}
-determines the set of terms that are formulas.  With algebraic data types,
-a type~$\delta$ is defined by a sequence of patterns, each of the form
-$\nu(\delta_1,\ldots,\delta_n)$. For example, one could define the types
-\textit{nat}, $e$, and~$o$ as follows.
-\begin{align}
-&\mathbf{type}\,\mathit{nat} =
-      \mathit{zero}()
-  \mid\mathit{succ}(\mathit{nat})
-  \mid\mathit{add}(\mathit{nat},\mathit{nat}) \\
-&\mathbf{type}\,e =
-      \mathit{zero}()
-  \mid\mathit{succ}(o)
-  \mid\mathit{add}(e,e)
-  \mid\mathit{add}(o,o) \\
-&\mathbf{type}\,o =
-      \mathit{succ}(e)
-  \mid\mathit{add}(o,e)
-  \mid\mathit{add}(e,o)
-\end{align}
-%\rg{These things are presented as if they are completely standard. They're
-%not. I think they should be presented as part of the design of AF-RAF.}
-We make the following observations.
-\begin{enumerate}
-\item
-  Function names may appear in multiple definitions. For example,
-  \textit{zero} appears in the definition of~$\mathit{nat}$ and also in the
-  definition of~$e$. In particular, the term $\mathit{zero}()$ belongs both
-  to the set of ground terms defined by the type~$\mathit{nat}$ and to the
-  one defined by the type~$e$.
-\item
-  Function names may appear multiple times in the same definition. For
-  example, \textit{add} appears twice in the definition of~$e$. (This
-  property distinguishes our types from polymorphic
-  variants~\cite{garrigue1998}.)
-\item
-  Type definitions may be recursive or mutually recursive. For example,
-  $\mathit{nat}$~appears within the definition of~$\mathit{nat}$.
-\end{enumerate}
-The set of ground terms corresponding to type~$\mathit{nat}$ is the following.
-\begin{equation}
-\begin{aligned}
-\{\,&\mathit{zero}(), \\
-    &\mathit{succ}(\mathit{zero}()),
-        \mathit{succ}(\mathit{succ}(\mathit{zero}())), \ldots \\
-    &\mathit{add}(\mathit{zero}(), \mathit{zero}()),
-        \mathit{add}(\mathit{zero}(), \mathit{succ}(\mathit{zero}())),
-        \ldots \\
-    &\mathit{succ}(\mathit{add}(\mathit{zero}(), \mathit{zero}())),
-        \ldots \\
-    &\ldots\, \}
-\end{aligned}
-\end{equation}
-Moreover, $e$~and~$o$ partition~$\mathit{nat}$.
+In functional programming an algebraic data type is a kind of compound type
+formed by combining other types. In this context, an algebra of data types
+denotes a set of types along with a collection of operations on that set of
+types. Those operations are: the Cartesian product, also known as
+multiplication or conjunction, and the discriminated union, also known as
+sum or disjunction. The operations are used to create new types.
 
-\begin{proposition}
-Algebraic data types (as defined above) are strictly more expressive than
-sorts. More precisely, (1)~all sets of ground terms that can be defined by
-sorts can also be defined by algebraic data types, and (2)~there are pairs
-of sets of ground terms that can be defined by algebraic data types but
-cannot be defined by sorts.
-\end{proposition}
+Algebraic data types are the natural target of pattern-matching functions,
+values of algebraic data types are analysed with pattern matching.  When
+the type is parametric then the pattern-matching functions typically
+support parametric polymorphism~\cite{AlgebraicDT09}, meaning that the
+values are handled identically regardless of their actual type.
 
-\begin{proof}
-For~(1), we define a type~$\delta(\sigma)$ for each sort~$\sigma$ as
-follows: For each function $\nu:(\sigma_1,\ldots,\sigma_n)\to\sigma$ we add
-a pattern $\nu(\delta(\sigma_1),\ldots,\delta(\sigma_n))$to the definition
-of type~$\delta(\sigma)$. It is easy to see, by structural induction, that
-the sort~$\sigma$ and the type~$\delta(\sigma)$ define the same sets of
-ground terms.
-
-For~(2), note that, given a fixed set of function signatures, the sets of
-ground terms defined by distinct sorts are disjoint. In the previous
-example, however, the sets of ground terms defined by the types
-$\mathit{nat}$~and~$e$ have (at least) a common element, namely
-$\mathit{zero}()$.
-\end{proof}
-
-Finally, let us note that there are sets of ground terms for which it is
-undecidable whether a given term is an element.  (A classic result of
-computability theory is that there are undecidable sets of bit-strings, and
-sorted ground terms can encode bit-strings.) In particular, there exist
-sets of ground terms that cannot be defined using algebraic data types.
-%\rg{These things are probably too cryptic, and should be explained more.}
 
 % >>>
 
@@ -2309,9 +2167,9 @@ words a term that may contain variables, which are interpreted as patterns.
 x &::= {\rm string-LID} && \text{variable symbol} \\ \upsilon  &::= {\rm
 string-UID} &&\text{predicate symbol} \end{align} 
 
-The grammar rules (3.5) and (3.7) are the same as for beliefs.  Thus, any
-belief can be used as a query:  It stands for asking whether the belief
-base contains that particular belief.
+The grammar rules (11.7), (11.8), (11.10) and (11.12) are the same as for
+beliefs.  Thus, any belief can be used as a query:  It stands for asking
+whether the belief base contains that particular belief.
 
 \begin{example} The following are AF-Raf \emph{queries}: \begin{align}
 &{\it HasColor}({\it my}({\it car}()), x) \label{eq:query.1} \\ &{\it
@@ -2417,6 +2275,74 @@ a name and an IP address. To support the check for messages we add
 $\delta_m(a)$ to the agent identifier of agent~$a$.
 
 
+\subsection{Multi-Sorted Predicate Logic} \label{sec:multi-sorted} % <<<
+
+The starting point in designing a type system is the observation that most
+agent oriented programming languages use first order logic, more
+specifically predicate logic terms, to represent beliefs and messages. As a
+consequence we should look at how the introduction of types is managed in
+mathematical logic, and recall basic notions necessary to our
+understanding. And, also, introduce notational conventions used in AF-Raf.
+Moreover, although these notions are simple, their definitions in
+literature tend to have subtle but important differences.
+
+A \emph{term} is a variable, or a function applied to other terms.
+\begin{align}
+\mathit{Term}\quad\tau &::= \omega \mid \phi \\
+\mathit{Variable}\quad\omega &::= \nu \\
+\mathit{Function}\quad\phi &::= \nu(\tau_1,\ldots,\tau_n) \\
+\mathit{Name}\quad\nu
+\end{align}
+In AF-Raf, term names are strings.  Because term names uniquely identify a
+variable or a function we will say ``the function~$\nu$'' rather than ``the
+function with name~$\nu$.'' A term not containing variables is said to be
+\emph{ground}.
+
+\begin{remark}
+Ground terms are essentially trees of strings.
+\end{remark}
+
+A multi-sorted logic has a set~$S$ of sorts.  We use the letter~$\sigma$ to
+denote sorts.
+\begin{align}
+\sigma, \sigma_1, \sigma_2, \sigma_3, \ldots &\in S
+\end{align}
+Each function~$\nu$ has a signature
+$(\sigma_1\times\cdots\times\sigma_n)\to\sigma$.  Function~$\nu$ is always
+applied to $n$~terms whose sorts must be, respectively,
+$\sigma_1$,~$\sigma_2$, \dots,~$\sigma_n$, and the resulting term has
+sort~$\sigma$. We say that $\nu$~has \emph{arity}~$n$. \emph{Constants} are
+functions with arity~$0$.
+
+Typically, in mathematical logic, the set~$S$ of sorts and the function
+signatures are required to satisfy further constraints. \textit{Bool} must
+be one of the sorts. \emph{Formulas} are terms with sort \textit{Bool}.
+The argument sorts ($\sigma_1$,~$\sigma_2$, \dots,~$\sigma_n$) either are
+all \textit{Bool}, or none is \textit{Bool}.  If the argument sorts are
+\textit{Bool}, then the result sort~$\sigma$ must also be \textit{Bool},
+and $\nu$ is said to be a \emph{boolean connective}.  If the argument sorts
+are not \textit{Bool} and the result sort~$\sigma$ is \textit{Bool}, then
+$\nu$ is said to be a \emph{predicate}.  Agent~Factory has these
+constraints and AF-Raf inherits them. In addition, AF-Raf uses an infix
+notation (described later) for boolean connectives, letter strings starting
+with uppercase for predicate names, and letter strings starting with
+lowercase for other function names and for variable names.
+
+\begin{remark}
+%\rg{I'm not sure about this remark. I think \emph{traditional} logicians
+%behave as described here.}
+The definitions given here are in-between what applied computer scientists
+tend to prefer and what pure logicians tend to prefer.  Computer scientists
+work with \emph{expressions} (rather than terms and formulas) and do not
+have constraints on function signatures with respect to booleans.
+Logicians, on the other hand, do have these constraints and, moreover,
+define terms in such a way that formulas are not terms, and predicates are
+not functions. Moreover, logicians single out equality between terms as
+being a special predicate.
+\end{remark}
+
+%\rg{Maybe add some simple examples early on.}
+% >>>
 \subsection{Algebraic Data Types} % <<<
 
 In AF-Raf, a \emph{belief} is a boolean ground term; in AF-Raf, a
@@ -2547,19 +2473,6 @@ Such aliases are especially useful when $\delta'$ is of the form
 $\mathit{integer}[\tau]$ or $\mathit{string}[\tau]$, and $\tau$~is long.
 
 %\todo{Example with something like {\tt type t=int*t list}.}
-
-Algebraic data types are the natural target of pattern-matching functions,
-values of algebraic data types are analysed with pattern matching.  When
-the type is parametric then the pattern-matching functions typically
-support parametric polymorphism~\cite{AlgebraicDT09}, meaning that the
-values are handled identically regardless of their actual type.
-
-In functional programming an algebraic data type is a kind of compound type
-formed by combining other types. In this context, an algebra of data types
-denotes a set of types along with a collection of operations on that set of
-types. Those operations are: the Cartesian product, also known as
-multiplication or conjunction, and the discriminated union, also known as
-sum or disjunction. The operations are used to create new types.
 
 In AF-Raf one of the important uses of algebraic data types is to describe
 the content of messages. Type checking messages leads to fewer runtime
@@ -4020,7 +3933,7 @@ A\pmap B$ is essentially a finite set of pairs
 $\{(a_1,b_1),\ldots,(a_n,b_n)\}$ with $a_k$s distinct and coming from~$A$,
 and $b_k$s coming from~$B$. The expression $\sigma(a)$ denotes the $b$ such
 that $(a,b)\in\sigma$ if such a $b$ exists; otherwise it stands for $\bot$
-(undefined). The singleton mapping $\{(a,b)\}$ is denoted also by
+(undefined or unknown). The singleton mapping $\{(a,b)\}$ is denoted also by
 $[a\mapsto b]$.  The concatenation $\sigma_1\sigma_2$ denotes the update
 operation on mappings:
 \begin{align}
