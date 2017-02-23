@@ -14,11 +14,13 @@
 
 \newcommand{\eval}[1]{[\!\![#1]\!\!]}
 \newcommand*\llangle{\mathopen{\langle\!\langle}}
+\newcommand*\llbracket{\mathopen{[\!\![}}
 \newcommand{\limp}{\Rightarrow}
 \newcommand{\on}[2]{\genfrac{}{}{0pt}{0}{\strut#1}{\strut#2}}
 \newcommand{\pmap}{\rightharpoonup}
 \newcommand{\rg}[1]{\marginpar{\tiny\raggedright\textcolor{blue}{\bf rg:} #1}}
 \newcommand*\rrangle{\mathclose{\rangle\!\rangle}}
+\newcommand*\rrbracket{\mathclose{]\!\!]}}
 \newcommand{\todo}[1]{[\textcolor{red}{TODO}: #1]}
 
 \renewcommand{\rg}{}
@@ -2205,6 +2207,43 @@ appear multiple times in a query.  In such a case, it implicitly requires
 the corresponding subterms to be equal.  Also note that the \emph{empty
 match} differs from \emph{no match}.
 \end{example}
+
+A match $\sigma$ is an answer to query~$q$ on belief base~$T$
+  when applying the match as a substitution to the query yields a belief
+  $q\sigma \in T$.
+We can define the answer to a query~$q$ on a belief base~$T$
+  as a set $\llbracket q \rrbracket_T$ of matches:
+\begin{align}
+  \llbracket q \rrbracket_T
+  =
+  \{\,\sigma\mid q\sigma \in T\,\}
+\end{align}
+Disjunctive queries correspond to union,
+  and conjunctive queries correspond to Cartesian product.
+\begin{align}
+  \llbracket q_1 \lor q_2 \rrbracket_T
+    &= \llbracket q_1 \rrbracket_T \cup \llbracket q_2 \rrbracket_T
+\\
+  \llbracket q_1 \land q_2 \rrbracket_T
+    &= \left\{\,\sigma_1\oplus\sigma_2
+    \bigg\vert
+    \on{
+      (\sigma_1,\sigma_2)\in
+      \llbracket q_1 \rrbracket_T \times \llbracket q_2 \rrbracket_T}%
+      {\text{and $\sigma_1\bot\sigma_2$}}
+%
+%    \text{$(\sigma_1,\sigma_2)\in
+%      \llbracket q_1 \rrbracket_T \times \llbracket q_2 \rrbracket_T$}
+\,\right\}
+\end{align}
+The notation $\sigma_1\bot\sigma_2$ means that the matches
+$\sigma_1$~and~$\sigma_2$ are \emph{compatible}: if some variable is bound
+by both, then it is bound to the same term by both. The notation
+$\sigma_1\oplus\sigma_2$, defined only for compatible matches, binds all
+variables that are bound by one of $\sigma_1$~or~$\sigma_2$, in the same
+way. Because matches, unlike substitutions, are restricted to use only
+ground terms, $\sigma_1\oplus\sigma_2$ is the same as the composition
+$\sigma_1\sigma_2$.
 
 %\todo{Conjunctive queries.}
 
