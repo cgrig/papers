@@ -2447,7 +2447,7 @@ primitive type.
 
 Binary operators such as $+$ are also inherited from Agent~Factory. From
 the point of view of type-checking, an expression like $2+3$ is equivalent
-to $+(2,3)$. Standard conventions on precedence and associativity are
+to $+(2(),3())$. Standard conventions on precedence and associativity are
 obeyed.
 
 More interestingly, AF-Raf has built-in the type $\mathit{integer}[\tau]$,
