@@ -14,13 +14,11 @@
 
 \newcommand{\eval}[1]{[\!\![#1]\!\!]}
 \newcommand*\llangle{\mathopen{\langle\!\langle}}
-\newcommand*\llbracket{\mathopen{[\!\![}}
 \newcommand{\limp}{\Rightarrow}
 \newcommand{\on}[2]{\genfrac{}{}{0pt}{0}{\strut#1}{\strut#2}}
 \newcommand{\pmap}{\rightharpoonup}
 \newcommand{\rg}[1]{\marginpar{\tiny\raggedright\textcolor{blue}{\bf rg:} #1}}
 \newcommand*\rrangle{\mathclose{\rangle\!\rangle}}
-\newcommand*\rrbracket{\mathclose{]\!\!]}}
 \newcommand{\todo}[1]{[\textcolor{red}{TODO}: #1]}
 
 \renewcommand{\rg}{}
@@ -1419,7 +1417,9 @@ They sprung from the theory community around $\pi$-calculus,
 For example, popular languages like Scala
   now have implementations of session types.
 
-What follows is a condensed summary of \cite{DBLP:journals/jacm/HondaYC16}.
+What follows is a condensed and simplified summary
+  of~\cite{DBLP:journals/jacm/HondaYC16}.
+The main simplification is that we elide higher-order features.
 We begin by introducing a small programming language (\autoref{sec:pi}),
   continue by presenting
     local types (\autoref{sec:mast-local})
@@ -1437,18 +1437,21 @@ Multiparty, asynchronous session types were originally introduced
 This small programming language
   is a $\pi$-calculus with several extensions,
   including sessions and buffers.
-The rest of the subsection presents this enriched $\pi$-calculus,
-  without assuming prior knowledge of the standard $\pi$-calculus.
+In standard $\pi$-calculus,
+  an essential feature is that channels can be sent over channels.
+In what follows,
+  we elide this higher-order feature,
+  for simplicity and because no analogue is present in AF-Raf.
 
 Several \emph{processes} communicate through \emph{channels}.
 Over channels, one can send \emph{messages},
-  which include integers, channels, and labels.
+  which include integers and labels.
 Informally, one could think of a channel as a queue data structure:
 (1)~sending a value to a channel corresponds to pushing into the queue;
-(2)~receiving a value from a channel corresponds to popping from the queue;
-and
-(3)~sending a channel~$x$ over a channel~$y$ corresponds to
-  pushing the `object reference'~$x$ into the queue~$y$.
+(2)~receiving a value from a channel corresponds to popping from the queue.
+%and
+%(3)~sending a channel~$x$ over a channel~$y$ corresponds to
+%  pushing the `object reference'~$x$ into the queue~$y$.
 In the particular flavour of $\pi$-calculus described here,
   channels are created by establishing a session.
 To establish a session,
@@ -1465,8 +1468,8 @@ To establish a session,
   \\  & $\mid$ & $a[p](\tilde{s}).P$  & session accept
   \\ & $\mid$  & $s!\langle\tilde{e}\rangle;P$ & send value
   \\ & $\mid$ & $s?(\tilde{x});P$ & receive value
-  \\ & $\mid$  & $s!\llangle\tilde{e}\rrangle;P$ & send channels
-  \\ & $\mid$ & $s?((\tilde{x}));P$ & receive channels
+%  \\ & $\mid$  & $s!\llangle\tilde{e}\rrangle;P$ & send channels
+%  \\ & $\mid$ & $s?((\tilde{x}));P$ & receive channels
   \\ & $\mid$ & $s \triangleleft l; P$ & send label
   \\ & $\mid$ & $s \triangleright \{l_i:P_i\}_{i\in I}$ & receive label
   \\ & $\mid$ & $P_1|P_2$ & parallel composition
@@ -1519,56 +1522,47 @@ Afterwards,
   all having access to two newly created channels,
     named ${\tt x}$~and~${\tt y}$.
 
-There are three types of messages that can be sent and received:
-  values, channels, and labels.
-The statements used for transmitting values and channels
-  are similar to each-other:
+The code
 \begin{align}
-  &s! \langle {\tt true} \rangle; P_1 \mid s? (x); P_2
-\\
-  &s! \llangle {\tt x},{\tt y} \rrangle; P_3 \mid s? ((s_x,s_y)); P_4
+  s! \langle 42 \rangle; P_1
+  \mid
+  s? (x); P_2
 \end{align}
-In the first example,
-  the execution will continue with $P_1$ in parallel
-    with a copy of $P_2$ that has the value `true' substituted
-    in place of variable~$x$.
-So, the value `true' is transmitted from one process to another.
-In the second example,
-  the channels {\tt x}~and~{\tt y} are transmitted.
-As before,
-  each free occurrence of $s_x$ in the body of~$P_4$ is replaced by~{\tt x};
-  and each free occurrence of $s_y$ is replaced by~{\tt y}.
-Notice that two channels ({\tt x}~and~{\tt y}) are sent simultaneously.
-Because groups of channels are essentially sessions,
-  the statement $s!\llangle\tilde{s}\rrangle$ is sometimes
-    called \emph{session delegation}.
+sends the value~$42$ from the process on the left to the process on the
+right. The execution will continue with $P_1$~and~$P_2$ in parallel, except
+that all free occurrences of~$x$ in~$P_2$ are replaced by~$42$.
 
 Sending labels is paired on the receiving side with branching;
   for example,
 \begin{align}
-  s \triangleleft 2; P_0
+  s \triangleleft {\bf b}; P
   \mid
-  s \triangleright \{ 1: P_1,\; 2:P_2,\; 3:P_3 \}
+  s \triangleright
+    \{ {\bf a} : P_{\bf a},\;
+       {\bf b} : P_{\bf b},\;
+       {\bf c} : P_{\bf c} \}
 \end{align}
-will continue with processes $P_0$~and~$P_2$ running in parallel.
+will continue with processes $P$~and~$P_{\bf b}$ running in parallel.
 In other words,
-  the first process sends the value~$2$ and then continues executing~$P_0$,
-  while the second process receives value~$2$ and branches according to it.
+  the first process sends the label~$\bf b$ and then continues executing~$P$,
+  while the second process receives label~$\bf b$ and branches according to it.
 
 It is also possible to define a set of named procedures, and call them.
 For example,
 \begin{align}
 \begin{aligned}
-  &{\rm def}\;\{{\it foo}(y,t)=(t\triangleleft 2; P'_0)\}\;{\rm in} \\
+  &{\rm def}\;\{{\it foo}(y,t)=(t\triangleleft{\bf b}; P')\}\;{\rm in} \\
   &\quad {\it foo}(x,s)
     \mid
-    s \triangleright \{ 1: P_1,\; 2:P_2,\; 3:P_3 \}
+    s \triangleright
+    \{ {\bf a} : P_{\bf a},\;
+       {\bf b} : P_{\bf b},\;
+       {\bf c} : P_{\bf c} \}
 \end{aligned}
   \label{eq:ex-mast-send-label}
 \end{align}
 is essentially equivalent to the previous example,
-  provided that we obtain $P_0$ from $P'_0$ after doing argument substitutions;
-  that is, $P'_0[x/y,s/t]=P_0$.
+  modulo argument substitution: $P=P'[x/y,s/t]$.
 
 The program $0$ is simply a terminator,
   present for syntactic reasons.
@@ -1592,7 +1586,7 @@ That is, the operational semantics is a relation
   where $P$~is the set of syntax trees,
     which is defined inductively in \autoref{fig:pi-calculus}.
 
-\begin{figure}
+\begin{figure} % fig:pi-opsem <<<
 \begin{align}
   &\frac
     {}
@@ -1661,6 +1655,7 @@ That is, the operational semantics is a relation
 }
 \label{fig:pi-opsem}
 \end{figure}
+% >>>
 
 Using the rules from \autoref{fig:pi-opsem},
   we can deduce, for example, the following steps:
@@ -1703,11 +1698,37 @@ This is a rather technical detail,
 \section{Local Types}
 \label{sec:mast-local}
 
+Local types say how the interaction looks like from the point of view of
+one process.
+
+\begin{figure}
+\begin{center}
+\begin{tabular}{lccll}
+sort & $S$ & $::=$ & ${\bf int} \mid {\bf string} \mid \ldots$ \\
+local type & $T$
+  & $::=$ & $k! \langle\tilde{S}\rangle; T$ & send \\
+ && $\mid$ & $k? \langle\tilde{S}\rangle; T$ & receive \\
+ && $\mid$ & $k \oplus \{\,l_i:T_i\,\}_{i\in I}$ & selection \\
+ && $\mid$ & $k \& \{\,l_i:T_i\,\}_{i\in I}$ & branching \\
+ && $\mid$ & $\mu{\bf t}.T \mid {\bf t}$ & recursion \\
+ && $\mid$ & $0$ \\
+channel & $k$ \\
+label & $l$
+\end{tabular}
+\end{center}
+\caption{
+  Syntax of simplified local types.
+  The main simplification is that higher-order features are not present.
+}
+\end{figure}
+
 \section{Global Types}
 \label{sec:mast-global}
 
 \section{Connection to AF-Raf}
 \label{sec:mast-vs-afraf}
+
+TODO: say we have no delegation -- so one agent can't pretend to be another
 
 TODO: say that $\pi$ is too high-level -- session creation
 
@@ -2213,28 +2234,25 @@ A match $\sigma$ is an answer to query~$q$ on belief base~$T$
   when applying the match as a substitution to the query yields a belief
   $q\sigma \in T$.
 We can define the answer to a query~$q$ on a belief base~$T$
-  as a set $\llbracket q \rrbracket_T$ of matches:
+  as a set $\eval{q}_T$ of matches:
 \begin{align}
-  \llbracket q \rrbracket_T
+  \eval{q}_T
   =
   \{\,\sigma\mid q\sigma \in T\,\}
 \end{align}
 Disjunctive queries correspond to union,
   and conjunctive queries correspond to Cartesian product.
 \begin{align}
-  \llbracket q_1 \lor q_2 \rrbracket_T
-    &= \llbracket q_1 \rrbracket_T \cup \llbracket q_2 \rrbracket_T
+  \eval{q_1 \lor q_2}_T
+    &= \eval{q_1}_T \cup \eval{q_2}_T
 \\
-  \llbracket q_1 \land q_2 \rrbracket_T
+  \eval{q_1 \land q_2}_T
     &= \left\{\,\sigma_1\oplus\sigma_2
     \bigg\vert
     \on{
       (\sigma_1,\sigma_2)\in
-      \llbracket q_1 \rrbracket_T \times \llbracket q_2 \rrbracket_T}%
+      \eval{q_1}_T \times \eval{q_2}_T}%
       {\text{and $\sigma_1\bot\sigma_2$}}
-%
-%    \text{$(\sigma_1,\sigma_2)\in
-%      \llbracket q_1 \rrbracket_T \times \llbracket q_2 \rrbracket_T$}
 \,\right\}
 \end{align}
 The notation $\sigma_1\bot\sigma_2$ means that the matches
