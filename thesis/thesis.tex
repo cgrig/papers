@@ -3512,16 +3512,17 @@ preceded by either \verb-+-~or~\verb+-+, depending on whether the belief
 should be added or removed.
 
 \begin{example}
-The core of AF-Raf performs no hidden actions. For example, received
-messages must be explicitly removed from the belief base.
+Even though there are several constructs defined as syntactic sugar, that
+reduce the verbosity of AF-Raf programs, the core of AF-Raf performs no
+hidden actions with regards to how messages are handled. For example,
+received messages must be explicitly removed from the belief base.
+
 \begin{verbatim}
   rule Message(other, someData(x, y)) {
       -Message(other, someData(x, y));
       /* ... rest ... */
   }
 \end{verbatim}
-There exist, however, several constructs defined as syntactic sugar, that
-reduce the verbosity of AF-Raf programs.
 \end{example}
 
 The lexical conventions of AF-Raf are rather typical for a Java-like
@@ -4022,28 +4023,32 @@ Equation~\eqref{eq:bbdef} simply says that elements of ${\rm BeliefBase}$
 are mappings from ground terms to the element of some singleton set, which
 is the same as saying that they are \emph{finite} subsets of ${\rm
 GroundTerm}$. The sets ${\rm AgentCode}$ and ${\rm GroundTerm}$ are defined
-in figure and in section respectively. The message queues $I$~and~$O$ are
-represented in the semantics by finite sequences: the (standard) notation
-$A^*$ stands for the finite sequences of elements from the set~$A$. Each
-message contains the identifier of another agent and the message data,
-which is a grounded term. The queue~$I$ contains agent identifiers for
-senders; the queue~$O$ contains agent identifiers for receivers.
-
+in~\autoref{fig:agent-code} and in~\autoref{sec:multi-sorted} respectively.
+The message queues $I$~and~$O$ are represented in the semantics by finite
+sequences: the (standard) notation $A^*$ stands for the finite sequences of
+elements from the set~$A$. Each message contains the identifier of another
+agent and the message data, which is a grounded term. The queue~$I$
+contains agent identifiers for senders; the queue~$O$ contains agent
+identifiers for receivers.
+{\it sid}
 
 \begin{figure} % fig:agent-code<<<
 \begin{center}
 \begin{tabular}{lcll}
-  $P$ & $::=$ & $P_a;P$ & atomic program followed by a program 
-  \\  & $\mid$ & $\emptyset$  & empty
-  \\
-  $P_a$ & $::=$ & ${\bf rule}\,q\,\{B\}$ & rule
+  $P$ & $::=$ & $P;P$ & program followed by a program 
+  \\  & $\mid$ & ${\bf rule}\,q\,\{B\}$ & rule 
   \\  & $\mid$ & ${\bf new}\,d(\bar{a})\,a'\,\{T'\}$ & agent creation
   \\  & $\mid$ & ${\bf new }\;{\bf call}$ & new call 
   \\  & $\mid$ & ${\bf new}\;{\bf session}\;n$ & new session
   \\  & $\mid$ & $action(\ldots)$ & action invocation
   \\  & $\mid$ & $x:=P$ & assignment
-  \\  & $\mid$ & $+t$ & belief update
-  \\  & $\mid$ & $-t$ & belief update
+  \\  & $\mid$ & $+t$ & belief addition 
+  \\  & $\mid$ & $-t$ & belief removal
+  \\  & $\mid$ & $\emptyset$  & empty
+  \\  & $\mid$ & $t$ & term 
+  \\  & $\mid$ & $a'$ & agent identifier
+  \\  & $\mid$ & ${\it cid}$ & call identifier
+  \\  & $\mid$ & ${\it sid}$ & session identifier
   \\
   $d$ & & & agent design name
   \\
@@ -4053,13 +4058,13 @@ senders; the queue~$O$ contains agent identifiers for receivers.
   \\
   $T'$ & & & new agent's belief base
   \\
-  $c$ & & & session name
-  \\
-  $t$ & & & ground term
+  $n$ & & & session name
 \end{tabular}
 \end{center}
 \caption{
-Definition of AF-Raf agent code
+Definition of AF-Raf agent code. Note that the last four elements of the
+definition: $t$, $a'$, ${\it cid}$, and ${\it sid}$ are used only in
+operational semantics.
 }
 \label{fig:agent-code}
 \end{figure} % >>>
@@ -4353,7 +4358,7 @@ an empty message queue. Finally, ${\it body}(d_2)[\bar{a}/{\it args}(d_2)]$
 means that the code for the design~$d_2$ is looked up, and a substitution is
 applied on its body: the formal argument ${\it args}(d_2)$ are replaced by
 the actual arguments~$\bar a$. The result of this substitution is the code
-that the newly created agent should execute, and it is a set of rules.
+that the newly created agent should execute, which is a collection of rules.
 
 The only property that a new call identifier must have is that it must be
 fresh.

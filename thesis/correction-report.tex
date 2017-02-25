@@ -906,7 +906,9 @@ better explained) at the beginning of Chapter 3, when the AF-Raf architecture
 and control flow are described.
 
 \end{them}
-\todo{}
+This sentence refered only to the fact that the received messages have to be
+removed explicitly from the belief base. Since it caused confusion, I have
+removed it.
 
 \begin{them}
 
@@ -958,7 +960,8 @@ can be easily recovered from the abstract grammar”: it should be better to
 define them here, instead.
 
 \end{them}
-\todo{}
+Fixed. The definition for Agent code is presented in figure 12.7, and a
+reference to the definition of Ground term is provided.
 
 \begin{them}
 
@@ -976,7 +979,8 @@ set. A clarification on the syntax and data structures used for P is required,
 as well as a coherence check in all the transition rules.
 
 \end{them}
-\todo{}
+The sentence "P is the agent code" is correct, and has the same meaninig as "the
+program for an agent". See the Agent code definition in figure 12.7. 
 
 \begin{them}
 
@@ -985,7 +989,7 @@ Rule 4.44 states that we can discard I, O and d in the transition. It should be
 stated where these components come into play again.
 
 \end{them}
-\todo{}
+Fixed. Explanation added on page 127.
 
 \begin{them}
 
@@ -996,13 +1000,28 @@ of “agent code” (for example, the agent code contains “include” statemen
 it should include the beliefs as well). The consequence of the rule states that
 an agent program is some data structure providing a “;” operator. This is in
 contrast with stating that an agent's program is a set, as sets – as usually
-defined - do not support a “;” operator, whatever the meaning of “;” is. The
-rule also states that the agent's code changes over time, which supports the
-reviewers' understanding that P is not the agent code, but the agent execution
-state.
+defined - do not support a “;” operator, whatever the meaning of “;” is.
 
 \end{them}
-\todo{}
+The new definition for agent code (figure 12.7) should clarify this.
+
+Also, see rule 12.52 for the definition of sequential composition.
+
+
+\begin{them}
+
+The rule also states that the agent's code changes over time, which supports
+the reviewers' understanding that P is not the agent code, but the agent
+execution state.
+
+\end{them}
+The agent execution state includes the agent code, as defined in figure 12.8. The agent execution state changes over time,
+  including the agent code it contains.
+(Of course, this does not change the agent code written by the programmer.)
+
+We note that including agent code in the agent state is not unusual:
+  Indeed, the usual way to give operational semantics to, say,
+    $\pi$-calculus is as a transition system over fragments of `code'.
 
 \begin{them}
 
@@ -1014,7 +1033,9 @@ the choice of the program rule to use should be demanded to a selection
 function, for generality,
 
 \end{them}
-\todo{}
+I disagree. A selection function is unnecessary for generality, and is ugly.
+For an explanation why implicit nondeterminism is good see:
+http://homepages.inf.ed.ac.uk/gdp/publications/Dijkstras_Predicate_Transformers.pdf
 
 \begin{them}
 
@@ -1023,14 +1044,20 @@ Rule 4.52: what does “X:=P” mean? Whatever P, assigning an agent code (which
 a set?) to a variable is not clear.
 
 \end{them}
-\todo{}
+Rule 4.52 (now 12.53) is the definition of what $x:=P$ means, that is
+assignment. Variable x is assigned the value to which the agent code is
+evaluated to.
 
 \begin{them}
 
 Rule 4.53:
 An agent code can be a belief? As Gamma t is a belief.
 \end{them}
-\todo{}
+Yes. See agent code definition in figure 12.7.
+The programmer is not allowed to write such code, though.
+This is entirely analogous to the message queues in
+  multiparty asynchronous session types:
+  See the new background section covering them.
 
 \begin{them}
 
@@ -1039,7 +1066,8 @@ with the notion of m.g.u.? Why not using the standard notation for
 substitutions and m.g.u.s?
 
 \end{them}
-\todo{}
+There is no unification here. I've changed the notation to the more usual
+postfix.
 
 \begin{them}
 
@@ -1055,7 +1083,9 @@ should execute, and is a set of rules”: in Rule 4.53 it seemed that the agent
 code could include beliefs as well.
 
 \end{them}
-\todo{}
+Fixed. A "set" in this context has the meaning of a "collection" rather than
+the mathematical concept of set. I've changed the formulation to avoid
+confusion.
 
 \begin{them}
 
@@ -1063,7 +1093,7 @@ Also, the comments to page 97 raise doubts that P can be a set because of the
 “;” operator.
 
 \end{them}
-\todo{}
+See new agent code definition (figure 12.7) for clarification.
 
 \begin{them}
 
@@ -1073,7 +1103,10 @@ should have a clean semantics as well; if it is not the case, a strong
 motivation should be provided.
 
 \end{them}
-\todo{}
+Programming languages can call pieces of code written in other programming
+languages. For example, you can run Asembly code from C, and C code from Java
+and Haskell. None of those programming languages have semantincs for this
+features.
 
 \begin{them}
 
@@ -1090,7 +1123,7 @@ The action send.... : what about the action receive? Is it supported? Which is
 its semantics?
 
 \end{them}
-\todo{}
+No, there's no receive action. Sensors deal with receiving messages in AF-Raf.
 
 \begin{them}
 
@@ -1103,8 +1136,7 @@ In rule 11.41
 
 In Rule 4.63, sid binds to nothing
 \end{them}
-The rule says that when sid doesn't match to any session it errors
-\todo{maybe explain better}
+The rule says that when sid doesn't match to any session it errors.
 
 \begin{them}
 
