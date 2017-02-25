@@ -1367,7 +1367,7 @@ modules~\cite{dblp:conf/prima/dastanims08}.
 %\todo{how is this chapter related to one of my objectives}
 % >>>
 \chapter{Types}\label{ch:types} % <<<
-\subsection{Algebraic Data Types} % <<<
+\subsection{Algebraic Data Types}\label{sec:adt} % <<<
 
 In functional programming an algebraic data type is a kind of compound type
 formed by combining other types. In this context, an algebra of data types
@@ -1502,6 +1502,7 @@ To establish a session,
     $\tilde{s}$~is a sequence of channels,
     $\tilde{x}$~is a sequence of variables,
     and so on.
+  We do not include higher-order features.
 }
 \label{fig:pi-calculus}
 \end{figure} % >>>
@@ -4258,9 +4259,9 @@ concurrency rule~\eqref{eq:opsem-agentfocus1}, are sources of
 nondeterminism.
 
 \begin{remark}
-$T \models q$ has the same meaning as: the set $\llbracket q \rrbracket_T$ of
-matches is not empty.
-\end{remark}  
+We note that $T \models q$ if and only $\eval{q}_T\neq\emptyset$.
+The notation $\eval{q}_T$ was introduced in \autoref{sec:adt}.
+\end{remark}
 
 The semantics for sequential composition is given by the following
 inference rule.
