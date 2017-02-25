@@ -1699,32 +1699,155 @@ This is a rather technical detail,
 \section{Local Types}
 \label{sec:mast-local}
 
-Local types say how the interaction looks like from the point of view of
-one process.
-
 \begin{figure}
 \begin{center}
 \begin{tabular}{lccll}
 sort & $S$ & $::=$ & ${\bf int} \mid {\bf string} \mid \ldots$ \\
 local type & $T$
-  & $::=$ & $k! \langle\tilde{S}\rangle; T$ & send \\
- && $\mid$ & $k? \langle\tilde{S}\rangle; T$ & receive \\
- && $\mid$ & $k \oplus \{\,l_i:T_i\,\}_{i\in I}$ & selection \\
- && $\mid$ & $k \& \{\,l_i:T_i\,\}_{i\in I}$ & branching \\
+  & $::=$ & $s! \langle\tilde{S}\rangle; T$ & send \\
+ && $\mid$ & $s? \langle\tilde{S}\rangle; T$ & receive \\
+ && $\mid$ & $s \oplus \{\,l_i:T_i\,\}_{i\in I}$ & selection \\
+ && $\mid$ & $s \& \{\,l_i:T_i\,\}_{i\in I}$ & branching \\
  && $\mid$ & $\mu{\bf t}.T \mid {\bf t}$ & recursion \\
  && $\mid$ & $0$ \\
-channel & $k$ \\
 label & $l$
 \end{tabular}
 \end{center}
 \caption{
-  Syntax of simplified local types.
-  The main simplification is that higher-order features are not present.
-}
+  Syntax of local types.
+  We do not include higher-order features.
+}\label{fig:pi-types-local}
 \end{figure}
+
+Intuitively,
+  local types describe how a single process interacts with its environment.
+The syntax of local types,
+  given in \autoref{fig:pi-types-local},
+  closely resembles the syntax of $\pi$-calculus itself.
+To describe the type system,
+  we will use two judgements:
+\begin{align}
+  &\Gamma \vdash P \triangleright \Delta
+    &&\text{process $P$ has typing $\Delta$}
+\\
+  &\Gamma \vdash e : S
+    &&\text{expression $e$ has sort $S$}
+\end{align}
+in environment~$\Gamma$,
+  which binds variables to sorts.
+A typing $\Delta$ is a set of local types.
+We need a set so that we can handle parallel composition.
+The typing rules are given in \autoref{fig:pi-typesystem-local}.
+
+\begin{figure}
+\begin{center}
+\begin{align}
+&\frac
+  {}
+  {\Gamma, x:S \vdash x : S}
+\\[1ex]
+&\frac
+  {\Gamma \vdash P \triangleright \Delta, \Delta'}
+  {\Gamma \vdash \bar{a}[2..n](\tilde{s}).P \triangleright \Delta}
+  \label{eq:pi-mcast}
+\\[1ex]
+&\frac
+  {\Gamma \vdash P \triangleright \Delta, \Delta'}
+  {\Gamma \vdash a[p](\tilde{s}).P \triangleright \Delta}
+  \label{eq:pi-macc}
+\\[1ex]
+&\frac
+  {\forall j \bigl(\Gamma \vdash e_j : S_j\bigr)
+    \qquad \Gamma \vdash P \triangleright \Delta,T}
+  {\Gamma \vdash s!\langle\tilde{e}\rangle;P
+    \triangleright \Delta, s!\langle\tilde{S}\rangle;T}
+\\[1ex]
+&\frac
+  {\Gamma, \tilde{x}:\tilde{S} \vdash P \triangleright \Delta,T}
+  {\Gamma \vdash s?(\tilde{x});P
+    \triangleright \Delta, s?(\tilde{S});T}
+\\[1ex]
+&\frac
+  {\Gamma \vdash P \triangleright \Delta,T_j
+    \qquad j\in I}
+  {\Gamma \vdash \bigl(s \triangleleft l_j; P\bigr)
+    \triangleright
+    \Delta,\bigl(s\oplus\{l_i:T_i\}_{i\in I}\bigr) }
+\\[1ex]
+&\frac
+  {\forall i\in I \bigl(\Gamma \vdash P_i \triangleright \Delta,T_i\bigr)}
+  {\Gamma \vdash \bigl(s \triangleright \{l_i:P_i\}_{i\in I}; P\bigr)
+    \triangleright
+    \Delta,\bigl(s\&\{l_i:T_i\}_{i\in I}\bigr) }
+\\[1ex]
+&\frac
+  {\Gamma \vdash P \triangleright \Delta
+    \qquad \Gamma \vdash P' \triangleright \Delta'}
+  {\Gamma \vdash \bigl(P\mid P'\bigr)
+    \triangleright \bigl(\Delta,\Delta'\bigr)}
+\end{align}
+\end{center}
+\caption{
+  Type system for local types.
+  This is significantly simpler than in
+    \cite{DBLP:journals/jacm/HondaYC16}
+    because we elided the higher order features.
+  In particular,
+    this makes it possible to define a local type system
+    without any reference to global types.
+  We omit the rules for process call,
+    because they do not bear much to our subsequent discussion of AF-Raf.
+  The notation $\tilde{x}:\tilde{S}$
+    is shorthand for
+    $x_1:S_1,\; x_2:S_2,\; x_3:S_3, \ldots$
+}
+\label{fig:pi-typesystem-local}
+\end{figure}
+
+Let us revisit our earlier example
+\begin{align}
+  P \;=\;
+  \bigl(
+  \bar{a}[2](s). s\triangleleft {\rm yes}; 0
+    \mid a[2](s). s\triangleright\{{\rm no} : P_{\rm no},\;
+      {\rm yes} : P_{\rm yes} \}
+  \bigr)
+\end{align}
+We can see that $\vdash P \triangleright $ holds,
+  with an empty context~$\Gamma$ and an empty typing~$\Delta$,
+  if there exist types $T_{\rm no}$~and~$T_{\rm yes}$
+  such that $\vdash P_{\rm no}\triangleright T_{\rm no}$
+    and $\vdash P_{\rm yes}\triangleright T_{\rm yes}$.
+Indeed,
+  the existence of such $T_{\rm no}$ and $T_{\rm yes}$
+    implies both
+\begin{align}
+  &\vdash \bigl(s \triangleleft {\rm yes}; 0\bigr)
+    \triangleright
+    \bigl(s \oplus \{{\rm no}:0,\; {\rm yes}:0\}\bigr)
+\\
+  &\vdash \bigl(s\triangleright\{{\rm no} : P_{\rm no},\;
+      {\rm yes} : P_{\rm yes} \}\bigr)
+    \triangleright
+    \bigl(s \& \{{\rm no}:T_{\rm no},\; {\rm yes}:T_{\rm yes}\} \bigr)
+\end{align}
+according to our rules.
+Notice, however,
+  that our rules \eqref{eq:pi-mcast} and \eqref{eq:pi-macc}
+  merely require the types
+    $s \oplus \{{\rm no}:0,\; {\rm yes}:0\}$
+  and
+    $s \& \{{\rm no}:T_{\rm no},\; {\rm yes}:T_{\rm yes}\}$
+  to exist:
+There is no requirement that the two types match up!
+This is unlike \cite{DBLP:journals/jacm/HondaYC16}.
+To rectify the situation,
+  we need to introduce global types.
 
 \section{Global Types}
 \label{sec:mast-global}
+
+
 
 \section{Connection to AF-Raf}
 \label{sec:mast-vs-afraf}
