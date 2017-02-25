@@ -2190,9 +2190,10 @@ by a binding of terms, such as ${\it sky}()$ and ${\it blue}()$, to
 variables, such as $y$~and~$z$.  More formally, a \emph{match} is a finite
 partial map from the set of variables to the set of ground terms.  We write
 $[\tau_1/x_1,\ldots,\tau_n/x_n]$ for the match that binds $x_k$
-to~$\tau_k$, for all $1\le k\le n$.  Also, we write
-$\tau[\tau_1/x_1,\ldots,\tau_n/x_n]$ for the result of substituting in
-parallel $x_k$ with~$\tau_k$, for all $1\le k\le n$.
+to~$\tau_k$, for all $1\le k\le n$. A well formed match has $x_i=x_j$ only
+for $i=j$.  Also, we write $\tau[\tau_1/x_1,\ldots,\tau_n/x_n]$ for the
+result of substituting in parallel $x_k$ with~$\tau_k$, for all $1\le k\le
+n$.
 
 \begin{example} Consider the following belief base \begin{align} &{\it
 Knows}({\it john}(), {\it john}()) \\ &{\it Knows}({\it john}(), {\it
@@ -4020,14 +4021,48 @@ Agent states are tuples with six components.
 Equation~\eqref{eq:bbdef} simply says that elements of ${\rm BeliefBase}$
 are mappings from ground terms to the element of some singleton set, which
 is the same as saying that they are \emph{finite} subsets of ${\rm
-GroundTerm}$. The sets ${\rm AgentCode}$ and ${\rm GroundTerm}$ are not
-defined here, but the definitions can be easily recovered from the abstract
-grammar (\autoref{sec:langdef.syntax}). The message queues $I$~and~$O$ are
+GroundTerm}$. The sets ${\rm AgentCode}$ and ${\rm GroundTerm}$ are defined
+in figure and in section respectively. The message queues $I$~and~$O$ are
 represented in the semantics by finite sequences: the (standard) notation
 $A^*$ stands for the finite sequences of elements from the set~$A$. Each
 message contains the identifier of another agent and the message data,
 which is a grounded term. The queue~$I$ contains agent identifiers for
 senders; the queue~$O$ contains agent identifiers for receivers.
+
+
+\begin{figure} % fig:agent-code<<<
+\begin{center}
+\begin{tabular}{lcll}
+  $P$ & $::=$ & $P_a;P$ & atomic program followed by a program 
+  \\  & $\mid$ & $\emptyset$  & empty
+  \\
+  $P_a$ & $::=$ & ${\bf rule}\,q\,\{B\}$ & rule
+  \\  & $\mid$ & ${\bf new}\,d(\bar{a})\,a'\,\{T'\}$ & agent creation
+  \\  & $\mid$ & ${\bf new }\;{\bf call}$ & new call 
+  \\  & $\mid$ & ${\bf new}\;{\bf session}\;n$ & new session
+  \\  & $\mid$ & $action(\ldots)$ & action invocation
+  \\  & $\mid$ & $x:=P$ & assignment
+  \\  & $\mid$ & $+t$ & belief update
+  \\  & $\mid$ & $-t$ & belief update
+  \\
+  $d$ & & & agent design name
+  \\
+  $\bar{a}$ & & & agent id's as arguments
+  \\
+  $a'$ & & & new agent identifier
+  \\
+  $T'$ & & & new agent's belief base
+  \\
+  $c$ & & & session name
+  \\
+  $t$ & & & ground term
+\end{tabular}
+\end{center}
+\caption{
+Definition of AF-Raf agent code
+}
+\label{fig:agent-code}
+\end{figure} % >>>
 
 The call state has four components, out of which only the call phase is
 mandatory.
@@ -4088,7 +4123,8 @@ AF-Raf~program.
 &(A, C, S)\.{is the program state, where} \\
 &\quad A({\it aid})=(\Gamma, T, P, I, O, d)
   &&\text{for all agent identifiers~$\it aid$} \\
-&\quad\quad \text{$\Gamma(x)$ is a term} && \text{for variables~$x$} \\
+%&\quad\quad \text{$\Gamma(x)$ is a term} && \text{for variables~$x$} \\
+&\quad\quad \text{$\Gamma$ maps variables to terms} \\
 &\quad\quad T\.{is a belief base} \\
 &\quad\quad P\.{is agent code} \\
 &\quad\quad I=m_1\ldots m_n\.{are the incoming messages} \\
@@ -4102,12 +4138,21 @@ AF-Raf~program.
 &\quad\quad p\.{is the call phase} \\
 &\quad S({\it sid})=\{(\Delta_1,Q_1),\ldots\,\}
   &&\text{for session identifiers~$\it sid$} \\
-&\quad\quad \Delta_k(x)\.{is an agent identifier, for variables~$x$} \\
+%&\quad\quad \Delta_k(x)\.{is an agent identifier, for variables~$x$} \\
+&\quad\quad \Delta_k\.{maps variables to agent identifiers} \\
 &\quad\quad Q_k\.{is a finite set of session expressions}
 \end{align*}
 \caption{The State of an AF-Raf Program}
 \label{fig:af-raf-state}
 \end{figure}
+
+\begin{remark}
+  Since $\Gamma$ maps variables to terms, it can be used as a substitution.
+  So $x\Gamma$ stands for $\Gamma(x)$; that is, the term to which $\Gamma$
+  maps variable x. In addition, $t\Gamma$ can be used for terms t,
+  recursively descending in t to perform the substitutions as usual.
+  \label{r:subst}
+\end{remark}
 
 Recall that the (structural) operational semantics of AF-Raf consists of a
 transition system. The states of this transition system have been defined
@@ -4146,9 +4191,14 @@ constraints are another form of judgment. The third hypothesis has the form
 (\Gamma_1,T_1,P_1)\to(\Gamma_2,T_2,P_2)
 \end{align}
 This is another form of judgment, which should be read as a transition
-involving only the local state of one agent. One way to view
-rule~\eqref{eq:opsem-agentfocus1} is that it gives us the means to focus on
-the state of one agent; another way to view it is that it defines the
+involving only the local state of one agent. 
+
+One way to view rule~\eqref{eq:opsem-agentfocus1} is that it gives us the
+means to focus on the state of one agent. Most rules focus on the evolution
+of $(\Gamma,T,P)$ and ignoring $(I,O,d)$, we only need to track the latter
+when we discuss message transmission, for example in~\eqref{eq:opsem-message} .
+
+Another way to view rule~\eqref{eq:opsem-agentfocus1} is that it defines the
 concurrent semantics of AF-Raf programs as being interleaving semantics. In
 particular, this makes the semantic of AF-Raf programs
 \emph{nondeterministic}, something to be expected of a distributed program.
@@ -4159,28 +4209,28 @@ rule is executed first, and there is no constraint on which instantiation of
 a rule is executed first.
 \begin{align}
 \frac
-  {({\bf rule}\,Q\,\{B\}) \in P}
+%  {({\bf rule}\,Q\,\{B\}) \in P}
+  {P = (P_1;{\bf rule}\,q\,\{B\};P_2)}
   {(\Gamma,T,P)\to(\Gamma,T,({\bf rule}\,Q\,\{B\};P))}
   \label{eq:opsem-chooserule}
 \\[1ex]
 \frac
-  {T \models \sigma Q \qquad\text{$\sigma Q$ ground}}
-  {(\Gamma,T,({\bf rule}\,Q\,\{B\}))\to(\Gamma,T,\sigma B)}
+  {T \models q \sigma \qquad\text{$q\sigma$ ground}}
+  {(\Gamma,T,({\bf rule}\,q\,\{B\}))\to(\Gamma,T,B\sigma)}
   \label{eq:opsem-instrule}
 \end{align}
 Rule~\eqref{eq:opsem-chooserule} says that if the code of an agent is~$P$,
 then execution may pick one of the rules in~$P$, execute the rule, and then
 start over with the execution of~$P$. Rule~\eqref{eq:opsem-instrule} uses
-some new, but standard, notations. Recall that $Q$, the query, is a term.
-Here $\sigma$~is a substitution from variables to ground terms: $\sigma
-Q$~is the result of applying the substitution $\sigma$ to the term~$Q$, and
-$\sigma B$ is the result of applying the substitution $\sigma$ to the rule
-body~$B$. The notation $T\models Q$ means that formula $Q$ hold in the
+some new, but standard, notations. Recall that $q$, the query, is a term.
+Here $\sigma$~is a substitution from variables to ground terms: $q\sigma$~is the result of applying the substitution $\sigma$ to the term~$q$, and
+$B\sigma$ is the result of applying the substitution $\sigma$ to the rule
+body~$B$. The notation $T\models q$ means that formula $q$ hold in the
 theory~$T$. (Recall that belief bases are predicate logic theories.)
 \begin{align}
-T &\models Q  &&\text{if} && Q\in T \\
-T &\models Q_1\&Q_2 &&\text{iff} &&\text{$T\models Q_1$ and $T\models Q_2$}\\
-T &\models Q_1|Q_2 &&\text{iff} &&\text{$T\models Q_1$ or $T\models Q_2$}
+T &\models q  &&\text{if} && q\in T \\
+T &\models q_1\&q_2 &&\text{iff} &&\text{$T\models q_1$ and $T\models q_2$}\\
+T &\models q_1|q_2 &&\text{iff} &&\text{$T\models q_1$ or $T\models q_2$}
 \end{align}
 Thus, rule~\eqref{eq:opsem-instrule} says that any instantiation of a rule
 may be chosen to be executed, as long as the instance of the query holds in
@@ -4188,6 +4238,11 @@ the current belief base. Rules
 \eqref{eq:opsem-chooserule}~and~\eqref{eq:opsem-instrule}, like the
 concurrency rule~\eqref{eq:opsem-agentfocus1}, are sources of
 nondeterminism.
+
+\begin{remark}
+$T \models q$ has the same meaning as: the set $\llbracket q \rrbracket_T$ of
+matches is not empty.
+\end{remark}  
 
 The semantics for sequential composition is given by the following
 inference rule.
@@ -4256,13 +4311,13 @@ $x$~maps to the value to which $P$~evaluated.
 The semantics of belief updates are the following:
 \begin{align}
 \frac
-  {\text{$\Gamma t$ ground}}
-  {(\Gamma,T,+t)\to(\Gamma,T\cup\{\Gamma t\},\Gamma t)}
+  {\text{$t\Gamma$ ground}}
+  {(\Gamma,T,+t)\to(\Gamma,T\cup\{t\Gamma\}, t\Gamma)}
   \label{eq:opsem-addbelief}
 \\[1ex]
 \frac
-  {\text{$\Gamma t$ ground}}
-  {(\Gamma,T,-t)\to(\Gamma,T-\{\Gamma t\},\Gamma t)}
+  {\text{$t\Gamma$ ground}}
+  {(\Gamma,T,-t)\to(\Gamma,T-\{t\Gamma\}, t\Gamma)}
   \label{eq:opsem-delbelief}
 \end{align}
 Here the scope $\Gamma$ is used as a substitution. Note that there are two
