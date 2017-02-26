@@ -1367,6 +1367,75 @@ modules~\cite{dblp:conf/prima/dastanims08}.
 %\todo{how is this chapter related to one of my objectives}
 % >>>
 \chapter{Types}\label{ch:types} % <<<
+\subsection{Multi-Sorted Predicate Logic} \label{sec:multi-sorted} % <<<
+
+The starting point in designing a type system for AF-Raf is the observation
+that most agent oriented programming languages use first order logic, more
+specifically predicate logic terms, to represent beliefs and messages. As a
+consequence we should look at how the introduction of types is managed in
+mathematical logic~\cite{DBLP:journals/jsyml/Wang52}, and recall basic
+notions necessary to our understanding. And, also, introduce notational
+conventions used in AF-Raf.  Moreover, although these notions are simple,
+their definitions in literature tend to have subtle but important
+differences.
+
+A \emph{term} is a variable, or a function applied to other terms.
+\begin{align}
+\mathit{Term}\quad\tau &::= \omega \mid \phi \\
+\mathit{Variable}\quad\omega &::= \nu \\
+\mathit{Function}\quad\phi &::= \nu(\tau_1,\ldots,\tau_n) \\
+\mathit{Name}\quad\nu
+\end{align}
+In AF-Raf, term names are strings.  Because term names uniquely identify a
+variable or a function we will say ``the function~$\nu$'' rather than ``the
+function with name~$\nu$.'' A term not containing variables is said to be
+\emph{ground}.
+
+\begin{remark}
+Ground terms are essentially trees of strings.
+\end{remark}
+
+A multi-sorted logic has a set~$S$ of sorts.  We use the letter~$\sigma$ to
+denote sorts.
+\begin{align}
+\sigma, \sigma_1, \sigma_2, \sigma_3, \ldots &\in S
+\end{align}
+Each function~$\nu$ has a signature
+$(\sigma_1\times\cdots\times\sigma_n)\to\sigma$.  Function~$\nu$ is always
+applied to $n$~terms whose sorts must be, respectively,
+$\sigma_1$,~$\sigma_2$, \dots,~$\sigma_n$, and the resulting term has
+sort~$\sigma$. We say that $\nu$~has \emph{arity}~$n$. \emph{Constants} are
+functions with arity~$0$.
+
+Typically, in mathematical logic, the set~$S$ of sorts and the function
+signatures are required to satisfy further constraints. \textit{Bool} must
+be one of the sorts. \emph{Formulas} are terms with sort \textit{Bool}.
+The argument sorts ($\sigma_1$,~$\sigma_2$, \dots,~$\sigma_n$) either are
+all \textit{Bool}, or none is \textit{Bool}.  If the argument sorts are
+\textit{Bool}, then the result sort~$\sigma$ must also be \textit{Bool},
+and $\nu$ is said to be a \emph{boolean connective}.  If the argument sorts
+are not \textit{Bool} and the result sort~$\sigma$ is \textit{Bool}, then
+$\nu$ is said to be a \emph{predicate}.  Agent~Factory has these
+constraints and AF-Raf inherits them. In addition, AF-Raf uses an infix
+notation (described later) for boolean connectives, letter strings starting
+with uppercase for predicate names, and letter strings starting with
+lowercase for other function names and for variable names.
+
+\begin{remark}
+%\rg{I'm not sure about this remark. I think \emph{traditional} logicians
+%behave as described here.}
+The definitions given here are in-between what applied computer scientists
+tend to prefer and what pure logicians tend to prefer.  Computer scientists
+work with \emph{expressions} (rather than terms and formulas) and do not
+have constraints on function signatures with respect to booleans.
+Logicians, on the other hand, do have these constraints and, moreover,
+define terms in such a way that formulas are not terms, and predicates are
+not functions. Moreover, logicians single out equality between terms as
+being a special predicate.
+\end{remark}
+
+%\rg{Maybe add some simple examples early on.}
+% >>>
 \subsection{Algebraic Data Types}\label{sec:adt} % <<<
 
 In functional programming an algebraic data type is a kind of compound type
@@ -2716,74 +2785,6 @@ a name and an IP address. To support the check for messages we add
 $\delta_m(a)$ to the agent identifier of agent~$a$.
 
 
-\subsection{Multi-Sorted Predicate Logic} \label{sec:multi-sorted} % <<<
-
-The starting point in designing a type system is the observation that most
-agent oriented programming languages use first order logic, more
-specifically predicate logic terms, to represent beliefs and messages. As a
-consequence we should look at how the introduction of types is managed in
-mathematical logic, and recall basic notions necessary to our
-understanding. And, also, introduce notational conventions used in AF-Raf.
-Moreover, although these notions are simple, their definitions in
-literature tend to have subtle but important differences.
-
-A \emph{term} is a variable, or a function applied to other terms.
-\begin{align}
-\mathit{Term}\quad\tau &::= \omega \mid \phi \\
-\mathit{Variable}\quad\omega &::= \nu \\
-\mathit{Function}\quad\phi &::= \nu(\tau_1,\ldots,\tau_n) \\
-\mathit{Name}\quad\nu
-\end{align}
-In AF-Raf, term names are strings.  Because term names uniquely identify a
-variable or a function we will say ``the function~$\nu$'' rather than ``the
-function with name~$\nu$.'' A term not containing variables is said to be
-\emph{ground}.
-
-\begin{remark}
-Ground terms are essentially trees of strings.
-\end{remark}
-
-A multi-sorted logic has a set~$S$ of sorts.  We use the letter~$\sigma$ to
-denote sorts.
-\begin{align}
-\sigma, \sigma_1, \sigma_2, \sigma_3, \ldots &\in S
-\end{align}
-Each function~$\nu$ has a signature
-$(\sigma_1\times\cdots\times\sigma_n)\to\sigma$.  Function~$\nu$ is always
-applied to $n$~terms whose sorts must be, respectively,
-$\sigma_1$,~$\sigma_2$, \dots,~$\sigma_n$, and the resulting term has
-sort~$\sigma$. We say that $\nu$~has \emph{arity}~$n$. \emph{Constants} are
-functions with arity~$0$.
-
-Typically, in mathematical logic, the set~$S$ of sorts and the function
-signatures are required to satisfy further constraints. \textit{Bool} must
-be one of the sorts. \emph{Formulas} are terms with sort \textit{Bool}.
-The argument sorts ($\sigma_1$,~$\sigma_2$, \dots,~$\sigma_n$) either are
-all \textit{Bool}, or none is \textit{Bool}.  If the argument sorts are
-\textit{Bool}, then the result sort~$\sigma$ must also be \textit{Bool},
-and $\nu$ is said to be a \emph{boolean connective}.  If the argument sorts
-are not \textit{Bool} and the result sort~$\sigma$ is \textit{Bool}, then
-$\nu$ is said to be a \emph{predicate}.  Agent~Factory has these
-constraints and AF-Raf inherits them. In addition, AF-Raf uses an infix
-notation (described later) for boolean connectives, letter strings starting
-with uppercase for predicate names, and letter strings starting with
-lowercase for other function names and for variable names.
-
-\begin{remark}
-%\rg{I'm not sure about this remark. I think \emph{traditional} logicians
-%behave as described here.}
-The definitions given here are in-between what applied computer scientists
-tend to prefer and what pure logicians tend to prefer.  Computer scientists
-work with \emph{expressions} (rather than terms and formulas) and do not
-have constraints on function signatures with respect to booleans.
-Logicians, on the other hand, do have these constraints and, moreover,
-define terms in such a way that formulas are not terms, and predicates are
-not functions. Moreover, logicians single out equality between terms as
-being a special predicate.
-\end{remark}
-
-%\rg{Maybe add some simple examples early on.}
-% >>>
 \subsection{Algebraic Data Types} % <<<
 
 In AF-Raf, a \emph{belief} is a boolean ground term; in AF-Raf, a
