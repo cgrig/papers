@@ -2034,20 +2034,91 @@ However, such technicalities are outside this brief introduction to
   But, the AF-Raf formalism is new, and distinct from that of session types.
 }
 
-TODO: origrinal mast has many more subtelties, which we ignored on purpose
+The development methodology~\cite{DBLP:journals/jacm/HondaYC16}
+  with session types works as follows.
+First, the global type is designed.
+Then, this global type is automatically projected
+  so that several local types are obtained.
+Two local types can then be implemented by two independent teams.
+In contrast, AF-Raf does not have an automated projections operation.
+Programmers must first agree on sessions,
+  and then split into independent teams,
+  as they would do with session types.
+But, then, programmers should also write down roles,
+  and only then implement them.
+The AF-Raf compiler will check that sessions and roles agree.
+Although it is recommended that programmers design roles in addition to
+sessions, this is not, strictly speaking, required.
+The agreement between an implementation and a session
+  is checked by the AF-Raf interpreter.
 
-TODO: methodology for development with original mast
+Some features of session types are missing from AF-Raf.
+For example, it is usually considered that the ability to send channels
+over channels is a defining characteristic of $\pi$-calculus,
+  yet we did not cover it in the previous review.
+We did not not cover it for simplicity,
+  but also because it is a feature without a correspondent in AF-Raf.
+In AF-Raf, there is no notion of channel.
+Instead,
+  there is a notion of \emph{agent identifier}.
+To send a message,
+  an agent simply needs to know the identifier of the target.
+One can of course embed an agent identifier in a message.
+But, that would be, from the point of view of the AF-Raf compiler and from
+the point of view of the AF-Raf interpreter, just normal data, that
+receives no special treatment.
+In contrast,
+  $\pi$-calculus has a special syntactic construct for sending channels
+  over channels.
+Another way to view the situation is this:
+  AF-Raf leaves all higher-order reasoning about distributing agent
+  identifiers to the programmer.
+As a result, type checking in AF-Raf is much simpler
+  --- almost trivial.
+This choice is done consciously,
+  because we believe that higher-order features,
+    though useful and interesting,
+    are confusing to many programmers.
+In general,
+  we tried to avoid altogether the subtle corners of session type.
 
-TODO: say we have no delegation -- so one agent can't pretend to be another
+In some sense,
+  multiparty asynchronous $\pi$-calculus is simultaneously
+    too high level and too low level for developing realistic programs.
+It is too high level
+  because it has one statement that, in an atomic step,
+    establishes agreement between $n$~processes, to initiate a session.
+It is nontrivial to implement atomically such an operation
+  in a distributed system.
+AF-Raf takes the following approach:
+Any \emph{single} agent can initiate a session,
+  and the other agents involved in the session are simply informed in due time.
 
-TODO: say that $\pi$ is too high-level -- session creation
+Also, multiparty asynchronous $\pi$-calculus is too low level
+  because it offers no means to structure data.
+There are, however, variants of $\pi$-calculus that solve this problem~%
+  \cite{DBLP:conf/popl/AbadiF01}.
+In AF-Raf,
+  not only do we provide a built-in facility to define and represent
+  algebraic data types,
+  but we also define AF-Raf actions to be arbitrary pieces of Java code.
+This is similar to the foreign-function interfaces of most widely used
+programming languages:
+  C can embed assembly,
+  Java can call `native' C code,
+  Haskell and OCaml can also call C code,
+  and so on.
 
-TODO: say that $\pi$ is too low-level
-  -- no ADTs (though Fournet and Abadi), and no ???
+We note that the operational semantics of $\pi$-calculus
+  is defined as a transition system over $P$,
+  which is an inductively defined set containing process `code'.
+We take a similar approach in the definition of AF-Raf operational
+semantics, carrying around `agent code' in the runtime state.
 
-TODO: say we use similar style of opsem
+Finally,
+  it should be said that there exist many other formalisms for session
+  types~\cite{DBLP:conf/forte/CastagnaDP11}.
 
-TODO: Link to other formalisms for session types.
 
 \section{Old}
 
