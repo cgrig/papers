@@ -6,7 +6,7 @@
 \def\fb#1{\textbf{#1}}
 
 \newcommand*\R[1]{\textcolor{red}{#1}} % used for refs that might change
-\newcommand{\todo}[1]{[\textcolor{red}{TODO}: #1]}
+\newcommand{\todo}[1]{[\textcolor{green}{TODO}: #1]}
 
 \newenvironment{them}{\noindent\begingroup\color{blue}}{\endgroup\par}
 
@@ -654,7 +654,9 @@ system.
 
 Page 37:
 Remark 3 highlights a problem: which is the candidate's solution to it?
+
 \end{them}
+
 The candidate's solution is presented in the first sentence of that paragraph:
 ``The definitions given here are in-between what applied scientists tend to
 prefer and what pure logicians tend to prefer''.
@@ -676,6 +678,7 @@ Page 39:
 programs?
 
 \end{them}
+
 Fixed. It should, indeed, be +(2(),3()). The user of AF-Raf doesn't have to use
 this cumbersome representation.
 
@@ -684,6 +687,7 @@ this cumbersome representation.
 Page 41:
 “Those operations are: ....” has been already said in page 40.
 \end{them}
+
 Fixed. Definition of algebraic data types was moved to Background.
 
 \begin{them}
@@ -704,7 +708,11 @@ using an ontology to give meaning to terms appearing there, and communication
 is asynchronous.
 
 \end{them}
-\todo{?}
+Indeed, AF-Raf messages are not structured according to  the speech act
+theory.  We use algebraic data types to define the content of the messages,
+roles to define possible message exchanges and sessions to define communication
+patterns. For a formal definition of messages see the operational semantics of
+messages starting on \R{page 138}.
 
 \begin{them}
 
@@ -723,7 +731,17 @@ Page 48:
 motivation should be provided for that.
 
 \end{them}
-\todo{?}
+
+Messages in AF-Raf are written in the same format as beliefs so it is very easy
+to store them in the belief base without no further transformation. This is
+very convenient for the AF-Raf programmer. 
+
+The standard format is very important for the situations when agents interact
+with other agents that are written using different programming languages.
+AF-Raf messages could potentialy be transformed automatically to conform with
+the standard before they are being passed to the Agent Factory framework. This
+functionality is not supoorted yet, but it is one area to look at in the
+future.
 
 \begin{them}
 
@@ -755,8 +773,8 @@ than using JADE ontology.
 Page 49:
 “In contrast, the earlier role....” should be explained before.
 \end{them}
-I think it is sensible to introduce role dependencies after describing simple
-roles first, to avoid confusion.
+I believe that introducing role dependencies after describing simple roles
+minimises confusion.
 
 \begin{them}
 
@@ -877,7 +895,7 @@ components of the AF-Raf language should be introduced in Chapter 3: in Chapter
 4, they should just be discussed in more detail.
 
 \end{them}
-\todo{}
+Fixed. All components are introduced in \R{Chapter 11}, Main AF-Raf Concepts, and discussed in detail in \R{Chapter 12}.
 
 \begin{them}
 
@@ -893,7 +911,8 @@ Fixed
 What is an “agent design”? 
 
 \end{them}
-\todo{}
+
+An agent is an instance of an agent design. This was explained on page 66 (now \R{103}): the relationship between an agent design and an agent in AF-Raf is similar to that between a class and an object in Java.
 
 \begin{them}
 
