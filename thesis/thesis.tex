@@ -1458,17 +1458,6 @@ values are handled identically regardless of their actual type.
 % >>>
 \chapter{Multiparty Session Types} % <<<
 
-\marginpar{
-Plan:
-\begin{itemize}
-\item intro: what multiparty async session types are good for
-\item (multiparty async) $\pi$-calculus: syntax and semantics
-\item local types: typechecking
-\item global types: projection
-\item conclusion: which bits we'll use
-\end{itemize}
-}
-
 The design of AF-Raf is partly inspired
   by the multiparty asynchronous session types
   of Honda, Yoshida, and Carbone~\cite{DBLP:journals/jacm/HondaYC16}.
@@ -1516,11 +1505,8 @@ Several \emph{processes} communicate through \emph{channels}.
 Over channels, one can send \emph{messages},
   which include integers and labels.
 Informally, one could think of a channel as a queue data structure:
-(1)~sending a value to a channel corresponds to pushing into the queue;
+(1)~sending a value to a channel corresponds to pushing into the queue; and
 (2)~receiving a value from a channel corresponds to popping from the queue.
-%and
-%(3)~sending a channel~$x$ over a channel~$y$ corresponds to
-%  pushing the `object reference'~$x$ into the queue~$y$.
 In the particular flavour of $\pi$-calculus described here,
   channels are created by establishing a session.
 To establish a session,
@@ -2103,126 +2089,91 @@ However, such technicalities are outside this brief introduction to
   But, the AF-Raf formalism is new, and distinct from that of session types.
 }
 
-TODO: origrinal mast has many more subtelties, which we ignored on purpose
+The development methodology~\cite{DBLP:journals/jacm/HondaYC16}
+  with session types works as follows.
+First, the global type is designed.
+Then, this global type is automatically projected
+  so that several local types are obtained.
+Two local types can then be implemented by two independent teams.
+In contrast, AF-Raf does not have an automated projections operation.
+Programmers must first agree on sessions,
+  and then split into independent teams,
+  as they would do with session types.
+But, then, programmers should also write down roles,
+  and only then implement them.
+The AF-Raf compiler will check that sessions and roles agree.
+Although it is recommended that programmers design roles in addition to
+sessions, this is not, strictly speaking, required.
+The agreement between an implementation and a session
+  is checked by the AF-Raf interpreter.
 
-TODO: methodology for development with original mast
+Some features of session types are missing from AF-Raf.
+For example, it is usually considered that the ability to send channels
+over channels is a defining characteristic of $\pi$-calculus,
+  yet we did not cover it in the previous review.
+We did not not cover it for simplicity,
+  but also because it is a feature without a correspondent in AF-Raf.
+In AF-Raf, there is no notion of channel.
+Instead,
+  there is a notion of \emph{agent identifier}.
+To send a message,
+  an agent simply needs to know the identifier of the target.
+One can of course embed an agent identifier in a message.
+But, that would be, from the point of view of the AF-Raf compiler and from
+the point of view of the AF-Raf interpreter, just normal data, that
+receives no special treatment.
+In contrast,
+  $\pi$-calculus has a special syntactic construct for sending channels
+  over channels.
+Another way to view the situation is this:
+  AF-Raf leaves all higher-order reasoning about distributing agent
+  identifiers to the programmer.
+As a result, type checking in AF-Raf is much simpler
+  --- almost trivial.
+This choice is done consciously,
+  because we believe that higher-order features,
+    though useful and interesting,
+    are confusing to many programmers.
+In general,
+  we tried to avoid altogether the subtle corners of session type.
 
-TODO: say we have no delegation -- so one agent can't pretend to be another
+In some sense,
+  multiparty asynchronous $\pi$-calculus is simultaneously
+    too high level and too low level for developing realistic programs.
+It is too high level
+  because it has one statement that, in an atomic step,
+    establishes agreement between $n$~processes, to initiate a session.
+It is nontrivial to implement atomically such an operation
+  in a distributed system.
+AF-Raf takes the following approach:
+Any \emph{single} agent can initiate a session,
+  and the other agents involved in the session are simply informed in due time.
 
-TODO: say that $\pi$ is too high-level -- session creation
+Also, multiparty asynchronous $\pi$-calculus is too low level
+  because it offers no means to structure data.
+There are, however, variants of $\pi$-calculus that solve this problem~%
+  \cite{DBLP:conf/popl/AbadiF01}.
+In AF-Raf,
+  not only do we provide a built-in facility to define and represent
+  algebraic data types,
+  but we also define AF-Raf actions to be arbitrary pieces of Java code.
+This is similar to the foreign-function interfaces of most widely used
+programming languages:
+  C can embed assembly,
+  Java can call `native' C code,
+  Haskell and OCaml can also call C code,
+  and so on.
 
-TODO: say that $\pi$ is too low-level
-  -- no ADTs (though Fournet and Abadi), and no ???
+We note that the operational semantics of $\pi$-calculus
+  is defined as a transition system over $P$,
+  which is an inductively defined set containing process `code'.
+We take a similar approach in the definition of AF-Raf operational
+semantics, carrying around `agent code' in the runtime state.
 
-TODO: say we use similar style of opsem
+Finally,
+  it should be said that there exist many other formalisms for session
+  types~\cite{DBLP:conf/forte/CastagnaDP11}.
 
-TODO: Link to other formalisms for session types.
-
-\section{Old}
-
-
-
-The next research area we draw inspiration from is the area of multiparty
-session types, developed at the intersection of communications systems and
-type theory. Multiparty session types represent a type systems that ensure
-communication safety among two or more participants. This is achieved by
-the global types, which can be viewed as a global specification of the
-participants' actions, or, in other words a global specification of the
-interaction protocol. The global types are projected at the level of each
-participant as local types. The programs are eventually type checked
-against the local types~\cite{DBLP:journals/jacm/HondaYC16}.
-
-The research in session types initiated in process calculi and programming
-languages for binary session, was extended to multiparty asynchronous
-session types. In binary session types, where you have just two
-participants, the local type serves as the description of the whole
-conversation as well, but for multiparty sessions the whole conversation
-can't be specified without the type abstraction which describes global
-conversation scenarios of multiparty sessions.~\cite{DBLP:journals/jacm/HondaYC16}
-
-A session is a series of interactions which serve as a unit of
-communication. The structure of a session is abstracted as a type. Such a
-global type is like a shared agreement among communication peers, and
-represents the basis for efficient type checking through its projection
-onto individual peers.
-
-{\def\l#1->#2:#3<#4>{\mathtt{#1}\to\mathtt{#2}:#3\langle\mathsf{#4}\rangle}
-
-Here is an example of such a type from
-Honda et al.~\cite{dblp:conf/popl/hondayc08}:\\
-  $\mu\mathbf{t}.$
-  $\l DP->K:d<bool>. $\\
-  $\l KP->K:k<bool>. $\\
-  $\l K->C:c<bool>.\mathbf{t}$
-
-This type means that process \texttt{K} receives two booleans, one from
-\texttt{DP} through channel~$d$ and one from \texttt{KP} through channel~$k$,
-then sends a boolean to~\texttt{C} through channel~$c$, and the whole process
-repeats.
-
-\begin{figure}\footnotesize % <<<
-\begin{center}
-\begin{tabular}{llcll}
-  Global & $G$ & $::=$ & $p \to p' : k\langle U\rangle.G'$ & values
-  \\  && $\mid$ & $p\to p' : k \{l_j : G_j\}_{j\in J}$  & branching
-  \\ && $\mid$  & $G,G'$ & parallel
-  \\ && $\mid$ & $\mu {\bf t}. G$ & recursive
-  \\ && $\mid$ & ${\bf t}$ & variable
-  \\ && $\mid$ & ${\sf end}$ & end
-\\
-Value & $U$ & $::=$ & $\tilde S \mid T@p$
-\\
-Sort & $S$ & $::=$ & ${\sf bool}\mid {\sf nat}\mid\ldots\mid\langle G\rangle$
-\end{tabular}
-\end{center}
-\caption{Syntax of Global Types~\cite{DBLP:journals/jacm/HondaYC16}}
-\label{fig:globalType-old}
-\end{figure} % >>>
-
-The grammar of global session type, or global type, denoted by $G$,$G'$,...
-is given in \ref{fig:globalType}. Type $p \to p' : k\langle U\rangle.G'$
-says that participant $p$ sends a message of type $U$ to channel $k$, is
-received by participant $p'$, and interactions described in $G'$ takes
-place. Type $p\to p' : k \{l_j : G_j\}_{j\in J}$ says participant $p$ sends
-one of the labels to channel $k$ which is then received by participant $p$.
-If $l_j$ is sent, interactions described in $G_j$ take place.  Type $G,G'$
-represents concurrent run of interactions specified by $G$ and $G'$ . Type
-$μt.G$ is a recursive type for recurring conversation structures~\cite{DBLP:journals/jacm/HondaYC16}.
-
-
-%\begin{figure}\footnotesize % <<<
-%\begin{verbatim}
-%Value U ::= S˜ | T@p
-%Sort S ::= bool | ... | G
-%Local T ::= k!UT send
-%          | k? UT receive
-%          | k⊕ {li : Ti}i∈I selection
-%          | k&{li : Ti}i∈I branching
-%          | μt.T | t | end
-%\end{verbatim}
-%\caption{Syntax of Local Types}
-%\label{fig:localType}
-%\end{figure} % >>>
-%The grammar is given in~\ref{fig:localType}.
-
-Local session types or local types, ranged over by $T$,$T'$ are types for
-local behaviour of processes, acting as a link between global types and
-processes. The following rules define how the projection is performed from the global type to the local types of each participant. The value global type is
-projected either as a send local type or as a receive local type. The
-branching global type is projected as either a selection (describes the
-behaviour of selecting from a number of options) or a branching (describes
-the behaviour of waiting for an option to be selected) local type~\cite{DBLP:journals/jacm/HondaYC16}.
-
-\cite{DBLP:journals/jacm/HondaYC16} describes the Programming Methodology
-for Multiparty Interactions as follows: "Once given global types as our
-tool, we can consider the following development steps for programs with
-multiparty sessions.  Step 1 A programmer describes an intended interaction
-scenario as global type G, and checks that it is linear.  Step 2 She
-develops code, one for each participant, incrementally validating its
-conformance to the projection of G onto each participant by efficient
-type-checking.  When programs are executed, their interactions are
-guaranteed to follow the stipulated scenario. The type specification also
-serves as a basis for maintenance and upgrade."
 
 % >>>
 \chapter{Agent Factory} % <<<
