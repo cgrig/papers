@@ -1709,8 +1709,7 @@ local type & $T$
  && $\mid$ & $s \oplus \{\,l_i:T_i\,\}_{i\in I}$ & selection \\
  && $\mid$ & $s \& \{\,l_i:T_i\,\}_{i\in I}$ & branching \\
  && $\mid$ & $\mu{\bf t}.T \mid {\bf t}$ & recursion \\
- && $\mid$ & $0$ \\
-label & $l$
+ && $\mid$ & $0$ & end
 \end{tabular}
 \end{center}
 \caption{
@@ -1747,6 +1746,11 @@ The typing rules are given in \autoref{fig:pi-typesystem-local}.
   {\Gamma, x:S \vdash x : S}
 \\[1ex]
 &\frac
+  {}
+  {\Gamma \vdash 0 \triangleright 0}
+  \label{eq:pi-typesystem-inact}
+\\[1ex]
+&\frac
   {\Gamma \vdash P \triangleright \Delta, \Delta'}
   {\Gamma \vdash \bar{a}[2..n](\tilde{s}).P \triangleright \Delta}
   \label{eq:pi-mcast}
@@ -1761,11 +1765,13 @@ The typing rules are given in \autoref{fig:pi-typesystem-local}.
     \qquad \Gamma \vdash P \triangleright \Delta,T}
   {\Gamma \vdash s!\langle\tilde{e}\rangle;P
     \triangleright \Delta, s!\langle\tilde{S}\rangle;T}
+  \label{eq:pi-typesystem-send}
 \\[1ex]
 &\frac
   {\Gamma, \tilde{x}:\tilde{S} \vdash P \triangleright \Delta,T}
   {\Gamma \vdash s?(\tilde{x});P
     \triangleright \Delta, s?(\tilde{S});T}
+  \label{eq:pi-typesystem-rcv}
 \\[1ex]
 &\frac
   {\Gamma \vdash P \triangleright \Delta,T_j
@@ -1773,12 +1779,14 @@ The typing rules are given in \autoref{fig:pi-typesystem-local}.
   {\Gamma \vdash \bigl(s \triangleleft l_j; P\bigr)
     \triangleright
     \Delta,\bigl(s\oplus\{l_i:T_i\}_{i\in I}\bigr) }
+  \label{eq:pi-typesystem-select}
 \\[1ex]
 &\frac
   {\forall i\in I \bigl(\Gamma \vdash P_i \triangleright \Delta,T_i\bigr)}
   {\Gamma \vdash \bigl(s \triangleright \{l_i:P_i\}_{i\in I}; P\bigr)
     \triangleright
     \Delta,\bigl(s\&\{l_i:T_i\}_{i\in I}\bigr) }
+  \label{eq:pi-typesystem-branch}
 \\[1ex]
 &\frac
   {\Gamma \vdash P \triangleright \Delta
@@ -1815,7 +1823,7 @@ Let us revisit our earlier example
 \end{align}
 We can see that $\vdash P \triangleright $ holds,
   with an empty context~$\Gamma$ and an empty typing~$\Delta$,
-  if there exist types $T_{\rm no}$~and~$T_{\rm yes}$
+  if there exist local types $T_{\rm no}$~and~$T_{\rm yes}$
   such that $\vdash P_{\rm no}\triangleright T_{\rm no}$
     and $\vdash P_{\rm yes}\triangleright T_{\rm yes}$.
 Indeed,
@@ -1831,7 +1839,10 @@ Indeed,
     \triangleright
     \bigl(s \& \{{\rm no}:T_{\rm no},\; {\rm yes}:T_{\rm yes}\} \bigr)
 \end{align}
-according to our rules.
+according to typing rules
+  \eqref{eq:pi-typesystem-inact},
+  \eqref{eq:pi-typesystem-select}, and
+  \eqref{eq:pi-typesystem-branch}.
 Notice, however,
   that our rules \eqref{eq:pi-mcast} and \eqref{eq:pi-macc}
   merely require the types
@@ -1847,10 +1858,185 @@ To rectify the situation,
 \section{Global Types}
 \label{sec:mast-global}
 
+\begin{figure} % <<<
+\begin{center}
+\begin{tabular}{lccll}
+global type & $G$
+  & $::=$ & $p \to p' : s\langle\tilde{S}\rangle.G'$ & value
+  \\  && $\mid$ & $p\to p' : s \{l_j : G_j\}_{j\in J}$  & label
+  \\ && $\mid$  & $G,G'$ & parallel
+  \\ && $\mid$ & $\mu {\bf t}. G \mid {\bf t}$ & recursion
+  \\ && $\mid$ & $0$ & end \\
+participant & $p$
+\end{tabular}
+\end{center}
+\caption{
+  Syntax of global types.
+  We omit higher-order features.
+  The sorts $S$ are defined in \autoref{fig:pi-types-local}.
+}
+\label{fig:pi-types-global}
+\end{figure} % >>>
 
+Intuitively,
+  global types describe a protocol,
+  in which there may be more than two participants.
+The syntax of global types,
+  given in \autoref{fig:pi-types-global},
+  resembles that of local types,
+    except that sending and receiving are grouped together.
+In other words,
+  some asynchrony --- the overtaking of messages en route ---
+  is not visible anymore at the level of global types.
+The executions described by global types are still highly concurrent, though:
+  Different parts of the system can exchange messages in parallel.
 
-\section{Connection to AF-Raf}
+As an example, here is a global type of a two-buyer protocol~%
+  \cite{DBLP:journals/jacm/HondaYC16}:
+\begin{align}
+\begin{aligned}
+  {\tt B1}\to{\tt S} &: s\langle{\rm string}\rangle. \\
+  {\tt S}\to{\tt B1} &: b_1\langle{\rm int}\rangle. \\
+  {\tt S}\to{\tt B2} &: b_2\langle{\rm int}\rangle. \\
+  {\tt B1}\to{\tt B2} &: b'_2\langle{\rm int}\rangle. \\
+  {\tt B2}\to{\tt S} &: s
+    \left\{
+      \begin{aligned}
+      {\rm ok} :
+        {\tt B2}\to{\tt S} &: s\langle{\rm string}\rangle. \\
+        {\tt S}\to{\tt B2} &: b_2\langle{\rm date}\rangle. 0 \\
+      \end{aligned}
+      \;,\quad
+      \begin{aligned}
+      {\rm quit} : 0
+      \end{aligned}
+    \right\}
+\end{aligned}
+\end{align}
+{\tt B1}~and~{\tt B2} are the buyers; {\tt S} is the seller.
+{\tt B1} sends a book title ({\rm string}) to {\tt S}.
+{\tt S} replies with quote ({\rm int}) to both {\tt B1} and {\tt B2}, in parallel.
+{\tt B1} tells {\tt B2} how much it is willing to contribute ({\tt int}).
+Now, {\tt B2} notifies {\tt S}
+  whether the deal is on ({\rm ok})
+  or off ({\rm quit}).
+If the deal is on,
+  then {\tt B2} follows up with an address ({\rm string}),
+  and {\tt S} replies with an expected delivery date.
+
+Recall our earlier motivation for global types:
+  the need for a mechanism that enforces local types to match up.
+The idea is to define a projection operation:
+  $G \upharpoonright p$ is a local type obtained by projecting
+    the global type~$G$ on participant~$p$.
+In our two-buyer example,
+  the projection on {\tt S} is the following:
+\begin{align}
+\begin{aligned}
+&s? \langle{\rm string}\rangle.
+b_1! \langle{\rm int}\rangle.
+b_2! \langle{\rm int}\rangle. \\
+&\quad s \&
+\left\{
+  \begin{aligned}
+  {\rm ok} : s&?\langle{\rm string}\rangle. \\
+    s_2&!\langle{\rm date}\rangle.0
+  \end{aligned}
+  ,
+  \quad{\rm quit}:0
+\right\}
+\end{aligned}
+\end{align}
+The seller receives a book title ({\rm string}) on channel~$s$,
+  sends a quote ({\rm int}) on both channels $b_1$~and~$b_2$,
+  then waits for a label on channel~$s$,
+  and branches accordingly.
+
+In general,
+  projection is defined as follows.
+For value transmission:
+\begin{align}
+\bigl(p_1\to p_2: s\langle\tilde{S}\rangle.G'\bigr)\upharpoonright p
+  \;=\;
+  \begin{cases}
+    s!\langle\tilde{S}\rangle; (G' \upharpoonright p)
+      &\text{if $p=p_1\ne p_2$} \\
+    s?\langle\tilde{S}\rangle; (G' \upharpoonright p)
+      &\text{if $p=p_2\ne p_1$} \\
+    (G' \upharpoonright p)
+      &\text{if $p\notin\{p_1,p_2\}$}
+  \end{cases}
+\end{align}
+For label transmission:
+\begin{align}
+\begin{aligned}
+&\bigl(p_1\to p_2: s\{l_j:G_j\}_{j\in J}\bigr)\upharpoonright p
+  \;=\;\\
+&\qquad
+  \begin{cases}
+    s\oplus \bigl\{l_j:(G_j \upharpoonright p)\bigr\}
+      &\text{if $p=p_1\ne p_2$} \\
+    s\& \bigl\{l_j:(G_j \upharpoonright p)\bigr\}
+      &\text{if $p=p_2\ne p_1$} \\
+    G \upharpoonright p
+      &\text{if $p\notin\{p_1,p_2\}$, and $G=G_j$ for all $j\in J$}
+  \end{cases}
+\end{aligned}
+\end{align}
+For parallel composition:
+\begin{align}
+\bigl(G_1\mid G_2\bigr) \upharpoonright p \;=\;
+  \begin{cases}
+  G_i \upharpoonright p
+    &\text{if $\{p\}\cap\{G_1,G_2\}=\{G_i\}$} \\
+  0 &\text{if $p\notin\{G_1,G_2\}$}
+  \end{cases}
+\end{align}
+For recursion:
+\begin{align}
+\bigl(\mu{\bf t}.G\bigr)\upharpoonright p
+  \;&=\;
+  \begin{cases}
+  \mu{\bf t}.(G\upharpoonright p)
+    &\text{if $(G\upharpoonright p)\ne0$} \\
+  0 &\text{otherwise}
+  \end{cases}
+\\
+{\bf t}\upharpoonright p \;&=\;
+  {\bf t}
+\end{align}
+For end:
+\begin{align}
+  0\upharpoonright p \;=\; 0
+\end{align}
+When none of the side conditions hold,
+  the projection is undefined.
+A global type is said to be \emph{coherent}
+  if its projection with respect to every participant are defined.
+
+The basic idea of how local types are forced to match up
+  is to require them to be projections of a single coherent global type.
+Technically,
+  this is achieved by enriching the local type system
+    (\autoref{fig:pi-typesystem-local})
+  such that it tracks information about global types.
+However, such technicalities are outside this brief introduction to
+  multiparty asynchronous session types.
+
+\section{Conclusions and Connection to AF-Raf}
 \label{sec:mast-vs-afraf}
+
+\emph{%
+  There is no formal connection between session types and AF-Raf.
+  Informally,
+    AF-Raf sessions are inspired by global types,
+    and AF-Raf roles are inspired by local types.
+  But, the AF-Raf formalism is new, and distinct from that of session types.
+}
+
+TODO: origrinal mast has many more subtelties, which we ignored on purpose
+
+TODO: methodology for development with original mast
 
 TODO: say we have no delegation -- so one agent can't pretend to be another
 
@@ -1919,7 +2105,7 @@ Sort & $S$ & $::=$ & ${\sf bool}\mid {\sf nat}\mid\ldots\mid\langle G\rangle$
 \end{tabular}
 \end{center}
 \caption{Syntax of Global Types~\cite{DBLP:journals/jacm/HondaYC16}}
-\label{fig:globalType}
+\label{fig:globalType-old}
 \end{figure} % >>>
 
 The grammar of global session type, or global type, denoted by $G$,$G'$,...
