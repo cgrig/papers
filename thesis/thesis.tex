@@ -4177,9 +4177,9 @@ identifiers for receivers.
 \begin{figure} % fig:agent-code<<<
 \begin{center}
 \begin{tabular}{lcll}
-  $P$ & $::=$ & $P;P$ & program followed by a program 
+  $P$ & $::=$ & $P;P$ & sequence
   \\  & $\mid$ & ${\bf rule}\,q\,\{B\}$ & rule 
-  \\  & $\mid$ & ${\bf new}\,d(\bar{a})\,a'\,\{T'\}$ & agent creation
+  \\  & $\mid$ & ${\bf new}\,d(\bar{a})\,a\,\{T\}$ & agent creation
   \\  & $\mid$ & ${\bf new }\;{\bf call}$ & new call 
   \\  & $\mid$ & ${\bf new}\;{\bf session}\;n$ & new session
   \\  & $\mid$ & $action(\ldots)$ & action invocation
@@ -4188,24 +4188,20 @@ identifiers for receivers.
   \\  & $\mid$ & $-t$ & belief removal
   \\  & $\mid$ & $\emptyset$  & empty
   \\  & $\mid$ & $t$ & term 
-  \\  & $\mid$ & $a'$ & agent identifier
+  \\  & $\mid$ & $a$ & agent identifier
   \\  & $\mid$ & ${\it cid}$ & call identifier
   \\  & $\mid$ & ${\it sid}$ & session identifier
   \\
   $d$ & & & agent design name
   \\
-  $\bar{a}$ & & & agent id's as arguments
-  \\
-  $a'$ & & & new agent identifier
-  \\
-  $T'$ & & & new agent's belief base
-  \\
   $n$ & & & session name
+  \\
+  $T$ & & & belief base
 \end{tabular}
 \end{center}
 \caption{
 Definition of AF-Raf agent code. Note that the last four elements of the
-definition: $t$, $a'$, ${\it cid}$, and ${\it sid}$ are used only in
+definition: $t$, $a$, ${\it cid}$, and ${\it sid}$ are used only in
 operational semantics.
 }
 \label{fig:agent-code}
