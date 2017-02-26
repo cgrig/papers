@@ -1456,7 +1456,7 @@ values are handled identically regardless of their actual type.
 
 %\todo{how is this chapter related to one of my objectives}
 % >>>
-\chapter{Multiparty Session Types} % <<<
+\chapter{Multiparty Session Types}\label{ch:multiparty} % <<<
 
 The design of AF-Raf is partly inspired
   by the multiparty asynchronous session types
@@ -3061,9 +3061,9 @@ session ComputeExpression(a, b, c)
 \paragraph{Second Analogy: Types as Agents} We read $f::a\to b$ as
 ``message $f$ is sent by agent~$a$ to agent~$b$.'' A type class lists
 several function signatures, so its natural analogue is a list of messages
-together with their endpoints. It turns out that such a list is very
-similar to the global types that describe multiparty sessions in the
-context of $\pi$-calculus.
+together with their endpoints. Such a list is reminiscent of the
+local types we saw in \autoref{ch:multiparty}.
+
 
 Session types represent a type foundation for structured communication
 centered programming, that facilitate communication safety, progress and

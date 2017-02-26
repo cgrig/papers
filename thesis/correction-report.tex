@@ -5,6 +5,7 @@
 
 \def\fb#1{\textbf{#1}}
 
+\newcommand*\R[1]{\textcolor{red}{#1}} % used for refs that might change
 \newcommand{\todo}[1]{[\textcolor{red}{TODO}: #1]}
 
 \newenvironment{them}{\noindent\begingroup\color{blue}}{\endgroup\par}
@@ -464,7 +465,21 @@ the interaction protocol) as they usually include operators for representing
 choices, interleaving, concatenation of sessions, synchronization. 
 
 \end{them}
-\todo{link to new section} 
+
+As explained now in the introductory chapter on multiparty asynchonrous session
+types, AF-Raf sessions are only informally similar to global types --- there is
+no formal connection, but one can find an informal comparison in
+\R{Section~9.4}. In \R{Figure~12.1}, one sees the abstract syntax of sessions;
+we remind the examiner that the notation is explained at the beginning of
+\R{Section~12.2}, and that there are good reasons why it is not EBNF.  The
+semantics of AF-Raf sessions appear in the section on semantics.  For example,
+see the the rule \R{(12.72)}.
+
+In summary,
+  AF-Raf sessions are now introduced informally (\R{11.5}),
+  their formal syntax is given (\R{Figure~12.1}),
+  and their operational semantics as well (rule \R{(12.72)} and related).
+
 
 \begin{them}
 
@@ -481,8 +496,7 @@ session types should be already clear, and their integration into AF-Raf should
 be given in a correct and complete way.
 
 \end{them}
-Partly fixed
-\todo{link to new section} 
+Fixed. See \R{Chapter~9}.
 
 \begin{them}
 
@@ -758,7 +772,12 @@ multiparty sessions...” is debatable, as global types represent patterns of
 interaction among agents which are much more complex than sequences.
 
 \end{them}
-\todo{link to new section}
+
+There was a mistake: I did not mean global types, but local types.
+Also, I toned down `very similar',
+  to make it clear that this sentence is only meant to communicate intuition,
+and should not be taken as making any formal judgement.
+
 
 \begin{them}
 
@@ -771,7 +790,10 @@ discussed in the literature (see for example Section 4 of
 References should be given and a comparison should be drawn.
 
 \end{them}
-\todo{link to new section}
+
+Fixed.
+See \R{Chapter~9},
+  in particular \R{Section~9.4}.
 
 \begin{them}
 
@@ -806,7 +828,17 @@ global/session types are well formed), on the assumptions for using them
 operator should be carried out as well.
 
 \end{them}
-\todo{link to new section}
+
+There is no formal connection between AF-Raf sessions and global types.
+AF-Raf sessions are inspired by global types in a very high-level,
+  informal way.
+Nevertheless,
+  \R{Chapter~9} now explains in session types in some detail,
+  and comments at length on the (informal) relationship it has with
+    AF-Raf sessions.
+The latter are a novel and quite different concept.
+An in-depth formal comparison is a non-trivial open problem.
+
 
 \begin{them}
 
@@ -1102,9 +1134,17 @@ the choice of the program rule to use should be demanded to a selection
 function, for generality,
 
 \end{them}
-I disagree. A selection function is unnecessary for generality, and is ugly.
-For an explanation why implicit nondeterminism is good see:
-\url{http://homepages.inf.ed.ac.uk/gdp/publications/Dijkstras_Predicate_Transformers.pdf}
+I disagree.
+An explicit selection function is unnecessary for generality, and is ugly.
+People have been using implicit nondeterminism,
+  even in the sequential setting,
+  since the dawn of operational semantics for nondeterministic languages.
+For example,
+  Plotkin handles nondeterminism this way in his semantics for
+  Dijkstra's guarded commands;
+see Plotkin, {\it Dijkstra's Predicate Transformers and Smyth' Powerdomains},
+  1979.
+
 
 \begin{them}
 
