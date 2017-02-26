@@ -3388,6 +3388,72 @@ from which the non-essential features have been elided.
 This section describes the abstract grammar and briefly gives the concrete
 grammar.
 
+\subsection{Overview of AF-Raf's abstract and concrete grammars} % <<<
+The concrete syntax of AF-Raf is specified by an LL(k) grammar, which I call
+the concrete grammar. From the concrete grammar, ANTLR generates a
+recursive descent parser. The concrete grammar also contains semantic
+actions. In what follows, the concrete grammar is given in the notation
+understood by ANTLR but omitting semantic actions. The notation understood
+by ANTLR is very close to BNF, with small differences: rules cannot be
+left-recursive, a ? signifies "zero or one", and a * signifies "zero or
+more". The semantic actions are left out so that the structure of the
+grammar is more apparent. The semantic actions are very simple: each
+semantic action instantiates an object, and, taken together, all semantic
+actions create a tree-like data structure, which I call the abstract syntax
+tree (AST). The Java data structures that are being instantiated to create
+the AST are what I call later the abstract grammar.
+
+For example, the concrete syntax may specify a nonempty comma-separated
+list of strings as follows:
+
+$string\_list: string (',' string)*;$
+
+In BNF, one would not be allowed to use the '*', and would have to write
+
+$string\_list ::= string string\_list\_tail;$
+
+$string\_list\_tail ::= ;$
+
+$string\_list\_tail ::= ',' string string\_list\_tail;$
+
+or, alternatively,
+
+$string\_list ::= string string\_list\_tail;$
+
+$string\_list\_tail ::= ;$
+
+$string\_list\_tail ::= string\_list\_tail ',' string;$
+
+The second variant is not an LL grammar, while the first is. In any case,
+these details about how to define $string\_list\_tail$ are nonessential and
+ANTLR takes care of them automatically. Thus, I've decided to employ the
+notation that allows the use of '*'.
+
+The semantic action for the $string\_list$ rule would say that one has to
+instantiate a Java class that represents a list of strings. The commas will
+get thrown away, but the strings will be preserved in the abstract syntax
+tree.
+
+As stated above, the abstract grammar is represented by the Java data
+structures that are instantiated in the semantic actions of the concrete
+grammar. How is the abstract grammar specified? One option to specify the
+abstract grammar would be to list the Java code of those data structures.
+But, I've decided to go one step further and I use a special notation
+(described in Section 11.2), which does two things: (1) it lets me describe
+Java data structures concisely, and (2) it forces me to restrict myself to
+describing algebraic data types.
+
+Briefly, product types are specified as
+
+  $Product = Part1type part1name, Part2tytpe part2name;$
+
+  and sum types are specified as
+
+    $Sum <: Part1type, Part2type.$
+
+% >>>
+
+\subsection{AF-Raf Abstract Grammar} % <<<
 The abstract grammar of AF-Raf~(\autoref{fig:Abstract-Grammar1},
 \autoref{fig:Abstract-Grammar2}) is taken
 directly from the reference implementation of AF-Raf.  In general, there
@@ -3663,9 +3729,11 @@ Friend}(\text{\tt``Alice''})$.
 
 Each SessionDeclaration introduces a new session, by specifying its name, a
 list of type variables, and a list of AgentRoles, and a list of session
-steps. The session steps coul be simple, nested (maybe and repeat), or
+steps. The session steps could be simple, nested (maybe and repeat), or
 choice session steps.
+% >>>
 
+\subsection{AF-Raf Concrete Grammar} % <<<
 Let us now move from the abstract grammar to the concrete grammar.  The
 concrete grammar has three main parts: the top-level structures
 (\autoref{fig:grammar-top-level}), expressions
@@ -3884,6 +3952,7 @@ LINE_COMMENT: '//' ~('\n'|'\r')* ('\r'|'\n');
 \caption{AF-Raf Grammar Lexer}
 \label{fig:Grammar-lexer}
 \end{figure} % >>>
+% >>>
 % >>>
 \section{Syntactic Sugar}\label{sec:sugar} % <<<
 

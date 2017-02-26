@@ -464,7 +464,7 @@ the interaction protocol) as they usually include operators for representing
 choices, interleaving, concatenation of sessions, synchronization. 
 
 \end{them}
-\todo{Radu} 
+\todo{link to new section} 
 
 \begin{them}
 
@@ -482,7 +482,7 @@ be given in a correct and complete way.
 
 \end{them}
 Partly fixed
-\todo{Radu} 
+\todo{link to new section} 
 
 \begin{them}
 
@@ -758,7 +758,7 @@ multiparty sessions...” is debatable, as global types represent patterns of
 interaction among agents which are much more complex than sequences.
 
 \end{them}
-\todo{Radu}
+\todo{link to new section}
 
 \begin{them}
 
@@ -771,7 +771,7 @@ discussed in the literature (see for example Section 4 of
 References should be given and a comparison should be drawn.
 
 \end{them}
-\todo{Radu}
+\todo{link to new section}
 
 \begin{them}
 
@@ -806,7 +806,7 @@ global/session types are well formed), on the assumptions for using them
 operator should be carried out as well.
 
 \end{them}
-\todo{Radu}
+\todo{link to new section}
 
 \begin{them}
 
@@ -864,19 +864,82 @@ used somewhere and each definition used in the body of a BNF rule (right hand
 side of “=”), should be provided in the grammar. If recursive definitions are
 interpreted in the standard inductive way, they should have a base; if they are
 interpreted coinductively as they define infinite terms, this should be made
-explicit.  RoelDeclaration is not used Type is defined recursively but it has
-no base TypeDeclaration is not used TypeBranch uses a syntax different from the
-other rules AgentDeclaration is not used Function is not defined QualifiedId is
-defined recursively but it has no base
+explicit. 
 
 \end{them}
-\todo{}
+The pictures labelled by "abstract grammar" do not describe a context free
+grammar. They describe the (Java) data structures that are used by AfRaf
+interpreter. More precisely, they are the actual Java code.
+
+Moreover, it is not possible to describe those data structures in BNF because
+BNF does not express inheritance of Java classes, which is used.
+
+This issue is explained on pages 65-66 in the old version of the thesis, now
+pages 83-84. More exactly, it is explained how the "abstract grammar" notation
+is a shorthand for Java code.
+
+\begin{them}
+RoelDeclaration is not used 
+
+\end{them}
+RoleDeclaration is the data structure used by the AfRaf interpreter to
+represent role declarations.
+
+\begin{them}
+Type is defined recursively but it has no base 
+
+\end{them}
+The notation in the thesis is shorthand for the following Java class definition:
+\begin{verbatim}
+public class Type {
+    String name;
+      ImmutableList<Type> actuals;
+    }
+\end{verbatim}
+
+This Java class definition is well-formed, as long as the Guava library which
+defines ImmutableList is included. There is no "base case" needed. These
+classes can be instantiated because the list "actuals" can be empty. [The
+situation is analogous to the strong induction principle.]
+
+\begin{them}
+
+TypeDeclaration is not used 
+
+\end{them}
+The TypeDeclaration data structure is used by the AfRaf type checker.
+
+\begin{them}
+TypeBranch uses a syntax different from the other rules 
+
+\end{them}
+That is inheritance. 
+
+\begin{them}
+AgentDeclaration is not used 
+
+\end{them}
+The AgentDeclaration data structure is used by the AfRaf interpreter.
+
+\begin{them}
+Function is not defined 
+
+\end{them}
+Function is a class defined in the AgentFactory framework.
+
+\begin{them}
+QualifiedId is defined recursively but it has no base
+
+\end{them}
+This is a Java class definition. There is no "base case" needed.
 
 \begin{them}
 
 Iformula and IplanStep are not defined
 \end{them}
-\todo{}
+These are defined in AgentFactory. A paragraph on page 90  explains this. Also,
+figure 11.4 presents the grammar for formulas, and figure 11.5 presents the
+grammar for statements.
 
 \begin{them}
 
