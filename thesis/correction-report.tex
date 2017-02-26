@@ -848,11 +848,18 @@ Fixed
 
 \begin{them}
 
-What is an “agent design”? Was the “AgentDeclaration” already introduced as a
-component of the agent's code?
+What is an “agent design”? 
 
 \end{them}
-\todo{explain}
+\todo{}
+
+\begin{them}
+
+Was the “AgentDeclaration” already introduced as a component of the agent's
+code?
+
+\end{them}
+Yes. See the new definition of agent code in figure 12.7.
 
 \begin{them}
 
@@ -874,11 +881,13 @@ interpreter. More precisely, they are the actual Java code.
 Moreover, it is not possible to describe those data structures in BNF because
 BNF does not express inheritance of Java classes, which is used.
 
-This issue is explained on pages 65-66 in the old version of the thesis, now
-pages 83-84. More exactly, it is explained how the "abstract grammar" notation
-is a shorthand for Java code.
+This issue was explained on pages 65-66 in the old version of the thesis (now
+pages 83-84). More exactly, it was explained how the "abstract grammar"
+notation is a shorthand for Java code. A new subsection (12.2.1) was added to
+further clarify this issue. 
 
 \begin{them}
+
 RoelDeclaration is not used 
 
 \end{them}
@@ -886,6 +895,7 @@ RoleDeclaration is the data structure used by the AfRaf interpreter to
 represent role declarations.
 
 \begin{them}
+
 Type is defined recursively but it has no base 
 
 \end{them}
@@ -910,24 +920,28 @@ TypeDeclaration is not used
 The TypeDeclaration data structure is used by the AfRaf type checker.
 
 \begin{them}
+
 TypeBranch uses a syntax different from the other rules 
 
 \end{them}
 That is inheritance. 
 
 \begin{them}
+
 AgentDeclaration is not used 
 
 \end{them}
 The AgentDeclaration data structure is used by the AfRaf interpreter.
 
 \begin{them}
+
 Function is not defined 
 
 \end{them}
 Function is a class defined in the AgentFactory framework.
 
 \begin{them}
+
 QualifiedId is defined recursively but it has no base
 
 \end{them}
@@ -936,6 +950,7 @@ This is a Java class definition. There is no "base case" needed.
 \begin{them}
 
 Iformula and IplanStep are not defined
+
 \end{them}
 These are defined in AgentFactory. A paragraph on page 90  explains this. Also,
 figure 11.4 presents the grammar for formulas, and figure 11.5 presents the
@@ -1029,8 +1044,8 @@ can be easily recovered from the abstract grammar”: it should be better to
 define them here, instead.
 
 \end{them}
-Fixed. The definition for Agent code is presented in figure 12.7, and a
-reference to the definition of Ground term is provided.
+Fixed. The definition for agent code is presented in figure 12.7, and a
+reference to the definition of ground term is provided.
 
 \begin{them}
 
@@ -1049,7 +1064,7 @@ as well as a coherence check in all the transition rules.
 
 \end{them}
 The sentence "P is the agent code" is correct, and has the same meaninig as "the
-program for an agent". See the Agent code definition in figure 12.7. 
+program for an agent". See the agent code definition in figure 12.7. 
 
 \begin{them}
 
@@ -1183,7 +1198,7 @@ features.
 be used”: what does this sentence mean?
 
 \end{them}
-Fixed
+Fixed. "(...) an AF-Raf action should be used."
 
 \begin{them}
 
