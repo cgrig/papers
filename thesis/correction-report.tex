@@ -727,9 +727,9 @@ motivation should be provided for that.
 
 \begin{them}
 
-The syntax f::a->b was never introduced before.
+The syntax $f::a->b$ was never introduced before.
 \end{them}
-\todo{?}
+This is standard Haskell. See \R{Chapter 7}, more specifically \R{figure 7.1}.
 
 \begin{them}
 
@@ -742,14 +742,21 @@ expressions. Dealing with their purposes and usage in the “Background” secti
 should help.
 
 \end{them}
-\todo{?}
+In examiner's own words ``\ldots [message] content is written in some high
+level language, maybe using an ontology to give meaning to terms appearing
+there''
+
+What this paraghraph says is that using algebraic data types to define the
+content of messages that consist of arithmetic expressions is more convenint
+than using JADE ontology.
 
 \begin{them}
 
 Page 49:
 “In contrast, the earlier role....” should be explained before.
 \end{them}
-\todo{?}
+I think it is sensible to introduce role dependencies after describing simple
+roles first, to avoid confusion.
 
 \begin{them}
 
@@ -1001,7 +1008,13 @@ for example) and so on. It is difficult to imagine an autonomous agent playing
 the role “Array”.
 
 \end{them}
-\todo{}
+Anything that exhibits behaviour that can be used by others can be modeled as a
+role. The question is if we chose the right level of granularity. Would it be
+better to include that behaviour along with other related ones in an ampler,
+more complex role? In this particular situation chosing to model the role
+``Array'' is perfectly legitimate, as the purpose of this choice is to give a
+very simple and easy to undesrtand example that illustrates the use of type
+variables as arguments in a role.
 
 \begin{them}
 
