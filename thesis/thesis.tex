@@ -951,7 +951,7 @@ structured multiagent interaction. I will include in this analysis some
 newly developed programming languages, SimpAl and 2OLP, that are relevant
 to this research.
 
-\subsection{Jason/Agent Speak} % <<<
+\section{Jason/Agent Speak} % <<<
 Jason is an interpreter written in Java for an extended version of the
 AgentSpeak programming language, it also provides a platform for the
 development of multiagent systems. AgentSpeak is logic based and supports
@@ -985,7 +985,7 @@ J-Moise+~\cite{hubner2007j}.
 
 % >>>
 
-\subsection{2APL} % <<<
+\section{2APL} % <<<
 2APL is also a Belief Desire Intention architecture-based programming
 language. 2APL is modular, and integrates both the declarative and the
 imperatives style of programming. Also, 2APL incorporates two sets of
@@ -1011,15 +1011,16 @@ beliefs, testing beliefs and goals, managing dynamics of goals, external
 actions and communication actions.
 
 The three types of reasoning rules mentioned earlier are: rules that
-generate plans to achieve goals, rules that process internal events and
-received messages, and rules to handle and repair failed plans.
+generate plans to achieve goals (PG-rules), rules that process internal
+events and received messages (PC-rules), and rules to handle and repair
+failed plans (PR-rules).
 
 2APL employs modules to implement the functionality of
 roles~\cite{dblp:conf/prima/dastanims08}. We will discuss more about it in
 the next chapter.
 % >>>
 
-\subsection{GOAL} % <<<
+\section{GOAL} % <<<
 GOAL is a rule-based programming language, its focus is agent reasoning.
 GOAL agents consist of four components: a belief base, a goal base, action
 rules, and action specifications. An actual GOAL agent program is a set of
@@ -1043,7 +1044,7 @@ goals~\cite{DBLP:conf/jelia/indriksH08}.
 GOAL doesn't manage in an explicit way the social level of the agent system.
 % >>>
 
-\subsubsection{SimpAL} % <<<
+\section{SimpAL} % <<<
 Ricci  and Santi developed a novel programming language, called
 simpAL~\cite{DBLP:conf/oopsla/RicciS11,DBLP:conf/oopsla/RicciS12}, that
 supports organisational structure, types and type
@@ -1053,32 +1054,24 @@ Jason programming language, which is based on the Belief, Desire, Intention
 model. SimpAL is conceived as an extension to the Java object oriented
 programming language with a separate agent abstraction layer.
 
-Even though this language is very different from AF-Raf, there are a number
-of overlapping concepts. SimpAL imports a social view of computation where
-agents playing different roles constitute an organisation, and work within
-a shared environment. The main building blocks of this model are agents
-(autonomous components) and artifacts (the environmental components that
-provide functionality or services). The agent has a belief base, some tasks
-to perform and a set of plans to utilise in order to accomplish the tasks.
+SimpAL imports a social view of computation where agents playing different
+roles constitute an organisation, and work within a shared environment. The
+main building blocks of this model are agents (autonomous components) and
+artifacts (the environmental components that provide functionality or
+services). The agent has a belief base, some tasks to perform and a set of
+plans to utilise in order to accomplish the tasks.
 
-SimpAl roles are similar to AF-Raf roles in that each role is composed of a
-set of tasks types, in the same way an AF-Raf role constitutes a set
-of operations, where tasks are the analogous to the AF-Raf operations.
-However, operations and tasks are completely different entities. An
-operation is defined by the type of messages exchanged by the agents, while
-a task is defined by a set of parameters and a set of optional attributes
-(understand, goal, pre-attributes).
+Each role is composed of a set of tasks types, and a task is defined by a
+set of parameters and a set of optional attributes (understand, goal,
+pre-attributes).
 
-SimpAL roles are organised in a slightly different manner compared to the
-AF-Raf's session model. In AF-Raf sessions can be seen as a kind of protocol
-prescribing the agent communication. In simpAL organisation models are used
-to define organisation types, that bring together related roles and
-artifact in coherent units named workspaces. Organisation types are
-implemented by concrete organisations. SimpAL organisation types do not put
-any constraint on the order in which interactions between agents occur, as
-AF-Raf session types do, instead, they simply group together related roles
-and artifacts working in a similar way to the object oriented programming
-interfaces.
+In simpAL organisation models are used to define organisation types, that
+bring together related roles and artifact in coherent units named
+workspaces. Organisation types are implemented by concrete organisations.
+SimpAL organisation types do not put any constraint on the order in which
+interactions between agents occur, instead, they simply group together
+related roles and artifacts working in a similar way to the object oriented
+programming interfaces.
 
 A number of static type checks are performed. At the role level it is
 verified that for each task type there exists at least one plan, and for
@@ -1087,31 +1080,12 @@ defined in the task type. Assignment of tasks are also checked to
 correspond to the task types defined in the role, and that the types of
 the messages sent to an agent correspond to that the agent can understand.
 
-Errors about beliefs that are checked include finding, inside the plans,
-beliefs that are not declared, and beliefs that are assigned with
-expressions of the wrong type.
+Similar checks are performed at the environment and organisation level.
+More details about this in~\autoref{ch:related}.
 
-Similar checks are performed at the environment level. The usage interface
-represents the type of artifact, and contains the observable properties and
-the operations provided by the artifact. Artifact template is the actual
-artifact implementation. On the agent side are checked errors regarding
-artifact operations and its observable state. For each action in the plan
-there must be a matching operation in the artifact's interface.  Likewise,
-for each update belief statement regarding an artifact property there must
-exist a matching observable property in the usage interface. On the
-environment side, it is checked that the artifact templates match the
-corresponding usage interfaces. First, checks are performed to ascertain
-that for each operation declared in the interface there exists an
-implementation in the template, and for any of the observable properties
-in the template there exists a declaration in the corresponding interface
-with a compatible type.
-
-At the organisation level it is checked that each workspace, artifact, and
-agent types declared in an organisational model are actually implemented in
-the implementation of the organisation.
 % >>>
 
-\subsection{2OPL} % <<<
+\section{2OPL} % <<<
 
 2OPL~\cite{DBLP:conf/atal/DybalovaTDL13} is a programming language for
 developing agent organizations.  The used abstractions in the language are
@@ -1132,7 +1106,7 @@ behavior of the organization.
 
 % >>>
 
-\subsection{Discussion} % <<<
+\section{Discussion} % <<<
 
 All of the languages referred to above (Jason/AgentSpeak, 2APL, and GOAL)
 have a number of constructs to model the agent level concepts: a belief
@@ -1148,9 +1122,9 @@ modules to implement roles (2APL) to using an external organisational framework
 (Jason) to manage the social concepts, or disregarding this aspect
 altogether (GOAL).
 
-None of the languages investigated above incorporate, as first order
-constructs, any social level concepts, that could support organising agent
-interaction.
+None of the agent oriented programming languages investigated above
+incorporate, as first order constructs, any social level concepts, that
+could support organising agent interaction.
 
 The social level of multiagent systems is where this research work brings
 most of its contributions. AF-Raf is a newly designed agent oriented
@@ -1166,7 +1140,7 @@ discuss them further in the related work section of the next chapter.
 In comparing the social level approaches we will use the organisational
 components identified as being the most significant to the multiagent
 systems development: (1) the organisational rules (global constraints and
-conventions); the organisational structures (role structure); and (3) the
+conventions); (2) the organisational structures (role structure); and (3) the
 organisational patterns (describing agent
 interaction)~\cite{DBLP:conf/aose/ZambonelliJW00}.
 
@@ -1215,17 +1189,18 @@ specifically to the typing of messages.}
 \end{table}
 
 % >>>
-\subsection{Summary} % <<<
+\section{Identified problems versus our objectives} % <<<
 So far we've identified two important needs that are not met by the
 present functionality of the Agent Oriented Programming languages, to which
 we offer suitable solutions:
 
 (1) The need to structure related social behaviour. One way to accomplish
 this would be introducing the concept of role as a first order language
-construct.
+construct. This is objective (1a).
 
 (2) The need to structure agent interactions into patterns. This could be
-achieved by employing sessions to model interaction patterns.
+achieved by employing sessions to model interaction patterns. This is
+objective (2b).
 
 To this list, I would like to add one final area that has long been
 neglected in the Agent Oriented Programming languages, even though the
@@ -1233,13 +1208,9 @@ other mainstream programming languages have acknowledged its benefits about
 three decades ago.
 
 (3) The need of a consistent type system and type checking mechanisms. We
-designed a type system that include algebraic data types.
+designed a type system that include algebraic data types. This is objective
+(2c).
 
-
-A remarkable thirty year old paper depicts the benefits of having a type
-system and type checking: early detection of errors; greater execution-time
-efficiency; and making the programs more structured and easier to
-read~\cite{DBLP:journals/csur/CardelliW85}.
 
 % >>>
 % >>>
@@ -1371,7 +1342,13 @@ modules~\cite{dblp:conf/prima/dastanims08}.
 %\todo{how is this chapter related to one of my objectives}
 % >>>
 \chapter{Types}\label{ch:types} % <<<
-\subsection{Multi-Sorted Predicate Logic} \label{sec:multi-sorted} % <<<
+A remarkable thirty year old paper depicts the benefits of having a type
+system and type checking: early detection of errors; greater execution-time
+efficiency; and making the programs more structured and easier to
+read~\cite{DBLP:journals/csur/CardelliW85}.
+
+
+\section{Multi-Sorted Predicate Logic} \label{sec:multi-sorted} % <<<
 
 The starting point in designing a type system for AF-Raf is the observation
 that most agent oriented programming languages use first order logic, more
@@ -1440,7 +1417,7 @@ being a special predicate.
 
 %\rg{Maybe add some simple examples early on.}
 % >>>
-\subsection{Algebraic Data Types}\label{sec:adt} % <<<
+\section{Algebraic Data Types}\label{sec:adt} % <<<
 
 In functional programming an algebraic data type is a kind of compound type
 formed by combining other types. In this context, an algebra of data types
@@ -2255,6 +2232,167 @@ Factory since it was created in the early 1990s can be found
 in~\cite{muldoon2009towards}.
 % >>>
 
+\chapter{Comparison with Related Work}\label{ch:related} % <<<
+
+\section{SimpAL} % <<<
+Ricci  and Santi developed a novel programming language, called
+simpAL~\cite{DBLP:conf/oopsla/RicciS11,DBLP:conf/oopsla/RicciS12}, that
+supports organisational structure, types and type
+checking~\cite{DBLP:conf/promas/RicciS12}. SimpAl draws inspiration from
+the Agent and Artifacts model~\cite{DBLP:conf/atal/RicciVO07} and from the
+Jason programming language, which is based on the Belief, Desire, Intention
+model. SimpAL is conceived as an extension to the Java object oriented
+programming language with a separate agent abstraction layer.
+
+Even though this language is very different from AF-Raf, there are a number
+of overlapping concepts. SimpAL imports a social view of computation where
+agents playing different roles constitute an organisation, and work within
+a shared environment. The main building blocks of this model are agents,
+the autonomous components, and artifacts, the environmental components that
+provide functionality or services. The agent has a belief base, some tasks
+to perform and a set of plans to utilise in order to accomplish the tasks.
+
+SimpAl roles are similar to AF-Raf roles in that each role is composed of a
+set of tasks types, in the same way an AF-Raf role is constitute by a set
+of operations, where tasks are the analogous to the AF-Raf operations.
+However, operations and tasks are completely different entities. An
+operation is defined by the type of messages exchanged by the agents, while
+a task is defined by a set of parameters and a set of optional attributes
+(understand, goal, pre-attributes).
+
+SimpAL roles are organised in a slightly different manner compared to the
+AF-Raf's session model. In AF-Raf, sessions provide a blueprint for
+interaction between agents which can be seen as a kind of protocol
+prescribing the agent communication. In simpAL, organisation models are used
+to define organisation types that bring together related roles and
+artifact in coherent units named workspaces. Organisation types are
+implemented by concrete organisations. SimpAL organisation types do not put
+any constraints on the order in which interactions between agents occur, as
+AF-Raf session types do. Instead, they simply group together related roles
+and artifacts working in a similar way to the object oriented programming
+interfaces.
+
+A number of static type checks are performed; at the role level a check is
+undertaken that for each task type there exists at least one plan, and
+further that for each plan, the type of the sent messages are only the ones
+defined in the task type. Also it's checked that the assignment of tasks
+corresponds to the task types defined in the role, and that the types of
+the messages sent to an agent correspond to that the agent can understand.
+
+Errors about beliefs that are checked include finding, inside the plans,
+beliefs that are not declared, and beliefs that are assigned with
+expressions of the wrong type.
+
+Similar checks are performed at the environment level. The usage interface
+represents the type of artifact, and contains the observable properties and
+the operations provided by the artifact. Artifact template is the actual
+artifact implementation. On the agent side are checked errors regarding
+artifact operations and its observable state. For each action in the plan
+there must be a matching operation in the artifact's interface.  Likewise,
+for each update belief statement regarding an artifact property there must
+exist a matching observable property in the usage interface. The
+environment side is checked to ensure the artifact templates match the
+corresponding usage interfaces. Checks are performed to ascertain
+that for each operation declared in the interface there exists an
+implementation in the template, and also for any of the observable properties
+in the template there exists a declaration in the corresponding interface
+with a compatible type.
+
+At the organisation level it is checked that each workspace, artifact, and
+agent types declared in an organisational model are actually implemented in
+the implementation of the organisation.
+% >>>
+
+\section{Self Monitoring MAS} % <<<
+Subsequent to my proposal to integrate session types with agent programming
+languages, global session types were exploited further in the context of
+multiagent systems~\cite{DBLP:conf/dalt/AnconaDM12} to specify multiparty
+interactions and verify their correctness. They were used for automatic
+generation of self-monitoring agent systems implemented in Jason. The
+solution suggested was to generate a monitor agent that checks at runtime
+that the ongoing conversation is correct conform to the global session
+type. In this context, global session types are viewed as states on which
+several transition steps are possible. Transitions occur with each
+successfully sent message.
+
+In order to be able to generate the agent monitor, the developer needs to
+provide Prolog rules to define global session types, to specify possible
+transitions to different states upon message sending, and to specify the
+message content types. In addition, a number of changes to the code of the
+participating agents need to be done to support the integration with the
+monitor agent. There is no attempt to project the global types to local
+ones. 
+
+In contrast, even though the projection is not automated, AF-Raf
+sessions, that correspond to global types, are projected to local types, as
+roles. The agreement between roles and sessions is checked statically, by
+the compiler, and the agreement between the actual implementation of the
+role and the session is checked dynamically by the interpreter.
+
+Only one monitor agent keeps track of all messages and checks if there
+exists a new state that can be reached from the current state. If the
+transition is possible the monitor agent allows the sending action by
+acknowledging it to the sending agent. If such a transition is not possible
+the protocol fails and there's no possibility of self recovery.  The
+developer has to change either the agent code or the global session type's
+specification in order to fix the error.
+
+However, AF-Raf takes a different approach: Any single agent can initiate a
+session, and the other agents involved in the session are simply informed
+in due time. This solves the bottleneck problem, and it is possible only
+because of the existence of local type projection.
+
+% >>>
+
+\section{ALPHA} % <<<
+A theoretical proposal to extend the ALPHA programming language to employ roles
+as a run-time construct dates back to 2005\cite{Collier_arole-based}. An
+ALPHA agent would in theory able to play multiple roles and be aware of them at
+run-time. The role construct, also called a role template, consists of a
+variable named role identifier, a set of commitment rules, that defines the
+behaviour, and a set of trigger conditions that cause the activation of
+the role. Each instance of a role template has to have a unique role
+identifier. A mechanism for inheritance of roles is provided in the form of
+a possibility to  extend the agent behaviour by adding more commitment
+rules and trigger conditions.  Also, a mechanism for composition and
+aggregation of roles is outlined.
+
+However, this was just a theoretical proposal and there is no
+infrastructure to support the location and enactment of roles at run-time,
+and there is also no mechanism to model the interaction between roles.
+
+Similarly, AF-Raf agents can play more than a role at a time, but can't
+undertake new the roles at run-time.
+
+Moreover, AF-Raf comes with a suitable infrastructure that supports role
+interactions at run time, through sessions.
+% >>>
+
+\section{3APL} % <<<
+The 3APL programming language\cite{DBLP:conf/aose/DastaniRHDM04} has a
+formal proposal to include roles as first order constructs. An agent role
+is seen as a set of behaviour rules, expected objectives, and information
+resources. An agent can assume multiple roles at a time, but only one of
+them can actually be active; this is the distinction between role enactment
+and role activation. A subset of consistent roles, which do not contradict
+each other, are grouped together in agent types. The roles that an agent
+can enact must be mutually consistent as they influence the agent's mental
+attitudes. A role enacting agent has its own mental attitudes, an active
+role, a set of inactive roles, and a type.
+
+AF-Raf agent do not have enacting/deacting potential, but can instantiate
+more than a single role, and they have a type associated from creation.
+
+In the end, the role has not been introduced in 3APL, and the decision was
+carried further to 2APL\cite{DBLP:journals/aamas/Dastani08}, 3APL's
+successor, where modules are used as a substitute for roles. We argued that
+modules and roles have different functionalities within a programming
+language, and both are useful construct that cannot be reduced one to
+another.
+
+% >>>
+%Roles and norms for programming agent organisations. Tinnemeier 2009
+% >>>
 %>>>
 
 \part{AF-Raf Agent Oriented Programming Language}\label{part:AF-Raf} % <<<
@@ -3195,141 +3333,6 @@ our concrete problem to solve. A reference implementation is described
 in~\autoref{ch:casestudy}.
 
 % >>>
-% >>>
-\section{Comparison with Other Work}\label{ch:related} % <<<
-
-\subsubsection{SimpAL} % <<<
-Ricci  and Santi developed a novel programming language, called
-simpAL~\cite{DBLP:conf/oopsla/RicciS11,DBLP:conf/oopsla/RicciS12}, that
-supports organisational structure, types and type
-checking~\cite{DBLP:conf/promas/RicciS12}. SimpAl draws inspiration from
-the Agent and Artifacts model~\cite{DBLP:conf/atal/RicciVO07} and from the
-
-model. SimpAL is conceived as an extension to the Java object oriented
-programming language with a separate agent abstraction layer.
-
-Even though this language is very different from AF-Raf, there are a number
-of overlapping concepts. SimpAL imports a social view of computation where
-agents playing different roles constitute an organisation, and work within
-a shared environment. The main building blocks of this model are agents,
-the autonomous components, and artifacts, the environmental components that
-provide functionality or services. The agent has a belief base, some tasks
-to perform and a set of plans to utilise in order to accomplish the tasks.
-
-SimpAl roles are similar to AF-Raf roles in that each role is composed of a
-set of tasks types, in the same way an AF-Raf role is constitute by a set
-of operations, where tasks are the analogous to the AF-Raf operations.
-However, operations and tasks are completely different entities. An
-operation is defined by the type of messages exchanged by the agents, while
-a task is defined by a set of parameters and a set of optional attributes
-(understand, goal, pre-attributes).
-
-SimpAL roles are organised in a slightly different manner compared to the
-AF-Raf's session model. In AF-Raf, sessions provide a blueprint for
-interaction between agents which can be seen as a kind of protocol
-prescribing the agent communication. In simpAL, organisation models are used
-to define organisation types that bring together related roles and
-artifact in coherent units named workspaces. Organisation types are
-implemented by concrete organisations. SimpAL organisation types do not put
-any constraints on the order in which interactions between agents occur, as
-AF-Raf session types do. Instead, they simply group together related roles
-and artifacts working in a similar way to the object oriented programming
-interfaces.
-
-A number of static type checks are performed; at the role level a check is
-undertaken that for each task type there exists at least one plan, and
-further that for each plan, the type of the sent messages are only the ones
-defined in the task type. Also it's checked that the assignment of tasks
-corresponds to the task types defined in the role, and that the types of
-the messages sent to an agent correspond to that the agent can understand.
-
-Errors about beliefs that are checked include finding, inside the plans,
-beliefs that are not declared, and beliefs that are assigned with
-expressions of the wrong type.
-
-Similar checks are performed at the environment level. The usage interface
-represents the type of artifact, and contains the observable properties and
-the operations provided by the artifact. Artifact template is the actual
-artifact implementation. On the agent side are checked errors regarding
-artifact operations and its observable state. For each action in the plan
-there must be a matching operation in the artifact's interface.  Likewise,
-for each update belief statement regarding an artifact property there must
-exist a matching observable property in the usage interface. The
-environment side is checked to ensure the artifact templates match the
-corresponding usage interfaces. Checks are performed to ascertain
-that for each operation declared in the interface there exists an
-implementation in the template, and also for any of the observable properties
-in the template there exists a declaration in the corresponding interface
-with a compatible type.
-
-At the organisation level it is checked that each workspace, artifact, and
-agent types declared in an organisational model are actually implemented in
-the implementation of the organisation.
-% >>>
-
-\subsubsection{Self Monitoring MAS} % <<<
-Subsequent to my proposal to integrate session types with agent programming
-languages, global session types were exploited further in the context of
-multiagent systems~\cite{DBLP:conf/dalt/AnconaDM12} to specify multiparty
-interactions and verify their correctness. They were used for automatic
-generation of self-monitoring agent systems implemented in Jason. The
-solution suggested was to generate a monitor agent that checks at runtime
-that the ongoing conversation is correct conform to the global session
-type. In this context, global session types are viewed as states on which
-several transition steps are possible. Transitions occur with each
-successfully sent message.
-
-In order to be able to generate the agent monitor, the developer needs to
-provide Prolog rules to define global session types, to specify possible
-transitions to different states upon message sending, and to specify the
-message content types. In addition, a number of changes to the code of the
-participating agents need to be done to support the integration with the
-monitor agent.
-
-Only one monitor agent keeps track of all messages and checks if there
-exists a new state that can be reached from the current state. If the
-transition is possible the monitor agent allows the sending action by
-acknowledging it to the sending agent. If such a transition is not possible
-the protocol fails and there's no possibility of self recovery.  The
-developer has to change either the agent code or the global session type's
-specification in order to fix the error.
-
-% >>>
-
-\subsubsection{ALPHA} % <<<
-A proposed extension to the ALPHA programming language that employs roles
-as a run-time construct dates back to 2005\cite{Collier_arole-based}. An
-ALPHA agent is able to play multiple roles and be aware of them at
-run-time. The role construct, also called a role template, consists of a
-variable named role identifier, a set of commitment rules, that defines the
-behaviour, and a set of trigger conditions that cause the activation of
-the role. Each instance of a role template has to have a unique role
-identifier. A mechanism for inheritance of roles is provided in the form of
-a possibility to  extend the agent behaviour by adding more commitment
-rules and trigger conditions.  Also, a mechanism for composition and
-aggregation of roles is outlined.
-
-However, there is no infrastructure to support the location and enactment
-of roles at run-time, and there is also no mechanism to model the
-interaction between roles.
-% >>>
-
-\subsubsection{3APL} % <<<
-The 3APL programming language\cite{DBLP:conf/aose/DastaniRHDM04} has a
-formal proposal to include roles as first order constructs. An agent role
-is seen as a set of behaviour rules, expected objectives, and information
-resources. An agent can assume multiple roles at a time, but only one of
-them can actually be active; this is the distinction between role enactment
-and role activation. A subset of consistent roles, which do not contradict
-each other, are grouped together in agent types. At the end, the role has
-not been introduced in 3APL, and the decision was carried further to
-2APL\cite{DBLP:journals/aamas/Dastani08}, 3APL's successor, where modules
-are used as a substitute for roles. We argued that modules and roles have
-different functionalities within a programming language, and both are
-useful construct that cannot be reduced one to another.
-
-% >>>
-%Roles and norms for programming agent organisations. Tinnemeier 2009
 % >>>
 % >>>
 
