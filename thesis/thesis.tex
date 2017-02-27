@@ -2319,11 +2319,19 @@ of an agent declaration (just like an object is an instance of a class).
 \label{fig:AF-RafArch}
 \end{figure} % >>>
 
-The first two fundamental components of AF-Raf are the \textit{belief base}
-and the \textit{rule base}. The belief base models the agent's view of the
-current state of its environment and the rule base models the agent's
-behaviour. Figure~\ref{fig:AF-RafArch} presents the AF-Raf agent
-architecture.
+Figure~\ref{fig:AF-RafArch} presents the AF-Raf agent architecture.
+Everything that is outside of the agent is regarded as its environment. The
+only way for the AF-Raf agent to become aware of its environment is through
+sensors. At each time step sensors gather knowledge that is transformed in
+beliefs and stored in the belief base. Based on the state of the belief
+base and the actual available behaviour, which is modeled by the rule base
+(and organised by roles and sessions), an appropriate action is triggered,
+with potential effector consequences at environmental level.
+
+The first two fundamental components of AF-Raf to consider are the
+\textit{belief base} and the \textit{rule base}. As stated earlier the
+belief base models the agent's view of the current state of its environment
+and the rule base models the agent's behaviour.
 
 Beliefs in AF-Raf are regarded as logical terms and represented in the form
 of trees of strings. Beliefs are grouped together in a belief base that can
@@ -2392,6 +2400,8 @@ step. Figure~\ref{fig:actions-sensors} presents some of the AF-Raf standard
 actions and sensors. Both {\sf println} and {\sf send} actions have been
 used in the rule illustrated in \autoref{fig:rule}.
 
+Note that the AF-Raf agent's environment is represented in the form of
+beliefs, and it is managed accordingly.
 
 \begin{figure}\footnotesize % <<<
 \begin{verbatim}
@@ -2422,7 +2432,8 @@ reflects this by considering only those kind of behaviours (rules) that
 impact other agents through message passing, namely operations. A role is a
 set of operation types, acting in a similar way to interfaces in object
 oriented programming. When an agent plays a role it needs to give an
-implementation to all the operations defined within that role.
+implementation to all the operations defined within that role. (Note that
+the role component corresponds to the objective (1a).)
 
 Sessions organise the interaction between agents stating the exact order in
 which the messages should succeed. A session brings together related roles
@@ -2430,7 +2441,8 @@ and maps the set of operations defined in those roles to a particular
 protocol of conversation. A session specifies the agents involved in the
 conversation, as well as the roles they play, then provides a list
 containing entries of the form: message type followed by the sender agent
-and the receiver agent.
+and the receiver agent. (Sessions correspond to the objective (2b).)
+
 
 \begin{figure}\footnotesize % <<<
 \includegraphics{typechecking.png}
@@ -2438,8 +2450,9 @@ and the receiver agent.
 \label{fig:typechecking}
 \end{figure} % >>>
 
-Figure~\ref{fig:typechecking} illustrates the AF-Raf type checking
-functionality.
+Figure~\ref{fig:typechecking} illustrates the AF-Raf MAS architecture and
+control flow as well as the type checking functionality. (Type cheking
+functionality corresponds to the objective (2c).)
 
 AF-Raf statically checks that the type of each call message in a session
 corresponds to an operation defined in the receiver's role, and each return
