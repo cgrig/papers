@@ -188,7 +188,7 @@ a view of distributed systems as a collection of intelligent (agent)
 components that are autonomous and which interact in a way that is highly
 disciplined and well defined. Further, through this interaction, agents are
 able to cooperate as necessary, allowing competing system objectives to be
-realized in a context sensitive fashion. The necessary attributes of any
+realized in a context sensitive fashion. The necessary attributes of an
 agent are autonomy, social ability, reactivity and
 pro-activeness~\cite{DBLP:journals/ker/WooldridgeJ95}.
 
@@ -206,8 +206,8 @@ Factory~\cite{collier1999agent}, AgentBuilder~\cite{web:agb04},
 together with a set of standards developed by the Foundation for
 Intelligent Physical Agents (FIPA), and a diverse set of software engineering
 methodologies, such as GAIA~\cite{DBLP:journals/aamas/WooldridgeJK00}, Agent
-UML~\cite{bauer2001agent}, MaSE~\cite{deloach2001analysis}, and
-Prometheus~\cite{DBLP:conf/atal/PadghamW02}.
+UML~\cite{bauer2001agent}, MaSE~\cite{deloach2001analysis},
+Prometheus~\cite{DBLP:conf/atal/PadghamW02}, Moise+~\cite{DBLP:conf/atal/HubnerSB02}, and ASPECS~\cite{DBLP:journals/aamas/CossentinoGHGK10}.
 
 One approach to implement agent systems is Agent Oriented Programming.
 This programming paradigm ``promotes a societal view of computation, in
@@ -231,8 +231,10 @@ A number of Agent Oriented Programming languages have been developed to
 date, such as Agent-0~\cite{DBLP:journals/ai/Shoham93},
 AgentSpeak(L)~\cite{DBLP:conf/maamaw/Rao96},
 2APL~\cite{DBLP:journals/aamas/Dastani08},
-3APL~\cite{DBLP:conf/promas/DastaniRDM03}, and
-AFAPL~\cite{DBLP:conf/seke/CollierOR04}. The research in this area has
+3APL~\cite{DBLP:conf/promas/DastaniRDM03},
+AFAPL~\cite{DBLP:conf/seke/CollierOR04}, 
+Jason~\cite{DBLP:books/sp/map2005/BordiniHV05},
+and GOAL~\cite{DBLP:journals/corr/cs-AI-0207008}. The research in this area has
 focused on clearly defining the reasoning process, linking these processes
 to the agents environment, and generally trying to improve the usability of
 the languages via better tool support.
@@ -264,16 +266,17 @@ the organisation.
 
 A variety of organization-oriented approaches to multi-agent systems
 engineering have been brought forth. \cite{DBLP:conf/se/Wester-EbbinghausMRM07} groups them in three categories: modelling
-approaches: AGR, MOISE, ODML; complete development methodologies:
-GAIA~\cite{DBLP:journals/tosem/ZambonelliJW03}, MaSE,
-OMNI, Tropos~\cite{DBLP:conf/aose/GiunchigliaMP02}; and middleware MADKIT, S-MOISE.
+approaches (AGR, MOISE, ODML); complete development methodologies:(
+GAIA~\cite{DBLP:journals/tosem/ZambonelliJW03}, MaSE~\cite{deloach2001analysis},
+OMNI, Tropos~\cite{DBLP:conf/aose/GiunchigliaMP02}); and middleware:
+(MADKIT, S-MOISE).
 
-Implementation-level support for these concepts is a research area. One
-approach is to design organisational models and frameworks such as
-BRAIN~\cite{DBLP:conf/coopis/CabriLZ03},
-Moise+~\cite{DBLP:conf/atal/HubnerSB02},
-GAIA~\cite{DBLP:journals/aamas/WooldridgeJK00}, and
-MaSE~\cite{deloach2001analysis}.
+%Implementation-level support for these concepts is a research area. One
+%approach is to design organisational models and frameworks such as
+%BRAIN~\cite{DBLP:conf/coopis/CabriLZ03},
+%Moise+~\cite{DBLP:conf/atal/HubnerSB02},
+%GAIA~\cite{DBLP:journals/aamas/WooldridgeJK00}, and
+%MaSE~\cite{deloach2001analysis}.
 
 A different approach to support the implementation of organisational
 concepts would be to develop custom programming languages, in the context
@@ -312,11 +315,14 @@ established. I had identified three original analogies that proved very
 useful: the analogy between Agent Oriented Programming languages and
 Functional languages; the analogy between agent communication and
 multiparty session types; and the analogy between AOP languages and Typed
-Programming languages. All of them were explored subsequently. For example
-AOP to Functional programming analogy was explored
-in~\cite{DBLP:conf/dalt/SolimandoT12}, multiparty sessions types were
-explored in~\cite{DBLP:conf/dalt/AnconaDM12}, and type checking was
-explored in~\cite{DBLP:conf/promas/RicciS12}.
+Programming languages. All three ideas are original and I was the first one
+to propose them in two papers~\cite{DBLP:conf/oopsla/GrigoreC11, DBLP:conf/iat/GrigoreC11} published in 2011.
+
+%All of them were explored subsequently. For example
+%AOP to Functional programming analogy was explored
+%in~\cite{DBLP:conf/dalt/SolimandoT12}, multiparty sessions types were
+%explored in~\cite{DBLP:conf/dalt/AnconaDM12}, and type checking was
+%explored in~\cite{DBLP:conf/promas/RicciS12}.
 
 \subsubsection{Hypotheses and Objectives}
 (1) The primary hypothesis of my research is that the integration of roles,
