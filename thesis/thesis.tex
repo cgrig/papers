@@ -1476,7 +1476,9 @@ Nevertheless,
 Session types were developed as a foundation for typing communication.
 They sprung from the theory community around $\pi$-calculus,
   but they are now making inroads in practice.
-For example, popular languages like Scala
+For example,
+  popular languages like Scala~\cite{DBLP:conf/ecoop/ScalasY16}
+  and Haskell~\cite{orchard2017sessions}
   now have implementations of session types.
 
 What follows is a condensed and simplified summary
@@ -2840,16 +2842,26 @@ upon the following scenario.
 
 \paragraph{Bad Scenario.}
 
-%\rg{Needs a diagram; otherwise, hard to follow.}
-Agent~$a$ sends message $\tau_{ab}$ to agent~$b$. Agent~$b$ stores a
-subterm~$\tau_b$ of~$\tau_{ab}$ into its belief base. Later, when some
-other condition is satisfied, agent~$b$ extracts a subterm~$\tau_{bc}$ of
-term~$\tau_b$ and sends it to agent~$c$. Agent~$c$ extracts a
-subterm~$\tau_c$ of term~$\tau_{bc}$ and stores it in its belief base.
-Later, when some other condition is satisfied, agent~$c$ extracts a
-subterm~$\tau$ of~$\tau_c$. Agent~$c$ expects $\tau$ to be an integer
-literal, but instead $\tau$ is a string literal. Agent~$c$ notices the
-problem, but many things happened since agent~$a$ sent an invalid message.
+Consider the following sequence of events:
+\begin{align}
+  A
+  \xrightarrow{f_1(f_2(f_3(f_4(\text{``ten''}))))}
+  B
+  \xrightarrow{f_3(f_4(\text{``ten''}))}
+  C
+\end{align}
+Agent~$A$ sends message $f_1(f_2(f_3(f_4(\text{``ten''}))))$ to agent~$B$.
+Agent~$b$ stores a subterm,
+  say $f_2(f_3(f_4(\text{``ten''})))$,
+  in its belief base.
+Later, when some other condition is satisfied,
+  agent~$B$ extracts, from the term in its belief base,
+  a subterm~$f_3(f_4(\text{``ten''}))$ which it sends to agent~$C$.
+Agent~$C$ extracts a subterm~$f_4(\text{``ten''})$ and stores it in its belief base.
+Later, when some other condition is satisfied, agent~$C$ extracts a
+subterm~``ten''. Agent~$C$ expects ``ten'' to be an integer
+literal, but instead it is a string literal. Agent~$C$ notices the
+problem, but many things happened since agent~$A$ sent an invalid message.
 
 The goal of AF-Raf's dynamic typing is to notice such errors early.
 
