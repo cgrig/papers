@@ -1373,7 +1373,16 @@ function with name~$\nu$.'' A term not containing variables is said to be
 \emph{ground}.
 
 \begin{remark}
-Ground terms are essentially trees of strings.
+Since AF-Raf needs to manipulate terms,
+  it needs to choose a representation for them.
+The simplest possible representation
+  is to choose that all function symbols are represented as strings.
+In the formal parts of this dissertation,
+  we assume such a representation,
+  and we think of alternative representations
+    as implementation-level optimisations.
+One such optimisation would be to have a special Java class
+  to represent the `addition' function.
 \end{remark}
 
 A multi-sorted logic has a set~$S$ of sorts.  We use the letter~$\sigma$ to
@@ -1389,7 +1398,9 @@ sort~$\sigma$. We say that $\nu$~has \emph{arity}~$n$. \emph{Constants} are
 functions with arity~$0$.
 
 Typically, in mathematical logic, the set~$S$ of sorts and the function
-signatures are required to satisfy further constraints. \textit{Bool} must
+signatures are required to satisfy further constraints~%
+  \cite{shoenfield1967}.
+\textit{Bool} must
 be one of the sorts. \emph{Formulas} are terms with sort \textit{Bool}.
 The argument sorts ($\sigma_1$,~$\sigma_2$, \dots,~$\sigma_n$) either are
 all \textit{Bool}, or none is \textit{Bool}.  If the argument sorts are
@@ -2403,7 +2414,20 @@ another.
 %Factory. 4. Move calculator example to case study. 5. Add discussion to the
 %comparison with other work.}
 
-\section{An overview of the AF-Raf programming Language} % <<<
+The main goal of this chapter is to informally present
+  two novel concepts introduced in AF-Raf:
+  roles (\autoref{sec:roles}) and sessions (\autoref{sec:sessions}).
+Before doing so,
+  it starts with a high-level view of the language (\autoref{sec:c-over}),
+  and it introduces a few basic notions
+    about terms (\autoref{sec:c-belief})
+    and types (\autoref{sec:types}).
+Once roles and sessions are presented,
+  we will see an example AF-Raf program (\autoref{sec:c-example}).
+The next chapter % \autoref{ch:langdef}
+  revisits these concepts in a formal way.
+
+\section{An overview of the AF-Raf programming Language}\label{sec:c-over} % <<<
 
 AF-Raf is a new agent oriented programming language specifically developed
 to incorporate the support for organising multiagent systems at the
@@ -2611,7 +2635,7 @@ messages succeed in the right order.
 
 AF-Raf uses Agent Factory as a platform. 
 % >>>
-\section{The Belief Base} % <<<
+\section{The Belief Base}\label{sec:c-belief} % <<<
 
 In most agent-oriented programming languages, agents maintain a
 \emph{belief base}.  The operations available to the agent are
@@ -3283,7 +3307,7 @@ interactions in agent-oriented programming languages in terms of sessions.
 
 %\todo{link with objectives}
 % >>>
-\section{Designing an AF-Raf program} % <<<
+\section{Designing an AF-Raf program}\label{sec:c-example} % <<<
 We will use the Calculator example to illustrate the thought process of
 designing an AF-Raf program. We will develop the program step by step by
 adding functionality as we go along.
@@ -4615,7 +4639,7 @@ start over with the execution of~$P$. Rule~\eqref{eq:opsem-instrule} uses
 some new, but standard, notations. Recall that $q$, the query, is a term.
 Here $\sigma$~is a substitution from variables to ground terms: $q\sigma$~is the result of applying the substitution $\sigma$ to the term~$q$, and
 $B\sigma$ is the result of applying the substitution $\sigma$ to the rule
-body~$B$. The notation $T\models q$ means that formula $q$ hold in the
+body~$B$. The notation $T\models q$ means that formula $q$ holds in the
 theory~$T$. (Recall that belief bases are predicate logic theories.)
 \begin{align}
 T &\models q  &&\text{if} && q\in T \\
@@ -4630,7 +4654,8 @@ concurrency rule~\eqref{eq:opsem-agentfocus1}, are sources of
 nondeterminism.
 
 \begin{remark}
-We note that $T \models q$ if and only $\eval{q}_T\neq\emptyset$.
+We note that, for a ground formula $q$,
+  we have $T \models q$ if and only $\eval{q}_T\neq\emptyset$.
 The notation $\eval{q}_T$ was introduced in \autoref{sec:adt}.
 \end{remark}
 
