@@ -3718,7 +3718,9 @@ one used in the reference implementation. The upside is that it is
 extensively tested and likely to be correct. The downside is that the
 grammar productions are constrained such that the grammar is (almost)
 $LL(k)$, which could make the grammar more complicated than needed in
-theory. (The parser generator used is~ANTLRv3.)
+theory.
+(LL grammars are standard~\cite{rosenkrantz1970}.
+AF-Raf uses the ANTLRv3 parser generator~\cite{DBLP:conf/pldi/ParrF11}.)
 
 An AF-Raf program consists of a set of scripts, each stored in a file with
 the extension {\tt raf}.  A {\it script\/} is composed of a number of
