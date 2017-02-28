@@ -5378,18 +5378,66 @@ agent ExprCalc(binaryCalc : BinaryCalc<value>) : Calculator<value> {
 \end{figure} % >>>
 % >>>
 \subsection{Discussion} % <<<
-As a concluding remark, AF-Raf's roles and sessions bear similarities to the multiparty session types developed in the context of
-$\pi$-calculus. AF-Raf sessions correspond to their global types, while
-AF-Raf roles correspond with their local type projections. The benefits of
-session types are well known, they facilitate communication safety,
-progress and fidelity~\cite{dblp:conf/popl/hondayc08}. In addition, in
-AF-Raf, roles and sessions offer a structured global perspective regarding
-the social level of the multiagent systems.
 
-Moreover, designing our roles similar to Haskell type classes empowers them
-with the great flexibility of polymorphism~\cite{DBLP:conf/popl/WadlerB89}.
-To which we add further the benefits of algebraic data
-types~\cite{DBLP:journals/acta/GuttagH78}.
+Why is our calculator and agent?
+To answer this question,
+  imagine for a moment that we implemented our calculator in Java.
+Then, a legitimate question would be why is the calculator a class.
+But few ask this question because the answer is more or less obvious:
+  in Java, (almost) \emph{everything} is a class.
+To some extent, the answer is the same in our case:
+  in AF-Raf, (almost) everything is an agent.
+In both cases, however, the answer --- although technically correct ---
+  is not illuminating.
+In both cases,
+  we can find out more by probing with deeper questions.
+Let us pose those question in AF-Raf's case.
+
+Suppose that we implement a calculator in AF-Raf.
+Since the fundamental entity in AF-Raf is an agent,
+  we implement the calculator as an agent.
+Here are the questions:
+(a)~Is it natural or cumbersome to implement the calculator as an agent?
+(b)~How does this implementation compare
+  to the natural implementation in other languages?
+  For example, how does it compare to an implementation in Java, as a class?
+
+Let us try to address these questions.
+The code in \autoref{fig:calc-op} is simple enough to read,
+  but still less elegant than what one would write in Java.
+Evidence that AF-Raf code is easy to read is given in \autoref{ch:results}.
+As for the comparison with Java,
+  observe that the slightly more complicated code of AF-Raf
+  comes with a benefit:
+The implementation is intrinsically distributed.
+One can easily deploy several expression calculators
+  that share a small number of binary calculators.
+Also,
+  which agent runs on which real machine,
+  questions of load balancing,
+  handling of network traffic, and so on
+  could be handled by the underlying implementation.
+Of course,
+  one would need to improve AgentFactory with these features,
+  but all the necessary conceptual features are there:
+The programmer was guided towards writing code
+  that is amenable to automated distribution.
+
+\smallskip
+
+Let us step back and recall which concepts guided us, intuitively,
+  while designing AF-Raf, with roles and sessions.
+
+AF-Raf sessions were inspired by global session types,
+  while AF-Raf roles were inspired by local session types~%
+  \cite{dblp:conf/popl/hondayc08}.
+AF-Raf roles also take inspiration from Haskell type classes~%
+  \cite{DBLP:conf/popl/WadlerB89},
+  in particular in their use of polymorphism.
+Finally, AF-Raf's basic type system takes inspiration
+  from algebraic data types, which are pervasive in functional languages~%
+  \cite{DBLP:journals/acta/GuttagH78}.
+
 % >>>
 % >>>
 \section{The Contract Net Interaction Protocol}\label{sc:contractNet} % <<< 
