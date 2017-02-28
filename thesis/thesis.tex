@@ -3429,47 +3429,49 @@ This section describes the abstract grammar and briefly gives the concrete
 grammar.
 
 \subsection{Overview of AF-Raf's abstract and concrete grammars} % <<<
-The concrete syntax of AF-Raf is specified by an LL(k) grammar, which I call
-the concrete grammar. From the concrete grammar, ANTLR generates a
+The concrete syntax of AF-Raf is specified by an ${\rm LL}(k)$ grammar%
+  ~\cite{rosenkrantz1970}, which I call
+the \emph{concrete grammar}. From the concrete grammar,
+  ANTLR~\cite{DBLP:conf/pldi/ParrF11} generates a
 recursive descent parser. The concrete grammar also contains semantic
 actions. In what follows, the concrete grammar is given in the notation
 understood by ANTLR but omitting semantic actions. The notation understood
 by ANTLR is very close to BNF, with small differences: rules cannot be
-left-recursive, a ? signifies "zero or one", and a * signifies "zero or
-more". The semantic actions are left out so that the structure of the
+left-recursive, a $?$ signifies ``zero or one'', and a $*$ signifies ``zero or
+more''. The semantic actions are left out so that the structure of the
 grammar is more apparent. The semantic actions are very simple: each
 semantic action instantiates an object, and, taken together, all semantic
-actions create a tree-like data structure, which I call the abstract syntax
-tree (AST). The Java data structures that are being instantiated to create
-the AST are what I call later the abstract grammar.
+actions create a tree-like data structure,
+  which I call the \emph{abstract syntax tree} (AST).
+The AST is obtained by instantiating certain Java classes.
+The set of these Java classes are what I later call the \emph{abstract
+grammar}.
+
 
 For example, the concrete syntax may specify a nonempty comma-separated
 list of strings as follows:
 
-$string\_list: string (',' string)*;$
-
-In BNF, one would not be allowed to use the '*', and would have to write
-
-$string\_list ::= string string\_list\_tail;$
-
-$string\_list\_tail ::= ;$
-
-$string\_list\_tail ::= ',' string string\_list\_tail;$
-
+\begin{verbatim}
+  string_list: string (',' string)*;
+\end{verbatim}
+In BNF, one would not be allowed to use the $*$,
+  and would have to write
+\begin{verbatim}
+  string_list ::= string string_list_tail;
+  string_list_tail ::= ;
+  string_list_tail ::= ',' string string_list_tail;
+\end{verbatim}
 or, alternatively,
-
-$string\_list ::= string string\_list\_tail;$
-
-$string\_list\_tail ::= ;$
-
-$string\_list\_tail ::= string\_list\_tail ',' string;$
-
+\begin{verbatim}
+  string_list ::= string;
+  string_list ::= string_list ',' string;
+\end{verbatim}
 The second variant is not an LL grammar, while the first is. In any case,
-these details about how to define $string\_list\_tail$ are nonessential and
-ANTLR takes care of them automatically. Thus, I've decided to employ the
-notation that allows the use of '*'.
+these details about how to define {\tt string\_list} are nonessential and
+ANTLR takes care of them automatically. Thus, I have decided to employ the
+notation that allows the use of Kleene star~$*$.
 
-The semantic action for the $string\_list$ rule would say that one has to
+The semantic action for the {\tt string\_list} rule would say that one has to
 instantiate a Java class that represents a list of strings. The commas will
 get thrown away, but the strings will be preserved in the abstract syntax
 tree.
@@ -3483,13 +3485,16 @@ But, I've decided to go one step further and I use a special notation
 me describe Java data structures concisely, and (2) it forces me to
 restrict myself to describing algebraic data types.
 
-Briefly, product types are specified as:
-
-  $Product = Part1type part1name, Part2tytpe part2name;$
-
-  and sum types are specified as:
-
-    $Sum <: Part1type, Part2type.$
+Briefly, sum types are specified as
+\begin{verbatim}
+  Sum <: Part1type, Part2type;
+\end{verbatim}
+and product types are specified as
+\begin{verbatim}
+  Product = Part1type part1name, Part2type part2name;
+\end{verbatim}
+The full Java code that is generated automatically
+  from such sum and product types appears in \autoref{app:ast}.
 
 % >>>
 
