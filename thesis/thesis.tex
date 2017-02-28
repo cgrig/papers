@@ -3037,6 +3037,9 @@ is~$O(mn)$, where $m$~is the size of the term and $n$~is the size of all
 type definitions.
 %\rg{Maybe expand a bit here, with some example?}
 
+The Java implementation of the algorithm described here
+  is given in \autoref{app:tc}.
+
 % >>>
 %\todo{link with objectives}
 % >>>
@@ -6658,6 +6661,113 @@ public final class RafAst {
 
 } % end small size
 
+% >>>
+\section{Type Checking Algebraic Data Types}\label{app:tc} % <<<
+
+\autoref{sec:types} describes type checking of algebraic data types
+  by giving a reference OCaml implementation.
+Here, one can find the actual Java implementation used in AF-Raf.
+At the moment,
+  arbitrary constraints on primitive types
+    (such as requiring an integer to be prime)
+    are not supported.
+In addition to what is described in \autoref{sec:types},
+  the AF-Raf code also handles type declarations and type variables,
+  which require a few substitutions to be performed.
+
+{\tiny
+\begin{verbatim}
+private boolean hasType(ITerm term, ImmutableList<TypeBranch> branches) {
+    for (TypeBranch branch : branches) {
+        if (hasTypeBranch(term, branch)) return true;
+    }
+    return false;
+}
+
+private boolean hasTypeBranch(ITerm term, TypeBranch branch) {
+    if (branch instanceof Type) {
+        Type type = (Type) branch;
+        if (type.actuals() == null) {
+            // {@code type} represents a type variable
+            System.err.printf("W: free type variable %s\n", type.name());
+            return false;
+        } else {
+            // {@code type} represents a named type, which needs to be looked up.
+            TypeDeclaration typeDeclaration = typeDeclarationByName(type.name());
+            
+            ImmutableList<String> formals = typeDeclaration.formals();
+            ImmutableList<TypeBranch> actuals = type.actuals();
+            if (formals.size() != actuals.size()) return false;
+            UnmodifiableIterator<String> f = formals.iterator();
+            UnmodifiableIterator<TypeBranch> a = actuals.iterator();
+            Map<String, TypeBranch> typeSubstitution = Maps.newHashMap();
+            while (f.hasNext()) {
+                typeSubstitution.put(f.next(), a.next());
+            }
+            for (TypeBranch newBranch : typeDeclaration.branches()) {
+                TypeBranch groundBranch = applyTypeSubstitution(newBranch, typeSubstitution);
+                if (groundBranch == null) continue;
+                if (hasTypeBranch(term, groundBranch)) return true;
+            }
+        }
+    } else if (branch instanceof ValueConstructor) {
+        ValueConstructor simpleType = (ValueConstructor) branch;
+        if (term instanceof Function) {
+            Function f = (Function) term;
+            if (!f.functor().equals(simpleType.name())) return false;
+            if (f.terms().size() != simpleType.arguments().size()) return false;
+            Iterator<ITerm> subTerm = f.terms().iterator();
+            UnmodifiableIterator<TypeBranch> subBranch = simpleType.arguments().iterator();
+            while (subTerm.hasNext()) {
+                if (!hasTypeBranch(subTerm.next(), subBranch.next())) {
+                    return false;
+                }
+            }
+            return true;
+        } else {
+            System.err.printf("W: untyped built-in constant term (%s)\n", term.getClass().getName());
+            return true;
+        }
+    } else {
+        Preconditions.checkArgument(false, "unsupported type branch");
+    }
+    return false;
+}
+
+// Returns only ground type branches.
+// Instead of non-ground type branches, it returns {@code null}.
+private TypeBranch applyTypeSubstitution(TypeBranch t, Map<String, TypeBranch> s) {
+    if (t instanceof Type) {
+        Type namedType = (Type) t;
+        if (namedType.actuals() == null) {
+            return s.get(namedType.name());
+        } else {
+            // Note that no lookup is done: All replacement is in-place.
+            ImmutableList.Builder<TypeBranch> newActuals = new ImmutableList.Builder<>();
+            for (TypeBranch a : namedType.actuals()) {
+                a = applyTypeSubstitution(a, s);
+                if (a == null) return null;
+                newActuals.add(a);
+            }
+            return Type.make(namedType.name(), newActuals.build());
+        }
+    } else if (t instanceof ValueConstructor) {
+        ValueConstructor simpleType = (ValueConstructor) t;
+        ImmutableList.Builder<TypeBranch> newActuals = new ImmutableList.Builder<>();
+        for (TypeBranch a : simpleType.arguments()) {
+            a = applyTypeSubstitution(a, s);
+            if (a == null) return null;
+            newActuals.add(a);
+        }
+        return ValueConstructor.make(simpleType.name(), newActuals.build());
+    } else {
+        Preconditions.checkArgument(false, "unsupported type branch");
+        return null;
+    }
+}
+\end{verbatim}
+
+} % end small font
 % >>>
 % >>>
 
