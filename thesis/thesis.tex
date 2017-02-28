@@ -5201,21 +5201,25 @@ action intmul(x, y) = raftest.IntegerMulAction;
 action intdiv(x, y) = raftest.IntegerDivAction;
 
 agent BinaryCalcInt : BinaryCalc<integer> {
+  //rule to handle addition
   rule Message(other, op(call(add(), cid, sid), pair(x, y))) {
     -Message(other, op(call(add(), cid, sid), pair(x, y)));
             z := intadd(x, y);
     send(other, op(return(add(), cid, sid), z));
   }
+  //rule to handle subtraction
   rule Message(other, op(call(sub(), cid, sid), pair(x, y))) {
     -Message(other, op(call(sub(), cid, sid), pair(x, y)));
             z := intsub(x, y);
     send(other, op(return(sub(), cid, sid), z));
   }
+  //rule to handle multiplication
   rule Message(other, op(call(mul(), cid, sid), pair(x, y))) {
     -Message(other, op(call(mul(), cid, sid), pair(x, y)));
             z := intmul(x, y);
     send(other, op(return(mul(), cid, sid), z));
   }
+  //rule to handle division
   rule Message(other, op(call(div(), cid, sid), pair(x, y))) {
     -Message(other, op(call(div(), cid, sid), pair(x, y)));
             z := intdiv(x, y);
@@ -5238,13 +5242,14 @@ action intmul(x, y) = raftest.IntegerMulAction;
 action intdiv(x, y) = raftest.IntegerDivAction;
 
 agent ExprCalc(binaryCalc : BinaryCalc<value>) : Calculator<value> {
+  //rule to prepare expr for evaluation and recursively evaluate expr x
   rule Message(other, op(call(eval(), cid, sid), add(x, y))) & Iam(self) {
     -Message(other, op(call(eval(), cid, sid), add(x, y)));
                 xcid := newcall;
     +Continue(other, cid, xcid, add1(y));
     send(self, op(call(eval(), xcid, sid)), x);
   }
-
+  //operation continuation: recursively evaluates expression y
   rule Message(self, op(return(eval(), xcid, sid), ctx))
                 & Iam(self)
                 & Continue(other, cid, xcid, add1(y))
@@ -5255,7 +5260,7 @@ agent ExprCalc(binaryCalc : BinaryCalc<value>) : Calculator<value> {
     +Continue(other, cid, ycid, add2(ctx));
     send(self, op(call(eval(), ycid, sid), y));
   }
-
+  //operation continuation: calls binaryCalc to add ctx and cty
   rule Message(self, op(return(eval(), cid, sid), cty))
                 & Iam(self)
                 & Continue(other, cid, ycid, add2(ctx))
@@ -5266,7 +5271,7 @@ agent ExprCalc(binaryCalc : BinaryCalc<value>) : Calculator<value> {
     +Continue(other, cid, zcid, add3());
     send(binaryCalc, op(call(add(), zcid, sid), operands(ctx, cty)));
   }
-
+  //operation continuation: returns the result to the caller
   rule Message(binaryCalc, op(return(add(), zcid, sid), z))
                 & Continue(other, cid, zcid, add3())
   {
@@ -5367,8 +5372,7 @@ agent ExprCalc(binaryCalc : BinaryCalc<value>) : Calculator<value> {
 \end{figure} % >>>
 % >>>
 \subsection{Discussion} % <<<
-As a concluding remark, AF-Raf's roles and sessions overlap in great amount
-with the multiparty session types developed in the context of
+As a concluding remark, AF-Raf's roles and sessions bear similarities to the multiparty session types developed in the context of
 $\pi$-calculus. AF-Raf sessions correspond to their global types, while
 AF-Raf roles correspond with their local type projections. The benefits of
 session types are well known, they facilitate communication safety,
