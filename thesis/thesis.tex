@@ -3462,21 +3462,21 @@ structures that are instantiated in the semantic actions of the concrete
 grammar. How is the abstract grammar specified? One option to specify the
 abstract grammar would be to list the Java code of those data structures.
 But, I've decided to go one step further and I use a special notation
-(described in Section 11.2), which does two things: (1) it lets me describe
-Java data structures concisely, and (2) it forces me to restrict myself to
-describing algebraic data types.
+(described in \autoref{sec:abstr-gram}), which does two things: (1) it lets
+me describe Java data structures concisely, and (2) it forces me to
+restrict myself to describing algebraic data types.
 
-Briefly, product types are specified as
+Briefly, product types are specified as:
 
   $Product = Part1type part1name, Part2tytpe part2name;$
 
-  and sum types are specified as
+  and sum types are specified as:
 
     $Sum <: Part1type, Part2type.$
 
 % >>>
 
-\subsection{AF-Raf Abstract Grammar} % <<<
+    \subsection{AF-Raf Abstract Grammar}\label{sec:abstr-gram} % <<<
 The abstract grammar of AF-Raf~(\autoref{fig:Abstract-Grammar1},
 \autoref{fig:Abstract-Grammar2}) is taken
 directly from the reference implementation of AF-Raf.  In general, there
@@ -5754,6 +5754,12 @@ The AF-Raf role construct encapsulates related social behaviour; The
 session construct models the pattern of interaction, while the algebraic
 data type provide an elegant way of representing the concepts related to
 the problem to be solved. 
+
+I have designed a questionnaire based survey to evaluate and compare the
+readability and understanding of each implementation. I've considered the
+individual programs, as well as how easy it is to put together related
+programs. The results are presented in \autoref{ch:survey}.
+
 % >>>
 % >>>
 % >>>
@@ -6253,7 +6259,7 @@ plays(initiator,c).
 .send(A,tell,propose(CNPId,Offer)).
 @r1 +accept_proposal(CNPId)
 : proposal(CNPId,Task,Offer)
-<- .print("My proposal ’",Offer,"’ won CNP ",CNPId,
+<- .print("My proposal '",Offer,"' won CNP ",CNPId,
 " for ",Task,"!").
 @r2 +reject_proposal(CNPId)
 <- .print("I lost CNP ",CNPId, ".");
