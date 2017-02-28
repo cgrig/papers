@@ -3487,7 +3487,7 @@ AgentRole =
 \begin{verbatim}
 Type =
   String name,
-  ImmutableList<Type> actuals;
+  ImmutableList<TypeBranch> actuals;
 
 TypeDeclaration =
   String name,
@@ -6311,7 +6311,9 @@ Q16. Last level of qualification in Computer Science.
 \end{verbatim}
 % >>>
 
-\chapter{stdio.raf}\label{app:standardLibrary} % <<<
+\chapter{Selected Parts of the Implementation}\label{app:code} % <<<
+
+\section{stdio.raf}\label{app:stdio} % <<<
 
 \begin{verbatim}
 
@@ -6328,6 +6330,319 @@ sensor com.agentfactory.raf.RafStandardSensor$Message;
 
 \end{verbatim}
 
+% >>>
+\section{Generated Abstract Syntax Tree}\label{app:ast} % <<<
+
+The following Java code is generated automatically
+  from the code in Figures
+  \ref{fig:Abstract-Grammar1}~and~\ref{fig:Abstract-Grammar2}.
+The figures use a notation that should be much easier to read.
+
+{\tiny
+\begin{verbatim}
+// This file is generated from Raf.ag and Raf.tpl by the script mkast.sh.
+package com.agentfactory.raf;
+import com.agentfactory.clf.lang.*;
+import com.agentfactory.clf.plans.*;
+import com.agentfactory.clf.reasoner.Bindings;
+import com.google.common.collect.ImmutableList;
+
+public final class RafAst {
+  public static interface Ast {}
+  
+    public static interface NestedSessionStep {}
+  
+    public static interface SessionStep {}
+  
+    public static interface TypeBranch {}
+  
+  
+    public static final class ActionDeclaration implements Ast {
+      
+      private final Function function;
+      private final String javaClass;
+      private ActionDeclaration(Function function,String javaClass) {
+        this.function = function;this.javaClass = javaClass;
+      }
+      public static ActionDeclaration make(Function function,String javaClass) {
+        return new ActionDeclaration(function,javaClass);
+      }
+      public Function function() {return function;}
+      public String javaClass() {return javaClass;}
+    }
+  
+    public static final class AgentDeclaration implements Ast {
+      
+      private final String design;
+      private final ImmutableList<AgentRole> arguments;
+      private final ImmutableList<Type> roles;
+      private final ImmutableList<Rule> rules;
+      private AgentDeclaration(String design,ImmutableList<AgentRole> arguments,ImmutableList<Type> roles,ImmutableList<Rule> rules) {
+        this.design = design;this.arguments = arguments;this.roles = roles;this.rules = rules;
+      }
+      public static AgentDeclaration make(String design,ImmutableList<AgentRole> arguments,ImmutableList<Type> roles,ImmutableList<Rule> rules) {
+        return new AgentDeclaration(design,arguments,roles,rules);
+      }
+      public String design() {return design;}
+      public ImmutableList<AgentRole> arguments() {return arguments;}
+      public ImmutableList<Type> roles() {return roles;}
+      public ImmutableList<Rule> rules() {return rules;}
+    }
+  
+    public static final class AgentRole implements Ast {
+      
+      private final String name;
+      private final Type role;
+      private AgentRole(String name,Type role) {
+        this.name = name;this.role = role;
+      }
+      public static AgentRole make(String name,Type role) {
+        return new AgentRole(name,role);
+      }
+      public String name() {return name;}
+      public Type role() {return role;}
+    }
+  
+    public static final class ChoiceSessionStep implements SessionStep {
+      
+      private final ImmutableList<SessionInvokation> alternativeSessions;
+      private ChoiceSessionStep(ImmutableList<SessionInvokation> alternativeSessions) {
+        this.alternativeSessions = alternativeSessions;
+      }
+      public static ChoiceSessionStep make(ImmutableList<SessionInvokation> alternativeSessions) {
+        return new ChoiceSessionStep(alternativeSessions);
+      }
+      public ImmutableList<SessionInvokation> alternativeSessions() {return alternativeSessions;}
+    }
+  
+    public static final class Contract implements Ast {
+      public static enum ContractType {PRE,FAIL,POST}
+      private final ContractType type;
+      private final IFormula condition;
+      private Contract(ContractType type,IFormula condition) {
+        this.type = type;this.condition = condition;
+      }
+      public static Contract make(ContractType type,IFormula condition) {
+        return new Contract(type,condition);
+      }
+      public ContractType type() {return type;}
+      public IFormula condition() {return condition;}
+    }
+  
+    public static final class MaybeSessionStep implements NestedSessionStep {
+      
+      private final SessionInvokation session;
+      private MaybeSessionStep(SessionInvokation session) {
+        this.session = session;
+      }
+      public static MaybeSessionStep make(SessionInvokation session) {
+        return new MaybeSessionStep(session);
+      }
+      public SessionInvokation session() {return session;}
+    }
+  
+    public static final class NamedBindings implements Ast {
+      
+      private final String name;
+      private final Bindings bindings;
+      private NamedBindings(String name,Bindings bindings) {
+        this.name = name;this.bindings = bindings;
+      }
+      public static NamedBindings make(String name,Bindings bindings) {
+        return new NamedBindings(name,bindings);
+      }
+      public String name() {return name;}
+      public Bindings bindings() {return bindings;}
+    }
+  
+    public static final class Operation implements Ast {
+      
+      private final String name;
+      private final Type input;
+      private final Type output;
+      private Operation(String name,Type input,Type output) {
+        this.name = name;this.input = input;this.output = output;
+      }
+      public static Operation make(String name,Type input,Type output) {
+        return new Operation(name,input,output);
+      }
+      public String name() {return name;}
+      public Type input() {return input;}
+      public Type output() {return output;}
+    }
+  
+    public static final class PlanDeclaration implements Ast {
+      
+      private final Function signature;
+      private final ImmutableList<Contract> contract;
+      private final IPlanStep body;
+      private PlanDeclaration(Function signature,ImmutableList<Contract> contract,IPlanStep body) {
+        this.signature = signature;this.contract = contract;this.body = body;
+      }
+      public static PlanDeclaration make(Function signature,ImmutableList<Contract> contract,IPlanStep body) {
+        return new PlanDeclaration(signature,contract,body);
+      }
+      public Function signature() {return signature;}
+      public ImmutableList<Contract> contract() {return contract;}
+      public IPlanStep body() {return body;}
+    }
+  
+    public static final class QualifiedId implements Ast {
+      
+      private final QualifiedId path;
+      private final String id;
+      private QualifiedId(QualifiedId path,String id) {
+        this.path = path;this.id = id;
+      }
+      public static QualifiedId make(QualifiedId path,String id) {
+        return new QualifiedId(path,id);
+      }
+      public QualifiedId path() {return path;}
+      public String id() {return id;}
+    }
+  
+    public static final class RepeatSessionStep implements NestedSessionStep {
+      
+      private final SessionInvokation session;
+      private RepeatSessionStep(SessionInvokation session) {
+        this.session = session;
+      }
+      public static RepeatSessionStep make(SessionInvokation session) {
+        return new RepeatSessionStep(session);
+      }
+      public SessionInvokation session() {return session;}
+    }
+  
+    public static final class RoleDeclaration implements Ast {
+      
+      private final String role;
+      private final ImmutableList<String> formals;
+      private final ImmutableList<Operation> operations;
+      private RoleDeclaration(String role,ImmutableList<String> formals,ImmutableList<Operation> operations) {
+        this.role = role;this.formals = formals;this.operations = operations;
+      }
+      public static RoleDeclaration make(String role,ImmutableList<String> formals,ImmutableList<Operation> operations) {
+        return new RoleDeclaration(role,formals,operations);
+      }
+      public String role() {return role;}
+      public ImmutableList<String> formals() {return formals;}
+      public ImmutableList<Operation> operations() {return operations;}
+    }
+  
+    public static final class Rule implements Ast {
+      
+      private final String name;
+      private final IFormula condition;
+      private final IPlanStep statement;
+      private Rule(String name,IFormula condition,IPlanStep statement) {
+        this.name = name;this.condition = condition;this.statement = statement;
+      }
+      public static Rule make(String name,IFormula condition,IPlanStep statement) {
+        return new Rule(name,condition,statement);
+      }
+      public String name() {return name;}
+      public IFormula condition() {return condition;}
+      public IPlanStep statement() {return statement;}
+    }
+  
+    public static final class SessionDeclaration implements Ast {
+      
+      private final String session;
+      private final ImmutableList<String> formals;
+      private final ImmutableList<AgentRole> arguments;
+      private final ImmutableList<SessionStep> sessionSteps;
+      private SessionDeclaration(String session,ImmutableList<String> formals,ImmutableList<AgentRole> arguments,ImmutableList<SessionStep> sessionSteps) {
+        this.session = session;this.formals = formals;this.arguments = arguments;this.sessionSteps = sessionSteps;
+      }
+      public static SessionDeclaration make(String session,ImmutableList<String> formals,ImmutableList<AgentRole> arguments,ImmutableList<SessionStep> sessionSteps) {
+        return new SessionDeclaration(session,formals,arguments,sessionSteps);
+      }
+      public String session() {return session;}
+      public ImmutableList<String> formals() {return formals;}
+      public ImmutableList<AgentRole> arguments() {return arguments;}
+      public ImmutableList<SessionStep> sessionSteps() {return sessionSteps;}
+    }
+  
+    public static final class SessionInvokation implements Ast {
+      
+      private final String sessionName;
+      private final ImmutableList<String> sessionArguments;
+      private SessionInvokation(String sessionName,ImmutableList<String> sessionArguments) {
+        this.sessionName = sessionName;this.sessionArguments = sessionArguments;
+      }
+      public static SessionInvokation make(String sessionName,ImmutableList<String> sessionArguments) {
+        return new SessionInvokation(sessionName,sessionArguments);
+      }
+      public String sessionName() {return sessionName;}
+      public ImmutableList<String> sessionArguments() {return sessionArguments;}
+    }
+  
+    public static final class SimpleSessionStep implements SessionStep {
+      
+      private final Type messageType;
+      private final String sourceAgent;
+      private final String targetAgent;
+      private SimpleSessionStep(Type messageType,String sourceAgent,String targetAgent) {
+        this.messageType = messageType;this.sourceAgent = sourceAgent;this.targetAgent = targetAgent;
+      }
+      public static SimpleSessionStep make(Type messageType,String sourceAgent,String targetAgent) {
+        return new SimpleSessionStep(messageType,sourceAgent,targetAgent);
+      }
+      public Type messageType() {return messageType;}
+      public String sourceAgent() {return sourceAgent;}
+      public String targetAgent() {return targetAgent;}
+    }
+  
+    public static final class Type implements TypeBranch {
+      
+      private final String name;
+      private final ImmutableList<TypeBranch> actuals;
+      private Type(String name,ImmutableList<TypeBranch> actuals) {
+        this.name = name;this.actuals = actuals;
+      }
+      public static Type make(String name,ImmutableList<TypeBranch> actuals) {
+        return new Type(name,actuals);
+      }
+      public String name() {return name;}
+      public ImmutableList<TypeBranch> actuals() {return actuals;}
+    }
+  
+    public static final class TypeDeclaration implements Ast {
+      
+      private final String name;
+      private final ImmutableList<String> formals;
+      private final ImmutableList<TypeBranch> branches;
+      private TypeDeclaration(String name,ImmutableList<String> formals,ImmutableList<TypeBranch> branches) {
+        this.name = name;this.formals = formals;this.branches = branches;
+      }
+      public static TypeDeclaration make(String name,ImmutableList<String> formals,ImmutableList<TypeBranch> branches) {
+        return new TypeDeclaration(name,formals,branches);
+      }
+      public String name() {return name;}
+      public ImmutableList<String> formals() {return formals;}
+      public ImmutableList<TypeBranch> branches() {return branches;}
+    }
+  
+    public static final class ValueConstructor implements TypeBranch {
+      
+      private final String name;
+      private final ImmutableList<TypeBranch> arguments;
+      private ValueConstructor(String name,ImmutableList<TypeBranch> arguments) {
+        this.name = name;this.arguments = arguments;
+      }
+      public static ValueConstructor make(String name,ImmutableList<TypeBranch> arguments) {
+        return new ValueConstructor(name,arguments);
+      }
+      public String name() {return name;}
+      public ImmutableList<TypeBranch> arguments() {return arguments;}
+    }
+  
+}
+\end{verbatim}
+
+} % end small size
+
+% >>>
 % >>>
 
 \backmatter
