@@ -2668,15 +2668,27 @@ In general, a query $q$ is a sentence in some logic that determines a
 subset of beliefs.  Given a belief base and a query, it is important to be
 able to efficiently find the subset of beliefs from the belief base that
 satisfy the query.  Again, AF-Raf takes a simple approach, because its
-focus is not the belief base.  Each query is a predicate formula, in other
-words a term that may contain variables, which are interpreted as patterns.
+focus is not the belief base: The logic is quantifier free first order
+logic.
 
-\begin{align} \pi &::=
-\upsilon(\tau,\ldots,\tau) && \text{predicate formula} \\\tau &::=
-\nu(\tau,\ldots,\tau) && \text{function term} \\ \tau &::= x &&
-\text{variable term} \\ \nu  &::= {\rm string-LID} &&\text{function symbol} \\
-x &::= {\rm string-LID} && \text{variable symbol} \\ \upsilon  &::= {\rm
-string-UID} &&\text{predicate symbol} \end{align} 
+
+\begin{align}
+\pi &::= \upsilon(\tau,\ldots,\tau) && \text{atomic query}
+\\
+\pi &::= \pi_1 \land \pi_2 && \text{conjunctive query}
+\\
+\pi &::= \pi_1 \lor \pi_2 && \text{disjunctive query}
+\\
+\tau &::= \nu(\tau,\ldots,\tau) && \text{function term}
+\\
+\tau &::= x && \text{variable term}
+\\
+\nu  &::= {\rm string-LID} &&\text{function symbol}
+\\
+x &::= {\rm string-LID} && \text{variable symbol}
+\\
+\upsilon  &::= {\rm string-UID} &&\text{predicate symbol}
+\end{align}
 
 The grammar rules (11.7), (11.8), (11.10) and (11.12) are the same as for
 beliefs.  Thus, any belief can be used as a query:  It stands for asking

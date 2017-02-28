@@ -46,7 +46,7 @@ Language with Roles, Sessions and Type Checking''.
 
 -- Structure of the thesis
 
-A “Background” chapter is missing; many background notions are scattered
+A ``Background'' chapter is missing; many background notions are scattered
 throughout the thesis, whereas they should be included in a chapter, just after
 the Introduction, as customary.
 
@@ -56,8 +56,8 @@ I} of the thesis).
 
 \begin{them}
 
-One chapter devoted to the “Implementation” of AF-Raf (with link to an online
-prototype) and one devoted to “Experiments” should be added before the
+One chapter devoted to the ``Implementation'' of AF-Raf (with link to an online
+prototype) and one devoted to ``Experiments'' should be added before the
 Conclusions.
 
 \end{them}
@@ -113,7 +113,7 @@ Examples should not be provided inline with the text.
 
 I have checked that the examples throughout the thesis conform to normal
 standards of mathematical writing: very small examples are interspersed with
-text that presents informal high level ideas, more formal examples have their
+text that presents informal high level ideas, more incolved examples have their
 own environment, and large, significant examples have their own figure.
 
 \begin{them}
@@ -151,7 +151,8 @@ components: rule base, belief base, roles, sessions, type checking are all
 described there. Detailed explanations regarding the sensors and actions are
 given in the same section starting with \R{page 66}. The MAS architecture and
 control flow, including type checking is depicted in \R{figure 11.5}. The
-interpreter is described at the beginning of \R{Section 12.4}. 
+interpreter is described at the beginning of \R{Section 13.4} and in
+\R{Chapter~14}.
 
 \begin{them}
 
@@ -209,7 +210,7 @@ I've also used this paper when defining AF-Raf agency, in \R{Section 2.1}.
 \begin{them}
 
 Page 2:
-Stating that the set of standards by FIPA is “nascent” is debatable, as it is
+Stating that the set of standards by FIPA is ``nascent'' is debatable, as it is
 very old.
 
 \end{them}
@@ -239,7 +240,7 @@ Fixed. I've added newer methodologies.
 
 \begin{them}
 
-“This relatively new paradigm” is debatable, as AOP is more than 20 years old.
+``This relatively new paradigm'' is debatable, as AOP is more than 20 years old.
 \end{them}
 Fixed.
 
@@ -274,11 +275,11 @@ Fixed. Added reference to their work, which is preceded by my publications.
 \begin{them}
 
 Page 6:
-The sentence “and design the first AOP language to introduce type checking” is
+The sentence ``and design the first AOP language to introduce type checking'' is
 not clear,
 
 \end{them}
-Fixed. Sentence made clear. 
+Fixed.
 
 \begin{them}
 
@@ -291,7 +292,7 @@ the thesis.
 \begin{them}
 
 -- Chapter 2
-This chapter should be entitled “Background” and all the background knowledge
+This chapter should be entitled ``Background'' and all the background knowledge
 needed to understand the thesis' contribution should be moved here. The
 description of AgentFactory, the BDI model and AgentSpeak(L), SimpAL, JADE, the
 global and session types theories and their projection, ALPHA, etc, should be
@@ -307,7 +308,7 @@ the thesis
 Important topics to introduce in the Background section are agent communication
 principles and languages. Asynchronous message passing using high level ACL
 like FIPA ACL and KQML should be introduced here in order to better motivate
-the “Functions as Messages” analogy in page 47, putting it into the right
+the ``Functions as Messages'' analogy in page 47, putting it into the right
 context.
 
 \end{them}
@@ -326,7 +327,7 @@ Fixed. Added \R{section 5.2} on ontologies.
 \begin{them}
 
 Page 8:
-Again, the “relatively” new paradigm is debatable.
+Again, the ``relatively'' new paradigm is debatable.
 \end{them}
 Fixed. 
 
@@ -335,8 +336,12 @@ Fixed.
 Page 11:
 What does it mean that roles are negotiated on a constant basis?
 \end{them}
-It means that roles are not fixed and that they are challenged and changed all
-the time.  
+
+I believe that what Biddle means when he says that ``roles are negotiated on
+a constant basis'' is clear: People's roles throughout life are not fixed,
+and the way they change is through negotiation, a process that that never
+stops.
+
 
 \begin{them}
 
@@ -354,7 +359,7 @@ Fixed. Described Object Teams and PowerJava in more detail \R{pages 21-22}.
 
 Page 14:
 Gaia, MASE, AALAADDIN are AOSE methodologies, whereas they are described in the
-thesis as “organizational frameworks”; this point should be better expanded.
+thesis as ``organizational frameworks''; this point should be better expanded.
 
 \end{them}
 The section was updated to provide more accurate and detailed data regarding
@@ -363,8 +368,8 @@ programming.
 
 \begin{them}
 
-The sentence “there is no full support at the language level for the
-organization of agents” is not cleas, as it refers to AOSE methodologies and
+The sentence ``there is no full support at the language level for the
+organization of agents'' is not cleas, as it refers to AOSE methodologies and
 not to AOP languages. Also, at least Gaia and MASE include the notions of role
 and protocol, so they do provide a support to these concepts. A recent
 extension to MASE, o-MASE (JAOSE 2010), integrates organizational concepts. It
@@ -403,7 +408,7 @@ a high level pseudo-code could also help as done for example in
 
 \url{http://www.upv.es/sma/teoria/teoria_ag/bdi\%20agents\%20from\%20theoryRao.pdf},
 \end{them}
-Fixed. The graphical representation of the control flow \R{figure 11.2} is
+Fixed. The graphical representation of the control flow \R{Figure~12.2} is
 accompanied by a textual illustration.
 
 \begin{them}
@@ -416,7 +421,7 @@ supporting each of the objectives 1a, 2b, 2c.
 \end{them}
 Fixed. Added brief description to link AF-Raf components with the objectives
 (1a), (2b), (2c). Also, the relationship between AF-Raf components and
-objectives is described in  more detail in \R{Chapter 16}.
+objectives is described in  more detail in \R{Chapter 17}.
 
 \begin{them}
 
@@ -439,22 +444,24 @@ examples showing the same features are different, their captions should briefly
 explain why.
 
 \end{them}
-The reader is referred to \R{section 11.3} (Syntactic Sugar) where this issue
-is explained in a formal way and to \R{section 13.1} (the Calculator) where
+The reader is referred to \R{Section~13.3} (Syntactic Sugar) where this issue
+is explained in a formal way and to \R{Section~15.1} (the Calculator) where
 this issue is exemplified.
 
-In short, figure 3.1 (now \R{11.1})presents an agent code written only with
-rules, whereas figure 5.2 (now \R{14.6}) and figure 5.3 (now \R{14.7}) presents
+In short, figure 3.1 (now \R{12.1}) presents an agent code written only with
+rules, whereas figure 5.2 (now \R{15.6}) and figure 5.3 (now \R{15.7}) present
 agent code written using operations (syntactic sugar).
 
 \begin{them}
 
 In the second line of Figure 3.1 a conjunction is used in the rule head, but in
-page 31 only queries without conjunctions are shown and the use of “\&” as
-“and” is not explained.
+page 31 only queries without conjunctions are shown and the use of ``\&'' as
+``and'' is not explained.
 
 \end{them}
-Fixed. Conjunctive queries are defined on \R{page 74}. 
+Fixed.
+Conjunctive queries are defined in \R{(12.30)} in \R{Section~12.2}.
+
 
 \begin{them}
 
@@ -465,19 +472,29 @@ Fixed.
 
 \begin{them}
 
-Which is the relationship between the sentence “executing an action means
-executing a piece of associated Java code” and the situatedness of agents? Are
+Which is the relationship between the sentence ``executing an action means
+executing a piece of associated Java code'' and the situatedness of agents? Are
 all these Java actions a form of effectors operating in the environment? How
 does sensing take place?
 
 \end{them}
-This is explained in \R{Section 11.1}, \R{pages 65, 67, 68}.
+
+This is now explained in \R{Section~12.1} and \R{Chapter~14}.
+
+Briefly, both actions and sensors are implemented in Java,
+  and they both have access to the AgentFramework infrastructure.
+Actions are invoked explicitely from AF-Raf code.
+Sensors are executed by the AF-Raf interpreter at each time step,
+  and they typically have the side effect of updating the belief base.
+In turn, the change of the belief base affects
+  which rules fire.
+
 
 \begin{them}
 
 Page 26:
-The sentence “then provides a list containing entries of the form: message
-type....”, referring to sessions, should be associated with a BNF giving the
+The sentence ``then provides a list containing entries of the form: message
+type....'', referring to sessions, should be associated with a BNF giving the
 syntax of a session. From the definition of session given in page 26, the
 reader understands that a session is a plain sequence of messages. This is
 probably false as in page 73 the maybe, repeat, oneof operators - introduced
@@ -491,16 +508,16 @@ choices, interleaving, concatenation of sessions, synchronization.
 As explained now in the introductory chapter on multiparty asynchonrous session
 types, AF-Raf sessions are only informally similar to global types --- there is
 no formal connection, but one can find an informal comparison in
-\R{Section~9.4}. In \R{Figure~12.1}, one sees the abstract syntax of sessions;
+\R{Section~9.4}. In \R{Figure~13.1}, one sees the abstract syntax of sessions;
 we remind the examiner that the notation is explained at the beginning of
-\R{Section~12.2}, and that there are good reasons why it is not EBNF.  The
+\R{Section~13.2.2}, and that there are good reasons why it is not EBNF.  The
 semantics of AF-Raf sessions appear in the section on semantics.  For example,
-see the the rule \R{(12.72)}.
+see the the rule \R{(13.72)}.
 
 In summary,
-  AF-Raf sessions are now introduced informally (\R{11.5}),
-  their formal syntax is given (\R{Figure~12.1}),
-  and their operational semantics as well (rule \R{(12.72)} and related).
+  AF-Raf sessions are now introduced informally (\R{12.5}),
+  their formal syntax is given (\R{Figure~13.1}),
+  and their operational semantics as well (rule \R{(13.72)} and related).
 
 
 \begin{them}
@@ -526,7 +543,10 @@ Dynamic and static checks are shortly mentioned in page 26: the topic should be
 dealt with in more detail as type checking is one of the thesis' objectives.
 
 \end{them}
-I've added a graphical representation of dynamic and static type checkin in \R{figure 11.5}. More detailed explanation of type checking is given in \R{Section 11.3.2}.
+I've added a graphical representation of dynamic and static type checking
+in \R{Figure~12.5}. More detailed explanation of type checking is given
+in \R{Section~12.3.2}. A representative part of the implementation is now
+in \R{Appendix~C.3}.
 
 \begin{them}
 
@@ -538,12 +558,12 @@ Fixed.
 \begin{them}
 
 Page 29:
-The sentence “an update corresponds to a change in the environment” seems not
+The sentence ``an update corresponds to a change in the environment'' seems not
 appropriate for a section dealing with the Belief Base. A section dealing with
 the representation and management of the Environment in AF-Raf should be added.
 
 \end{them}
-I've updated \R{Section 11.1} to include more details about the way the
+I've updated \R{Section~12.1} to include more details about the way the
 environment is represented and managed. In short, the environment is
 represented in the form of beliefs and it is managed accordingly. Given this
 piece of information, I believe that the sentence in question is a legitimate
@@ -553,34 +573,49 @@ clarification.
 
 Page 30:
 For sake of clarity, syntax and semantics should be kept separate; in page 30
-the focus seems to be on the syntax; the sentence “funtion symbols can
-represent both values and typing information” deals with the semantics and
+the focus seems to be on the syntax; the sentence ``funtion symbols can
+represent both values and typing information'' deals with the semantics and
 should be moved in a more suitable place.
 
 \end{them}
-I agree that the syntax and semantics should be kept separate in the formal
-parts of the thesis, but I do not see why I should not give examples that
-illustrate both syntax and semantics.
+
+I agree that there should be a formal presentation of the syntax
+  and a formal presentation of the semantics,
+  which should be kept separate.
+However, the thesis also should present examples
+  that illustrate both syntax and semantics.
+I believe it is completely standard to give a figure
+  with the syntax of a small language,
+and then to comment in text informally about what each construct
+  is supposed to do,
+  \emph{before} (and if) the formal semantics are given.
+For an example of this,
+  see Section~2.1 of Honda et al, J.~ACM~2016.
+
 
 \begin{them}
 
 Page 31:
-The sentence “a query is a sentence in some logic” is too general, as this
+The sentence ``a query is a sentence in some logic'' is too general, as this
 section should provide the AF-Raf syntax, not a general introduction of what
 queries are. The candidate should state in which logic AF-Raf queries are
 expressed, which operators can appear in a query, and should provide examples
-demonstrating many different forms of queries, not just “atomic” ones.
+demonstrating many different forms of queries, not just ``atomic'' ones.
 
 \end{them}
-Fixed. The first sentence is just an introduction. All types of queries are now
-formally defined. See definitions: \R{11.26, 11.27, 11.28}.
+Fixed.
+% The first sentence is just an introduction.
+The logic is a subset of quantifier free first order logic,
+  and is given by \R{(12.7--14)}.
+Queries are defined in~\R{(12.28--30)}.
+
 
 \begin{them}
 
 Page 32:
 Ground terms are defined in page 36, they should be defined here.
 \end{them}
-Fixed
+Fixed.
 
 \begin{them}
 
@@ -608,7 +643,7 @@ chapter in \R{section 11.3.2 (page )}.
 \begin{them}
 
 Given the definitions 3.1 and 3.2 in page 30, the only type for a belief is
-“string”. Since each belief has type string, it is difficult to understand this
+``string''. Since each belief has type string, it is difficult to understand this
 section about typing.
 
 \end{them}
@@ -622,7 +657,7 @@ definitions should be acknowledged to avoid confusion.
 
 \begin{them}
 
-The “Bad scenario” description is too involved: “tau”s should be substituted
+The ``Bad scenario'' description is too involved: ``tau''s should be substituted
 with concrete messages in order to make this example clearer.
 
 \end{them}
@@ -663,7 +698,7 @@ not about semantics.
 
 \begin{them}
 
-Sentence “Typically, in mathematical logic,....” seems a complex way to define
+Sentence ``Typically, in mathematical logic,....'' seems a complex way to define
 predicates and formulae, which might be given for granted as they belong to the
 background of any computer scientist.
 
@@ -708,7 +743,7 @@ this cumbersome representation.
 \begin{them}
 
 Page 41:
-“Those operations are: ....” has been already said in page 40.
+``Those operations are: ....'' has been already said in page 40.
 \end{them}
 
 Fixed. Definition of algebraic data types was moved to Background.
@@ -725,7 +760,7 @@ The actual implementation was added in \R{Appendix~C.3}.
 \begin{them}
 
 Page 47:
-The analogy “Functions as messages” should be better clarified, as it seems not
+The analogy ``Functions as messages'' should be better clarified, as it seems not
 to fit the common understanding that messages are structured according to the
 speech act theory, their content is written in some high level language, maybe
 using an ontology to give meaning to terms appearing there, and communication
@@ -751,7 +786,7 @@ roles BinaryCalc and Calculator, this is explained in \R{Section 14.1}.
 \begin{them}
 
 Page 48:
-“Messages” do not meet the state of the art format (see FIPA ACL, KQML): a
+``Messages'' do not meet the state of the art format (see FIPA ACL, KQML): a
 motivation should be provided for that.
 
 \end{them}
@@ -780,7 +815,7 @@ and the algebraic data types is debatable, as the need to define an ontology
 for arithmetic expressions just to be sure that the content of a message
 adheres to their syntax is not so evident. Ontologies are used for other
 purposes than giving a syntax of a language or defining the types of
-expressions. Dealing with their purposes and usage in the “Background” section
+expressions. Dealing with their purposes and usage in the ``Background'' section
 should help.
 
 \end{them}
@@ -795,7 +830,7 @@ than using JADE ontology.
 \begin{them}
 
 Page 49:
-“In contrast, the earlier role....” should be explained before.
+``In contrast, the earlier role....'' should be explained before.
 \end{them}
 I believe that introducing role dependencies after describing simple roles
 minimises confusion.
@@ -809,7 +844,7 @@ minimises confusion.
 \begin{them}
 
 Page 50:
-The statement “In summary, the vague and informal intuition...” is not
+The statement ``In summary, the vague and informal intuition...'' is not
 supported by evidence in the thesis.
 
 \end{them}
@@ -819,8 +854,8 @@ say anything about any results.
 \begin{them}
 
 Page 51:
-The statement “such a list is very similar to the global types that describe
-multiparty sessions...” is debatable, as global types represent patterns of
+The statement ``such a list is very similar to the global types that describe
+multiparty sessions...'' is debatable, as global types represent patterns of
 interaction among agents which are much more complex than sequences.
 
 \end{them}
@@ -869,12 +904,12 @@ into more figures.
 \begin{them}
 
 Page 58:
-The concluding remark “our notions of roles and sessions overlap in great
+The concluding remark ``our notions of roles and sessions overlap in great
 amount with the multiparty session types developed in the context of the
-Pi-calculus” should be supported by a more precise comparison of the two
+Pi-calculus'' should be supported by a more precise comparison of the two
 formalisms carried out based on the operators they support, on their
 expressiveness (do they define regular languages of sequences over messages?
-context free languages? ...), on the definition of “well-formedness” (not all
+context free languages? ...), on the definition of ``well-formedness'' (not all
 global/session types are well formed), on the assumptions for using them
 (determinism, no cover channels, and so on). The comparison with the projection
 operator should be carried out as well.
@@ -904,8 +939,8 @@ Fixed. See \R{Chapter 11}.
 \begin{them}
 
 Page 61:
-What does sentence “In AF-Raf sessions provide which can be seen as a kind of
-protocol...” mean?
+What does sentence ``In AF-Raf sessions provide which can be seen as a kind of
+protocol...'' mean?
 
 \end{them}
 Fixed. Provide a blueprint.
@@ -942,7 +977,7 @@ This was explained on page 66 (now \R{103}).
 
 \begin{them}
 
-Was the “AgentDeclaration” already introduced as a component of the agent's
+Was the ``AgentDeclaration'' already introduced as a component of the agent's
 code?
 
 \end{them}
@@ -951,11 +986,11 @@ Yes. See the new definition of agent code in \R{figure 12.7}.
 \begin{them}
 
 Page 67:
-A standard style for BNF should be used, with “::=” and “|” in the body for
+A standard style for BNF should be used, with ``::='' and ``|'' in the body for
 separating the various forms that the body may have; inline comments might be
-added to enhance clarity; each definition (left hand side of the “=”) should be
+added to enhance clarity; each definition (left hand side of the ``='') should be
 used somewhere and each definition used in the body of a BNF rule (right hand
-side of “=”), should be provided in the grammar. If recursive definitions are
+side of ``=''), should be provided in the grammar. If recursive definitions are
 interpreted in the standard inductive way, they should have a base; if they are
 interpreted coinductively as they define infinite terms, this should be made
 explicit. 
@@ -1048,9 +1083,9 @@ presents the grammar for statements.
 Page 70:
 Stating that an Array is a Role seems not very close to the common intuition of
 what a Role is.In the common understanding of agents' roles, a role may be
-“Seller”, “Buyer”, “Initiator”, “Participant”, “Bidder” (see FIPA Protocols,
+``Seller'', ``Buyer'', ``Initiator'', ``Participant'', ``Bidder'' (see FIPA Protocols,
 for example) and so on. It is difficult to imagine an autonomous agent playing
-the role “Array”.
+the role ``Array''.
 
 \end{them}
 Anything that exhibits behaviour that can be used by others can be modeled as a
@@ -1072,7 +1107,7 @@ Fixed.
 \begin{them}
 
 Page 77:
-“keyword new must be followed by the category of the name....”: what do you
+``keyword new must be followed by the category of the name....'': what do you
 mean by category of the name?
 
 \end{them}
@@ -1080,7 +1115,7 @@ Fixed.
 
 \begin{them}
 
-Sentence “The core of AF-Raf performs no hidden actions” should be moved (and
+Sentence ``The core of AF-Raf performs no hidden actions'' should be moved (and
 better explained) at the beginning of Chapter 3, when the AF-Raf architecture
 and control flow are described.
 
@@ -1112,7 +1147,7 @@ Concepts, as requested by the examiner.
 \begin{them}
 
 Page 90:
-“Unknown” is named “undefined” in page 92, and only in page 93 there is the
+``Unknown'' is named ``undefined'' in page 92, and only in page 93 there is the
 statement that unknown and undefined are the same thing. Please choose one and
 use it only.
 
@@ -1123,7 +1158,7 @@ references are consistent now.
 \begin{them}
 
 Page 92:
-The thesis states that “agents states themselves are triples”, but in
+The thesis states that ``agents states themselves are triples'', but in
 definition 4.31 they are 6-tuples.  Such mismatches raise a lot of confusion
 and a careful consistency check should be performed.
 
@@ -1133,8 +1168,8 @@ Fixed
 \begin{them}
 
 Page 93:
-“The sets AgentCode and GroundTerm are not defined here, but the definitions
-can be easily recovered from the abstract grammar”: it should be better to
+``The sets AgentCode and GroundTerm are not defined here, but the definitions
+can be easily recovered from the abstract grammar'': it should be better to
 define them here, instead.
 
 \end{them}
@@ -1144,10 +1179,10 @@ reference to the definition of ground term is provided.
 \begin{them}
 
 Page 95:
-“P is the agent code”: the syntax of the agent code should be necessarily given
+``P is the agent code'': the syntax of the agent code should be necessarily given
 since this component is not clearly defined; in the reviewers' opinion, P is
 not the actual agent code (meant as the program for an agent) but it is the
-“agent's execution state”, which is a deeply different concept and requires
+``agent's execution state'', which is a deeply different concept and requires
 suitable data structures. The agent's code does not (usually) change, whereas
 its excecution state does. Referring to the BDI model, the the AF-Raf agent
 code can be compared with the plan library + the belief base, whereas the
@@ -1173,12 +1208,12 @@ Fixed. Explanation added on \R{page 132}.
 
 Page 97:
 The premise of rule 4.46 states that an agent's program is a set (since the
-“belongs to P” operator is used), which is not consistent with the definition
-of “agent code” (for example, the agent code contains “include” statements and
+``belongs to P'' operator is used), which is not consistent with the definition
+of ``agent code'' (for example, the agent code contains ``include'' statements and
 it should include the beliefs as well). The consequence of the rule states that
-an agent program is some data structure providing a “;” operator. This is in
+an agent program is some data structure providing a ``;'' operator. This is in
 contrast with stating that an agent's program is a set, as sets – as usually
-defined - do not support a “;” operator, whatever the meaning of “;” is.
+defined - do not support a ``;'' operator, whatever the meaning of ``;'' is.
 
 \end{them}
 The new definition for agent code \R{(figure 12.7)} should clarify this.
@@ -1226,7 +1261,7 @@ see Plotkin, {\it Dijkstra's Predicate Transformers and Smyth' Powerdomains},
 \begin{them}
 
 Page 99:
-Rule 4.52: what does “X:=P” mean? Whatever P, assigning an agent code (which is
+Rule 4.52: what does ``X:=P'' mean? Whatever P, assigning an agent code (which is
 a set?) to a variable is not clear.
 
 \end{them}
@@ -1247,7 +1282,7 @@ This is entirely analogous to the message queues in
 
 \begin{them}
 
-“Here the scope Gamma is used as a substitution”: which are the relationship
+``Here the scope Gamma is used as a substitution'': which are the relationship
 with the notion of m.g.u.? Why not using the standard notation for
 substitutions and m.g.u.s?
 
@@ -1264,8 +1299,8 @@ Fixed
 
 \begin{them}
 
-“The result of this substitution is the code that the newly created agent
-should execute, and is a set of rules”: in Rule 4.53 it seemed that the agent
+``The result of this substitution is the code that the newly created agent
+should execute, and is a set of rules'': in Rule 4.53 it seemed that the agent
 code could include beliefs as well.
 
 \end{them}
@@ -1276,7 +1311,7 @@ confusion.
 \begin{them}
 
 Also, the comments to page 97 raise doubts that P can be a set because of the
-“;” operator.
+``;'' operator.
 
 \end{them}
 See new agent code definition \R{(figure 12.7)} for clarification.
@@ -1284,7 +1319,7 @@ See new agent code definition \R{(figure 12.7)} for clarification.
 \begin{them}
 
 Page 101:
-“AF-Raf actions .. are an escape hatch from AF-Raf's semantics”: AF-Raf actions
+``AF-Raf actions .. are an escape hatch from AF-Raf's semantics'': AF-Raf actions
 should have a clean semantics as well; if it is not the case, a strong
 motivation should be provided.
 
@@ -1296,8 +1331,8 @@ features.
 
 \begin{them}
 
-“If something is not possible to do in pure AF-Raf, ..., than an AF-Raf should
-be used”: what does this sentence mean?
+``If something is not possible to do in pure AF-Raf, ..., than an AF-Raf should
+be used'': what does this sentence mean?
 
 \end{them}
 Fixed. ``(...) an AF-Raf action should be used.''
@@ -1344,7 +1379,7 @@ but no systematic comparison is provided.
 
 -- Chapter 6
 Page 118:
-The sentence “AF-Raf implementations tend to be shorter and more readable” is
+The sentence ``AF-Raf implementations tend to be shorter and more readable'' is
 subjective. It may be true, but nothing in the thesis supports this statement.
 
 \end{them}
@@ -1352,8 +1387,8 @@ Fixed. It is now supported by the survey results
 
 \begin{them}
 
-The sentence “The AF-Raf programming language is properly formalised .... and
-its operational semantics is defined...” is not completely true in the current
+The sentence ``The AF-Raf programming language is properly formalised .... and
+its operational semantics is defined...'' is not completely true in the current
 version of the thesis: this is rather an objective that should be achieved in
 the revised one.
 
@@ -1363,7 +1398,7 @@ Fixed. All is checked for correctness.
 \begin{them}
 
 Page 119:
-The sentence “...improved the efficiency...” is subjective. Maybe it is true,
+The sentence ``...improved the efficiency...'' is subjective. Maybe it is true,
 but nothing in the thesis supports this statement.
 
 \end{them}
