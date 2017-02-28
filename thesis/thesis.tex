@@ -2696,7 +2696,7 @@ x &::= {\rm string-LID} && \text{variable symbol}
 \upsilon  &::= {\rm string-UID} &&\text{predicate symbol}
 \end{align}
 
-The grammar rules (11.7), (11.8), (11.10) and (11.12) are the same as for
+The grammar rules (12.7), (12.8), (12.10) and (12.12) are the same as for
 beliefs.  Thus, any belief can be used as a query:  It stands for asking
 whether the belief base contains that particular belief.
 
@@ -5798,6 +5798,10 @@ well as by the algebraic data types and the type checking functionality.
 % >>>
 \chapter{Results and Evaluation}\label{ch:results} % <<<
 
+This chapter presents an overview of the achievements, the interaction
+between objectives, and how they all worked toward the confirmation of our
+hypotheses. 
+
 The primary hypothesis, \textbf{that the integration of roles, based on
 sociological Role Theory, will improve the readability and usability of
 Agent Oriented Programming languages}, and the corresponding objective:
@@ -5837,9 +5841,10 @@ corresponding objectives were addressed as follows.
 The objective (2a) was addressed in (\autoref{sec:roles},
 \autoref{ch:flang}). Exploring the analogy between AOP languages and
 Functional Languages led to incorporating Haskell type classes principles
-into AF-Raf roles. Objective (2a) played a fundamental part in achieving
-objective (1a). More exactly, achieving objective (2a) laied the foundation
-to designing and implementing roles. 
+into AF-Raf roles, as well as employing algebraic data types to define
+types in AF-Raf. Objective (2a) played a fundamental part in achieving
+objective (1a) and (2c). Particularly, achieving objective (2a) laid the
+foundation to designing and implementing roles. 
 
 \begin{itemize}
 \item Objective (2b) \textit{To investigate the similarity between
@@ -5851,7 +5856,11 @@ to designing and implementing roles.
   
 The objective (2b) was addressed in (\autoref{sec:sessions}). Exploring
 the analogy with multiparty session types led to designing AF-Raf sessions
-as role based communication patterns.
+as role based communication patterns. Sessions played an important part in
+achieving objective (1a) as they ensure that the roles interact in the
+intended way. Also, sessions played an important role in achieving
+objective (2c), as they are deeply involved in both dynamic and static type
+checking. 
 
 \begin{itemize}
 \item Objective (2c) \textit{To develop a consistent type system,
@@ -5860,9 +5869,13 @@ as role based communication patterns.
   
 \end{itemize}
 Objective (2c) was addressed in (\autoref{sec:types}, \autoref{ch:types}).
-Exploring types in the context of multisorted predicate logic, as well as
+Exploring types in the context of multi-sorted predicate logic, as well as
 algebraic data types led to the construction of a type system and a type
-checking mechanism both for messages and agents.
+checking mechanism both for messages and agents. It is widely accepted that
+having a type system and type checking leads to early detection of errors,
+greater execution-time efficiency, and making the programs more structured
+and easier to read~\cite{DBLP:journals/csur/CardelliW85}. So, achieving
+objective (2c) supports both of our research hypotheses.
 
 Figure~\ref{fig:newFunct} presents what mainstream programming concepts
 applied to AF-Raf and the corresponding new functionality added to AF-Raf
