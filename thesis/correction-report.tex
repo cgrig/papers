@@ -116,7 +116,7 @@ the thesis, a well motivated evaluation and a deep comparison with the related
 work should be provided for each of the four objectives of the thesis.
 \end{them}
 Fixed. Evaluation had been deepened with the aid of a custom made survey. The
-results are presented in \R{Chapter 16}. Also, comparison with related work has
+results are presented in \R{Chapter 17}. Also, comparison with related work has
 been improved, see \R{Chapter 11}.
 
 \begin{them}
@@ -132,12 +132,12 @@ well.
 \end{them}
 Fixed.
 
-I have included a graphical representation of an AF-Raf agent in \R{Figure~12.5
+I have included a graphical representation of an AF-Raf agent in \R{Figure~12.2
 }. It depicts all AF-Raf agent components as well as the control flow. The
 AF-Raf architecture of an agent is described in \R{Section~12.1}. AF-Raf agent
 components: rule base, belief base, roles, sessions, type checking are all
 described there. Detailed explanations regarding the sensors and actions are
-given in the same section starting with \R{page 66}. The MAS architecture and
+given in the same section starting with \R{page 73}. The MAS architecture and
 control flow, including type checking is depicted in \R{Figure~12.5}. The
 interpreter is described at the beginning of \R{Section~13.4} and in
 \R{Chapter~14}.
@@ -154,7 +154,7 @@ The relationships between AF-Raf agents and the environment where
 they live should be explained: how are the agents' sensors and effectors
 implemented? 
 \end{them}
-I have improved the explanation in \R{section 11.1}.
+I have improved the explanation in \R{section 12.1}.
 
 \begin{them}
 Syntax and semantics should be correct and consistent throughout the entire
@@ -445,7 +445,7 @@ types, AF-Raf sessions are only informally similar to global types --- there is
 no formal connection, but one can find an informal comparison in
 \R{Section~9.4}. In \R{Figure~13.1}, one sees the abstract syntax of sessions;
 we remind the examiner that the notation is explained at the beginning of
-\R{Section~13.2.2}, and that there are good reasons why it is not EBNF.  The
+\R{Section~13.2.2}, and that there are good reasons why it is not BNF.  The
 semantics of AF-Raf sessions appear in the section on semantics.  For example,
 see the the rule \R{(13.72)}.
 
@@ -691,7 +691,7 @@ Indeed, AF-Raf messages are not structured according to  the speech act
 theory.  We use algebraic data types to define the content of the messages,
 roles to define possible message exchanges and sessions to define communication
 patterns. For a formal definition of messages see the operational semantics of
-messages starting on \R{page 138}.
+messages starting on \R{page 142}.
 
 \begin{them}
 The relationships between the role Calculator, CalculatorInt and BinaryCalcInt
@@ -864,7 +864,7 @@ should be a gentle and high level introduction to AF-Raf. However, all the
 components of the AF-Raf language should be introduced in Chapter 3: in Chapter
 4, they should just be discussed in more detail.
 \end{them}
-Fixed. All components are introduced in \R{Chapter 11}, Main AF-Raf Concepts, and discussed in detail in \R{Chapter 12}.
+Fixed. All components are introduced in \R{Chapter 12}, Main AF-Raf Concepts, and discussed in detail in \R{Chapter 13}.
 
 \begin{them}
 Page 66:
@@ -879,13 +879,13 @@ What is an ``agent design''?
 
 An agent is an instance of an agent design.
 (Just like a Java object is an instance of a Java class.)
-This was explained on page 66 (now \R{103}).
+This was explained on page 66 (now \R{106}).
 
 \begin{them}
 Was the ``AgentDeclaration'' already introduced as a component of the agent's
 code?
 \end{them}
-Yes. See the new definition of agent code in \R{figure 12.7}.
+Yes. See the new definition of agent code in \R{figure 13.7}.
 
 \begin{them}
 Page 67:
@@ -957,7 +957,7 @@ See also \R{Appendix C.2}.
 \begin{them}
 Iformula and IplanStep are not defined
 \end{them}
-These classes are defined in AgentFactory. A paragraph on \R{page 106}  explains this.
+These classes are defined in AgentFactory. A paragraph on \R{page 109}  explains this.
 Also, \R{Figure 13.4} presents the grammar for formulas, and \R{Figure~13.5}
 presents the grammar for statements.
 
@@ -1011,10 +1011,10 @@ deserves 12 pages.
 Syntactic sugar plays an important role in achieving the desired level of
 readability and understanding, so it is very important for achieving objective
 (1a), which in turns supports the primary hypothesis. This is explained in the
-beginning of \R{Section 12.3} , as well as in the \R{Chapter 16}, Results and
+beginning of \R{Section 13.3} , as well as in the \R{Chapter 17}, Results and
 Evaluation (page ).
 
-Operations are introduced at the beginning of \R{Chapter 11}, Main AF-Raf
+Operations are introduced at the beginning of \R{Chapter 12}, Main AF-Raf
 Concepts, as requested by the examiner.
 
 \begin{them}
@@ -1040,7 +1040,7 @@ Page 93:
 can be easily recovered from the abstract grammar'': it should be better to
 define them here, instead.
 \end{them}
-Fixed. The definition for agent code is presented in \R{figure 12.7}, and a
+Fixed. The definition for agent code is presented in \R{figure 13.7}, and a
 reference to the definition of ground term is provided.
 
 \begin{them}
@@ -1076,7 +1076,7 @@ Page 96:
 Rule 4.44 states that we can discard I, O and d in the transition. It should be
 stated where these components come into play again.
 \end{them}
-Fixed. Explanation added on \R{page 132}.
+Fixed. Explanation added on \R{page 136} to clarify \R{rule 13.45}.
 
 \begin{them}
 Page 97:
@@ -1088,9 +1088,9 @@ an agent program is some data structure providing a ``;'' operator. This is in
 contrast with stating that an agent's program is a set, as sets – as usually
 defined - do not support a ``;'' operator, whatever the meaning of ``;'' is.
 \end{them}
-The new definition for agent code \R{(figure 12.7)} should clarify this.
+The new definition for agent code \R{(Figure 13.7)} should clarify this.
 
-Also, see \R{rule 12.52} for the definition of sequential composition.
+Also, see \R{rule 13.52} for the definition of sequential composition.
 
 
 \begin{them}
@@ -1098,7 +1098,7 @@ The rule also states that the agent's code changes over time, which supports
 the reviewers' understanding that P is not the agent code, but the agent
 execution state.
 \end{them}
-The agent execution state includes the agent code, as defined in figure 12.8. The agent execution state changes over time,
+The agent execution state includes the agent code, as defined in \R{Figure 13.8}. The agent execution state changes over time,
   including the agent code it contains.
 (Of course, this does not change the agent code written by the programmer.)
 
@@ -1131,7 +1131,7 @@ Page 99:
 Rule 4.52: what does ``X:=P'' mean? Whatever P, assigning an agent code (which is
 a set?) to a variable is not clear.
 \end{them}
-Rule 4.52 \R{(now 12.53)} is the definition of what $x:=P$ means, that is
+Rule 4.52 \R{(now 13.53)} is the definition of what $x:=P$ means, that is
 assignment. Variable x is assigned the value to which the agent code is
 evaluated to.
 
@@ -1139,7 +1139,7 @@ evaluated to.
 Rule 4.53:
 An agent code can be a belief? As Gamma t is a belief.
 \end{them}
-Yes. See agent code definition in \R{figure 12.7}.
+Yes. See agent code definition in \R{figure 13.7}.
 The programmer is not allowed to write such code, though.
 This is entirely analogous to the message queues in
   multiparty asynchronous session types:
@@ -1172,7 +1172,7 @@ confusion.
 Also, the comments to page 97 raise doubts that P can be a set because of the
 ``;'' operator.
 \end{them}
-See new agent code definition \R{(figure 12.7)} for clarification.
+See new agent code definition \R{(figure 13.7)} for clarification.
 
 \begin{them}
 Page 101:
@@ -1202,7 +1202,7 @@ No, there's no receive action. Sensors deal with receiving messages in AF-Raf.
 Page 104:
 Where was DetSessionState defined?
 \end{them}
-In rule 11.41
+In \R{rule 13.41}.
 
 \begin{them}
 In Rule 4.63, sid binds to nothing
@@ -1223,7 +1223,7 @@ but no systematic comparison is provided.
 I have designed a questionnaire based survey to evaluate and compare the
 readability and understanding of each implementation. I've considered the
 individual programs, as well as how easy it is to put together related
-programs. The results are presented in \R{Chapter 16}.
+programs. The results are presented in \R{Chapter 17}.
 
 \begin{them}
 -- Chapter 6
